@@ -9,19 +9,20 @@ public class PlayerCameraMove : MonoBehaviour
     float xRotation = 15f;
 
     public Transform camAxis;
+    public Transform player;
+
 
     public void Update()
     {
-
         //transform.rotation = Quaternion.identity;
-        this.transform.localPosition = new Vector3(0, 0, -camRange);
+        this.transform.localPosition = new Vector3(0, transform.localPosition.y, -camRange);
 
         float mouseX = Input.GetAxis("Mouse X") * mouseSpeed * Time.deltaTime;
 
         transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
 
         camAxis.Rotate(Vector3.up * mouseX);
-
+        camAxis.position = player.position;        
 
     }
 
