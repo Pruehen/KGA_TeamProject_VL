@@ -24,4 +24,9 @@ public class PlayerCameraMove : MonoBehaviour
 
 
     }
+
+    public Vector3 CamForward()
+    {
+        return camAxis.forward;
+    }
 }
