@@ -9,6 +9,7 @@ public class PlayerMove : MonoBehaviour
     public float Speed = 2f;
     private CharacterController controller;
     public Animator animator;
+    public Camera Cam;
 
     private void Start()
     {
@@ -21,6 +22,7 @@ public class PlayerMove : MonoBehaviour
     void OnMove(InputValue inputValue) // ¿Ãµø(WASD)
     {
         moveInput = inputValue.Get<Vector2>();
+        
     }
 
     void OnAtk(InputValue value)
@@ -58,7 +60,8 @@ public class PlayerMove : MonoBehaviour
         moveVector = Vector2.Lerp(moveVector, moveInput * moveSpeed * Speed, Time.deltaTime * 5);
 
         Vector3 moveVector3 = transform.right * moveVector.x + transform.forward * moveVector.y;
-        controller.Move(moveVector3 * Time.deltaTime);
+        Vector3 moveVector4 = transform.right * moveVector.x + Cam.transform.forward * moveVector.y;
+        controller.Move(moveVector4 * Time.deltaTime);
 
         //animator.SetFloat("XSpeed", moveVector.x);
         //animator.SetFloat("ZSpeed", moveVector.y);
