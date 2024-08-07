@@ -1,19 +1,20 @@
 using System.Threading;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class PlayerMove : MonoBehaviour
 {
     private Vector2 moveInput = Vector2.zero;
     private Vector2 moveVector = Vector2.zero;
-    public float moveSpeed = 5f;
-    public float speed = 5f;
-    public float rotSpeed = 40f;
-
+    public float moveSpeed = 10f;
+    public float speed = 10f;
+    public float rotSpeed = 50f;
+    private Vector3 velocity;
     private CharacterController controller;
     public Animator animator;
     public Camera Cam;
+    private bool isGravityInverted = false;
+    public float gravity = -9.81f;
 
     public Transform atkPoint;
     public GameObject Item;
@@ -36,19 +37,10 @@ public class PlayerMove : MonoBehaviour
 
     void Atk()
     {
-
+        //RotateCharacter();
         GameObject items = Instantiate(Item, atkPoint.position, transform.rotation);
-        RotateCharacter();
     }
-    void RotateCharacter()
-    {
-        if (moveInput != Vector2.zero)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(moveInput, Vector3.up);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed * Time.deltaTime);
-        }
 
-    }
     void OnAtk(InputValue value)
     {
         // 공격 로직
@@ -82,7 +74,15 @@ public class PlayerMove : MonoBehaviour
     private void MoveOrder()
     {
         moveVector = Vector2.Lerp(moveVector, moveInput * moveSpeed * speed, Time.deltaTime * 5);
-        Vector3 moveDirection = new Vector3(moveVector.x, 0, moveVector.y);
+
+        if (controller.isGrounded && velocity.y < 0)
+        {
+            velocity.y = -2f;
+        }
+
+        // 카메라의 회전 방향을 기준으로 이동 방향 계산
+        Vector3 moveDirection = Cam.transform.right * moveVector.x + Cam.transform.forward * moveVector.y;
+        moveDirection.y = 0; // 수직 방향 제거
 
         // 캐릭터를 이동 방향으로 회전
         if (moveDirection != Vector3.zero)
@@ -91,10 +91,12 @@ public class PlayerMove : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed * Time.deltaTime);
         }
 
-        Vector3 moveVector3 = Cam.transform.right * moveVector.x + Cam.transform.forward * moveVector.y;
-        controller.Move(moveVector3 * Time.deltaTime);
+        float currentGravity = isGravityInverted ? -gravity : gravity;
+        velocity.y += currentGravity * Time.deltaTime;
+        controller.Move(velocity * Time.deltaTime);
+        controller.Move(moveDirection * Time.deltaTime);
 
-        // 애니메이션 설정
+        // 애니메이션
         // animator.SetFloat("XSpeed", moveVector.x);
         // animator.SetFloat("ZSpeed", moveVector.y);
     }
