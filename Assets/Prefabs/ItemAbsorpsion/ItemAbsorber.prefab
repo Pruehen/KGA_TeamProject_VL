@@ -70,6 +70,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RevolveRadious: 1
   RevolveSpeed: 120
+  RevolveSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 3
+      value: 1
+      inSlope: 0.58059
+      outSlope: 0.58059
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.255798
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   Radious: 5
   Height: 1
   AbsolsionSpeed: 0.2
