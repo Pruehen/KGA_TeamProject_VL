@@ -7,14 +7,14 @@ namespace ViewModel.Extensions
     {
         public static void Register_OnMouseObjectNameChanged(this PlayerViewModel vm)
         {
-            Player.Instance.OnMouseObjectNameChanged += vm.OnMouseObjectNameChanged;
-            Player.Instance.OnLookTargetPosSet += vm.OnMousePosChanged;
+            //Player.Instance.OnMouseObjectNameChanged += vm.OnMouseObjectNameChanged;
+            //Player.Instance.OnLookTargetPosSet += vm.OnMousePosChanged;
         }
 
         public static void UnRegister_OnMouseObjectNameChanged(this PlayerViewModel vm)
         {
-            Player.Instance.OnMouseObjectNameChanged -= vm.OnMouseObjectNameChanged;
-            Player.Instance.OnLookTargetPosSet -= vm.OnMousePosChanged;
+            //Player.Instance.OnMouseObjectNameChanged -= vm.OnMouseObjectNameChanged;
+            //Player.Instance.OnLookTargetPosSet -= vm.OnMousePosChanged;
         }
 
         public static void Refresh_OnMouseObjectNameChanged(this PlayerViewModel vm)
