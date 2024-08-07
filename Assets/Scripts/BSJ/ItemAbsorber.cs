@@ -20,6 +20,7 @@ public class ItemAbsorber : MonoBehaviour
     [SerializeField] private float AbsolsionSpeed = 30f;
     [SerializeField] private AnimationCurve RadiusExpandCurve;
     //¤±
+    //a
 
     //Ä³½Ã
     private CapsuleCollider _collider;
