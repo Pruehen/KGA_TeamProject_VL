@@ -12,6 +12,7 @@ public class ItemAbsorber : MonoBehaviour
     [Header ("회전 관련")]
     [SerializeField] private float RevolveRadious = 5f;
     [SerializeField] private float RevolveSpeed = 30f;
+    [SerializeField] private AnimationCurve RevolveSpeedCurve;
 
     [Header("획득 관련")]
     [SerializeField] private float Radious = 5f;
@@ -30,29 +31,61 @@ public class ItemAbsorber : MonoBehaviour
         SetHeight(Height);
     }
 
+    private float absorbTimeStamp = 0f;
     private void Update()
     {
-        transform.Rotate(0, Time.deltaTime * RevolveSpeed, 0);
-
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            if (_expendCoroutine == null)
-            {
-                _expendCoroutine = StartCoroutine(RadiusExpand());
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            if(_expendCoroutine != null)
-            {
-                StopCoroutine(_expendCoroutine);
-                _expendCoroutine = null;
-            }
-            SetRadius(0f);
-            DestroyAllItem();
-        }
+        Test();
+        
+        float timeFromAbsorb = Time.time - absorbTimeStamp;
+        transform.Rotate(0, Time.deltaTime * RevolveSpeed * RevolveSpeedCurve.Evaluate(timeFromAbsorb), 0);
     }
 
+
+    /// <summary>
+    /// 아이템 습득 시작
+    /// 범위가 옴션에 따라 점점 늘어남
+    /// </summary>
+    public void StartAbsorb()
+    {
+        if (_expendCoroutine == null)
+        {
+            _expendCoroutine = StartCoroutine(RadiusExpand());
+            absorbTimeStamp = Time.time;
+        }
+    }
+    /// <summary>
+    /// 아이템 획등 성공시 호출
+    /// 범위 내의 아이템을 삭제하고
+    /// 아이템 갯수를 리턴
+    /// </summary>
+    public int SucceseAbsorb()
+    {
+        int count = items.Count;
+        if (_expendCoroutine != null)
+        {
+            StopCoroutine(_expendCoroutine);
+            _expendCoroutine = null;
+        }
+        SetRadius(0f);
+        DestroyAllItem();
+
+        return count;
+    }
+
+    /// <summary>
+    /// F1 과 F2 키를 사용해 디버그
+    /// </summary>
+    private void Test()
+    {
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            StartAbsorb();
+        }
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            SucceseAbsorb();
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -79,9 +112,9 @@ public class ItemAbsorber : MonoBehaviour
         collider.isTrigger = true;
         rigidbody.isKinematic = true;
 
-        StartCoroutine(MoveToRevolvePos(item));
+        StartCoroutine(PullToCenter(item));
     }
-    private IEnumerator MoveToRevolvePos(Transform item)
+    private IEnumerator PullToCenter(Transform item)
     {
         //회전 범위까지 점점 끌어당김
         //while (Vector3.Distance(item.transform.position, transform.position) >= RevolveRadious)
