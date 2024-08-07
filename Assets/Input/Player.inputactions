@@ -16,39 +16,39 @@
                 },
                 {
                     "name": "Atk",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "8b4ed689-4bcd-4f91-ad2a-3c662dff29b0",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Skill",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "6b32adcd-81fa-4e59-a795-dd86e0968eed",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Bacuum",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "8904bfcc-bce2-42f4-a750-68b8ff3bbb7c",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Inventory",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "82361029-f1a3-4382-854e-cb0c7c3f8919",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Rotate",
@@ -174,7 +174,7 @@
                 {
                     "name": "",
                     "id": "ee995f1f-1b6a-444b-aa90-bc4ff51231a1",
-                    "path": "<Mouse>/position",
+                    "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
