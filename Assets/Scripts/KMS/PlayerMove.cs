@@ -62,6 +62,7 @@ public class PlayerMove : MonoBehaviour
         Vector3 moveVector3 = transform.right * moveVector.x + transform.forward * moveVector.y;
         Vector3 moveVector4 = transform.right * moveVector.x + Cam.transform.forward * moveVector.y;
         controller.Move(moveVector4 * Time.deltaTime);
+        transform.rotation = Cam.transform.rotation;
 
         //animator.SetFloat("XSpeed", moveVector.x);
         //animator.SetFloat("ZSpeed", moveVector.y);
