@@ -19,7 +19,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         public override void OnStart()
         {
             SetMovable(agent, true);
-            MoveToTarget2D(agent, targetPostion.Value);
+            MoveToTarget(agent, targetPostion.Value);
         }
 
         public override TaskStatus OnUpdate()
@@ -39,7 +39,7 @@ namespace BehaviorDesigner.Runtime.Tasks
             {
                 return TaskStatus.Success;
             }
-            MoveToTarget2D(agent, targetPostion.Value);
+            MoveToTarget(agent, targetPostion.Value);
             return TaskStatus.Running;
         }
         public override void OnEnd()
@@ -55,6 +55,10 @@ namespace BehaviorDesigner.Runtime.Tasks
             agent.isStopped = !isMovable;
         }
 
+        private void MoveToTarget(NavMeshAgent agent, Vector3 target)
+        {
+            agent.destination = target;
+        }
         private void MoveToTarget2D(NavMeshAgent agent, Vector3 target)
         {
             target.z = 0f;
