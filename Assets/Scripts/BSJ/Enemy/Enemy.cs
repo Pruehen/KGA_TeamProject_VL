@@ -115,7 +115,7 @@ public class Enemy : MonoBehaviour
         _characterEnvCollider = GetComponentInChildren<Collider>();
 
         _navMeshAgent.updateRotation = false;
-
+        _detector.Init(this, "Player", 5f, false);
 
 
         _pooledHitVfx = new ObjectPool<GameObject>( CreatePool,OnGetPool, OnReleasePool, OnDestroyPool,true,100,200);
