@@ -97,7 +97,7 @@ public class Detector : MonoBehaviour
         Vector3 targetCenter = target.bounds.center;
         if (Physics.Raycast(center, 
             targetCenter - (center),
-            out RaycastHit hit, _detectionRadius))
+            out RaycastHit hit, _detectionRadius, _characterColliderLayer))
         {
             Debug.DrawLine(center, hit.point, Color.magenta);
             if (hit.collider.CompareTag("Player"))

@@ -9,7 +9,7 @@ public class ItemAbsorber : MonoBehaviour
     // 실행은 update를 통해
     List<GameObject> items = new List<GameObject>();
 
-    [Header ("회전 관련")]
+    [Header("회전 관련")]
     [SerializeField] private float RevolveRadious = 5f;
     [SerializeField] private float RevolveSpeed = 30f;
     [SerializeField] private AnimationCurve RevolveSpeedCurve;
@@ -35,7 +35,7 @@ public class ItemAbsorber : MonoBehaviour
     private void Update()
     {
         Test();
-        
+
         float timeFromAbsorb = Time.time - absorbTimeStamp;
         transform.Rotate(0, Time.deltaTime * RevolveSpeed * RevolveSpeedCurve.Evaluate(timeFromAbsorb), 0);
     }
@@ -89,30 +89,33 @@ public class ItemAbsorber : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (IsItem(other.gameObject))
+        Rigidbody rb = other.attachedRigidbody;
+        if(rb == null)
         {
-            if (items.Contains(other.gameObject))
+            return;
+        }
+        if (IsItem(rb.gameObject))
+        {
+            if (items.Contains(rb.gameObject))
             {
                 Debug.Log("어케 이미 들어가 있음;;");
             }
             else
             {
-                items.Add(other.gameObject);
-                StartRevolve(other.transform);
+                items.Add(rb.gameObject);
+                StartRevolve(rb.transform);
             }
         }
     }
-    private void StartRevolve(Transform item)
+    private void StartRevolve(Transform itemTr)
     {
-        item.transform.SetParent(transform, true);
+        itemTr.transform.SetParent(transform, true);
 
-        Collider collider = item.GetComponent<Collider>();
-        Rigidbody rigidbody = collider.GetComponent<Rigidbody>();
+        TrashItem item = itemTr.GetComponent<TrashItem>();
 
-        collider.isTrigger = true;
-        rigidbody.isKinematic = true;
+        item.DisablePhysics();
 
-        StartCoroutine(PullToCenter(item));
+        StartCoroutine(PullToCenter(itemTr));
     }
     private IEnumerator PullToCenter(Transform item)
     {
@@ -158,7 +161,7 @@ public class ItemAbsorber : MonoBehaviour
     }
     private void DestroyAllItem()
     {
-        foreach(GameObject item in items)
+        foreach (GameObject item in items)
         {
             Destroy(item);
         }
