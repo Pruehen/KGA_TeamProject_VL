@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
-public class ItemAbsolsion : MonoBehaviour
+public class ItemAbsorber : MonoBehaviour
 {
+    // Todo 석진 끌어당기는 클래스와 돌리는 클래스를 따로 생성하면 더 읽기 쉬울것 같다.
+    // 실행은 update를 통해
     List<GameObject> items = new List<GameObject>();
 
     [Header ("회전 관련")]
@@ -17,8 +19,9 @@ public class ItemAbsolsion : MonoBehaviour
     [SerializeField] private float AbsolsionSpeed = 30f;
     [SerializeField] private AnimationCurve RadiusExpandCurve;
 
-    private CapsuleCollider _collider;
 
+    //캐시
+    private CapsuleCollider _collider;
     private Coroutine _expendCoroutine;
     private void Awake()
     {
