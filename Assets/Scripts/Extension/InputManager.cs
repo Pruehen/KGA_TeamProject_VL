@@ -2,43 +2,43 @@ using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public static class InputManager
+public class InputManager : GlobalSingleton<InputManager>
 {   
-    static Vector2 _moveVector2_Left;
-    static float _rotateValue;
+    Vector2 _moveVector2_Left_WASD;
+    Vector2 _moveVector2_Right_Mouse;
 
-    static bool _isLMouseBtnClick;
-    static bool _isRMouseBtnClick;
-    static bool _isLControlBtnClick;
-    static bool _isTapBtnClick;
+    bool _isLMouseBtnClick;
+    bool _isRMouseBtnClick;
+    bool _isLControlBtnClick;
+    bool _isTapBtnClick;
 
-    public static Vector2 MoveVector2_Left
+    public Vector2 MoveVector2_Left_WASD
     {
-        get { return _moveVector2_Left; }
+        get { return _moveVector2_Left_WASD; }
         set
         {
-            if (_moveVector2_Left != value)
+            if (_moveVector2_Left_WASD != value)
             {
-                _moveVector2_Left = value;
-                OnPropertyChanged(nameof(MoveVector2_Left));
+                _moveVector2_Left_WASD = value;
+                OnPropertyChanged(nameof(MoveVector2_Left_WASD));
             }
         }
     }
 
-    public static float RotateValue
+    public Vector2 MoveVector2_Right_Mouse
     {
-        get { return _rotateValue; }
+        get { return _moveVector2_Right_Mouse; }
         set
         {
-            if (_rotateValue != value)
+            if (_moveVector2_Right_Mouse != value)
             {
-                _rotateValue = value;
-                OnPropertyChanged(nameof(RotateValue));
+                _moveVector2_Right_Mouse = value;
+                OnPropertyChanged(nameof(MoveVector2_Right_Mouse));
             }
         }
     }
 
-    public static bool IsLMouseBtnClick
+    public bool IsLMouseBtnClick
     {
         get { return _isLMouseBtnClick; }
         set
@@ -51,7 +51,7 @@ public static class InputManager
         }
     }
 
-    public static bool IsRMouseBtnClick
+    public bool IsRMouseBtnClick
     {
         get { return _isRMouseBtnClick; }
         set
@@ -64,7 +64,7 @@ public static class InputManager
         }
     }
 
-    public static bool IsLControlBtnClick
+    public bool IsLControlBtnClick
     {
         get { return _isLControlBtnClick; }
         set
@@ -77,7 +77,7 @@ public static class InputManager
         }
     }
 
-    public static bool IsTapBtnClick
+    public bool IsTapBtnClick
     {
         get { return _isTapBtnClick; }
         set
@@ -91,41 +91,42 @@ public static class InputManager
     }
 
     #region PropChanged
-    public static event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler PropertyChanged;
 
-    public static void OnPropertyChanged(string propertyName)//값이 변경되었을 때 이벤트를 발생시키기 위한 용도 (데이터 바인딩)
+    public void OnPropertyChanged(string propertyName)//값이 변경되었을 때 이벤트를 발생시키기 위한 용도 (데이터 바인딩)
     {
-        PropertyChanged?.Invoke(null, new PropertyChangedEventArgs(propertyName));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
     #endregion
 
-    static void OnMove(InputValue inputValue) // 이동(WASD)
-    {
-        MoveVector2_Left = inputValue.Get<Vector2>();
+    void OnMove(InputValue inputValue) // 이동(WASD)
+    {        
+        MoveVector2_Left_WASD = inputValue.Get<Vector2>();
     }
 
-    static void OnAtk(InputValue value) // 마우스 좌클릭
+    void OnAtk(InputValue value) // 마우스 좌클릭
     {
-        IsLMouseBtnClick = value.Get<bool>();
+        IsLMouseBtnClick = value.isPressed;
     }
 
-    static void OnSkill(InputValue value)//마우스 우클릭
+    void OnSkill(InputValue value)//마우스 우클릭
     {
-        IsRMouseBtnClick = value.Get<bool>();
+        IsRMouseBtnClick = value.isPressed;
     }
 
-    static void OnBacuum(InputValue value)//좌측 컨트롤 클릭
+    void OnBacuum(InputValue value)//좌측 컨트롤 클릭
     {
-        IsLControlBtnClick = value.Get<bool>();
+        IsLControlBtnClick = value.isPressed;
     }
 
-    static void OnInventory(InputValue value)//탭 버튼 클릭
+    void OnInventory(InputValue value)//탭 버튼 클릭
     {
-        IsTapBtnClick = value.Get<bool>();
+        IsTapBtnClick = value.isPressed;
     }
 
-    static void OnRotate(InputValue value)
+    void OnRotate(InputValue value)
     {
-        RotateValue = value.Get<float>();
+        MoveVector2_Right_Mouse = value.Get<Vector2>();
     }
 }
