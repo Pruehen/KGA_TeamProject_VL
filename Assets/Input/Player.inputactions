@@ -16,12 +16,12 @@
                 },
                 {
                     "name": "Atk",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "8b4ed689-4bcd-4f91-ad2a-3c662dff29b0",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Skill",
@@ -174,7 +174,7 @@
                 {
                     "name": "",
                     "id": "ee995f1f-1b6a-444b-aa90-bc4ff51231a1",
-                    "path": "<Mouse>/position",
+                    "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
