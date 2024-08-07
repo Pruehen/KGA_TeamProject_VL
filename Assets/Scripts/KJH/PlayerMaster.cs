@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class PlayerMaster : MonoBehaviour
 {
+    PlayerInstanteState _PlayerInstanteState;
     PlayerMove _PlayerMove;
     PlayerAttack _PlayerAttack;
 
     private void Awake()
     {
+        _PlayerInstanteState = GetComponent<PlayerInstanteState>();
         _PlayerMove = GetComponent<PlayerMove>();
         _PlayerAttack = GetComponent<PlayerAttack>();
     }
