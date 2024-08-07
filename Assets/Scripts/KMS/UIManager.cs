@@ -17,7 +17,7 @@ public class UIManager : SceneSingleton<UIManager>
     public GameObject EscUI;
 
     #region InGameUI
-    public void UpdateStamina(int currntStamina, int maxStaminae)
+    public void UpdateStamina(float currntStamina, float maxStaminae)
     {
         if(stamina!=null)
         stamina.fillAmount = (float)currntStamina / maxStaminae;
