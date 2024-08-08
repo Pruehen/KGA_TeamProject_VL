@@ -17,47 +17,86 @@ public class UIManager : SceneSingleton<UIManager>
     public GameObject tabUI;
     public GameObject EscUI;
 
-    #region InGameUI
-    public void UpdateStamina(float currntStamina, float maxStaminae)
-    {
-        if(stamina!=null)
-        stamina.fillAmount = (float)currntStamina / maxStaminae;
-    }
-    public void UpdatehealthPoint(float currntHealtPoint, float maxhealthPoint)
-    {
-        if(healthPoint!=null)
-        healthPoint.fillAmount = currntHealtPoint / maxhealthPoint;
-    }
-    public void UpdateskillPoint(int currntskillPoint, int maxskillPoint)
-    {
-        if (skillPoint!=null)
-        skillPoint.fillAmount = (float)currntskillPoint / maxskillPoint;
-    }
-    public void UpdateBullet(int currntbullet, int maxbullet)
-    {
-        if(bullet!=null)
-        bullet.text = currntbullet.ToString() + " / " + maxbullet.ToString();
-    }
+
+    [SerializeField] PlayerInstanteState PlayerState;
+    [SerializeField] Slider healthSlider;
     
-    #endregion
-
-    #region TabUI
-
-    #endregion
-    public void UpdatePlayerState(int HP, int Stamina,int Atk,int moveSpeed)
+  
+    private void Start()
     {
-
+        if (PlayerState != null)
+        {
+            PlayerState.HealthChanged += OnHealthChanged;
+            PlayerState.StaminaChanged += OnStaminaChanged;
+            PlayerState.BulletChanged += OnBulletChanged;
+        }
+        UpdateHealthView();
+        UpdateStaminaView();
+        UpdateBulletView();
     }
-    #region EscUI
-
-    #endregion
-    public void PopUpUI(GameObject UI)
+    private void OnDestroy()
     {
-
+        if (PlayerState != null)
+        {
+            PlayerState.HealthChanged -= OnHealthChanged;
+            PlayerState.BulletChanged -= OnBulletChanged;
+            PlayerState.StaminaChanged -= OnStaminaChanged;
+        }
     }
-    public void CloseUI(GameObject UI)
+    public void setPlayer(PlayerInstanteState player)
     {
-
+        if(player == null)
+        PlayerState = player;
     }
+    public void Damage(float amount)
+    {
+        PlayerState?.Hit(amount);
+    }
+    public void Reset()
+    {
+        PlayerState?.Restore();
+    }
+    public void UpdateHealthView()
+    {
+        if (PlayerState == null)
+            return;
+        if (healthSlider != null && PlayerState.maxHp != 0)
+        {
+            healthPoint.fillAmount = PlayerState.hp / PlayerState.maxHp;
+        }
+    }
+
+    public void UpdateStaminaView()
+    {
+        if (PlayerState == null)
+            return;
+        if (stamina != null && PlayerState.stamina != 0)
+        {
+            stamina.fillAmount = PlayerState.stamina / PlayerState.MaxStamina;
+        }
+    }
+    public void UpdateBulletView()
+    {
+        if (PlayerState == null)
+            return;
+        if (bullet != null && PlayerState.bullets != 0)
+        {
+            stamina.fillAmount = PlayerState.stamina / PlayerState.MaxStamina;
+            bullet.text = PlayerState.bullets + " + " + PlayerState.maxBullets;
+        }
+    }
+    public void OnHealthChanged()
+    {
+        UpdateHealthView();
+    }
+    public void OnStaminaChanged()
+    {
+        UpdateStaminaView();
+    }
+    public void OnBulletChanged()
+    {
+        UpdateBulletView();
+    }
+  
 
 }
