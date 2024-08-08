@@ -200,6 +200,7 @@ GameObject:
   - component: {fileID: 396477178}
   - component: {fileID: 396477177}
   - component: {fileID: 396477176}
+  - component: {fileID: 396477180}
   m_Layer: 6
   m_Name: Capsule
   m_TagString: Player
@@ -322,11 +323,68 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 396477174}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &396477180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 396477174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0fb686451855974d82571b41613624c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &406689736 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3676231544126141315, guid: 967a86aea34047c4aa1d13f98de629cb, type: 3}
   m_PrefabInstance: {fileID: 870820136}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &493939531
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 493939532}
+  - component: {fileID: 493939533}
+  m_Layer: 0
+  m_Name: Damage Box
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &493939532
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 493939531}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.11, z: 0.873}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1825368237}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &493939533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 493939531}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aed76c03b65482a46832c97c85bfcbec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _halfSize: {x: 1, y: 1, z: 1}
 --- !u!1 &650594100
 GameObject:
   m_ObjectHideFlags: 0
@@ -352,7 +410,7 @@ Transform:
   m_GameObject: {fileID: 650594100}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -16.064648, y: 3.3176556, z: -6.9127264}
+  m_LocalPosition: {x: -16.064648, y: 0.57, z: -6.9127264}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -384,7 +442,7 @@ Transform:
   m_GameObject: {fileID: 725551799}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.77, y: 2.11, z: -11.47}
+  m_LocalPosition: {x: -11.77, y: 0.85, z: -11.47}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -837,6 +895,7 @@ Transform:
   m_Children:
   - {fileID: 1977823893}
   - {fileID: 1770071672}
+  - {fileID: 493939532}
   - {fileID: 2062743953}
   m_Father: {fileID: 725551800}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -856,16 +915,22 @@ MonoBehaviour:
   _rightPatrolPoint: {fileID: 0}
   _enemyId: 
   _isMovable: 1
+  _combat:
+    _maxHp: 100
+    _hp: 100
+    _dead: 0
+    _invincibleTimeOnHit: 0.1
+    _prevHitTime: 0
   _detector: {fileID: 1770071673}
   _isChargeAttack: 0
   _editorData:
-    AttackRange: 2
+    AttackRange: 3.03
     AttackCooldown: 2
     AttackMovableCooldown: 0.6
     AttackThroughWall: 0
-    EnemyPatrolDistance: 4
+    EnemyPatrolDistance: 4.38
     EnemyPatrolIdleDuration: 1
-    EnemyAlramDistance: 12.74
+    EnemyAlramDistance: 15.7
     EnemyAlramLimitTime: 2
     DetectThroughWall: 0
     CustomPatrolPoint: 0
@@ -919,7 +984,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
-  m_BaseOffset: 1
+  m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!54 &1825368241
@@ -1043,7 +1108,7 @@ CapsuleCollider:
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.99, z: 0}
 --- !u!1 &2004241988
 GameObject:
   m_ObjectHideFlags: 0
