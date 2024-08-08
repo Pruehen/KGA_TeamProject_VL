@@ -17,47 +17,61 @@ public class UIManager : SceneSingleton<UIManager>
     public GameObject tabUI;
     public GameObject EscUI;
 
-    #region InGameUI
-    public void UpdateStamina(float currntStamina, float maxStaminae)
+  
+    [SerializeField] PlayerInstanteState PlayerState;
+    [SerializeField] Slider healthSlider;
+    private void Start()
     {
-        if(stamina!=null)
-        stamina.fillAmount = (float)currntStamina / maxStaminae;
+        if (PlayerState != null)
+        {
+            PlayerState.HealthChanged += OnHealthChanged;
+            PlayerState.StaminaChanged += OnStaminaChanged;
+        }
+        UpdateHealthView();
+        UpdateStaminaView();
     }
-    public void UpdatehealthPoint(float currntHealtPoint, float maxhealthPoint)
+    private void OnDestroy()
     {
-        if(healthPoint!=null)
-        healthPoint.fillAmount = currntHealtPoint / maxhealthPoint;
+        if (PlayerState != null)
+        {
+            PlayerState.HealthChanged -= OnHealthChanged;
+        }
     }
-    public void UpdateskillPoint(int currntskillPoint, int maxskillPoint)
+    public void Damage(float amount)
     {
-        if (skillPoint!=null)
-        skillPoint.fillAmount = (float)currntskillPoint / maxskillPoint;
+        PlayerState?.Hit(amount);
     }
-    public void UpdateBullet(int currntbullet, int maxbullet)
+    public void Reset()
     {
-        if(bullet!=null)
-        bullet.text = currntbullet.ToString() + " / " + maxbullet.ToString();
+        PlayerState?.Restore();
     }
-    
-    #endregion
-
-    #region TabUI
-
-    #endregion
-    public void UpdatePlayerState(int HP, int Stamina,int Atk,int moveSpeed)
+    public void UpdateHealthView()
     {
-
+        if (PlayerState == null)
+            return;
+        if (healthSlider != null && PlayerState.maxHp != 0)
+        {
+            healthPoint.fillAmount = PlayerState.hp / PlayerState.maxHp;
+        }
     }
-    #region EscUI
-
-    #endregion
-    public void PopUpUI(GameObject UI)
+    public void OnHealthChanged()
     {
-
+        UpdateHealthView();
     }
-    public void CloseUI(GameObject UI)
+
+    public void UpdateStaminaView()
     {
-
+        if (PlayerState == null)
+            return;
+        if (stamina != null && PlayerState.stamina != 0)
+        {
+            stamina.fillAmount = PlayerState.stamina / PlayerState.MaxStamina;
+        }
     }
 
+    public void OnStaminaChanged()
+    {
+        UpdateStaminaView();
+    }
+   
 }

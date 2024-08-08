@@ -1,30 +1,35 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro.EditorUtilities;
 using UnityEngine;
 
 public class PlayerInstanteState : MonoBehaviour
 {
-    float hp;
-    float stamina;
+    public float hp;
+    public float stamina;
 
     public bool IsDead { get; private set; }
 
     [SerializeField]
-    private float maxHp;
+    public float maxHp;
 
     [SerializeField]
-    private float MaxStamina;
+    public float MaxStamina;
 
     [SerializeField]
     private float staminaRecoverySpeed;
+
+    public event Action HealthChanged;
+    public event Action StaminaChanged;
 
     private void Start()
     {
         IsDead = false;
         stamina = MaxStamina;
-        hp = maxHp;
-        UIManager.Instance.UpdateStamina(stamina,MaxStamina);
+
+        //UIManager.Instance.UpdateStamina(stamina, MaxStamina);
+        UpdateHealth();
+        UpdateStamina();
     }
 
     private void Update()
@@ -44,13 +49,11 @@ public class PlayerInstanteState : MonoBehaviour
         if (stamina > power)
         {
             stamina -= power;
-            UIManager.Instance.UpdateStamina(stamina, MaxStamina);
+            //UIManager.Instance.UpdateStamina(stamina, MaxStamina);
+            UpdateStamina();
         }
-
         else
             return;
-
-     
 
     }
 
@@ -60,8 +63,9 @@ public class PlayerInstanteState : MonoBehaviour
         if (stamina < MaxStamina)
         {
             stamina += staminaRecoverySpeed * Time.deltaTime;
-           
-            UIManager.Instance.UpdateStamina(stamina, MaxStamina);
+
+            //UIManager.Instance.UpdateStamina(stamina, MaxStamina);
+            UpdateStamina();
         }
         else if (stamina > MaxStamina)
         {
@@ -76,7 +80,7 @@ public class PlayerInstanteState : MonoBehaviour
         if (hp > 0)
         {
             hp -= dmg;
-            
+
         }
         else
             return;
@@ -89,9 +93,23 @@ public class PlayerInstanteState : MonoBehaviour
         }
         //체력 수치와 UI 연동.
 
-        UIManager.Instance.UpdatehealthPoint(hp , maxHp);
+        //UIManager.Instance.UpdatehealthPoint(hp, maxHp);
+        UpdateHealth();
 
     }
+    public void Restore()
+    {
+        hp = maxHp;
+    }
+    public void UpdateHealth()
+    {
+        HealthChanged?.Invoke();
+    }
+    public void UpdateStamina()
+    {
+        StaminaChanged?.Invoke();
+    }
+
 }
 
 
