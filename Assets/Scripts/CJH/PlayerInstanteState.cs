@@ -20,6 +20,7 @@ public class PlayerInstanteState : MonoBehaviour
     private void Start()
     {
         stamina = MaxStamina;
+        UIManager.Instance.UpdateStamina(stamina,MaxStamina);
     }
 
     private void Update()
@@ -37,7 +38,11 @@ public class PlayerInstanteState : MonoBehaviour
     public void StaminaConsumption(float power)
     {
         if (stamina > power)
+        {
             stamina -= power;
+            UIManager.Instance.UpdateStamina(stamina, MaxStamina);
+        }
+
         else
             return;
 
@@ -52,20 +57,14 @@ public class PlayerInstanteState : MonoBehaviour
         {
             stamina += staminaRecoverySpeed * Time.deltaTime;
             Debug.Log("stamina : " + stamina);
+            UIManager.Instance.UpdateStamina(stamina,MaxStamina);
         }
         else if(stamina > MaxStamina)
         {
             stamina = MaxStamina;
             return;
         }
-
-    
-    
     }
-
-
-
-
 }
 
 
