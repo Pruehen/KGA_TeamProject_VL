@@ -7,6 +7,7 @@ public class PlayerInstanteState : MonoBehaviour
 {
     float hp;
     float stamina;
+    int bullets;
 
     public bool IsDead { get; private set; }
 
@@ -18,6 +19,15 @@ public class PlayerInstanteState : MonoBehaviour
 
     [SerializeField]
     private float staminaRecoverySpeed;
+
+    [SerializeField]
+    private int maxBullets;
+
+    // 현재 보유 탄환량 변수 추가
+    // 최대 보유 가능 탄환량 변수 추가 (시리얼라이즈필드)
+    // 탄환 소모 메서드 추가
+    // 탄환 획득 메서드 추가
+
 
     private void Start()
     {
@@ -70,6 +80,8 @@ public class PlayerInstanteState : MonoBehaviour
         }
     }
 
+
+    //체력 감소
     public void Hit(float dmg)
     {
         //dmg만큼 체력 감소
@@ -94,6 +106,35 @@ public class PlayerInstanteState : MonoBehaviour
         UIManager.Instance.UpdatehealthPoint(hp , maxHp);
 
     }
+
+
+    //탄환 획득
+    public void AcquireBullets(int  _bullets)
+    {
+        if (bullets < maxBullets)
+        {
+            bullets += _bullets;
+            Debug.Log("bullets : " + bullets);
+        }
+        else
+            return;
+    }
+
+    //탄환 소모
+    public void BulletConsumption()
+    {
+        if (bullets != 0)
+            bullets--;
+        else
+        {
+            Debug.Log("탄알 없음");
+            return;
+        }
+        
+    }
+
+   
+
 }
 
 
