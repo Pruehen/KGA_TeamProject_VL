@@ -1,9 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Playables;
-using Zenject.SpaceFighter;
 
 public class PlayerInstanteState : MonoBehaviour
 {
@@ -129,7 +125,9 @@ public class PlayerInstanteState : MonoBehaviour
             Debug.Log("bullets : " + bullets);
         }
         else
-            return;
+        {
+            bullets = maxBullets;
+        }            
         UpdateBullet();
     }
 
