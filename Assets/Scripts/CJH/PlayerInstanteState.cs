@@ -86,9 +86,11 @@ public class PlayerInstanteState : MonoBehaviour
         {
             IsDead = true;
             Debug.Log("죽음");
-        }
-        //체력 수치와 UI 연동.
+            Destroy(gameObject);
 
+        }
+
+        //체력 수치와 UI 연동.
         UIManager.Instance.UpdatehealthPoint(hp , maxHp);
 
     }
