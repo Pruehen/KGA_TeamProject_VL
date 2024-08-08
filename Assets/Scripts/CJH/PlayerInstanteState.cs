@@ -7,6 +7,7 @@ public class PlayerInstanteState : MonoBehaviour
 {
     float hp;
     float stamina;
+    int bullets;
 
     public bool IsDead { get; private set; }
 
@@ -18,6 +19,17 @@ public class PlayerInstanteState : MonoBehaviour
 
     [SerializeField]
     private float staminaRecoverySpeed;
+
+    [SerializeField]
+    private int maxBullets;
+
+    [SerializeField]
+    private float attackPower;
+    public float GetAttackPower() { return attackPower; }
+
+    [SerializeField]
+    private float moveSpeed;
+    public float GetMoveSpeed() { return moveSpeed; }
 
     private void Start()
     {
@@ -70,6 +82,8 @@ public class PlayerInstanteState : MonoBehaviour
         }
     }
 
+
+    //Ã¼·Â °¨¼Ò
     public void Hit(float dmg)
     {
         //dmg¸¸Å­ Ã¼·Â °¨¼Ò
@@ -94,6 +108,35 @@ public class PlayerInstanteState : MonoBehaviour
         UIManager.Instance.UpdatehealthPoint(hp , maxHp);
 
     }
+
+
+    //ÅºÈ¯ È¹µæ
+    public void AcquireBullets(int  _bullets)
+    {
+        if (bullets < maxBullets)
+        {
+            bullets += _bullets;
+            Debug.Log("bullets : " + bullets);
+        }
+        else
+            return;
+    }
+
+    //ÅºÈ¯ ¼Ò¸ð
+    public void BulletConsumption()
+    {
+        if (bullets != 0)
+            bullets--;
+        else
+        {
+            Debug.Log("Åº¾Ë ¾øÀ½");
+            return;
+        }
+        
+    }
+
+   
+
 }
 
 
