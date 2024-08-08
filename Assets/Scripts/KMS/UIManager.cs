@@ -17,25 +17,36 @@ public class UIManager : SceneSingleton<UIManager>
     public GameObject tabUI;
     public GameObject EscUI;
 
-  
+
     [SerializeField] PlayerInstanteState PlayerState;
     [SerializeField] Slider healthSlider;
+    
+  
     private void Start()
     {
         if (PlayerState != null)
         {
             PlayerState.HealthChanged += OnHealthChanged;
             PlayerState.StaminaChanged += OnStaminaChanged;
+            PlayerState.BulletChanged += OnBulletChanged;
         }
         UpdateHealthView();
         UpdateStaminaView();
+        UpdateBulletView();
     }
     private void OnDestroy()
     {
         if (PlayerState != null)
         {
             PlayerState.HealthChanged -= OnHealthChanged;
+            PlayerState.BulletChanged -= OnBulletChanged;
+            PlayerState.StaminaChanged -= OnStaminaChanged;
         }
+    }
+    public void setPlayer(PlayerInstanteState player)
+    {
+        if(player == null)
+        PlayerState = player;
     }
     public void Damage(float amount)
     {
@@ -54,10 +65,6 @@ public class UIManager : SceneSingleton<UIManager>
             healthPoint.fillAmount = PlayerState.hp / PlayerState.maxHp;
         }
     }
-    public void OnHealthChanged()
-    {
-        UpdateHealthView();
-    }
 
     public void UpdateStaminaView()
     {
@@ -68,10 +75,28 @@ public class UIManager : SceneSingleton<UIManager>
             stamina.fillAmount = PlayerState.stamina / PlayerState.MaxStamina;
         }
     }
-
+    public void UpdateBulletView()
+    {
+        if (PlayerState == null)
+            return;
+        if (bullet != null && PlayerState.bullets != 0)
+        {
+            stamina.fillAmount = PlayerState.stamina / PlayerState.MaxStamina;
+            bullet.text = PlayerState.bullets + " + " + PlayerState.maxBullets;
+        }
+    }
+    public void OnHealthChanged()
+    {
+        UpdateHealthView();
+    }
     public void OnStaminaChanged()
     {
         UpdateStaminaView();
     }
-   
+    public void OnBulletChanged()
+    {
+        UpdateBulletView();
+    }
+  
+
 }
