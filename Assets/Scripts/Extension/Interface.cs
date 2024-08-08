@@ -13,4 +13,5 @@ public interface ITargetable
     public Vector3 GetPosition();    
 
     public void Hit(float dmg);
+    public bool IsDead();
 }
