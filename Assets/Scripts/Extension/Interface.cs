@@ -7,3 +7,10 @@ public interface IInteractable
 
     public bool TryInteract(Vector3 originPos, float checkRange);
 }
+
+public interface ITargetable
+{
+    public Vector3 GetPosition();    
+
+    public void Hit(float dmg);
+}
