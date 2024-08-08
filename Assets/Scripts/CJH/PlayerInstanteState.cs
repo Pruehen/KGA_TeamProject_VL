@@ -1,40 +1,57 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro.EditorUtilities;
 using UnityEngine;
+using UnityEngine.Playables;
+using Zenject.SpaceFighter;
 
 public class PlayerInstanteState : MonoBehaviour
 {
-    float hp;
-    float stamina;
-    int bullets;
+    public float hp;
+    public float stamina;
+    public int bullets;
+
 
     public bool IsDead { get; private set; }
 
     [SerializeField]
-    private float maxHp;
+    public float maxHp;
 
     [SerializeField]
-    private float MaxStamina;
+    public float MaxStamina;
 
     [SerializeField]
     private float staminaRecoverySpeed;
 
+
     [SerializeField]
-    private int maxBullets;
+    public int maxBullets;
 
-    // 현재 보유 탄환량 변수 추가
-    // 최대 보유 가능 탄환량 변수 추가 (시리얼라이즈필드)
-    // 탄환 소모 메서드 추가
-    // 탄환 획득 메서드 추가
+    [SerializeField]
+    private float attackPower;
+    public float GetAttackPower() { return attackPower; }
+
+    [SerializeField]
+    private float moveSpeed;
+    public float GetMoveSpeed() { return moveSpeed; }
 
 
+    public event Action HealthChanged;
+    public event Action StaminaChanged;
+    public event Action BulletChanged;
+
+    private void Awake()
+    {
+        UIManager.Instance.setPlayer(this);
+    }
     private void Start()
     {
         IsDead = false;
         stamina = MaxStamina;
-        hp = maxHp;
-        UIManager.Instance.UpdateStamina(stamina,MaxStamina);
+
+        //UIManager.Instance.UpdateStamina(stamina, MaxStamina);
+        UpdateHealth();
+        UpdateStamina();
     }
 
     private void Update()
@@ -54,13 +71,11 @@ public class PlayerInstanteState : MonoBehaviour
         if (stamina > power)
         {
             stamina -= power;
-            UIManager.Instance.UpdateStamina(stamina, MaxStamina);
+            //UIManager.Instance.UpdateStamina(stamina, MaxStamina);
+            UpdateStamina();
         }
-
         else
             return;
-
-     
 
     }
 
@@ -70,8 +85,9 @@ public class PlayerInstanteState : MonoBehaviour
         if (stamina < MaxStamina)
         {
             stamina += staminaRecoverySpeed * Time.deltaTime;
-           
-            UIManager.Instance.UpdateStamina(stamina, MaxStamina);
+
+            //UIManager.Instance.UpdateStamina(stamina, MaxStamina);
+            UpdateStamina();
         }
         else if (stamina > MaxStamina)
         {
@@ -80,15 +96,13 @@ public class PlayerInstanteState : MonoBehaviour
         }
     }
 
-
-    //체력 감소
     public void Hit(float dmg)
     {
         //dmg만큼 체력 감소
         if (hp > 0)
         {
             hp -= dmg;
-            
+
         }
         else
             return;
@@ -98,18 +112,16 @@ public class PlayerInstanteState : MonoBehaviour
         {
             IsDead = true;
             Debug.Log("죽음");
-            Destroy(gameObject);
-
         }
-
         //체력 수치와 UI 연동.
-        UIManager.Instance.UpdatehealthPoint(hp , maxHp);
+
+        //UIManager.Instance.UpdatehealthPoint(hp, maxHp);
+        UpdateHealth();
 
     }
 
-
     //탄환 획득
-    public void AcquireBullets(int  _bullets)
+    public void AcquireBullets(int _bullets)
     {
         if (bullets < maxBullets)
         {
@@ -118,6 +130,7 @@ public class PlayerInstanteState : MonoBehaviour
         }
         else
             return;
+        UpdateBullet();
     }
 
     //탄환 소모
@@ -130,10 +143,26 @@ public class PlayerInstanteState : MonoBehaviour
             Debug.Log("탄알 없음");
             return;
         }
-        
+        UpdateBullet();
     }
 
-   
+
+    public void Restore()
+    {
+        hp = maxHp;
+    }
+    public void UpdateHealth()
+    {
+        HealthChanged?.Invoke();
+    }
+    public void UpdateStamina()
+    {
+        StaminaChanged?.Invoke();
+    }
+    public void UpdateBullet()
+    {
+        StaminaChanged?.Invoke();
+    }
 
 }
 

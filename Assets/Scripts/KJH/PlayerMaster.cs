@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerMaster : MonoBehaviour, ITargetable
 {
-    PlayerInstanteState _PlayerInstanteState;
+    public PlayerInstanteState _PlayerInstanteState { get; private set; }
     PlayerMove _PlayerMove;
     PlayerAttack _PlayerAttack;
 

@@ -1,11 +1,9 @@
-using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.ComponentModel;
 using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {    
-    [SerializeField] float moveSpeed = 10f;
     [SerializeField] float rotSpeed = 0.2f;
 
     Vector3 _moveVector3_Origin;
@@ -36,6 +34,7 @@ public class PlayerMove : MonoBehaviour
     InputManager _InputManager;
     PlayerCameraMove _PlayerCameraMove;
     Rigidbody _Rigidbody;
+    PlayerMaster _PlayerMaster;
 
     private void Awake()
     {
@@ -43,8 +42,9 @@ public class PlayerMove : MonoBehaviour
         _InputManager.PropertyChanged += OnInputPropertyChanged;
 
         _Rigidbody = GetComponent<Rigidbody>();
+        _PlayerMaster = GetComponent<PlayerMaster>();
 
-        _PlayerCameraMove = PlayerCameraMove.Instance;
+        _PlayerCameraMove = PlayerCameraMove.Instance;        
     }
 
     public void FixedUpdate()
@@ -57,6 +57,7 @@ public class PlayerMove : MonoBehaviour
         switch (e.PropertyName)
         {
             case nameof(_InputManager.MoveVector2_Left_WASD):
+                float moveSpeed = _PlayerMaster._PlayerInstanteState.GetMoveSpeed();
                 _moveVector3_Origin = new Vector3(_InputManager.MoveVector2_Left_WASD.x * moveSpeed, 0, _InputManager.MoveVector2_Left_WASD.y * moveSpeed);
                 break;            
         }
