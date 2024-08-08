@@ -27,11 +27,13 @@ public class PlayerInstanteState : MonoBehaviour
     [SerializeField]
     public int maxBullets;
 
-    // 현재 보유 탄환량 변수 추가
-    // 최대 보유 가능 탄환량 변수 추가 (시리얼라이즈필드)
-    // 탄환 소모 메서드 추가
-    // 탄환 획득 메서드 추가
+    [SerializeField]
+    private float attackPower;
+    public float GetAttackPower() { return attackPower; }
 
+    [SerializeField]
+    private float moveSpeed;
+    public float GetMoveSpeed() { return moveSpeed; }
 
 
     public event Action HealthChanged;
