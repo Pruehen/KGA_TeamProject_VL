@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -22,10 +23,10 @@ public class UIManager : SceneSingleton<UIManager>
         if(stamina!=null)
         stamina.fillAmount = (float)currntStamina / maxStaminae;
     }
-    public void UpdatehealthPoint(int currntHealtPoint, int maxhealthPoint)
+    public void UpdatehealthPoint(float currntHealtPoint, float maxhealthPoint)
     {
         if(healthPoint!=null)
-        healthPoint.fillAmount = (float)currntHealtPoint / maxhealthPoint;
+        healthPoint.fillAmount = currntHealtPoint / maxhealthPoint;
     }
     public void UpdateskillPoint(int currntskillPoint, int maxskillPoint)
     {
@@ -58,4 +59,5 @@ public class UIManager : SceneSingleton<UIManager>
     {
 
     }
+
 }

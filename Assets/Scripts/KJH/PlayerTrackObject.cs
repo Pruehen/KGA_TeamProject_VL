@@ -4,8 +4,11 @@ public class PlayerTrackObject : MonoBehaviour
 {
     Transform trackTargetTrf;
 
+    PlayerCameraMove Cam;
+
     private void Awake()
     {
+        Cam = GetComponentInChildren<PlayerCameraMove>();
         trackTargetTrf = transform.parent;
         this.transform.SetParent(null);
     }
@@ -13,6 +16,16 @@ public class PlayerTrackObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        this.transform.position = trackTargetTrf.position;
+        if (trackTargetTrf != null)
+            this.transform.position = trackTargetTrf.position;
+        else
+        {
+            Destroy(Cam);
+            return;
+        }
+           
+
+
+
     }
 }

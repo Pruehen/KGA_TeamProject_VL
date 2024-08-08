@@ -8,6 +8,8 @@ public class PlayerInstanteState : MonoBehaviour
     float hp;
     float stamina;
 
+    public bool IsDead { get; private set; }
+
     [SerializeField]
     private float maxHp;
 
@@ -19,7 +21,9 @@ public class PlayerInstanteState : MonoBehaviour
 
     private void Start()
     {
+        IsDead = false;
         stamina = MaxStamina;
+        hp = maxHp;
         UIManager.Instance.UpdateStamina(stamina,MaxStamina);
     }
 
@@ -27,8 +31,8 @@ public class PlayerInstanteState : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.K))
         {
-           
             StaminaConsumption(10);
+            Hit(10);
         }
 
         StaminaAutoRecovery();
@@ -46,7 +50,7 @@ public class PlayerInstanteState : MonoBehaviour
         else
             return;
 
-        Debug.Log("stamina : " + stamina);
+     
 
     }
 
@@ -56,14 +60,39 @@ public class PlayerInstanteState : MonoBehaviour
         if (stamina < MaxStamina)
         {
             stamina += staminaRecoverySpeed * Time.deltaTime;
-            Debug.Log("stamina : " + stamina);
-            UIManager.Instance.UpdateStamina(stamina,MaxStamina);
+           
+            UIManager.Instance.UpdateStamina(stamina, MaxStamina);
         }
-        else if(stamina > MaxStamina)
+        else if (stamina > MaxStamina)
         {
             stamina = MaxStamina;
             return;
         }
+    }
+
+    public void Hit(float dmg)
+    {
+        //dmg만큼 체력 감소
+        if (hp > 0)
+        {
+            hp -= dmg;
+            
+        }
+        else
+            return;
+
+        //체력이 0이 될 경우 IsDead를 true로.
+        if (hp == 0)
+        {
+            IsDead = true;
+            Debug.Log("죽음");
+            Destroy(gameObject);
+
+        }
+
+        //체력 수치와 UI 연동.
+        UIManager.Instance.UpdatehealthPoint(hp , maxHp);
+
     }
 }
 
