@@ -171,23 +171,13 @@ public class Enemy : MonoBehaviour
                 target.y = 0;
                 look = Quaternion.LookRotation(target - orig, Vector3.up);
                 transform.rotation = look;
+                Debug.Log("DefaultLook");
             }
-        }
-        else if (Vector3.Distance(_navMeshAgent.destination, transform.position) > 2f)
-        {
-            Vector3 orig = transform.position;
-            Vector3 target = _navMeshAgent.destination;
-            if (!_isFlying)
-            {
-                orig.y = 0;
-                target.y = 0;
-            }
-            look = Quaternion.LookRotation(target - orig, Vector3.up);
-            transform.rotation = look;
         }
         else
         {
             transform.rotation = look;
+            Debug.Log("Just Look");
         }
         if (_navMeshAgent.velocity.magnitude > 0.1f)
         {
@@ -256,7 +246,6 @@ public class Enemy : MonoBehaviour
             _editorData.Shield.SetActive(false);
             StartCoroutine(EnableShield());
         }
-        transform.rotation = Quaternion.LookRotation(_detector.GetPosition() - transform.position, Vector3.up);
         IsMovable = false;
         _currentAttackTime = _attackCooldown;
         _animator.SetTrigger("Attack");
