@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using UnityEditor;
 using UnityEngine;
 
 public class ATKTest : MonoBehaviour
@@ -36,12 +37,12 @@ public class ATKTest : MonoBehaviour
 
     public void EndAttack()
     {
-        _animator.SetTrigger("AttackEnd");
+        _animator.SetTrigger("ChargingEnd");
     }
     public void Click()
     {
         _animator.SetTrigger("Attack");
-        _animator.SetTrigger("AttackEnd");
+        _animator.SetTrigger("ChargingEnd");
     }
     public void Hold()
     {
@@ -51,7 +52,16 @@ public class ATKTest : MonoBehaviour
     
     public void Release()
     {
-        _animator.SetTrigger("AttackEnd");
+        _animator.SetTrigger("ChargingEnd");
+    }
+
+    public void ATKEnd()
+    {
+        if (!_animator.GetBool("Attack"))
+        {
+            _animator.SetTrigger("AttackEnd");
+            Debug.Log("ATKEnd");
+        }
     }
 
     void Update()
@@ -69,5 +79,5 @@ public class ATKTest : MonoBehaviour
         //인풋매니저를 통해서 좌클릭시에 메세지를 send
     }
 
-
+  
 }
