@@ -8,7 +8,18 @@ public class PlayerInstanteState : MonoBehaviour
     public int bullets { get; private set; }
     public int meleeBullets { get; private set; }
     public float skillGauge { get; private set; }
+    public bool IsAbsorptState { get; set; }
 
+    bool _isMeleeMode;
+    public bool IsMeleeMode
+    {
+        get { return _isMeleeMode; }
+        set
+        {
+            _isMeleeMode = value;
+            OnMeleeModeChanged?.Invoke(_isMeleeMode);
+        }
+    }
 
     public bool IsDead { get; private set; }
 
@@ -41,6 +52,7 @@ public class PlayerInstanteState : MonoBehaviour
     public event Action BulletChanged;
     public event Action MeleeBulletChanged;
     public event Action SkillGaugeChanged;
+    public Action<bool> OnMeleeModeChanged;
 
     private void Awake()
     {

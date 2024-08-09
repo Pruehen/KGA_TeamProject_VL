@@ -27,6 +27,7 @@ public class UIManager : SceneSingleton<UIManager>
             PlayerState.StaminaChanged += OnStaminaChanged;
             PlayerState.BulletChanged += OnBulletChanged;
             PlayerState.MeleeBulletChanged += OnMeleeBulletChanged;
+            PlayerState.OnMeleeModeChanged += OnMeleeModeChanged;
         }
         UpdateHealthView();
         UpdateStaminaView();
@@ -88,10 +89,6 @@ public class UIManager : SceneSingleton<UIManager>
         {            
             TMP_MeleeBulletText.text = PlayerState.meleeBullets + " / " + PlayerState.maxBullets;
         }
-        if(UI_MeleeBulletUI != null)
-        {
-            UI_MeleeBulletUI.SetActive(PlayerState.meleeBullets != 0);
-        }
     }
 
     public void OnHealthChanged()
@@ -109,6 +106,10 @@ public class UIManager : SceneSingleton<UIManager>
     public void OnMeleeBulletChanged()
     {
         UpdateMeleeBulletView();
+    }
+    public void OnMeleeModeChanged(bool value)
+    {
+        UI_MeleeBulletUI.SetActive(value);
     }
 }
 
