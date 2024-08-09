@@ -6,6 +6,7 @@ public class PlayerInstanteState : MonoBehaviour
     public float hp { get; private set; }
     public float stamina { get; private set; }
     public int bullets { get; private set; }
+    public int meleeBullets { get; private set; }
     public float skillGauge { get; private set; }
 
 
@@ -23,8 +24,8 @@ public class PlayerInstanteState : MonoBehaviour
     private float MaxskillGauge = 100;
 
 
-    [SerializeField]
-    public int maxBullets;
+    [SerializeField] public int maxBullets = 50;
+    [SerializeField] int maxMeleeBullets = 50;
 
     [SerializeField]
     private float attackPower;
@@ -38,6 +39,7 @@ public class PlayerInstanteState : MonoBehaviour
     public event Action HealthChanged;
     public event Action StaminaChanged;
     public event Action BulletChanged;
+    public event Action MeleeBulletChanged;
     public event Action SkillGaugeChanged;
 
     private void Awake()
@@ -117,15 +119,12 @@ public class PlayerInstanteState : MonoBehaviour
     //ÅºÈ¯ È¹µæ
     public void AcquireBullets(int _bullets)
     {
-        if (bullets < maxBullets)
-        {
-            bullets += _bullets;
-            Debug.Log("bullets : " + bullets);
-        }
-        else
+        bullets += _bullets;
+        if(bullets > maxBullets)
         {
             bullets = maxBullets;
-        }            
+        }
+
         UpdateBullet();
     }
 
@@ -141,6 +140,34 @@ public class PlayerInstanteState : MonoBehaviour
         }
         UpdateBullet();
     }
+    //ÅºÈ¯ È¹µæ
+    public void AcquireBullets_Melee(int _bullets)
+    {
+        meleeBullets += _bullets;
+        if(meleeBullets > maxBullets)
+        {
+            meleeBullets = maxBullets;
+        }
+
+        UpdateBullet_Melee();
+    }
+
+    //ÅºÈ¯ ¼Ò¸ð
+    public bool TryBulletConsumption_Melee(int value)
+    {
+        if(meleeBullets >= value)
+        {
+            meleeBullets -= value;
+            UpdateBullet_Melee();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+
     public void SkillGaugeRecovery(float value)
     {
         skillGauge += value;
@@ -187,8 +214,12 @@ public class PlayerInstanteState : MonoBehaviour
     {
         BulletChanged?.Invoke();
     }
+    public void UpdateBullet_Melee()
+    {
+        MeleeBulletChanged?.Invoke();
+    }
     public void UpdateSkillGauge()
     {
         SkillGaugeChanged?.Invoke();
-    }
+    }    
 }

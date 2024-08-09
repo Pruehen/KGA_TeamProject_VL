@@ -9,6 +9,9 @@ public class PlayerMaster : MonoBehaviour, ITargetable
     PlayerModChangeManager _PlayerModChangeManager;
     [SerializeField] ItemAbsorber _ItemAbsorber;
 
+    public bool IsAbsorptState { get; set; }
+    public bool IsMeleeMode { get; set; }
+
     private void Awake()
     {
         _PlayerInstanteState = GetComponent<PlayerInstanteState>();
@@ -29,10 +32,11 @@ public class PlayerMaster : MonoBehaviour, ITargetable
         return this.transform.position;
     }
 
-    public void Register_PlayerModChangeManager(Action callBack_StartAbsorb, Func<int> callBack_SucceseAbsorb, Action callBack_DropAbsorbingItems)
+    public void Register_PlayerModChangeManager(Action callBack_StartAbsorb, Func<int> callBack_SucceseAbsorb, Func<int> callBack_AcquireAll, Action callBack_DropAbsorbingItems)
     {
         _PlayerModChangeManager.OnEnterAbsorptState = callBack_StartAbsorb;
-        _PlayerModChangeManager.OnSucceseAbsorptState = callBack_SucceseAbsorb;
+        _PlayerModChangeManager.OnSucceseAbsorptState = callBack_AcquireAll;
+        _PlayerModChangeManager.OnSucceseAbsorptState_EntryMelee = callBack_SucceseAbsorb;
         _PlayerModChangeManager.OnEndAbsorptState = callBack_DropAbsorbingItems;
     }
 

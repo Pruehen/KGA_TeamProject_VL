@@ -65,7 +65,7 @@ public class PlayerMove : MonoBehaviour
 
     void Move_OnFixedUpdate()
     {
-        if (_isMoving)
+        if (_isMoving && !_PlayerMaster.IsAbsorptState)
         {
             _moveVector3 = new Vector3(_moveVector3_Origin.x, 0, _moveVector3_Origin.z);
 
@@ -87,7 +87,7 @@ public class PlayerMove : MonoBehaviour
     void Rotate_OnFixedUpdate()
     {
         // 캐릭터를 이동 방향으로 회전
-        if (_moveVector3 != Vector3.zero && _isMoving)
+        if (_moveVector3 != Vector3.zero && _isMoving && !_PlayerMaster.IsAbsorptState)
         {
             _lookTargetPos = _moveVector3;
 

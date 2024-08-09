@@ -7,7 +7,9 @@ public class UIManager : SceneSingleton<UIManager>
     public Image stamina;
     public Image healthPoint;
     public Image skillPoint;
-    public TextMeshProUGUI bullet;
+    public TextMeshProUGUI TMP_BulletText;
+    public TextMeshProUGUI TMP_MeleeBulletText;
+    [SerializeField] GameObject UI_MeleeBulletUI;
     public GameObject inGameUI;
     public GameObject tabUI;
     public GameObject EscUI;    
@@ -23,10 +25,12 @@ public class UIManager : SceneSingleton<UIManager>
             PlayerState.HealthChanged += OnHealthChanged;
             PlayerState.StaminaChanged += OnStaminaChanged;
             PlayerState.BulletChanged += OnBulletChanged;
+            PlayerState.MeleeBulletChanged += OnMeleeBulletChanged;
         }
         UpdateHealthView();
         UpdateStaminaView();
         UpdateBulletView();
+        UpdateMeleeBulletView();
     }
     private void OnDestroy()
     {
@@ -35,6 +39,7 @@ public class UIManager : SceneSingleton<UIManager>
             PlayerState.HealthChanged -= OnHealthChanged;
             PlayerState.BulletChanged -= OnBulletChanged;
             PlayerState.StaminaChanged -= OnStaminaChanged;
+            PlayerState.MeleeBulletChanged -= OnMeleeBulletChanged;
         }
     }
     public void setPlayer(PlayerInstanteState player)
@@ -69,12 +74,25 @@ public class UIManager : SceneSingleton<UIManager>
     {
         if (PlayerState == null)
             return;
-        if (bullet != null && PlayerState.bullets != 0)
-        {
-            stamina.fillAmount = PlayerState.stamina / PlayerState.MaxStamina;
-            bullet.text = PlayerState.bullets + " + " + PlayerState.maxBullets;
+        if (TMP_BulletText != null)
+        {            
+            TMP_BulletText.text = PlayerState.bullets + " / " + PlayerState.maxBullets;
         }
     }
+    public void UpdateMeleeBulletView()
+    {
+        if (PlayerState == null)
+            return;
+        if (TMP_MeleeBulletText != null)
+        {            
+            TMP_MeleeBulletText.text = PlayerState.meleeBullets + " / " + PlayerState.maxBullets;
+        }
+        if(UI_MeleeBulletUI != null)
+        {
+            UI_MeleeBulletUI.SetActive(PlayerState.meleeBullets != 0);
+        }
+    }
+
     public void OnHealthChanged()
     {
         UpdateHealthView();
@@ -87,6 +105,9 @@ public class UIManager : SceneSingleton<UIManager>
     {
         UpdateBulletView();
     }
-  
-
+    public void OnMeleeBulletChanged()
+    {
+        UpdateMeleeBulletView();
+    }
 }
+

@@ -136,7 +136,7 @@ public class ItemAbsorber : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Rigidbody rb = other.attachedRigidbody;
-        if(rb == null)
+        if (rb == null)
         {
             return;
         }
@@ -205,7 +205,7 @@ public class ItemAbsorber : MonoBehaviour
             item.GetComponent<TrashItem>().EnablePhysics();
             item.transform.SetParent(null, true);
         }
-        foreach(Coroutine coroutine in absorbingCoroutines)
+        foreach (Coroutine coroutine in absorbingCoroutines)
         {
             StopCoroutine(coroutine);
         }
