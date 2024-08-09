@@ -54,19 +54,16 @@ public class PlayerAttack : MonoBehaviour
 
     void Attack()
     {
-        GameObject projectile = ObjectPoolManager.Instance.DequeueObject(Prefab_Projectile);
-        projectile.transform.position = projectile_InitPos.position;
-
-        Rigidbody projectileRb = projectile.GetComponent<Rigidbody>();
-        projectileRb.velocity = Vector3.zero;
-        projectileRb.angularVelocity = Vector3.zero;
+        Projectile projectile = ObjectPoolManager.Instance.DequeueObject(Prefab_Projectile).GetComponent<Projectile>();
 
         Vector3 projectionVector = _PlayerCameraMove.CamAxisTransform().forward * projectionSpeed_Forward + Vector3.up * projectionSpeed_Up;
-        projectileRb.AddForce(projectionVector, ForceMode.Impulse);
-        
-        Vector3 randomAxis = Random.onUnitSphere;        
-        Vector3 randomTorque = randomAxis * Random.Range(0, 10f);        
-        projectileRb.AddTorque(randomTorque);
+
+        projectile.Init(_PlayerMaster._PlayerInstanteState.GetAttackPower(), projectile_InitPos.position, projectionVector, OnProjectileHit);
+    }
+
+    void OnProjectileHit()
+    {
+        Debug.Log("공격 성공");
     }
 
     IEnumerator Attack_Delayed(float delayTime)
