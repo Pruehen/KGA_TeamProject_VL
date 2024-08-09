@@ -1,15 +1,12 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Playables;
-using Zenject.SpaceFighter;
 
 public class PlayerInstanteState : MonoBehaviour
 {
-    public float hp;
-    public float stamina;
-    public int bullets;
+    public float hp { get; private set; }
+    public float stamina { get; private set; }
+    public int bullets { get; private set; }
+    public float skillGauge { get; private set; }
 
 
     public bool IsDead { get; private set; }
@@ -22,6 +19,8 @@ public class PlayerInstanteState : MonoBehaviour
 
     [SerializeField]
     private float staminaRecoverySpeed;
+    [SerializeField]
+    private float MaxskillGauge = 100;
 
 
     [SerializeField]
@@ -39,16 +38,15 @@ public class PlayerInstanteState : MonoBehaviour
     public event Action HealthChanged;
     public event Action StaminaChanged;
     public event Action BulletChanged;
+    public event Action SkillGaugeChanged;
 
     private void Awake()
     {
+        Restore();
         UIManager.Instance.setPlayer(this);
     }
     private void Start()
-    {
-        IsDead = false;
-        stamina = MaxStamina;
-
+    {        
         //UIManager.Instance.UpdateStamina(stamina, MaxStamina);
         UpdateHealth();
         UpdateStamina();
@@ -104,9 +102,6 @@ public class PlayerInstanteState : MonoBehaviour
             hp -= dmg;
 
         }
-        else
-            return;
-
         //Ã¼·ÂÀÌ 0ÀÌ µÉ °æ¿ì IsDead¸¦ true·Î.
         if (hp == 0)
         {
@@ -117,7 +112,6 @@ public class PlayerInstanteState : MonoBehaviour
 
         //UIManager.Instance.UpdatehealthPoint(hp, maxHp);
         UpdateHealth();
-
     }
 
     //ÅºÈ¯ È¹µæ
@@ -129,7 +123,9 @@ public class PlayerInstanteState : MonoBehaviour
             Debug.Log("bullets : " + bullets);
         }
         else
-            return;
+        {
+            bullets = maxBullets;
+        }            
         UpdateBullet();
     }
 
@@ -145,11 +141,39 @@ public class PlayerInstanteState : MonoBehaviour
         }
         UpdateBullet();
     }
+    public void SkillGaugeRecovery(float value)
+    {
+        skillGauge += value;
+
+        if(skillGauge > MaxskillGauge)
+        {
+            skillGauge = MaxskillGauge;
+        }
+
+        UpdateSkillGauge();
+    }
+    public bool TryUseSkillGauge(float value)
+    {
+        if(skillGauge >= value)
+        {
+            skillGauge -= value;
+            UpdateSkillGauge();
+            return true;
+        }
+        else
+        {
+            return false;
+        }                
+    }
 
 
-    public void Restore()
+    void Restore()
     {
         hp = maxHp;
+        IsDead = false;
+        stamina = MaxStamina;
+        skillGauge = MaxskillGauge;
+        bullets = maxBullets / 3;
     }
     public void UpdateHealth()
     {
@@ -161,15 +185,10 @@ public class PlayerInstanteState : MonoBehaviour
     }
     public void UpdateBullet()
     {
-        StaminaChanged?.Invoke();
+        BulletChanged?.Invoke();
     }
-
+    public void UpdateSkillGauge()
+    {
+        SkillGaugeChanged?.Invoke();
+    }
 }
-
-
-
-
-
-
-
-

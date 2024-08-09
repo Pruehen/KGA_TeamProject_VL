@@ -1,10 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 
 public class UIManager : SceneSingleton<UIManager>
@@ -15,8 +10,7 @@ public class UIManager : SceneSingleton<UIManager>
     public TextMeshProUGUI bullet;
     public GameObject inGameUI;
     public GameObject tabUI;
-    public GameObject EscUI;
-
+    public GameObject EscUI;    
 
     [SerializeField] PlayerInstanteState PlayerState;
     [SerializeField] Slider healthSlider;
@@ -44,18 +38,14 @@ public class UIManager : SceneSingleton<UIManager>
         }
     }
     public void setPlayer(PlayerInstanteState player)
-    {
-        if(player == null)
+    {        
         PlayerState = player;
     }
     public void Damage(float amount)
     {
         PlayerState?.Hit(amount);
     }
-    public void Reset()
-    {
-        PlayerState?.Restore();
-    }
+
     public void UpdateHealthView()
     {
         if (PlayerState == null)

@@ -20,7 +20,7 @@ public class PlayerMove : MonoBehaviour
     bool _isMoving = true;
     public void SetMoveLock(float time)
     {
-        _Rigidbody.velocity = Vector3.zero;
+        //_Rigidbody.velocity = Vector3.zero;
         StartCoroutine(SetMoveLock_Coroutine(time));
     }
     IEnumerator SetMoveLock_Coroutine(float time)
@@ -47,7 +47,7 @@ public class PlayerMove : MonoBehaviour
         _PlayerCameraMove = PlayerCameraMove.Instance;        
     }
 
-    public void FixedUpdate()
+    public void Update()
     {
         Move_OnFixedUpdate();
         Rotate_OnFixedUpdate();
@@ -67,7 +67,7 @@ public class PlayerMove : MonoBehaviour
     {
         if (_isMoving)
         {
-            _moveVector3 = new Vector3(_moveVector3_Origin.x, _Rigidbody.velocity.y, _moveVector3_Origin.z);
+            _moveVector3 = new Vector3(_moveVector3_Origin.x, 0, _moveVector3_Origin.z);
 
             // 카메라의 회전 방향을 기준으로 이동 방향 계산 
             if (_PlayerCameraMove != null)
@@ -76,7 +76,7 @@ public class PlayerMove : MonoBehaviour
             }
 
 
-            _Rigidbody.velocity = _moveVector3;
+            this.transform.position += (_moveVector3 * Time.deltaTime);
 
             // 애니메이션
             // animator.SetFloat("XSpeed", moveVector.x);
