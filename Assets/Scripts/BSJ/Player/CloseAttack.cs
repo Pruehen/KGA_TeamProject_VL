@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CloseAttack : MonoBehaviour
+public class CloseAttack
 {
     Animator _animator;
 

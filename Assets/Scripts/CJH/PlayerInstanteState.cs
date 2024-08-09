@@ -32,7 +32,7 @@ public class PlayerInstanteState : MonoBehaviour
     [SerializeField]
     private float staminaRecoverySpeed;
     [SerializeField]
-    private float MaxskillGauge = 100;
+    public float MaxskillGauge = 100;
 
 
     [SerializeField] public int maxBullets = 50;
@@ -64,6 +64,7 @@ public class PlayerInstanteState : MonoBehaviour
         //UIManager.Instance.UpdateStamina(stamina, MaxStamina);
         UpdateHealth();
         UpdateStamina();
+        UpdateSkillGauge();
     }
 
     private void Update()
@@ -114,7 +115,6 @@ public class PlayerInstanteState : MonoBehaviour
         if (hp > 0)
         {
             hp -= dmg;
-
         }
         //체력이 0이 될 경우 IsDead를 true로.
         if (hp == 0)
@@ -211,7 +211,7 @@ public class PlayerInstanteState : MonoBehaviour
         hp = maxHp;
         IsDead = false;
         stamina = MaxStamina;
-        skillGauge = MaxskillGauge;
+        skillGauge = 0;
         bullets = maxBullets / 3;
     }
     public void UpdateHealth()

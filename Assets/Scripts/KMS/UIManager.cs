@@ -1,4 +1,5 @@
 using TMPro;
+using UI.Extension;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,8 +15,8 @@ public class UIManager : SceneSingleton<UIManager>
     public GameObject tabUI;
     public GameObject EscUI;    
 
-    [SerializeField] PlayerInstanteState PlayerState;
-    [SerializeField] Slider healthSlider;
+    [SerializeField] PlayerInstanteState PlayerState;    
+
     
   
     private void Start()
@@ -56,7 +57,7 @@ public class UIManager : SceneSingleton<UIManager>
     {
         if (PlayerState == null)
             return;
-        if (healthSlider != null && PlayerState.maxHp != 0)
+        if (healthPoint != null && PlayerState.maxHp != 0)
         {
             healthPoint.fillAmount = PlayerState.hp / PlayerState.maxHp;
         }

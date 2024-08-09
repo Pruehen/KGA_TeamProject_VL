@@ -117,7 +117,7 @@ public class Enemy : MonoBehaviour, ITargetable
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
 
-        _characterCollider = GetComponent<Collider>();
+        _characterCollider = GetComponentInChildren<Collider>();
         _characterEnvCollider = GetComponentInChildren<Collider>();
 
         _navMeshAgent.updateRotation = false;
@@ -285,8 +285,7 @@ public class Enemy : MonoBehaviour, ITargetable
     {
         if (_attackCollider == null)
             return;
-        _attackCollider.SetDamage(_attackDamage);
-        _attackCollider.enabled = true;
+        _attackCollider.EnableDamageBox(_attackDamage);
     }
 
     public bool IsTargetNear(float range)
