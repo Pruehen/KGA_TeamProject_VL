@@ -1,4 +1,5 @@
 using TMPro;
+using UI.Extension;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,8 @@ public class UIManager : SceneSingleton<UIManager>
     public GameObject EscUI;    
 
     [SerializeField] PlayerInstanteState PlayerState;    
+
+    
   
     private void Start()
     {
@@ -21,10 +24,12 @@ public class UIManager : SceneSingleton<UIManager>
             PlayerState.HealthChanged += OnHealthChanged;
             PlayerState.StaminaChanged += OnStaminaChanged;
             PlayerState.BulletChanged += OnBulletChanged;
+            PlayerState.SkillGaugeChanged += ONSkillGaugeChanged;
         }
         UpdateHealthView();
         UpdateStaminaView();
         UpdateBulletView();
+        UpdateSkillGaugeView();
     }
     private void OnDestroy()
     {
@@ -33,6 +38,7 @@ public class UIManager : SceneSingleton<UIManager>
             PlayerState.HealthChanged -= OnHealthChanged;
             PlayerState.BulletChanged -= OnBulletChanged;
             PlayerState.StaminaChanged -= OnStaminaChanged;
+            PlayerState.SkillGaugeChanged -= ONSkillGaugeChanged;
         }
     }
     public void setPlayer(PlayerInstanteState player)
@@ -73,6 +79,15 @@ public class UIManager : SceneSingleton<UIManager>
             bullet.text = PlayerState.bullets + " + " + PlayerState.maxBullets;
         }
     }
+    public void UpdateSkillGaugeView()
+    {
+        if (PlayerState == null)
+            return;
+        if (skillPoint != null)
+        {
+            skillPoint.fillAmount = PlayerState.skillGauge / PlayerState.MaxskillGauge;
+        }
+    }
     public void OnHealthChanged()
     {
         UpdateHealthView();
@@ -85,6 +100,12 @@ public class UIManager : SceneSingleton<UIManager>
     {
         UpdateBulletView();
     }
-  
+    public void ONSkillGaugeChanged()
+    {
+        UpdateSkillGaugeView();
+
+    }
+
+
 
 }
