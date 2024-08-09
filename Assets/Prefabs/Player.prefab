@@ -172,12 +172,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d62f7a5d144457440abeebf48d3d7b32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 0
-  stamina: 0
-  bullets: 0
   maxHp: 100
   MaxStamina: 100
   staminaRecoverySpeed: 10
+  MaxskillGauge: 100
   maxBullets: 50
   attackPower: 10
   moveSpeed: 10
@@ -242,7 +240,7 @@ Rigidbody:
   m_GameObject: {fileID: 3370145770967923552}
   serializedVersion: 4
   m_Mass: 100
-  m_Drag: 1
+  m_Drag: 0.1
   m_AngularDrag: 1
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
