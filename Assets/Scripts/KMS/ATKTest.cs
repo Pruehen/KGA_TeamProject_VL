@@ -48,13 +48,13 @@ public class ATKTest : MonoBehaviour
     public void Hold()
     {
 
-        _animator.SetTrigger("Attack");
+        _animator.SetBool("ChargingEnd",true);
     }
     
     public void Release()
     {
         //_animator.SetTrigger("ChargingEnd");
-        _animator.SetBool("ChargingEnd", true);
+        _animator.SetBool("ChargingEnd", false);
     }
     public void ChargingEnd()
     {
