@@ -9,8 +9,23 @@ public class PlayerMaster : MonoBehaviour, ITargetable
     PlayerModChangeManager _PlayerModChangeManager;
     [SerializeField] ItemAbsorber _ItemAbsorber;
 
-    public bool IsAbsorptState { get; set; }
-    public bool IsMeleeMode { get; set; }
+    public bool IsAbsorptState
+    {
+        get { return _PlayerInstanteState.IsAbsorptState; }
+        set
+        {
+            _PlayerInstanteState.IsAbsorptState = value;
+        }
+    }
+    public bool IsMeleeMode
+    {
+        get { return _PlayerInstanteState.IsMeleeMode; }
+        set
+        {
+            _PlayerInstanteState.IsMeleeMode = value;
+
+        }
+    }
 
     private void Awake()
     {
