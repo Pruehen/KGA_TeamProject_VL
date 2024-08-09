@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerMaster : MonoBehaviour, ITargetable
@@ -5,13 +6,17 @@ public class PlayerMaster : MonoBehaviour, ITargetable
     public PlayerInstanteState _PlayerInstanteState { get; private set; }
     PlayerMove _PlayerMove;
     PlayerAttack _PlayerAttack;
+    PlayerModChangeManager _PlayerModChangeManager;
+    [SerializeField] ItemAbsorber _ItemAbsorber;
 
-    
     private void Awake()
     {
         _PlayerInstanteState = GetComponent<PlayerInstanteState>();
         _PlayerMove = GetComponent<PlayerMove>();
         _PlayerAttack = GetComponent<PlayerAttack>();
+        _PlayerModChangeManager = GetComponent<PlayerModChangeManager>();
+
+        _ItemAbsorber.Init();
     }
 
     public void OnAttackState(Vector3 lookTarget)
@@ -23,6 +28,14 @@ public class PlayerMaster : MonoBehaviour, ITargetable
     {
         return this.transform.position;
     }
+
+    public void Register_PlayerModChangeManager(Action callBack_StartAbsorb, Func<int> callBack_SucceseAbsorb, Action callBack_DropAbsorbingItems)
+    {
+        _PlayerModChangeManager.OnEnterAbsorptState = callBack_StartAbsorb;
+        _PlayerModChangeManager.OnSucceseAbsorptState = callBack_SucceseAbsorb;
+        _PlayerModChangeManager.OnEndAbsorptState = callBack_DropAbsorbingItems;
+    }
+
 
     public void Hit(float dmg)
     {
