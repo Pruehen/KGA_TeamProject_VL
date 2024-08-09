@@ -5,6 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class ItemAbsorber : MonoBehaviour
 {
+    [SerializeField] PlayerMaster _PlayerMaster;
+
     // Todo 석진 끌어당기는 클래스와 돌리는 클래스를 따로 생성하면 더 읽기 쉬울것 같다.
     // 실행은 update를 통해
     List<GameObject> absorbingItems = new List<GameObject>();
@@ -25,20 +27,28 @@ public class ItemAbsorber : MonoBehaviour
     //캐시
     private CapsuleCollider _collider;
     private Coroutine _expendCoroutine;
-    private void Awake()
+
+    bool _isInit = false;
+    public void Init()
     {
         _collider = GetComponent<CapsuleCollider>();
         SetRadius(0f);
         SetHeight(Height);
+
+        _PlayerMaster.Register_PlayerModChangeManager(StartAbsorb, SucceseAbsorb, DropAbsorbingItems);
+        _isInit = true;
     }
 
     private float absorbTimeStamp = 0f;
     private void Update()
     {
-        Test();
+        if (_isInit)
+        {
+            Test();
 
-        float timeFromAbsorb = Time.time - absorbTimeStamp;
-        transform.Rotate(0, Time.deltaTime * RevolveSpeed * RevolveSpeedCurve.Evaluate(timeFromAbsorb), 0);
+            float timeFromAbsorb = Time.time - absorbTimeStamp;
+            transform.Rotate(0, Time.deltaTime * RevolveSpeed * RevolveSpeedCurve.Evaluate(timeFromAbsorb), 0);
+        }
     }
 
 
