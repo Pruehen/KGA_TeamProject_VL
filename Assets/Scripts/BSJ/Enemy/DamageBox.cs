@@ -7,6 +7,8 @@ public class DamageBox : MonoBehaviour
 
     private Coroutine _DisableBoxCoroutine;
 
+    private float _enableTimer = 0f;
+
     private Vector3 HalfSize
     {
         get
@@ -47,7 +49,15 @@ public class DamageBox : MonoBehaviour
             }            
             combat.Hit(_damage);
         }
-        enabled = false;
+    }
+
+    private void Update()
+    {
+        _enableTimer -= Time.deltaTime;
+        if(_enableTimer <= 0f)
+        {
+            enabled = false;
+        }
     }
 
     private void OnDrawGizmos()
@@ -60,8 +70,15 @@ public class DamageBox : MonoBehaviour
         Gizmos.DrawWireCube(transform.position, HalfSize);
     }
 
-    public void SetDamage(float damage)
+    /// <summary>
+    /// 0이면 한번만 데미지 적용
+    /// 시간만큼 데미지 박스를 켜 둠
+    /// </summary>
+    /// <param name="time"></param>
+    public void EnableDamageBox(float damage, float time = 0f)
     {
         _damage = damage;
+        enabled = true;
+        _enableTimer = time;
     }
 }
