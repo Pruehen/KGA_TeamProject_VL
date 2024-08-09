@@ -13,8 +13,8 @@ namespace UI.Extension
         /// <param name="originPos"></param>
         public static void SetUIPos_WorldToScreenPos(this RectTransform rectTransform, Vector3 originPos)
         {
-            //Camera cam = GetHighestPriorityCamera();
-            Camera cam = Camera.main;
+            Camera cam = GetHighestPriorityCamera();
+            //Camera cam = Camera.main;
 
             Vector2 screenSize = new Vector2(Screen.width, Screen.height);
             Vector3 screenPosition = cam.WorldToScreenPoint(originPos);

@@ -6,8 +6,13 @@ public class DmgTextManager : SceneSingleton<DmgTextManager>
 
     public void OnDmged(int dmg, Vector3 originPos)
     {
-        DmgText dmgText = ObjectPoolManager.Instance.DequeueObject(Prefab_DmgText).GetComponent<DmgText>();
+        DmgText dmgText = ObjectPoolManager.Instance.DequeueObject(Prefab_DmgText, this.transform).GetComponent<DmgText>();
 
         dmgText.Init(dmg, originPos);
+    }
+
+    public void OnDmged(float dmg, Vector3 originPos)
+    {
+        OnDmged((int)dmg, originPos);
     }
 }

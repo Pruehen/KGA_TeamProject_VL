@@ -27,6 +27,7 @@ public class PlayerMaster : MonoBehaviour, ITargetable
     public void Hit(float dmg)
     {
         _PlayerInstanteState.Hit(dmg);
+        DmgTextManager.Instance.OnDmged(dmg, this.transform.position);
     }
 
     public bool IsDead()

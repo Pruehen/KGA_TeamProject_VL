@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class DmgText : MonoBehaviour
 {
-    RectTransform rect;
-    TextMeshProUGUI text;
+    [SerializeField] RectTransform rect;
+    [SerializeField] TextMeshProUGUI text;
     float activeTime = 0;
     public void Init(int dmg, Vector3 originPos)
     {
-        if(rect == null)
-        {
-            rect = GetComponent<RectTransform>();
-        }
         rect.SetUIPos_WorldToScreenPos(originPos);
 
         activeTime = 0;
