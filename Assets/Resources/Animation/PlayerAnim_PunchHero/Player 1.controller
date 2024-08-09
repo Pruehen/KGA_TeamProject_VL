@@ -477,7 +477,7 @@ AnimatorStateMachine:
     second:
     - {fileID: 4044347971739607211}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: -70, y: 60, z: 0}
+  m_AnyStatePosition: {x: -80, y: 110, z: 0}
   m_EntryPosition: {x: -100, y: 330, z: 0}
   m_ExitPosition: {x: 800, y: 240, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
@@ -694,8 +694,14 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: ChargingEnd
+  - m_Name: ChargingEnd2
     m_Type: 9
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
+  - m_Name: ChargingEnd
+    m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
@@ -959,7 +965,7 @@ AnimatorStateMachine:
     m_Position: {x: 220, y: 550, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5910138380533927562}
-    m_Position: {x: -60, y: 410, z: 0}
+    m_Position: {x: -80, y: 520, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5802745676508686522}
     m_Position: {x: 220, y: 370, z: 0}
@@ -1000,7 +1006,7 @@ AnimatorStateMachine:
   m_StateMachineBehaviours:
   - {fileID: 4395452613185648201}
   m_AnyStatePosition: {x: -150, y: 210, z: 0}
-  m_EntryPosition: {x: -190, y: 320, z: 0}
+  m_EntryPosition: {x: -240, y: 410, z: 0}
   m_ExitPosition: {x: 870, y: 480, z: 0}
   m_ParentStateMachinePosition: {x: -200, y: 260, z: 0}
   m_DefaultState: {fileID: 5910138380533927562}

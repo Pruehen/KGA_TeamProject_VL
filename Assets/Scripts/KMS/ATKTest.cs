@@ -42,7 +42,8 @@ public class ATKTest : MonoBehaviour
     public void Click()
     {
         _animator.SetTrigger("Attack");
-        _animator.SetTrigger("ChargingEnd");
+        //_animator.SetTrigger("ChargingEnd");
+        
     }
     public void Hold()
     {
@@ -52,7 +53,13 @@ public class ATKTest : MonoBehaviour
     
     public void Release()
     {
-        _animator.SetTrigger("ChargingEnd");
+        //_animator.SetTrigger("ChargingEnd");
+        _animator.SetBool("ChargingEnd", true);
+    }
+    public void ChargingEnd()
+    {
+        //_animator.SetTrigger("ChargingEnd");
+        _animator.SetBool("ChargingEnd", false);
     }
 
     public void ATKEnd()
@@ -78,6 +85,5 @@ public class ATKTest : MonoBehaviour
         }
         //인풋매니저를 통해서 좌클릭시에 메세지를 send
     }
-
   
 }
