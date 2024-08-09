@@ -4,6 +4,9 @@ public class DamageBox : MonoBehaviour
 {
     [SerializeField] private ITargetable _owner;
     [SerializeField] private Vector3 _halfSize = new Vector3(1f, 1f, 1f);
+
+    private Coroutine _DisableBoxCoroutine;
+
     private Vector3 HalfSize
     {
         get
