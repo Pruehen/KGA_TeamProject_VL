@@ -21,6 +21,8 @@ public class PlayerAttack : MonoBehaviour
 
     private void Awake()
     {
+
+        
         _InputManager = InputManager.Instance;
         _InputManager.PropertyChanged += OnInputPropertyChanged;        
 
