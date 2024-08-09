@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class PlayerInstanteState : MonoBehaviour
 {
-    public float hp;
-    public float stamina;
-    public int bullets;
+    public float hp { get; private set; }
+    public float stamina { get; private set; }
+    public int bullets { get; private set; }
 
 
     public bool IsDead { get; private set; }
@@ -38,13 +38,11 @@ public class PlayerInstanteState : MonoBehaviour
 
     private void Awake()
     {
+        Restore();
         UIManager.Instance.setPlayer(this);
     }
     private void Start()
-    {
-        IsDead = false;
-        stamina = MaxStamina;
-
+    {        
         //UIManager.Instance.UpdateStamina(stamina, MaxStamina);
         UpdateHealth();
         UpdateStamina();
@@ -100,9 +98,6 @@ public class PlayerInstanteState : MonoBehaviour
             hp -= dmg;
 
         }
-        else
-            return;
-
         //Ã¼·ÂÀÌ 0ÀÌ µÉ °æ¿ì IsDead¸¦ true·Î.
         if (hp == 0)
         {
@@ -113,7 +108,6 @@ public class PlayerInstanteState : MonoBehaviour
 
         //UIManager.Instance.UpdatehealthPoint(hp, maxHp);
         UpdateHealth();
-
     }
 
     //ÅºÈ¯ È¹µæ
@@ -144,10 +138,11 @@ public class PlayerInstanteState : MonoBehaviour
         UpdateBullet();
     }
 
-
-    public void Restore()
+    void Restore()
     {
         hp = maxHp;
+        IsDead = false;
+        stamina = MaxStamina;
     }
     public void UpdateHealth()
     {
