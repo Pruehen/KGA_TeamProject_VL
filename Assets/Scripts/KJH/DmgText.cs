@@ -7,9 +7,11 @@ public class DmgText : MonoBehaviour
     [SerializeField] RectTransform rect;
     [SerializeField] TextMeshProUGUI text;
     float activeTime = 0;
+    Vector3 _originPos;
+
     public void Init(int dmg, Vector3 originPos)
     {
-        rect.SetUIPos_WorldToScreenPos(originPos);
+        _originPos = originPos;
 
         activeTime = 0;
         text.text = dmg.ToString();
@@ -17,7 +19,8 @@ public class DmgText : MonoBehaviour
 
     private void Update()
     {
-        rect.anchoredPosition += new Vector2(0, 100) * Time.deltaTime;
+        rect.SetUIPos_WorldToScreenPos(_originPos);
+        _originPos += new Vector3(0, 2, 0) * Time.deltaTime;
         activeTime += Time.deltaTime;
 
         if(activeTime > 1)
