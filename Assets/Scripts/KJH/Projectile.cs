@@ -1,10 +1,13 @@
+using System;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
     float _dmg;    
     Rigidbody _Rigidbody;
-    public void Init(float dmg, Vector3 initPos, Vector3 projectionVector)
+    Action onHit;
+
+    public void Init(float dmg, Vector3 initPos, Vector3 projectionVector, Action onHitCallBack)
     {
         _dmg = dmg;
 
@@ -20,15 +23,18 @@ public class Projectile : MonoBehaviour
 
         _Rigidbody.AddForce(projectionVector, ForceMode.Impulse);
 
-        Vector3 randomAxis = Random.onUnitSphere;
-        Vector3 randomTorque = randomAxis * Random.Range(0, 10f);
+        Vector3 randomAxis = UnityEngine.Random.onUnitSphere;
+        Vector3 randomTorque = randomAxis * UnityEngine.Random.Range(0, 10f);
         _Rigidbody.AddTorque(randomTorque);
+
+        onHit = onHitCallBack;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.TryGetComponent(out ITargetable targetable))
         {
+            onHit?.Invoke();
             targetable.Hit(_dmg);
         }
 

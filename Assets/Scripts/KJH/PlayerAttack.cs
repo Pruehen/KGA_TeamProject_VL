@@ -58,7 +58,12 @@ public class PlayerAttack : MonoBehaviour
 
         Vector3 projectionVector = _PlayerCameraMove.CamAxisTransform().forward * projectionSpeed_Forward + Vector3.up * projectionSpeed_Up;
 
-        projectile.Init(_PlayerMaster._PlayerInstanteState.GetAttackPower(), projectile_InitPos.position, projectionVector);
+        projectile.Init(_PlayerMaster._PlayerInstanteState.GetAttackPower(), projectile_InitPos.position, projectionVector, OnProjectileHit);
+    }
+
+    void OnProjectileHit()
+    {
+        Debug.Log("공격 성공");
     }
 
     IEnumerator Attack_Delayed(float delayTime)
