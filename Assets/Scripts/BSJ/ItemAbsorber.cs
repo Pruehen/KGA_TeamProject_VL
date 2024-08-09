@@ -97,6 +97,10 @@ public class ItemAbsorber : MonoBehaviour
         {
             StartCoroutine(PullToCenterAndDestroy(item.transform));
         }
+        foreach (GameObject item in revorvingItems)
+        {
+            StartCoroutine(PullToCenterAndDestroy(item.transform));
+        }
 
         return count;
     }
