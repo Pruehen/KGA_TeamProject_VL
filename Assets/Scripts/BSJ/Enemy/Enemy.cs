@@ -498,6 +498,7 @@ public class Enemy : MonoBehaviour, ITargetable
     public void Hit(float dmg)
     {
         _combat.Damaged(dmg);
+        DmgTextManager.Instance.OnDmged(dmg, this.transform.position);
     }
 
     public bool IsDead()
