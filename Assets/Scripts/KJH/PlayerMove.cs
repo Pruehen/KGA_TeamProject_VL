@@ -47,7 +47,7 @@ public class PlayerMove : MonoBehaviour
         _PlayerCameraMove = PlayerCameraMove.Instance;        
     }
 
-    public void FixedUpdate()
+    public void Update()
     {
         Move_OnFixedUpdate();
         Rotate_OnFixedUpdate();
@@ -76,7 +76,7 @@ public class PlayerMove : MonoBehaviour
             }
 
 
-            this.transform.position += (_moveVector3 * Time.fixedDeltaTime);
+            this.transform.position += (_moveVector3 * Time.deltaTime);
 
             // 애니메이션
             // animator.SetFloat("XSpeed", moveVector.x);

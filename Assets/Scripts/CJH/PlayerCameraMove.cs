@@ -18,7 +18,7 @@ public class PlayerCameraMove : SceneSingleton<PlayerCameraMove>
         startLocalPosition = transform.localPosition;
     }
 
-    public void Update()
+    public void LateUpdate()
     {
         //transform.rotation = Quaternion.identity;
         this.transform.localPosition = new Vector3(0, transform.localPosition.y, -camRange);

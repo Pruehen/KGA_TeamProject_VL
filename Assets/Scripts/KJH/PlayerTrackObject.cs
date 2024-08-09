@@ -14,7 +14,7 @@ public class PlayerTrackObject : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         if (trackTargetTrf != null)
             this.transform.position = trackTargetTrf.position;
@@ -22,10 +22,6 @@ public class PlayerTrackObject : MonoBehaviour
         {
             Destroy(Cam);
             return;
-        }
-           
-
-
-
+        }           
     }
 }
