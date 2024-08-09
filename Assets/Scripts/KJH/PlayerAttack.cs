@@ -33,7 +33,7 @@ public class PlayerAttack : MonoBehaviour
     {
         delayTime += Time.deltaTime;
 
-        if(attackTrigger && delayTime >= attack_CoolTime + attack_Delay)
+        if(attackTrigger && delayTime >= attack_CoolTime + attack_Delay && !_PlayerMaster.IsAbsorptState)
         {
             delayTime = 0;
             _PlayerMaster.OnAttackState(_PlayerCameraMove.CamAxisTransform().forward);

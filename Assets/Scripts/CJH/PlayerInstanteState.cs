@@ -6,6 +6,7 @@ public class PlayerInstanteState : MonoBehaviour
     public float hp { get; private set; }
     public float stamina { get; private set; }
     public int bullets { get; private set; }
+    public int meleeBullets { get; private set; }
     public float skillGauge { get; private set; }
 
 
@@ -23,8 +24,8 @@ public class PlayerInstanteState : MonoBehaviour
     private float MaxskillGauge = 100;
 
 
-    [SerializeField]
-    public int maxBullets;
+    [SerializeField] public int maxBullets = 50;
+    [SerializeField] int maxMeleeBullets = 50;
 
     [SerializeField]
     private float attackPower;

@@ -347,6 +347,10 @@ public class Enemy : MonoBehaviour, ITargetable
         _behaviorTree.DisableBehavior();
         _navMeshAgent.isStopped = true;
 
+        if(_editorData.Shield != null)
+        {
+            _editorData.Shield.SetActive(false);
+        }
         StopAllCoroutines();
         StartCoroutine(DelayedDisable());
     }
@@ -361,7 +365,7 @@ public class Enemy : MonoBehaviour, ITargetable
     }
     private IEnumerator DelayedDisable()
     {
-        yield return new WaitForSeconds(6f);
+        yield return new WaitForSeconds(2f);
         gameObject.SetActive(false);
     }
 
@@ -493,8 +497,7 @@ public class Enemy : MonoBehaviour, ITargetable
 
     public void Hit(float dmg)
     {
-        _combat.Damaged(dmg);
-        DmgTextManager.Instance.OnDmged(dmg, this.transform.position);
+        throw new NotImplementedException();
     }
 
     public bool IsDead()
