@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 3806392782287296963}
   - component: {fileID: 5248263286921858893}
   - component: {fileID: 3820283957303393746}
+  - component: {fileID: 2680144560742994316}
   - component: {fileID: 516789563033613623}
   - component: {fileID: 323388105381359817}
   - component: {fileID: 6736053533579567610}
@@ -160,6 +161,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 348df6729af512441a7eeed69870c82b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _ItemAbsorber: {fileID: 6544024869024547094}
+--- !u!114 &2680144560742994316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3370145770967923552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 729d35e4a3c03ad448294084810d3bc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &516789563033613623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,14 +186,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d62f7a5d144457440abeebf48d3d7b32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 0
-  stamina: 0
-  bullets: 0
   maxHp: 100
   MaxStamina: 100
   staminaRecoverySpeed: 10
-  maxBullets: 0
-  attackPower: 0
+  MaxskillGauge: 100
+  maxBullets: 50
+  maxMeleeBullets: 50
+  attackPower: 150
   moveSpeed: 10
 --- !u!114 &323388105381359817
 MonoBehaviour:
@@ -1304,7 +1317,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5196449005700022204, guid: 12fcf380555ed4f42870107ce6c0c2a0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.21579641
+      value: 0.2157963
       objectReference: {fileID: 0}
     - target: {fileID: 5196449005700022204, guid: 12fcf380555ed4f42870107ce6c0c2a0, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1462,3 +1475,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4952125843153786222, guid: 4b36b55253696c440a846bc5a2c11799, type: 3}
   m_PrefabInstance: {fileID: 7801427841416473191}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6544024869024547094 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3933110030324165489, guid: 4b36b55253696c440a846bc5a2c11799, type: 3}
+  m_PrefabInstance: {fileID: 7801427841416473191}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb6c32c6d7ddb0941ba086cc75ab3c4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
