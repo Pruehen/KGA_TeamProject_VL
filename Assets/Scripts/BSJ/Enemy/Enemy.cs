@@ -117,7 +117,7 @@ public class Enemy : MonoBehaviour, ITargetable
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
 
-        _characterCollider = GetComponent<Collider>();
+        _characterCollider = GetComponentInChildren<Collider>();
         _characterEnvCollider = GetComponentInChildren<Collider>();
 
         _navMeshAgent.updateRotation = false;
