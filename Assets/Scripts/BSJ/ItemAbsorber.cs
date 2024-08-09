@@ -6,7 +6,7 @@ using UnityEngine;
 public class ItemAbsorber : MonoBehaviour
 {
     /// <summary>
-    /// 흠수 원거리흡수ㅡㄴ 모든 것을 흡수하고 수 반환
+    /// 흠수 원거리흡수 모든 것을 흡수하고 갯수 반환
     /// 근거리흠수는 내부에 들어온것만 흡수하고 갯수 반환
     /// </summary>
 
@@ -76,14 +76,9 @@ public class ItemAbsorber : MonoBehaviour
     public int AcquireOnlyRevolve()
     {
         int count = revorvingItems.Count;
-        if (_expendCoroutine != null)
-        {
-            StopCoroutine(_expendCoroutine);
-            _expendCoroutine = null;
-        }
-        SetRadius(0f);
+        ClearAcquireRadius();
 
-        foreach(GameObject item in revorvingItems)
+        foreach (GameObject item in revorvingItems)
         {
             StartCoroutine(PullToCenterAndDestroy(item.transform));
         }
@@ -96,12 +91,7 @@ public class ItemAbsorber : MonoBehaviour
     public int AcquireAll()
     {
         int count = absorbingItems.Count;
-        if (_expendCoroutine != null)
-        {
-            StopCoroutine(_expendCoroutine);
-            _expendCoroutine = null;
-        }
-        SetRadius(0f);
+        ClearAcquireRadius();
 
         foreach (GameObject item in absorbingItems)
         {
@@ -132,6 +122,17 @@ public class ItemAbsorber : MonoBehaviour
             DropAbsorbingItems();
         }
     }
+    private void ClearAcquireRadius()
+    {
+
+        if (_expendCoroutine != null)
+        {
+            StopCoroutine(_expendCoroutine);
+            _expendCoroutine = null;
+        }
+        SetRadius(0f);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         Rigidbody rb = other.attachedRigidbody;
@@ -172,9 +173,7 @@ public class ItemAbsorber : MonoBehaviour
             {
                 break;
             }
-            item.localPosition = Vector3.Lerp(item.localPosition, targetPos, 0.002f);
-
-            item.transform.position -= GetDirItemToPlayer(item) * Time.deltaTime * AbsolsionSpeed;
+            item.localPosition = Vector3.Lerp(item.localPosition, targetPos, 0.02f);
             yield return null;
         }
         revorvingItems.Add(item.gameObject);
@@ -192,14 +191,13 @@ public class ItemAbsorber : MonoBehaviour
                 break;
             }
             item.localPosition = Vector3.Lerp(item.localPosition, targetPos, 0.02f);
-
-            item.transform.position -= GetDirItemToPlayer(item) * Time.deltaTime * AbsolsionSpeed;
             yield return null;
         }
         revorvingItems.Remove(item.gameObject);
         Destroy(item.gameObject);
         Debug.Log("EndOfAbsolsion");
     }
+
     private void DropAbsorbingItems()
     {
         foreach (GameObject item in absorbingItems)
