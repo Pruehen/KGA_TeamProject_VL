@@ -5,6 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class ItemAbsorber : MonoBehaviour
 {
+    [SerializeField] PlayerMaster _PlayerMaster;
+
     // Todo 석진 끌어당기는 클래스와 돌리는 클래스를 따로 생성하면 더 읽기 쉬울것 같다.
     // 실행은 update를 통해
     List<GameObject> items = new List<GameObject>();
@@ -69,6 +71,7 @@ public class ItemAbsorber : MonoBehaviour
         SetRadius(0f);
         DestroyAllItem();
 
+        _PlayerMaster._PlayerInstanteState.AcquireBullets(count);
         return count;
     }
 

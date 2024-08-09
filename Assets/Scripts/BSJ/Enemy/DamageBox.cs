@@ -28,7 +28,7 @@ public class DamageBox : MonoBehaviour
     }
     private void OnEnable()
     {
-        Collider[] result = Physics.OverlapBox(transform.position, HalfSize, transform.rotation);
+        Collider[] result = Physics.OverlapBox(transform.position, HalfSize, transform.rotation);        
 
         foreach (Collider hit in result)
         {
@@ -41,7 +41,7 @@ public class DamageBox : MonoBehaviour
             if (_owner == hit)
             {
                 continue;
-            }
+            }            
             combat.Hit(_damage);
         }
         enabled = false;

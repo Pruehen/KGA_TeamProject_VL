@@ -251,7 +251,7 @@ public class Enemy : MonoBehaviour, ITargetable
         gameObject.SetActive(true);
     }
 
-    float _attackCooldown = 1f;
+    float _attackCooldown = .8f;
     float _currentAttackTime = 0f;
 
     public void StartAttackAnimation()
