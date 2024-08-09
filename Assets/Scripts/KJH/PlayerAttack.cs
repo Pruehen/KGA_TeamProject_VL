@@ -59,6 +59,8 @@ public class PlayerAttack : MonoBehaviour
         Vector3 projectionVector = _PlayerCameraMove.CamAxisTransform().forward * projectionSpeed_Forward + Vector3.up * projectionSpeed_Up;
 
         projectile.Init(_PlayerMaster._PlayerInstanteState.GetAttackPower(), projectile_InitPos.position, projectionVector, OnProjectileHit);
+
+        _PlayerMaster._PlayerInstanteState.BulletConsumption();
     }
 
     void OnProjectileHit()

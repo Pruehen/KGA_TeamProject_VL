@@ -119,15 +119,12 @@ public class PlayerInstanteState : MonoBehaviour
     //ÅºÈ¯ È¹µæ
     public void AcquireBullets(int _bullets)
     {
-        if (bullets < maxBullets)
-        {
-            bullets += _bullets;
-            Debug.Log("bullets : " + bullets);
-        }
-        else
+        bullets += _bullets;
+        if(bullets > maxBullets)
         {
             bullets = maxBullets;
-        }            
+        }
+
         UpdateBullet();
     }
 
