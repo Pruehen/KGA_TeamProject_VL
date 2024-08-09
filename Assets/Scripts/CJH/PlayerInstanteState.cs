@@ -39,6 +39,7 @@ public class PlayerInstanteState : MonoBehaviour
     public event Action HealthChanged;
     public event Action StaminaChanged;
     public event Action BulletChanged;
+    public event Action MeleeBulletChanged;
     public event Action SkillGaugeChanged;
 
     private void Awake()
@@ -142,6 +143,34 @@ public class PlayerInstanteState : MonoBehaviour
         }
         UpdateBullet();
     }
+    //ÅºÈ¯ È¹µæ
+    public void AcquireBullets_Melee(int _bullets)
+    {
+        meleeBullets += _bullets;
+        if(meleeBullets > maxBullets)
+        {
+            meleeBullets = maxBullets;
+        }
+
+        UpdateBullet_Melee();
+    }
+
+    //ÅºÈ¯ ¼Ò¸ð
+    public bool TryBulletConsumption_Melee(int value)
+    {
+        if(meleeBullets >= value)
+        {
+            meleeBullets -= value;
+            UpdateBullet_Melee();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+
     public void SkillGaugeRecovery(float value)
     {
         skillGauge += value;
@@ -188,8 +217,12 @@ public class PlayerInstanteState : MonoBehaviour
     {
         BulletChanged?.Invoke();
     }
+    public void UpdateBullet_Melee()
+    {
+        MeleeBulletChanged?.Invoke();
+    }
     public void UpdateSkillGauge()
     {
         SkillGaugeChanged?.Invoke();
-    }
+    }    
 }
