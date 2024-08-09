@@ -347,10 +347,6 @@ public class Enemy : MonoBehaviour, ITargetable
         _behaviorTree.DisableBehavior();
         _navMeshAgent.isStopped = true;
 
-        if(_editorData.Shield != null)
-        {
-            _editorData.Shield.SetActive(false);
-        }
         StopAllCoroutines();
         StartCoroutine(DelayedDisable());
     }
@@ -365,7 +361,7 @@ public class Enemy : MonoBehaviour, ITargetable
     }
     private IEnumerator DelayedDisable()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(6f);
         gameObject.SetActive(false);
     }
 
