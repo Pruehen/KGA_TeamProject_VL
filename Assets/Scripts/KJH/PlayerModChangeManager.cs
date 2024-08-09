@@ -78,8 +78,7 @@ public class PlayerModChangeManager : MonoBehaviour
         Debug.Log($"{value}개 흡수");
     }
     public void EnterMeleeMode()
-    {
-        IsAbsorptState = false;        
+    {  
         int value = OnSucceseAbsorptState_EntryMelee.Invoke();
 
         if (value > 0)
@@ -87,6 +86,7 @@ public class PlayerModChangeManager : MonoBehaviour
             Debug.Log($"{value}개 흡수, 근접 모드 변환");
             IsMeleeMode = true;
         }
+        IsAbsorptState = false;
     }
 
     public void EndAbsorptState()
