@@ -1,27 +1,31 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro.EditorUtilities;
 using UnityEngine;
+using UnityEngine.Playables;
+using Zenject.SpaceFighter;
 
 public class PlayerInstanteState : MonoBehaviour
 {
-    float hp;
-    float stamina;
-    int bullets;
+    public float hp;
+    public float stamina;
+    public int bullets;
+
 
     public bool IsDead { get; private set; }
 
     [SerializeField]
-    private float maxHp;
+    public float maxHp;
 
     [SerializeField]
-    private float MaxStamina;
+    public float MaxStamina;
 
     [SerializeField]
     private float staminaRecoverySpeed;
 
+
     [SerializeField]
-    private int maxBullets;
+    public int maxBullets;
 
     [SerializeField]
     private float attackPower;
@@ -31,12 +35,23 @@ public class PlayerInstanteState : MonoBehaviour
     private float moveSpeed;
     public float GetMoveSpeed() { return moveSpeed; }
 
+
+    public event Action HealthChanged;
+    public event Action StaminaChanged;
+    public event Action BulletChanged;
+
+    private void Awake()
+    {
+        UIManager.Instance.setPlayer(this);
+    }
     private void Start()
     {
         IsDead = false;
         stamina = MaxStamina;
-        hp = maxHp;
-        UIManager.Instance.UpdateStamina(stamina,MaxStamina);
+
+        //UIManager.Instance.UpdateStamina(stamina, MaxStamina);
+        UpdateHealth();
+        UpdateStamina();
     }
 
     private void Update()
@@ -56,13 +71,11 @@ public class PlayerInstanteState : MonoBehaviour
         if (stamina > power)
         {
             stamina -= power;
-            UIManager.Instance.UpdateStamina(stamina, MaxStamina);
+            //UIManager.Instance.UpdateStamina(stamina, MaxStamina);
+            UpdateStamina();
         }
-
         else
             return;
-
-     
 
     }
 
@@ -72,8 +85,9 @@ public class PlayerInstanteState : MonoBehaviour
         if (stamina < MaxStamina)
         {
             stamina += staminaRecoverySpeed * Time.deltaTime;
-           
-            UIManager.Instance.UpdateStamina(stamina, MaxStamina);
+
+            //UIManager.Instance.UpdateStamina(stamina, MaxStamina);
+            UpdateStamina();
         }
         else if (stamina > MaxStamina)
         {
@@ -82,15 +96,13 @@ public class PlayerInstanteState : MonoBehaviour
         }
     }
 
-
-    //Ã¼·Â °¨¼Ò
     public void Hit(float dmg)
     {
         //dmg¸¸Å­ Ã¼·Â °¨¼Ò
         if (hp > 0)
         {
             hp -= dmg;
-            
+
         }
         else
             return;
@@ -100,18 +112,16 @@ public class PlayerInstanteState : MonoBehaviour
         {
             IsDead = true;
             Debug.Log("Á×À½");
-            Destroy(gameObject);
-
         }
-
         //Ã¼·Â ¼öÄ¡¿Í UI ¿¬µ¿.
-        UIManager.Instance.UpdatehealthPoint(hp , maxHp);
+
+        //UIManager.Instance.UpdatehealthPoint(hp, maxHp);
+        UpdateHealth();
 
     }
 
-
     //ÅºÈ¯ È¹µæ
-    public void AcquireBullets(int  _bullets)
+    public void AcquireBullets(int _bullets)
     {
         if (bullets < maxBullets)
         {
@@ -120,6 +130,7 @@ public class PlayerInstanteState : MonoBehaviour
         }
         else
             return;
+        UpdateBullet();
     }
 
     //ÅºÈ¯ ¼Ò¸ð
@@ -132,10 +143,26 @@ public class PlayerInstanteState : MonoBehaviour
             Debug.Log("Åº¾Ë ¾øÀ½");
             return;
         }
-        
+        UpdateBullet();
     }
 
-   
+
+    public void Restore()
+    {
+        hp = maxHp;
+    }
+    public void UpdateHealth()
+    {
+        HealthChanged?.Invoke();
+    }
+    public void UpdateStamina()
+    {
+        StaminaChanged?.Invoke();
+    }
+    public void UpdateBullet()
+    {
+        StaminaChanged?.Invoke();
+    }
 
 }
 
