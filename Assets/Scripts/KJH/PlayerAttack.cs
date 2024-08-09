@@ -14,7 +14,8 @@ public class PlayerAttack : MonoBehaviour
 
     InputManager _InputManager;
     PlayerCameraMove _PlayerCameraMove;
-    PlayerMaster _PlayerMaster;
+    PlayerMaster _PlayerMaster; 
+    AttackSystem _AttackSystem;
 
     float delayTime = 0;
     bool attackTrigger = false;
@@ -29,18 +30,21 @@ public class PlayerAttack : MonoBehaviour
         _PlayerCameraMove = PlayerCameraMove.Instance;
 
         _PlayerMaster = GetComponent<PlayerMaster>();
+        _AttackSystem = GetComponent<AttackSystem>();
     }
 
     private void Update()
     {
         delayTime += Time.deltaTime;
 
-        if(attackTrigger && delayTime >= attack_CoolTime + attack_Delay && !_PlayerMaster.IsMeleeMode && !_PlayerMaster.IsAbsorptState)
+        //if(attackTrigger && delayTime >= attack_CoolTime + attack_Delay && !_PlayerMaster.IsMeleeMode && !_PlayerMaster.IsAbsorptState)
+        if(attackTrigger)
         {
             delayTime = 0;
             _PlayerMaster.OnAttackState(_PlayerCameraMove.CamAxisTransform().forward);
-            //Attack();
-            StartCoroutine(Attack_Delayed(attack_Delay));
+            _AttackSystem.StartAttack(0);
+            attackTrigger = false;
+            //StartCoroutine(Attack_Delayed(attack_Delay));
         }
     }
 
@@ -71,9 +75,9 @@ public class PlayerAttack : MonoBehaviour
         Debug.Log("공격 성공");
     }
 
-    IEnumerator Attack_Delayed(float delayTime)
-    {
-        yield return new WaitForSeconds(delayTime);
-        Attack();
-    }
+    //IEnumerator Attack_Delayed(float delayTime)
+    //{
+    //    yield return new WaitForSeconds(delayTime);
+    //    Attack();
+    //}
 }

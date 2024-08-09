@@ -10,6 +10,13 @@ public class PlayerMove : MonoBehaviour
     Vector3 _moveVector3;
     Vector3 _lookTargetPos;
 
+    AttackSystem _attackSystem;
+
+    private void Start()
+    {
+        _attackSystem = GetComponent<AttackSystem>();
+    }
+
     public void OnAttackState(Vector3 attaciDir)
     {
         SetMoveLock(0.4f);
@@ -65,7 +72,7 @@ public class PlayerMove : MonoBehaviour
 
     void Move_OnFixedUpdate()
     {
-        if (_isMoving && !_PlayerMaster.IsAbsorptState)
+        if (_isMoving && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove)
         {
             _moveVector3 = new Vector3(_moveVector3_Origin.x, 0, _moveVector3_Origin.z);
 
@@ -87,7 +94,7 @@ public class PlayerMove : MonoBehaviour
     void Rotate_OnFixedUpdate()
     {
         // 캐릭터를 이동 방향으로 회전
-        if (_moveVector3 != Vector3.zero && _isMoving && !_PlayerMaster.IsAbsorptState)
+        if (_moveVector3 != Vector3.zero && _isMoving && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove)
         {
             _lookTargetPos = _moveVector3;
 

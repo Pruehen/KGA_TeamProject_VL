@@ -7,6 +7,13 @@ public class AttackSystem : MonoBehaviour
     Animator _animator;
     int hashAttackType = Animator.StringToHash("AttackType");
     int hashAttack = Animator.StringToHash("Attack");
+
+    bool _attackLcokMove;
+
+    public bool AttackLockMove
+    {
+        get => _attackLcokMove;
+    }
     void Start()
     {
         TryGetComponent(out _animator);
@@ -17,9 +24,19 @@ public class AttackSystem : MonoBehaviour
         set => _animator.SetInteger(hashAttackType, value);
     }
 
-    public void Attack(int index)
+    public void StartAttack(int index)
     {
+        _attackLcokMove = true;
         _animator.SetTrigger(hashAttack);
         _animator.SetInteger(hashAttackType, index);
+    }
+
+    public void LockMove()
+    {
+        _attackLcokMove = true;
+    }
+    public void ReleaseLockMove()
+    {
+        _attackLcokMove = false;
     }
 }
