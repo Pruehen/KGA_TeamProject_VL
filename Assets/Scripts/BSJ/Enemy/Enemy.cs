@@ -21,7 +21,7 @@ public enum AIState
 public class EnemyEditorData
 {
     [Space(10)]
-    [Header ("기본 공격")]
+    [Header("기본 공격")]
     public float AttackDamage = 2f;
     public float AttackRange = 2f;
     public float AttackCooldown = 2f;
@@ -127,7 +127,7 @@ public class Enemy : MonoBehaviour, ITargetable
 
         Init();
 
-        _pooledHitVfx = new ObjectPool<GameObject>( CreatePool,OnGetPool, OnReleasePool, OnDestroyPool,true,100,200);
+        _pooledHitVfx = new ObjectPool<GameObject>(CreatePool, OnGetPool, OnReleasePool, OnDestroyPool, true, 100, 200);
     }
     private void Init()
     {
@@ -203,9 +203,9 @@ public class Enemy : MonoBehaviour, ITargetable
         }
         Vector3 dir = _navMeshAgent.destination - transform.position;
         dir = dir.normalized;
-        if(_currentAttackTime > 0f)
+        if (_currentAttackTime > 0f)
         {
-            if(_editorData.HardLockOn)
+            if (_editorData.HardLockOn)
             {
                 look = Quaternion.LookRotation(_detector.GetPosition() - transform.position, Vector3.up);
             }
@@ -347,10 +347,6 @@ public class Enemy : MonoBehaviour, ITargetable
         _behaviorTree.DisableBehavior();
         _navMeshAgent.isStopped = true;
 
-        if(_editorData.Shield != null)
-        {
-            _editorData.Shield.SetActive(false);
-        }
         StopAllCoroutines();
         StartCoroutine(DelayedDisable());
     }
@@ -365,7 +361,7 @@ public class Enemy : MonoBehaviour, ITargetable
     }
     private IEnumerator DelayedDisable()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(6f);
         gameObject.SetActive(false);
     }
 
@@ -387,7 +383,7 @@ public class Enemy : MonoBehaviour, ITargetable
 
     public bool IsTargetVisible(bool isAttack)
     {
-        if(isAttack)
+        if (isAttack)
         {
             if (_editorData.AttackThroughWall)
             {
@@ -484,7 +480,7 @@ public class Enemy : MonoBehaviour, ITargetable
         _navMeshAgent.isStopped = true;
     }
 
-    private void SmoothRotate(Quaternion targetRotation, float speed,float deltaTime)
+    private void SmoothRotate(Quaternion targetRotation, float speed, float deltaTime)
     {
         transform.eulerAngles = Quaternion.Lerp(transform.rotation, targetRotation, (speed) * deltaTime).eulerAngles;
     }
@@ -497,7 +493,8 @@ public class Enemy : MonoBehaviour, ITargetable
 
     public void Hit(float dmg)
     {
-        throw new NotImplementedException();
+        _combat.Damaged(dmg);
+        DmgTextManager.Instance.OnDmged(dmg, this.transform.position);
     }
 
     public bool IsDead()
