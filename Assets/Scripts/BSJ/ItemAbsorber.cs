@@ -7,7 +7,8 @@ public class ItemAbsorber : MonoBehaviour
 {
     // Todo 석진 끌어당기는 클래스와 돌리는 클래스를 따로 생성하면 더 읽기 쉬울것 같다.
     // 실행은 update를 통해
-    List<GameObject> items = new List<GameObject>();
+    List<GameObject> absorbingItems = new List<GameObject>();
+    List<GameObject> revorvingItems = new List<GameObject>();
 
     [Header("회전 관련")]
     [SerializeField] private float RevolveRadious = 5f;
@@ -60,15 +61,16 @@ public class ItemAbsorber : MonoBehaviour
     /// </summary>
     public int SucceseAbsorb()
     {
-        int count = items.Count;
+        int count = revorvingItems.Count;
         if (_expendCoroutine != null)
         {
             StopCoroutine(_expendCoroutine);
             _expendCoroutine = null;
         }
         SetRadius(0f);
-        DestroyAllItem();
 
+        DestroyRevolvingItems();
+        DropAbsorbingItems();
         return count;
     }
 
@@ -85,6 +87,10 @@ public class ItemAbsorber : MonoBehaviour
         {
             SucceseAbsorb();
         }
+        if(Input.GetKeyDown(KeyCode.F3))
+        {
+            DropAbsorbingItems();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -96,27 +102,39 @@ public class ItemAbsorber : MonoBehaviour
         }
         if (IsItem(rb.gameObject))
         {
-            if (items.Contains(rb.gameObject))
+            if (absorbingItems.Contains(rb.gameObject))
             {
-                Debug.Log("어케 이미 들어가 있음;;");
+                Debug.Log("어케 이미 들어가 있음;; 트리거 두번씩 됨 수정 필요");
             }
             else
             {
-                items.Add(rb.gameObject);
+                absorbingItems.Add(rb.gameObject);
                 StartRevolve(rb.transform);
             }
         }
     }
     private void StartRevolve(Transform itemTr)
     {
-        itemTr.transform.SetParent(transform, true);
 
+        itemTr.transform.SetParent(transform, true);
         TrashItem item = itemTr.GetComponent<TrashItem>();
 
         item.DisablePhysics();
 
         StartCoroutine(PullToCenter(itemTr));
     }
+
+    private void StopRevolve(Transform itemTr)
+    {
+        itemTr.transform.SetParent(null, true);
+
+        TrashItem item = itemTr.GetComponent<TrashItem>();
+
+        item.EnablePhysics();
+
+        StopAllCoroutines();
+    }
+
     private IEnumerator PullToCenter(Transform item)
     {
         //회전 범위까지 점점 끌어당김
@@ -139,6 +157,7 @@ public class ItemAbsorber : MonoBehaviour
             item.transform.position -= DirectionItemToPlayer(item) * Time.deltaTime * AbsolsionSpeed;
             yield return null;
         }
+        revorvingItems.Add(item.gameObject);
         Debug.Log("EndOfAbsolsion");
     }
 
@@ -157,16 +176,21 @@ public class ItemAbsorber : MonoBehaviour
 
     private float GetCurrentItemAmount()
     {
-        return items.Count;
+        return absorbingItems.Count;
     }
-    private void DestroyAllItem()
+    private void DestroyRevolvingItems()
     {
-        foreach (GameObject item in items)
+        foreach (GameObject item in revorvingItems)
         {
+            absorbingItems.Remove(item);
             Destroy(item);
         }
-        items.Clear();
+        revorvingItems.Clear();
         StopAllCoroutines();
+    }
+    private void DropAbsorbingItems()
+    {
+
     }
 
 
