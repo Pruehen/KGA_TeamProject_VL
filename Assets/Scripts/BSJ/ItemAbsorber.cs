@@ -69,11 +69,16 @@ public class ItemAbsorber : MonoBehaviour
         }
         SetRadius(0f);
 
-        DestroyRevolvingItems();
+        foreach(GameObject item in revorvingItems)
+        {
+            StartCoroutine(PullToCenterAndDestroy(item.transform));
+        }
+
         DropAbsorbingItems();
+
+
         return count;
     }
-
     /// <summary>
     /// F1 과 F2 키를 사용해 디버그
     /// </summary>
@@ -121,21 +126,10 @@ public class ItemAbsorber : MonoBehaviour
 
         item.DisablePhysics();
 
-        StartCoroutine(PullToCenter(itemTr));
+        StartCoroutine(PullToRevolve(itemTr));
     }
 
-    private void StopRevolve(Transform itemTr)
-    {
-        itemTr.transform.SetParent(null, true);
-
-        TrashItem item = itemTr.GetComponent<TrashItem>();
-
-        item.EnablePhysics();
-
-        StopAllCoroutines();
-    }
-
-    private IEnumerator PullToCenter(Transform item)
+    private IEnumerator PullToRevolve(Transform item)
     {
         //회전 범위까지 점점 끌어당김
         //while (Vector3.Distance(item.transform.position, transform.position) >= RevolveRadious)
@@ -158,10 +152,44 @@ public class ItemAbsorber : MonoBehaviour
             yield return null;
         }
         revorvingItems.Add(item.gameObject);
+        absorbingItems.Remove(item.gameObject);
         Debug.Log("EndOfAbsolsion");
     }
 
+    private IEnumerator PullToCenterAndDestroy(Transform item)
+    {
+        //회전 범위까지 점점 끌어당김
+        //while (Vector3.Distance(item.transform.position, transform.position) >= RevolveRadious)
+        //{
+        //    item.transform.position -= DirectionItemToPlayer(item) * Time.deltaTime * AbsolsionSpeed;
+        //    yield return null;
+        //}
+        while (true)
+        {
+            Vector3 targetPos = Vector3.zero;
+            if (Vector3.Distance(targetPos, item.localPosition) <= 0.1f)
+            {
+                break;
+            }
+            item.localPosition = Vector3.Lerp(item.localPosition, targetPos, 0.02f);
 
+            item.transform.position -= DirectionItemToPlayer(item) * Time.deltaTime * AbsolsionSpeed;
+            yield return null;
+        }
+        absorbingItems.Remove(item.gameObject);
+        Destroy(item.gameObject);
+        Debug.Log("EndOfAbsolsion");
+    }
+
+    private void DropAbsorbingItems()
+    {
+        foreach (GameObject item in absorbingItems)
+        {
+            item.GetComponent<TrashItem>().EnablePhysics();
+            item.transform.SetParent(null, true);
+        }
+        absorbingItems.Clear();
+    }
     private Vector3 DirectionItemToPlayer(Transform item)
     {
         return (item.position - transform.position).normalized;
@@ -177,20 +205,6 @@ public class ItemAbsorber : MonoBehaviour
     private float GetCurrentItemAmount()
     {
         return absorbingItems.Count;
-    }
-    private void DestroyRevolvingItems()
-    {
-        foreach (GameObject item in revorvingItems)
-        {
-            absorbingItems.Remove(item);
-            Destroy(item);
-        }
-        revorvingItems.Clear();
-        StopAllCoroutines();
-    }
-    private void DropAbsorbingItems()
-    {
-
     }
 
 
