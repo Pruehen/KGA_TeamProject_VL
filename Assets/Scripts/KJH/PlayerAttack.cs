@@ -63,6 +63,7 @@ public class PlayerAttack : MonoBehaviour
 
     void OnProjectileHit()
     {
+        _PlayerMaster._PlayerInstanteState.SkillGaugeRecovery(10);
         Debug.Log("공격 성공");
     }
 
