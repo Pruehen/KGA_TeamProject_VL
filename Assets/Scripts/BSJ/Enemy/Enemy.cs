@@ -22,6 +22,7 @@ public class EnemyEditorData
 {
     [Space(10)]
     [Header ("기본 공격")]
+    public float AttackDamage = 2f;
     public float AttackRange = 2f;
     public float AttackCooldown = 2f;
     public float AttackMovableCooldown = 0.6f;
@@ -135,7 +136,7 @@ public class Enemy : MonoBehaviour, ITargetable
         _combat.OnDead += OnDead;
 
 
-        _attackDamage = 30f;
+        _attackDamage = _editorData.AttackDamage;
         _attackCooldown = _editorData.AttackCooldown;
 
         //if (_editorData.CustomPatrolPoint == false)
@@ -337,8 +338,7 @@ public class Enemy : MonoBehaviour, ITargetable
         _pooledHitVfx.Release(vfx);
     }
 
-    private void 
-        OnDead()
+    private void OnDead()
     {
         SetEnableAllCollision(false);
         _animator.SetTrigger("Dead");
@@ -497,13 +497,12 @@ public class Enemy : MonoBehaviour, ITargetable
 
     public void Hit(float dmg)
     {
-        DmgTextManager.Instance.OnDmged(dmg, this.transform.position);
-        Destroy(this.gameObject);
+        _combat.Damaged(dmg);
     }
 
     public bool IsDead()
     {
-        throw new NotImplementedException();
+        return _combat.IsDead();
     }
 
 }
