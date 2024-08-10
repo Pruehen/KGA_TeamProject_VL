@@ -2,6 +2,16 @@ using System.Collections;
 using System.ComponentModel;
 using UnityEngine;
 
+public enum AttackType
+{
+    RangeNormal,
+    RangeSkill1,
+    RangeSkill2,
+    CloseNormal,
+    CloseSkill1,
+    CloseSkill2,
+}
+
 public class PlayerAttack : MonoBehaviour
 {
     [SerializeField] GameObject Prefab_Projectile;
@@ -19,11 +29,12 @@ public class PlayerAttack : MonoBehaviour
 
     float delayTime = 0;
     bool attackTrigger = false;
+    bool attackBool = false;
+
+    [SerializeField] AttackType _currentAttackType = AttackType.CloseNormal; 
 
     private void Awake()
     {
-
-        
         _InputManager = InputManager.Instance;
         _InputManager.PropertyChanged += OnInputPropertyChanged;        
 
@@ -33,19 +44,26 @@ public class PlayerAttack : MonoBehaviour
         _AttackSystem = GetComponent<AttackSystem>();
     }
 
+    bool prevAttackTrigger = false;
     private void Update()
     {
         delayTime += Time.deltaTime;
-
         //if(attackTrigger && delayTime >= attack_CoolTime + attack_Delay && !_PlayerMaster.IsMeleeMode && !_PlayerMaster.IsAbsorptState)
-        if(attackTrigger)
+        if (attackTrigger && !prevAttackTrigger)
         {
             delayTime = 0;
             _PlayerMaster.OnAttackState(_PlayerCameraMove.CamAxisTransform().forward);
-            _AttackSystem.StartAttack(0);
-            attackTrigger = false;
+
+
+
+            _AttackSystem.StartAttack((int)_currentAttackType);
             //StartCoroutine(Attack_Delayed(attack_Delay));
         }
+        if(!attackTrigger && prevAttackTrigger)
+        {
+            _AttackSystem.OnRelease();
+        }
+        prevAttackTrigger = attackTrigger;
     }
 
     void OnInputPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -54,11 +72,12 @@ public class PlayerAttack : MonoBehaviour
         {
             case nameof(_InputManager.IsLMouseBtnClick):
                 attackTrigger = _InputManager.IsLMouseBtnClick;
+                attackBool = _InputManager.IsLMouseBtnClick;
                 break;
         }
     }
 
-    void Attack()
+    void ShootProjectile()
     {
         Projectile projectile = ObjectPoolManager.Instance.DequeueObject(Prefab_Projectile).GetComponent<Projectile>();
 
