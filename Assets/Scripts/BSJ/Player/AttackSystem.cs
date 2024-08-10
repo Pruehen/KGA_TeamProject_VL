@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AttackSystem : MonoBehaviour
@@ -8,15 +6,26 @@ public class AttackSystem : MonoBehaviour
     int hashAttackType = Animator.StringToHash("AttackType");
     int hashAttack = Animator.StringToHash("Attack");
 
+    ATKTest _closeAttack;
+
+    private void Awake()
+    {
+        Init();
+    }
+    public void Init()
+    {
+        TryGetComponent(out _animator);
+        TryGetComponent(out _closeAttack);
+        _closeAttack.Init(_animator);
+    }
+
+
+
     bool _attackLcokMove;
 
     public bool AttackLockMove
     {
         get => _attackLcokMove;
-    }
-    void Start()
-    {
-        TryGetComponent(out _animator);
     }
     public int AttackIndex
     {
@@ -38,5 +47,10 @@ public class AttackSystem : MonoBehaviour
     public void ReleaseLockMove()
     {
         _attackLcokMove = false;
+    }
+
+    public void OnRelease()
+    {
+        _closeAttack.EndAttack();
     }
 }
