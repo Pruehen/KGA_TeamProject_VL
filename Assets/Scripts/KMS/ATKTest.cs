@@ -10,80 +10,34 @@ public class ATKTest : MonoBehaviour
     InputManager _InputManager;
     Animator _animator;
 
-    int _startAttackTrigger;
-    int _endAttackTrigger;
+    int _animTriggerAttack;
+    int _animBoolChargingEnd;
+    int _animTriggerAttackEnd;
     bool _isAttacking;
-    
+
     private void Awake()
     {
-        //_InputManager = InputManager.Instance;
-        //_InputManager.PropertyChanged += OnInputPropertyChanged;
-        _animator= GetComponent<Animator>();        
+        _animator= GetComponent<Animator>();
+        Init(_animator);
     }
-
-    
-
     public void Init(Animator animator)
     {
         _animator = animator;
-        _startAttackTrigger = Animator.StringToHash("StartCloseAttack");
-        _endAttackTrigger = Animator.StringToHash("EndCloseAttack");
+        _animTriggerAttack = Animator.StringToHash("Attack");
+        _animBoolChargingEnd = Animator.StringToHash("ChargingEnd");
+        _animTriggerAttackEnd = Animator.StringToHash("AttackEnd");
     }
-
-    public void StartAttack()
-    {
-        _animator.SetTrigger("Attack");
-    }
-
     public void EndAttack()
     {
-        _animator.SetTrigger("ChargingEnd");
-    }
-    public void Click()
-    {
-        _animator.SetTrigger("Attack");
-        //_animator.SetTrigger("ChargingEnd");
-        
-    }
-    public void Hold()
-    {
-
-        _animator.SetBool("ChargingEnd",true);
-    }
-    
-    public void Release()
-    {
-        //_animator.SetTrigger("ChargingEnd");
-        _animator.SetBool("ChargingEnd", false);
-    }
-    public void ChargingEnd()
-    {
-        //_animator.SetTrigger("ChargingEnd");
-        _animator.SetBool("ChargingEnd", false);
+        _animator.SetTrigger(_animTriggerAttackEnd);
     }
 
     public void ATKEnd()
     {
-        if (!_animator.GetBool("Attack"))
+        if (!_animator.GetBool(_animTriggerAttack))
         {
-            _animator.SetTrigger("AttackEnd");
+            _animator.SetTrigger(_animTriggerAttackEnd);
             Debug.Log("ATKEnd");
         }
     }
-
-    void Update()
-    {
-        
-    }
-    void OnInputPropertyChanged(object sender, PropertyChangedEventArgs e)
-    {
-        switch (e.PropertyName)
-        {
-            case nameof(_InputManager.IsLMouseBtnClick):
-                _isAttacking = _InputManager.IsLMouseBtnClick;
-                break;
-        }
-        //인풋매니저를 통해서 좌클릭시에 메세지를 send
-    }
-  
 }
