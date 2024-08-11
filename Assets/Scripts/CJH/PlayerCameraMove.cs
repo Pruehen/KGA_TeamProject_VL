@@ -21,13 +21,13 @@ public class PlayerCameraMove : SceneSingleton<PlayerCameraMove>
     public void LateUpdate()
     {
         //transform.rotation = Quaternion.identity;
-        this.transform.localPosition = new Vector3(0, transform.localPosition.y, -camRange);
+        //this.transform.localPosition = new Vector3(0, transform.localPosition.y, -camRange);
 
-        float mouseX = Input.GetAxis("Mouse X") * mouseSpeed * Time.deltaTime;
+        //float mouseX = Input.GetAxis("Mouse X") * mouseSpeed * Time.deltaTime;
 
-        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        //transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
 
-        camAxis.Rotate(Vector3.up * mouseX);
+        //camAxis.Rotate(Vector3.up * mouseX);
 
        // //플레이어부터 카메라까지의 방향
        //Vector3 rayDir = transform.position - camAxis.position;
@@ -54,7 +54,10 @@ public class PlayerCameraMove : SceneSingleton<PlayerCameraMove>
 
     public Quaternion CamRotation()
     {
-        return camAxis.rotation;
+        Vector3 flat = transform.forward;
+        flat.y = 0f;
+        
+        return Quaternion.LookRotation(flat);
     }
 
 }
