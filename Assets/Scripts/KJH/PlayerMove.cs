@@ -12,9 +12,12 @@ public class PlayerMove : MonoBehaviour
 
     AttackSystem _attackSystem;
 
+    Animator _animator;
+
     private void Start()
     {
         _attackSystem = GetComponent<AttackSystem>();
+        _animator = GetComponent<Animator>();
     }
 
     public void OnAttackState(Vector3 attaciDir)
@@ -25,6 +28,7 @@ public class PlayerMove : MonoBehaviour
     }
 
     bool _isMoving = true;
+    bool _isGrounded = true;
     public void SetMoveLock(float time)
     {
         //_Rigidbody.velocity = Vector3.zero;
@@ -54,8 +58,9 @@ public class PlayerMove : MonoBehaviour
         _PlayerCameraMove = PlayerCameraMove.Instance;        
     }
 
-    public void Update()
+    public void FixedUpdate()
     {
+        CheckGounded_OnFixedUpdate();
         Move_OnFixedUpdate();
         Rotate_OnFixedUpdate();
     }
@@ -69,10 +74,13 @@ public class PlayerMove : MonoBehaviour
                 break;            
         }
     }
-
+    void CheckGounded_OnFixedUpdate()
+    {
+        _isGrounded = Physics.CheckSphere(transform.position, .5f, ~LayerMask.GetMask("Character_Collider"));
+    }
     void Move_OnFixedUpdate()
     {
-        if (_isMoving && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove)
+        if (_isMoving && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove && _isGrounded)
         {
             _moveVector3 = new Vector3(_moveVector3_Origin.x, 0, _moveVector3_Origin.z);
 
@@ -83,12 +91,22 @@ public class PlayerMove : MonoBehaviour
             }
 
 
-            this.transform.position += (_moveVector3 * Time.deltaTime);
+            _Rigidbody.velocity = _moveVector3;
 
-            // 애니메이션
-            // animator.SetFloat("XSpeed", moveVector.x);
-            // animator.SetFloat("ZSpeed", moveVector.y);
+            _animator.SetBool("IsMoving", _moveVector3.x != 0f || _moveVector3.z != 0f);
         }
+        else if (_isGrounded)
+        {
+            _animator.SetBool("IsMoving", false);
+            _Rigidbody.velocity = new Vector3(0f, _Rigidbody.velocity.y, 0f);
+        }
+        else
+        {
+            _animator.SetBool("IsMoving", false);
+            _animator.SetBool("IsFalling", true);
+        }
+        _animator.SetFloat("XSpeed", _moveVector3.x);
+        _animator.SetFloat("ZSpeed", _moveVector3.z);
     }
 
     void Rotate_OnFixedUpdate()
