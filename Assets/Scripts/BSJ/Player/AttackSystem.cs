@@ -8,6 +8,8 @@ public class AttackSystem : MonoBehaviour
 
     ATKTest _closeAttack;
 
+    [SerializeField] DamageBox _damageBox;
+
     private void Awake()
     {
         Init();
@@ -52,5 +54,10 @@ public class AttackSystem : MonoBehaviour
     public void OnRelease()
     {
         _closeAttack.EndAttack();
+    }
+
+    private void EnableDamageBox()
+    {
+        _damageBox.EnableDamageBox(30);
     }
 }
