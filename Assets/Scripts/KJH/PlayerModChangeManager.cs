@@ -64,6 +64,9 @@ public class PlayerModChangeManager : MonoBehaviour
     public Func<int> OnSucceseAbsorptState_EntryMelee;
     public Action OnEndAbsorptState;
 
+    //모드 변환시 캐릭터 공격 방식을 바꾸기 위해
+    public Action<bool> OnSucceseAbsorpt;
+
     public void EnterAbsorptState()
     {
         IsAbsorptState = true;
@@ -78,6 +81,7 @@ public class PlayerModChangeManager : MonoBehaviour
 
         _PlayerMaster._PlayerInstanteState.AcquireBullets(value);
         Debug.Log($"{value}개 흡수");
+        OnSucceseAbsorpt?.Invoke(IsMeleeMode);
     }
     public void EnterMeleeMode()
     {  
@@ -88,6 +92,7 @@ public class PlayerModChangeManager : MonoBehaviour
             Debug.Log($"{value}개 흡수, 근접 모드 변환");
             _PlayerMaster._PlayerInstanteState.AcquireBullets_Melee(value);
             IsMeleeMode = true;
+            OnSucceseAbsorpt?.Invoke(IsMeleeMode);
         }
         IsAbsorptState = false;
     }

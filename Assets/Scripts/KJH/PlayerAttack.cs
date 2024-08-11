@@ -26,6 +26,7 @@ public class PlayerAttack : MonoBehaviour
     PlayerCameraMove _PlayerCameraMove;
     PlayerMaster _PlayerMaster; 
     AttackSystem _AttackSystem;
+    PlayerModChangeManager _PlayerMod;
 
     float delayTime = 0;
     bool attackTrigger = false;
@@ -42,6 +43,27 @@ public class PlayerAttack : MonoBehaviour
 
         _PlayerMaster = GetComponent<PlayerMaster>();
         _AttackSystem = GetComponent<AttackSystem>();
+        _PlayerMod = GetComponent<PlayerModChangeManager>();
+
+        _PlayerMod.OnSucceseAbsorpt += ChangeAttackState;
+    }
+
+    private void OnDestroy()
+    {
+        _PlayerMod.OnSucceseAbsorpt -= ChangeAttackState;
+        _InputManager.PropertyChanged -= OnInputPropertyChanged;
+    }
+
+    private void ChangeAttackState(bool isMelee)
+    {
+        if (isMelee)
+        {
+            _currentAttackType = AttackType.CloseNormal;
+        }
+        else
+        {
+            _currentAttackType = AttackType.RangeNormal;
+        }
     }
 
     bool prevAttackTrigger = false;
@@ -52,7 +74,7 @@ public class PlayerAttack : MonoBehaviour
         if (attackTrigger && !prevAttackTrigger)
         {
             delayTime = 0;
-            _PlayerMaster.OnAttackState(_PlayerCameraMove.CamAxisTransform().forward);
+            _PlayerMaster.OnAttackState(_PlayerCameraMove.CamRotation() * Vector3.forward);
 
 
 
@@ -81,7 +103,7 @@ public class PlayerAttack : MonoBehaviour
     {
         Projectile projectile = ObjectPoolManager.Instance.DequeueObject(Prefab_Projectile).GetComponent<Projectile>();
 
-        Vector3 projectionVector = _PlayerCameraMove.CamAxisTransform().forward * projectionSpeed_Forward + Vector3.up * projectionSpeed_Up;
+        Vector3 projectionVector = _PlayerCameraMove.CamRotation() * Vector3.forward * projectionSpeed_Forward + Vector3.up * projectionSpeed_Up;
 
         projectile.Init(_PlayerMaster._PlayerInstanteState.GetAttackPower(), projectile_InitPos.position, projectionVector, OnProjectileHit);
 
