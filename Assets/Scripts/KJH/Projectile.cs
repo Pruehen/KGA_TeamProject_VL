@@ -32,13 +32,15 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.rigidbody == null)
+        Debug.Log($"{collision.collider.name}");
+        if (collision.rigidbody == null)
         {
             ObjectPoolManager.Instance.EnqueueObject(this.gameObject);
             return;
         }
         if (collision.rigidbody.TryGetComponent(out ITargetable targetable))
         {
+            Debug.Log($"{collision.rigidbody.name}");
             onHit?.Invoke();
             targetable.Hit(_dmg);
         }
