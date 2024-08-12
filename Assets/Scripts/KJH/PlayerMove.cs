@@ -163,7 +163,14 @@ public class PlayerMove : MonoBehaviour
 
     public void Dash()
     {
-        _Rigidbody.AddForce( _PlayerCameraMove.CamRotation() * _moveVector3_Origin * 100f, ForceMode.Acceleration);
+        Vector3 newPoint = _moveVector3_Origin;
+
+        if (newPoint == Vector3.zero)
+        {
+            newPoint = new Vector3(0, 0, 14.26f);
+        }
+
+        _Rigidbody.AddForce( _PlayerCameraMove.CamRotation() * newPoint * 100f, ForceMode.Acceleration);
         SetDashLock(.2f);
     }
 }
