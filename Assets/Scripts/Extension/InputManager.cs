@@ -148,4 +148,21 @@ public class InputManager : GlobalSingleton<InputManager>
     {
         IsDashBtnClick = value.isPressed;
     }
+    void Update()
+    {
+
+        if (Input.GetKey(KeyCode.LeftControl))
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
+
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
+        }
+    }
 }

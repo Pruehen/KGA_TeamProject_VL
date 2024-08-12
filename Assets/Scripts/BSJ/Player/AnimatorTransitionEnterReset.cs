@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class AnimatorAttackReset : StateMachineBehaviour
+public class AnimatorTransitionEnterReset : StateMachineBehaviour
 {
     [SerializeField] string triggerName;
 

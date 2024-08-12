@@ -340,6 +340,7 @@ public class Enemy : MonoBehaviour, ITargetable
     private void OnDead()
     {
         SetEnableAllCollision(false);
+        _aiState = AIState.Dead;
         _animator.SetTrigger("Dead");
         _animator.SetBool("IsDead", true);
         _isMovable = false;
