@@ -1,7 +1,6 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using UnityEngine;
-using UI.Extension;
 using System.Linq;
 
 public class BlueChip
@@ -72,6 +71,6 @@ public class JsonDataCreator : MonoBehaviour
     public void Awake()
     {
         JsonDataManager.jsonCache.Lode();
-        JsonDataManager.jsonCache.BlueChipTableCache.dic[4].Print(1);
+        JsonDataManager.jsonCache.BlueChipTableCache.dic[3].Print(1);
     }
 }
