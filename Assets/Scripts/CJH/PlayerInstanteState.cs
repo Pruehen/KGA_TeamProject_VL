@@ -69,27 +69,22 @@ public class PlayerInstanteState : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            StaminaConsumption(10);
-            Hit(10);
-        }
-
+        
         StaminaAutoRecovery();
     }
 
     //스태미나 소모 
-    public void StaminaConsumption(float power)
+    public bool TryStaminaConsumption(float power)
     {
+
         if (stamina > power)
         {
-            stamina -= power;
-            //UIManager.Instance.UpdateStamina(stamina, MaxStamina);
+            stamina -= power;            
             UpdateStamina();
+            return true;
         }
         else
-            return;
-
+            return false;
     }
 
     //스태미나 자동 회복
