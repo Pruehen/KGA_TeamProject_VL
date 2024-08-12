@@ -11,6 +11,7 @@ public class InputManager : GlobalSingleton<InputManager>
     bool _isRMouseBtnClick;
     bool _isLControlBtnClick;
     bool _isTapBtnClick;
+    bool _isDashBtnClick;
 
     public Vector2 MoveVector2_Left_WASD
     {
@@ -90,6 +91,19 @@ public class InputManager : GlobalSingleton<InputManager>
         }
     }
 
+    public bool IsDashBtnClick
+    {
+        get { return _isDashBtnClick; }
+        set
+        {
+            if(_isDashBtnClick != value)
+            {
+                _isDashBtnClick = value;
+                OnPropertyChanged(nameof(IsDashBtnClick));
+            }
+        }
+    }
+
     #region PropChanged
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -128,5 +142,10 @@ public class InputManager : GlobalSingleton<InputManager>
     void OnRotate(InputValue value)
     {
         MoveVector2_Right_Mouse = value.Get<Vector2>();
+    }
+
+    void OnDash(InputValue value)
+    {
+        IsDashBtnClick = value.isPressed;
     }
 }

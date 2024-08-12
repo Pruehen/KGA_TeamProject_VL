@@ -29,6 +29,7 @@ public class PlayerMove : MonoBehaviour
 
     bool _isMoving = true;
     bool _isGrounded = true;
+    bool _isDashing = false;
     public void SetMoveLock(float time)
     {
         //_Rigidbody.velocity = Vector3.zero;
@@ -40,6 +41,18 @@ public class PlayerMove : MonoBehaviour
         yield return new WaitForSeconds(time);
 
         _isMoving = true;
+    }
+    public void SetDashLock(float time)
+    {
+        //_Rigidbody.velocity = Vector3.zero;
+        StartCoroutine(SetDashLock_Coroutine(time));
+    }
+    IEnumerator SetDashLock_Coroutine(float time)
+    {
+        _isDashing = true;
+        yield return new WaitForSeconds(time);
+
+        _isDashing = false;
     }
 
     InputManager _InputManager;
@@ -71,7 +84,13 @@ public class PlayerMove : MonoBehaviour
             case nameof(_InputManager.MoveVector2_Left_WASD):
                 float moveSpeed = _PlayerMaster._PlayerInstanteState.GetMoveSpeed();
                 _moveVector3_Origin = new Vector3(_InputManager.MoveVector2_Left_WASD.x * moveSpeed, 0, _InputManager.MoveVector2_Left_WASD.y * moveSpeed);
-                break;            
+                break;
+            case nameof(_InputManager.IsDashBtnClick):
+                if(_InputManager.IsDashBtnClick)
+                {
+                    Dash();
+                }
+                break;
         }
     }
     void CheckGounded_OnFixedUpdate()
@@ -80,7 +99,7 @@ public class PlayerMove : MonoBehaviour
     }
     void Move_OnFixedUpdate()
     {
-        if (_isMoving && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove && _isGrounded)
+        if (_isMoving && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove && _isGrounded && !_isDashing)
         {
             _moveVector3 = new Vector3(_moveVector3_Origin.x, 0, _moveVector3_Origin.z);
 
@@ -95,6 +114,10 @@ public class PlayerMove : MonoBehaviour
 
             _animator.SetBool("IsMoving", _moveVector3.x != 0f || _moveVector3.z != 0f);
         }
+        else if (_isDashing)
+        {
+            _animator.SetBool("IsDashing", true);
+        }
         else if (_isGrounded)
         {
             _animator.SetBool("IsMoving", false);
@@ -104,6 +127,10 @@ public class PlayerMove : MonoBehaviour
         {
             _animator.SetBool("IsMoving", false);
             _animator.SetBool("IsFalling", true);
+        }
+        if (!_isDashing)
+        {
+            _animator.SetBool("IsDashing", false);
         }
         _animator.SetFloat("XSpeed", _moveVector3.x);
         _animator.SetFloat("ZSpeed", _moveVector3.z);
@@ -132,5 +159,11 @@ public class PlayerMove : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(_lookTargetPos, Vector3.up);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed);
         }
+    }
+
+    public void Dash()
+    {
+        _Rigidbody.AddForce( _PlayerCameraMove.CamRotation() * _moveVector3_Origin * 100f, ForceMode.Acceleration);
+        SetDashLock(.2f);
     }
 }
