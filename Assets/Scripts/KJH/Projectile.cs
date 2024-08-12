@@ -35,6 +35,7 @@ public class Projectile : MonoBehaviour
         Debug.Log($"{collision.collider.name}");
         if (collision.rigidbody == null)
         {
+            ObjectPoolManager.Instance.EnqueueObject(this.gameObject);
             return;
         }
         if (collision.rigidbody.TryGetComponent(out ITargetable targetable))
