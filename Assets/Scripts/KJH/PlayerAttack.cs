@@ -33,6 +33,7 @@ public class PlayerAttack : MonoBehaviour
     bool attackBool = false;
 
     [SerializeField] AttackType _currentAttackType = AttackType.CloseNormal; 
+    [SerializeField] int _initialAttackComboIndex = 0; 
 
     private void Awake()
     {
@@ -76,9 +77,7 @@ public class PlayerAttack : MonoBehaviour
             delayTime = 0;
             _PlayerMaster.OnAttackState(_PlayerCameraMove.CamRotation() * Vector3.forward);
 
-
-
-            _AttackSystem.StartAttack((int)_currentAttackType);
+            _AttackSystem.StartAttack((int)_currentAttackType, _initialAttackComboIndex);
             //StartCoroutine(Attack_Delayed(attack_Delay));
         }
         if(!attackTrigger && prevAttackTrigger)

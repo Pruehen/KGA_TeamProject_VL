@@ -118,7 +118,7 @@ public class PlayerMove : MonoBehaviour
         }
         else if (_isDashing)
         {
-            _animator.SetBool("IsDashing", true);
+            //_animator.SetBool("IsDashing", true);
         }
         else if (_isGrounded)
         {
@@ -132,7 +132,7 @@ public class PlayerMove : MonoBehaviour
         }
         if (!_isDashing)
         {
-            _animator.SetBool("IsDashing", false);
+            //_animator.SetBool("IsDashing", false);
         }
         _animator.SetFloat("XSpeed", _moveVector3.x);
         _animator.SetFloat("ZSpeed", _moveVector3.z);
@@ -168,23 +168,24 @@ public class PlayerMove : MonoBehaviour
 
         if (_PlayerMaster._PlayerInstanteState.TryStaminaConsumption(30))
         {
-            Vector3 newPoint = _moveVector3_Origin;
-
-            if (newPoint == Vector3.zero)
-            {
-                newPoint = new Vector3(0, 0, 14.26f);
-            }
-            _Rigidbody.AddForce(_PlayerCameraMove.CamRotation() * newPoint * 100f, ForceMode.Acceleration);
-            SetDashLock(.2f);
+            OnlyDash();
             _animator.SetTrigger("Dash");
         }
         else
         {
             return;
         }
+    }
+    //원거리4타시 호출
+    public void OnlyDash()
+    {
+        Vector3 newPoint = _moveVector3_Origin;
 
-
-
-
+        if (newPoint == Vector3.zero)
+        {
+            newPoint = new Vector3(0, 0, 14.26f);
+        }
+        _Rigidbody.AddForce(_PlayerCameraMove.CamRotation() * newPoint * 100f, ForceMode.Acceleration);
+        SetDashLock(.2f);
     }
 }

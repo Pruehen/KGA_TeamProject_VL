@@ -5,6 +5,7 @@ public class AttackSystem : MonoBehaviour
     Animator _animator;
     int hashAttackType = Animator.StringToHash("AttackType");
     int hashAttack = Animator.StringToHash("Attack");
+    int hashAttackComboInitialIndex = Animator.StringToHash("AttackComboInitialIndex");
 
     ATKTest _closeAttack;
 
@@ -35,11 +36,12 @@ public class AttackSystem : MonoBehaviour
         set => _animator.SetInteger(hashAttackType, value);
     }
 
-    public void StartAttack(int index)
+    public void StartAttack(int index, int comboIndex)
     {
         _attackLcokMove = true;
         _animator.SetTrigger(hashAttack);
         _animator.SetInteger(hashAttackType, index);
+        _animator.SetInteger(hashAttackComboInitialIndex, comboIndex);
     }
 
     public void LockMove()
