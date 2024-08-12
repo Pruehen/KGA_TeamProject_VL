@@ -63,14 +63,10 @@ public class Enemy : MonoBehaviour, ITargetable
 
     [SerializeField] private Detector _detector;
 
-    [SerializeField] private bool _isChargeAttack = false;
-
     [SerializeField] private EnemyEditorData _editorData;
     [SerializeField] private Transform _rotateTarget;
 
     [SerializeField] private GameObject _pooledHitVfxPrefab;
-
-    private static float positionZ = 0;
 
     private Rigidbody _rigidbody;
     private Animator _animator;
@@ -78,8 +74,6 @@ public class Enemy : MonoBehaviour, ITargetable
     private BehaviorTree _behaviorTree;
     private float _attackDamage;
     private float _colDamage;
-    public event Action OnKnockbackEnd;
-    private bool _isFlying = false;
 
     private AIState _aiState = AIState.Idle;
 
@@ -473,7 +467,7 @@ public class Enemy : MonoBehaviour, ITargetable
 
     private void SmoothRotate(Quaternion targetRotation, float speed, float deltaTime)
     {
-        transform.eulerAngles = Quaternion.Lerp(transform.rotation, targetRotation, (speed) * deltaTime).eulerAngles;
+        transform.eulerAngles = Quaternion.Lerp(transform.rotation, targetRotation, Mathf.Min((speed) * deltaTime, 1f)).eulerAngles;
     }
 
     // interface

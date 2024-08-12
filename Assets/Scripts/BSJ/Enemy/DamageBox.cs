@@ -47,10 +47,14 @@ public class DamageBox : MonoBehaviour
             {
                 continue;
             }
-            if (_owner == hit)
+            ITargetable hitTarget = null;
+            if (hit.TryGetComponent(out hitTarget))
             {
-                continue;
-            }            
+                if (_owner == hitTarget)
+                {
+                    continue;
+                }
+            }         
             combat.Hit(_damage);
         }
     }

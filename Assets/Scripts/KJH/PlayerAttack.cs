@@ -20,7 +20,6 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] float projectionSpeed_Forward = 15;
     [SerializeField] float projectionSpeed_Up = 3;
     [SerializeField] float attack_CoolTime = 0.7f;
-    [SerializeField] float attack_Delay = 0.5f;
 
     InputManager _InputManager;
     PlayerCameraMove _PlayerCameraMove;

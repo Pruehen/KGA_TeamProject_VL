@@ -4,7 +4,7 @@ public class PlayerCameraMove : SceneSingleton<PlayerCameraMove>
 {
     [Range(1f, 1000f)] public float mouseSpeed = 200f;
     [Range(1f, 50f)] public float camRange = 20f;
-    float xRotation = 15f;
+    //float xRotation = 15f;
 
     [SerializeField] Transform camAxis;
 
