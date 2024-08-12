@@ -10,8 +10,10 @@ public class InputManager : GlobalSingleton<InputManager>
     bool _isLMouseBtnClick;
     bool _isRMouseBtnClick;
     bool _isLControlBtnClick;
-    bool _isTapBtnClick;
+    bool _isChipUiToggleBtnClick;
+    bool _isRControlBtnClick;
     bool _isDashBtnClick;
+    bool _isInteractiveBtnClick;
 
     public Vector2 MoveVector2_Left_WASD
     {
@@ -78,15 +80,15 @@ public class InputManager : GlobalSingleton<InputManager>
         }
     }
 
-    public bool IsTapBtnClick
+    public bool IsChipUiToggleBtnClick
     {
-        get { return _isTapBtnClick; }
+        get { return _isChipUiToggleBtnClick; }
         set
         {
-            if (_isTapBtnClick != value)
+            if (_isChipUiToggleBtnClick != value)
             {
-                _isTapBtnClick = value;
-                OnPropertyChanged(nameof(IsTapBtnClick));
+                _isChipUiToggleBtnClick = value;
+                OnPropertyChanged(nameof(IsChipUiToggleBtnClick));
             }
         }
     }
@@ -100,6 +102,18 @@ public class InputManager : GlobalSingleton<InputManager>
             {
                 _isDashBtnClick = value;
                 OnPropertyChanged(nameof(IsDashBtnClick));
+            }
+        }
+    }
+    public bool IsInteractiveBtnClick
+    {
+        get { return _isInteractiveBtnClick; }
+        set
+        {
+            if(_isInteractiveBtnClick != value)
+            {
+                _isInteractiveBtnClick = value;
+                OnPropertyChanged(nameof(IsInteractiveBtnClick));
             }
         }
     }
@@ -134,17 +148,21 @@ public class InputManager : GlobalSingleton<InputManager>
         IsLControlBtnClick = value.isPressed;
     }
 
-    void OnInventory(InputValue value)//탭 버튼 클릭
+    void OnInventory(InputValue value)//T 버튼 클릭
     {
-        IsTapBtnClick = value.isPressed;
+        IsChipUiToggleBtnClick = value.isPressed;
+    }
+    void OnInteractive(InputValue value)//F 버튼 클릭
+    {
+        IsInteractiveBtnClick = value.isPressed;
     }
 
-    void OnRotate(InputValue value)
+    void OnRotate(InputValue value)//마우스 좌표
     {
         MoveVector2_Right_Mouse = value.Get<Vector2>();
     }
 
-    void OnDash(InputValue value)
+    void OnDash(InputValue value)//스페이스 버튼 클릭
     {
         IsDashBtnClick = value.isPressed;
     }

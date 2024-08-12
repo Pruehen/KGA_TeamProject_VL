@@ -60,4 +60,9 @@ public class AttackSystem : MonoBehaviour
     {
         _damageBox.EnableDamageBox(30);
     }
+
+    public void ResetEndAttack()
+    {
+        _animator.ResetTrigger("AttackEnd");
+    }
 }
