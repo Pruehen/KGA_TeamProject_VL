@@ -61,21 +61,21 @@ public static class JsonDataManager
 
 public class JsonCache
 {
-    ItemTable _itemTableCache;
-    public ItemTable ItemTableCache
+    BlueChipTable _blueChipTableCache;
+    public BlueChipTable BlueChipTableCache
     {
         get
         {
-            if (_itemTableCache == null)
+            if (_blueChipTableCache == null)
             {
-                _itemTableCache = JsonDataManager.DataTableListLoad<ItemTable>(ItemTable.FilePath());
+                _blueChipTableCache = JsonDataManager.DataTableListLoad<BlueChipTable>(BlueChipTable.FilePath());
             }
-            return _itemTableCache;
+            return _blueChipTableCache;
         }
     }
 
     public void Lode()
     {
-        _itemTableCache = ItemTableCache;
+        _blueChipTableCache = BlueChipTableCache;        
     }
 }

@@ -14,6 +14,8 @@ public class PlayerMove : MonoBehaviour
 
     Animator _animator;
 
+ 
+
     private void Start()
     {
         _attackSystem = GetComponent<AttackSystem>();
@@ -68,7 +70,7 @@ public class PlayerMove : MonoBehaviour
         _Rigidbody = GetComponent<Rigidbody>();
         _PlayerMaster = GetComponent<PlayerMaster>();
 
-        _PlayerCameraMove = PlayerCameraMove.Instance;        
+        _PlayerCameraMove = PlayerCameraMove.Instance;
     }
 
     public void FixedUpdate()
@@ -163,14 +165,27 @@ public class PlayerMove : MonoBehaviour
 
     public void Dash()
     {
-        Vector3 newPoint = _moveVector3_Origin;
 
-        if (newPoint == Vector3.zero)
+        if (_PlayerMaster._PlayerInstanteState.TryStaminaConsumption(30))
         {
-            newPoint = new Vector3(0, 0, 14.26f);
+            Vector3 newPoint = _moveVector3_Origin;
+
+            if (newPoint == Vector3.zero)
+            {
+                newPoint = new Vector3(0, 0, 14.26f);
+            }
+
+            _Rigidbody.AddForce(_PlayerCameraMove.CamRotation() * newPoint * 100f, ForceMode.Acceleration);
+            SetDashLock(.2f);
+
+        }
+        else
+        {
+            return;
         }
 
-        _Rigidbody.AddForce( _PlayerCameraMove.CamRotation() * newPoint * 100f, ForceMode.Acceleration);
-        SetDashLock(.2f);
+
+
+
     }
 }
