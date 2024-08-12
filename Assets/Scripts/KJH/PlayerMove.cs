@@ -18,6 +18,7 @@ public class PlayerMove : MonoBehaviour
     }
 
     bool _isMoving = true;
+    bool _isDash = false;
     public void SetMoveLock(float time)
     {
         //_Rigidbody.velocity = Vector3.zero;
@@ -47,11 +48,19 @@ public class PlayerMove : MonoBehaviour
         _PlayerCameraMove = PlayerCameraMove.Instance;        
     }
 
-    public void Update()
+    public void FixedUpdate()
     {
         Move_OnFixedUpdate();
         Rotate_OnFixedUpdate();
     }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Dash();
+        }
+    }
+
     void OnInputPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)
@@ -65,7 +74,7 @@ public class PlayerMove : MonoBehaviour
 
     void Move_OnFixedUpdate()
     {
-        if (_isMoving && !_PlayerMaster.IsAbsorptState)
+        if (_isMoving && !_PlayerMaster.IsAbsorptState && !_isDash)
         {
             _moveVector3 = new Vector3(_moveVector3_Origin.x, 0, _moveVector3_Origin.z);
 
@@ -75,8 +84,12 @@ public class PlayerMove : MonoBehaviour
                 _moveVector3 = _PlayerCameraMove.CamRotation() * _moveVector3_Origin;
             }
 
+            //이동구현(에드포스 , 벨로시티)
+            //_Rigidbody.AddForce(_moveVector3, ForceMode.VelocityCha);
+            _moveVector3.y = _Rigidbody.velocity.y;
+            _Rigidbody.velocity = _moveVector3;
 
-            this.transform.position += (_moveVector3 * Time.deltaTime);
+           // this.transform.position += (_moveVector3 * Time.deltaTime);
 
             // 애니메이션
             // animator.SetFloat("XSpeed", moveVector.x);
@@ -92,8 +105,19 @@ public class PlayerMove : MonoBehaviour
             _lookTargetPos = _moveVector3;
 
             Quaternion targetRotation = Quaternion.LookRotation(_lookTargetPos, Vector3.up);
+
+            targetRotation = FreezeXZ(targetRotation);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed);
         }
+    }
+
+    Quaternion FreezeXZ(Quaternion initialAngle)
+    {
+        Vector3 rotEuler = initialAngle.eulerAngles;
+        rotEuler.x = 0;
+        rotEuler.z = 0;
+        initialAngle.eulerAngles = rotEuler;
+        return initialAngle;
     }
 
     IEnumerator Rotate_Coroutine(float time)
@@ -108,4 +132,25 @@ public class PlayerMove : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed);
         }
     }
+    public void Dash()
+    {
+        StopCoroutine(Dash_Coroutine());
+        StartCoroutine(Dash_Coroutine());
+    }
+
+    IEnumerator Dash_Coroutine()
+    {
+        if(!_isDash)
+        {
+            _Rigidbody.velocity *= 3;
+            transform.position = new Vector3(0, 1, _Rigidbody.velocity.x);
+
+
+        }
+        _isDash = true;
+
+        yield return new WaitForSeconds(0.5f);
+        _isDash = false;
+    }
+
 }
