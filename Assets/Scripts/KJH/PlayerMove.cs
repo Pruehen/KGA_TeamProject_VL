@@ -59,7 +59,6 @@ public class PlayerMove : MonoBehaviour
     PlayerCameraMove _PlayerCameraMove;
     Rigidbody _Rigidbody;
     PlayerMaster _PlayerMaster;
-    PlayerInstanteState playerInstanteState;
 
     private void Awake()
     {
@@ -70,8 +69,6 @@ public class PlayerMove : MonoBehaviour
         _PlayerMaster = GetComponent<PlayerMaster>();
 
         _PlayerCameraMove = PlayerCameraMove.Instance;
-
-        playerInstanteState = GetComponent<PlayerInstanteState>();
     }
 
     public void FixedUpdate()
@@ -167,7 +164,7 @@ public class PlayerMove : MonoBehaviour
     public void Dash()
     {
 
-        if (playerInstanteState.TryStaminaConsumption(30))
+        if (_PlayerMaster._PlayerInstanteState.TryStaminaConsumption(30))
         {
             Vector3 newPoint = _moveVector3_Origin;
 
