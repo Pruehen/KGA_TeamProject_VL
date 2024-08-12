@@ -23,9 +23,9 @@ public class BlueChip
         Level_VelueList.Add(4, new List<float>());
         Level_VelueList.Add(5, new List<float>());
     }
-    public BlueChip()
+    public BlueChip(int id)
     {
-        Id = -1;
+        Id = id;
         Name = "블루칩 이름";
         Info = "블루칩 설명";
         Level_VelueList = new Dictionary<int, List<float>>();
@@ -38,18 +38,18 @@ public class BlueChip
 }
 public class BlueChipTable
 {
-    public List<BlueChip> list = new List<BlueChip>();
+    public Dictionary<int, BlueChip> dic;
     [JsonConstructor]
-    public BlueChipTable(List<BlueChip> list)
+    public BlueChipTable(Dictionary<int, BlueChip> dic)
     {
-        this.list = list;
+        this.dic = dic;
     }
     public BlueChipTable()
     {
-        list = new List<BlueChip>();
+        dic = new Dictionary<int, BlueChip>();
         for (int i = 0; i < 9; i++)
         {
-            list.Add(new BlueChip());
+            dic.Add(i, new BlueChip(i));
         }
     }
     public static string FilePath()
