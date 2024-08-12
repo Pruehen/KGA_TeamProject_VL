@@ -988,6 +988,10 @@ PrefabInstance:
       value: UI
       objectReference: {fileID: 0}
     - target: {fileID: 2223213414178075698, guid: 46a2d3f310067064f84db1700631524b, type: 3}
+      propertyPath: interactive
+      value: 
+      objectReference: {fileID: 6087796420837962139}
+    - target: {fileID: 2223213414178075698, guid: 46a2d3f310067064f84db1700631524b, type: 3}
       propertyPath: UI_MeleeBulletUI
       value: 
       objectReference: {fileID: 5389384419785040890}
@@ -1086,6 +1090,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4948640817398870840, guid: 46a2d3f310067064f84db1700631524b, type: 3}
   m_PrefabInstance: {fileID: 822439992380971392}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6087796420837962139 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6851618012068423707, guid: 46a2d3f310067064f84db1700631524b, type: 3}
+  m_PrefabInstance: {fileID: 822439992380971392}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &850112873815253084
 PrefabInstance:
   m_ObjectHideFlags: 0
