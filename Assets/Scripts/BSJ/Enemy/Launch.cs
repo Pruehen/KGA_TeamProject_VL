@@ -24,6 +24,9 @@ public class Launch : AiAttackAction
 
     private Detector detector;
 
+    private float initialDistance;
+    [SerializeField] private float _hommingPower = 100f;
+
     public Launch(MonoBehaviour owner, Detector detector)
     {
         this.owner = owner;
@@ -73,6 +76,7 @@ public class Launch : AiAttackAction
         isInit = true;
         rb.isKinematic = false;
         targetTrf = detector.GetTarget();
+        initialDistance = (transform.position - targetTrf.position).magnitude;
         Vector3 targetDir = (-transform.position + targetTrf.position).normalized;
         float angleV = Mathf.Atan2(targetDir.y, 1f);
         angleV = Mathf.Rad2Deg * angleV;
@@ -80,7 +84,7 @@ public class Launch : AiAttackAction
 
         rb.velocity = ProjectileCalc.CalcLaunch(transform.position, targetTrf.position, angleV);
         animator.SetBool(hashEndLaunch, false);
-        gameObject.layer = LayerMask.NameToLayer("EnemyProjectile");
+        gameObject.layer = LayerMask.NameToLayer("LaunchedEnemy");
     }
 
     private IEnumerator ResetLaunching()
@@ -127,22 +131,7 @@ public class Launch : AiAttackAction
             }
             else
             {
-                float deltaDist = (curPlayerPos - prevPlayerPos).magnitude;
-                Vector3 targetDir = (-rb.position + targetTrf.position).normalized;
-                Vector3 targetDirH = targetDir;
-                targetDirH.y = 0f;
-                targetDirH = targetDirH.normalized;
-
-                Vector3 velocityH = rb.velocity;
-                velocityH.y = 0f;
-                float velocityHMag = velocityH.magnitude;
-
-                Vector3 newVelocityH = targetDirH * velocityHMag;
-
-                Vector3 result = new Vector3(newVelocityH.x, rb.velocity.y, newVelocityH.z);
-                result += targetDirH * deltaDist * .5f;
-
-                rb.velocity = result;
+                Homming(curPlayerPos);
             }
             prevPlayerPos = curPlayerPos;
         }
@@ -158,5 +147,25 @@ public class Launch : AiAttackAction
     public bool IsAttacking()
     {
         return isInit;
+    }
+    private void Homming(Vector3 curPlayerPos)
+    {
+        Vector3 targetDir = (-rb.position + targetTrf.position).normalized;
+        Vector3 targetDirH = targetDir;
+        targetDirH.y = 0f;
+        targetDirH = targetDirH.normalized;
+
+        Vector3 velocityH = rb.velocity;
+        velocityH.y = 0f;
+        float velocityHMag = velocityH.magnitude;
+
+        Vector3 newVelocityH = targetDirH * velocityHMag;
+
+        if(Vector3.Dot(velocityH, targetDirH) >= .9f)
+        {
+            Vector3 result = new Vector3(newVelocityH.x, rb.velocity.y, newVelocityH.z);
+
+            rb.velocity = Vector3.Lerp(rb.velocity,result,Time.deltaTime * _hommingPower);
+        }
     }
 }
