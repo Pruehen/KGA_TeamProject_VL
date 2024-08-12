@@ -14,6 +14,7 @@ public class ATKTest : MonoBehaviour
     int _animBoolChargingEnd;
     int _animTriggerAttackEnd;
     int _animTriggerDashEnd;
+    int _animTriggerDash;
     bool _isAttacking;
 
     private void Awake()
@@ -28,6 +29,7 @@ public class ATKTest : MonoBehaviour
         _animBoolChargingEnd = Animator.StringToHash("ChargingEnd");
         _animTriggerAttackEnd = Animator.StringToHash("AttackEnd");
         _animTriggerDashEnd = Animator.StringToHash("DashEnd");
+        _animTriggerDash = Animator.StringToHash("Dash");
     }
     public void EndAttack()
     {
@@ -42,11 +44,16 @@ public class ATKTest : MonoBehaviour
             Debug.Log("ATKEnd");
         }
     }
-    public void DashENd()
+    public void DashEnd()
     {
-
         _animator.SetTrigger(_animTriggerDashEnd);
         Debug.Log("DashEnd");
+    }
+    public void DashAtkEnd()
+    {
+        _animator.ResetTrigger(_animTriggerAttackEnd);
+        _animator.ResetTrigger(_animTriggerDashEnd);
+        _animator.ResetTrigger(_animTriggerDash);
 
     }
 }
