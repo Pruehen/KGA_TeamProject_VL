@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7059723069037749417}
   - component: {fileID: 1206920868976007927}
-  m_Layer: 6
+  m_Layer: 9
   m_Name: Detector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61,7 +61,7 @@ GameObject:
   - component: {fileID: 6078903825372341943}
   - component: {fileID: 6847016174279394090}
   - component: {fileID: 5187475081854777868}
-  m_Layer: 6
+  m_Layer: 9
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -252,13 +252,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1966753621690214420}
-  m_Layer: 6
+  m_Layer: 9
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1966753621690214420
 Transform:
   m_ObjectHideFlags: 0
@@ -317,7 +317,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3431003864783991987}
   - component: {fileID: 7818489833940574782}
-  m_Layer: 6
+  m_Layer: 9
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -372,7 +372,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3088405023446145551}
   - component: {fileID: 2387716282888565263}
-  m_Layer: 6
+  m_Layer: 9
   m_Name: Damage Box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
