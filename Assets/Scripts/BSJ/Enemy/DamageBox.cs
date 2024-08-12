@@ -37,8 +37,11 @@ public class DamageBox : MonoBehaviour
 
         foreach (Collider hit in result)
         {
-
-            ITargetable combat = hit.GetComponent<ITargetable>();
+            if(hit.attachedRigidbody == null)
+            {
+                continue;
+            }
+            ITargetable combat = hit.attachedRigidbody.GetComponent<ITargetable>();
             if (combat == null)
             {
                 continue;

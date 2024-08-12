@@ -72,7 +72,6 @@ public class Detector : MonoBehaviour
 
         if(isPlayerInRange)
         {
-            Debug.Log("°¨ÁöµÊ");
             Target = col;
             _lastValidPostion = Target.bounds.center;
         }

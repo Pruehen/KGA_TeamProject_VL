@@ -32,7 +32,11 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.TryGetComponent(out ITargetable targetable))
+        if(collision.rigidbody == null)
+        {
+            return;
+        }
+        if (collision.rigidbody.TryGetComponent(out ITargetable targetable))
         {
             onHit?.Invoke();
             targetable.Hit(_dmg);

@@ -6,8 +6,8 @@ using UnityEngine;
 public class ItemAbsorber : MonoBehaviour
 {
     /// <summary>
-    /// 흠수 원거리흡수 모든 것을 흡수하고 갯수 반환
-    /// 근거리흠수는 내부에 들어온것만 흡수하고 갯수 반환
+    /// 흡수 원거리흡수 모든 것을 흡수하고 갯수 반환
+    /// 근거리 흡수는 내부에 들어온것만 흡수하고 갯수 반환
     /// </summary>
 
 

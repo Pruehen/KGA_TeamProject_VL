@@ -10,6 +10,16 @@ public class PlayerMove : MonoBehaviour
     Vector3 _moveVector3;
     Vector3 _lookTargetPos;
 
+    AttackSystem _attackSystem;
+
+    Animator _animator;
+
+    private void Start()
+    {
+        _attackSystem = GetComponent<AttackSystem>();
+        _animator = GetComponent<Animator>();
+    }
+
     public void OnAttackState(Vector3 attaciDir)
     {
         SetMoveLock(0.4f);
@@ -18,7 +28,8 @@ public class PlayerMove : MonoBehaviour
     }
 
     bool _isMoving = true;
-    bool _isDash = false;
+    bool _isGrounded = true;
+    bool _isDashing = false;
     public void SetMoveLock(float time)
     {
         //_Rigidbody.velocity = Vector3.zero;
@@ -30,6 +41,18 @@ public class PlayerMove : MonoBehaviour
         yield return new WaitForSeconds(time);
 
         _isMoving = true;
+    }
+    public void SetDashLock(float time)
+    {
+        //_Rigidbody.velocity = Vector3.zero;
+        StartCoroutine(SetDashLock_Coroutine(time));
+    }
+    IEnumerator SetDashLock_Coroutine(float time)
+    {
+        _isDashing = true;
+        yield return new WaitForSeconds(time);
+
+        _isDashing = false;
     }
 
     InputManager _InputManager;
@@ -50,17 +73,10 @@ public class PlayerMove : MonoBehaviour
 
     public void FixedUpdate()
     {
+        CheckGounded_OnFixedUpdate();
         Move_OnFixedUpdate();
         Rotate_OnFixedUpdate();
     }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Dash();
-        }
-    }
-
     void OnInputPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)
@@ -68,13 +84,22 @@ public class PlayerMove : MonoBehaviour
             case nameof(_InputManager.MoveVector2_Left_WASD):
                 float moveSpeed = _PlayerMaster._PlayerInstanteState.GetMoveSpeed();
                 _moveVector3_Origin = new Vector3(_InputManager.MoveVector2_Left_WASD.x * moveSpeed, 0, _InputManager.MoveVector2_Left_WASD.y * moveSpeed);
-                break;            
+                break;
+            case nameof(_InputManager.IsDashBtnClick):
+                if(_InputManager.IsDashBtnClick)
+                {
+                    Dash();
+                }
+                break;
         }
     }
-
+    void CheckGounded_OnFixedUpdate()
+    {
+        _isGrounded = Physics.CheckSphere(transform.position, .5f, ~LayerMask.GetMask("Character_Collider"));
+    }
     void Move_OnFixedUpdate()
     {
-        if (_isMoving && !_PlayerMaster.IsAbsorptState && !_isDash)
+        if (_isMoving && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove && _isGrounded && !_isDashing)
         {
             _moveVector3 = new Vector3(_moveVector3_Origin.x, 0, _moveVector3_Origin.z);
 
@@ -84,40 +109,43 @@ public class PlayerMove : MonoBehaviour
                 _moveVector3 = _PlayerCameraMove.CamRotation() * _moveVector3_Origin;
             }
 
-            //이동구현(에드포스 , 벨로시티)
-            //_Rigidbody.AddForce(_moveVector3, ForceMode.VelocityCha);
-            _moveVector3.y = _Rigidbody.velocity.y;
+
             _Rigidbody.velocity = _moveVector3;
 
-           // this.transform.position += (_moveVector3 * Time.deltaTime);
-
-            // 애니메이션
-            // animator.SetFloat("XSpeed", moveVector.x);
-            // animator.SetFloat("ZSpeed", moveVector.y);
+            _animator.SetBool("IsMoving", _moveVector3.x != 0f || _moveVector3.z != 0f);
         }
+        else if (_isDashing)
+        {
+            _animator.SetBool("IsDashing", true);
+        }
+        else if (_isGrounded)
+        {
+            _animator.SetBool("IsMoving", false);
+            _Rigidbody.velocity = new Vector3(0f, _Rigidbody.velocity.y, 0f);
+        }
+        else
+        {
+            _animator.SetBool("IsMoving", false);
+            _animator.SetBool("IsFalling", true);
+        }
+        if (!_isDashing)
+        {
+            _animator.SetBool("IsDashing", false);
+        }
+        _animator.SetFloat("XSpeed", _moveVector3.x);
+        _animator.SetFloat("ZSpeed", _moveVector3.z);
     }
 
     void Rotate_OnFixedUpdate()
     {
         // 캐릭터를 이동 방향으로 회전
-        if (_moveVector3 != Vector3.zero && _isMoving && !_PlayerMaster.IsAbsorptState)
+        if (_moveVector3 != Vector3.zero && _isMoving && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove)
         {
             _lookTargetPos = _moveVector3;
 
             Quaternion targetRotation = Quaternion.LookRotation(_lookTargetPos, Vector3.up);
-
-            targetRotation = FreezeXZ(targetRotation);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed);
         }
-    }
-
-    Quaternion FreezeXZ(Quaternion initialAngle)
-    {
-        Vector3 rotEuler = initialAngle.eulerAngles;
-        rotEuler.x = 0;
-        rotEuler.z = 0;
-        initialAngle.eulerAngles = rotEuler;
-        return initialAngle;
     }
 
     IEnumerator Rotate_Coroutine(float time)
@@ -132,25 +160,10 @@ public class PlayerMove : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed);
         }
     }
+
     public void Dash()
     {
-        StopCoroutine(Dash_Coroutine());
-        StartCoroutine(Dash_Coroutine());
+        _Rigidbody.AddForce( _PlayerCameraMove.CamRotation() * _moveVector3_Origin * 100f, ForceMode.Acceleration);
+        SetDashLock(.2f);
     }
-
-    IEnumerator Dash_Coroutine()
-    {
-        if(!_isDash)
-        {
-            _Rigidbody.velocity *= 3;
-            transform.position = new Vector3(0, 1, _Rigidbody.velocity.x);
-
-
-        }
-        _isDash = true;
-
-        yield return new WaitForSeconds(0.5f);
-        _isDash = false;
-    }
-
 }

@@ -196,6 +196,8 @@ public class Enemy : MonoBehaviour, ITargetable
     float rotateSpeed = 10f;
     private void Update()
     {
+        if (_aiState == AIState.Dead)
+        { return; }
         _currentStateTime += Time.deltaTime;
         if (_currentAttackTime > 0f)
         {
@@ -226,13 +228,11 @@ public class Enemy : MonoBehaviour, ITargetable
                 target.y = 0;
                 look = Quaternion.LookRotation(target - orig, Vector3.up);
                 SmoothRotate(look, rotateSpeed, Time.deltaTime);
-                Debug.Log("DefaultLook");
             }
         }
         else
         {
             SmoothRotate(look, rotateSpeed, Time.deltaTime);
-            Debug.Log("Just Look");
         }
         if (_navMeshAgent.velocity.magnitude > 0.1f)
         {
