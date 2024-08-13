@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+[RequireComponent(typeof(PlayerEquipBlueChip))]
 public class PlayerInstanteState : MonoBehaviour
 {
     public float hp { get; private set; }
