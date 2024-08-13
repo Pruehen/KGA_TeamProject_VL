@@ -21,6 +21,7 @@ public interface AiAttackAction
     public void DoAttack();
     public void DoUpdate();
     public bool IsAttacking();
+    public void StartAttackAnim();
 }
 
 [Serializable]
@@ -109,7 +110,7 @@ public class Enemy : MonoBehaviour, ITargetable
 
         if(_isJumpingEnemy)
         {
-            AiAttack = new Launch(this,_detector);
+            AiAttack = new LaunchAttack(this,_detector);
         }
     }
     private void Init()
@@ -230,7 +231,7 @@ public class Enemy : MonoBehaviour, ITargetable
         }
         else
         {
-            _animator.SetBool("IsLaunch", true);
+            AiAttack.StartAttackAnim();
             return;
         }
     }
@@ -262,7 +263,7 @@ public class Enemy : MonoBehaviour, ITargetable
     }
     private void StartLaunching()
     {
-        if(AiAttack is Launch la)
+        if(AiAttack is LaunchAttack la)
         {
             la.OnExcuteLaunch();
         }
