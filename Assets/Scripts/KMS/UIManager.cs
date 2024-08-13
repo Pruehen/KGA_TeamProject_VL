@@ -34,6 +34,7 @@ public class UIManager : SceneSingleton<UIManager>
         UpdateStaminaView();
         UpdateBulletView();
         UpdateMeleeBulletView();
+        OnMeleeModeChanged(false);
     }
     private void OnDestroy()
     {
