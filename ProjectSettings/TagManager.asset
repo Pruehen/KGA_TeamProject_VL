@@ -3,21 +3,24 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Item
+  - Enemy
+  - Chest
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Cam
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - PlayerCollider
+  - PlayerProjectile
+  - Ragdoll
+  - EnemyCollider
+  - Environment
+  - Interactive
+  - LaunchedEnemy
   - 
   - 
   - 

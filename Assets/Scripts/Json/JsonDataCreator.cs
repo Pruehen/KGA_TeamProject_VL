@@ -1,47 +1,76 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using EnumTypes;
+using UnityEngine;
+using System.Linq;
 
-public class Item
+public class BlueChip
 {
-    int _id;
-    ItemType _itemType;
-    string _name;
-    string _icon;
-    int _maxStack;
+    [JsonProperty] public int Id { get; private set; }
+    [JsonProperty] public string Name { get; private set; }
+    [JsonProperty] public string Info { get; private set; }
+    [JsonProperty] public Dictionary<int, List<float>> Level_VelueList { get; private set; }
 
     [JsonConstructor]
-    public Item(int id, ItemType itemType, string name, string icon, int maxStack)
+    public BlueChip(int id, string name, string info, Dictionary<int, List<float>> level_VelueList)
     {
-        _id = id;
-        _itemType = itemType;
-        _name = name;
-        _icon = icon;
-        _maxStack = maxStack;
+        Id = id;
+        Name = name;
+        Info = info;
+        Level_VelueList = level_VelueList;
     }
-    public Item()
+    public BlueChip(int id)
     {
-        _id = -1;
-        _itemType = ItemType.Material;
-        _name = "기본 자원 이름";
-        _icon = "기본 아이콘 이름";
-        _maxStack = 100;
+        Id = id;
+        Name = "블루칩 이름";
+        Info = "블루칩 설명";
+        Level_VelueList = new Dictionary<int, List<float>>();
+        Level_VelueList.Add(1, new List<float>());
+        Level_VelueList.Add(2, new List<float>());
+        Level_VelueList.Add(3, new List<float>());
+        Level_VelueList.Add(4, new List<float>());
+        Level_VelueList.Add(5, new List<float>());
+    }
+
+    public void Print(int level)
+    {
+        Debug.Log($"{level}레벨 : {Name}");
+        int[] arr = new int[Level_VelueList[level].Count];
+
+        for (int i = 0; i < Level_VelueList[level].Count; i++)
+        {
+            arr[i] = (int)(Level_VelueList[level][i]);
+        }
+        //Info.FormatStringWithArray(arr);
+        Debug.Log(string.Format(Info, Level_VelueList[level].Cast<object>().ToArray()));
     }
 }
-public class ItemTable
+public class BlueChipTable
 {
-    public List<Item> list = new List<Item>();
+    public Dictionary<int, BlueChip> dic;
     [JsonConstructor]
-    public ItemTable(List<Item> list)
+    public BlueChipTable(Dictionary<int, BlueChip> dic)
     {
-        this.list = list;
+        this.dic = dic;
     }
-    public ItemTable()
+    public BlueChipTable()
     {
-        list = new List<Item>();
+        dic = new Dictionary<int, BlueChip>();
+        for (int i = 0; i < 9; i++)
+        {
+            dic.Add(i, new BlueChip(i));
+        }
     }
     public static string FilePath()
     {
-        return "/Data/Table/Item/ItemTable.json";
+        return "/Data/Table/BlueChipTable.json";
+    }
+}
+
+public class JsonDataCreator : MonoBehaviour
+{
+    public void Awake()
+    {
+        JsonDataManager.jsonCache.Lode();
+        JsonDataManager.jsonCache.BlueChipTableCache.dic[3].Print(1);
     }
 }
