@@ -6,8 +6,8 @@ public class AttackSystem : MonoBehaviour
     int hashAttackType = Animator.StringToHash("AttackType");
     int hashAttack = Animator.StringToHash("Attack");
     int hashAttackComboInitialIndex = Animator.StringToHash("AttackComboInitialIndex");
-
-    ATKTest _closeAttack;
+    MeleeAttack _closeAttack;
+    Skill _closeSkill; 
 
     [SerializeField] DamageBox _damageBox;
 
@@ -19,7 +19,9 @@ public class AttackSystem : MonoBehaviour
     {
         TryGetComponent(out _animator);
         TryGetComponent(out _closeAttack);
+        TryGetComponent(out _closeSkill);
         _closeAttack.Init(_animator);
+        _closeSkill.Init(_animator);
     }
 
 
