@@ -81,7 +81,10 @@ public class PlayerAttack : MonoBehaviour
         }
         if(!attackTrigger && prevAttackTrigger)
         {
-            _AttackSystem.OnRelease();
+            if (_currentAttackType == AttackType.CloseNormal)
+            {
+                _AttackSystem.OnRelease();
+            }
         }
         prevAttackTrigger = attackTrigger;
     }

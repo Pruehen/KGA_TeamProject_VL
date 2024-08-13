@@ -1,9 +1,9 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
+[Serializable]
 public class Launch : AiAttackAction
 {
     private MonoBehaviour owner;
@@ -18,14 +18,15 @@ public class Launch : AiAttackAction
     private float attackDistance;
     private Vector3 prevPlayerPos;
     Vector3 SentinelVec = new Vector3(-9999f, -9999f, -9999f);
-    private float aimRotateSpeed = 10f;
 
     private bool isInit = false;
 
     private Detector detector;
 
     private float initialDistance;
+    [SerializeField] private float _aimRotateSpeed = 10f;
     [SerializeField] private float _hommingPower = 100f;
+    [SerializeField] private float _meleeRange = 3f;
 
     public Launch(MonoBehaviour owner, Detector detector)
     {
@@ -112,7 +113,7 @@ public class Launch : AiAttackAction
         desiredDir = new Vector3(desiredDir.x, 0f, desiredDir.z);
         desiredDir = desiredDir.normalized;
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiredDir), Time.deltaTime * aimRotateSpeed);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiredDir), Time.deltaTime * _aimRotateSpeed);
 
         bool isGrounded = Physics.CheckSphere(transform.position, .2f, LayerMask.GetMask("Environment"));
 
@@ -148,5 +149,19 @@ public class Launch : AiAttackAction
     public bool IsAttacking()
     {
         return isInit;
+    }
+
+    public void StartAttackAnim()
+    {
+        if(Vector3.Distance(detector.GetPosition(),transform.position) <= _meleeRange)
+        {
+            agent.nextPosition = transform.position;
+            animator.SetBool("IsLaunch", false);
+            animator.SetTrigger("Attack");
+        }
+        else
+        {
+            animator.SetBool("IsLaunch", true);
+        }
     }
 }
