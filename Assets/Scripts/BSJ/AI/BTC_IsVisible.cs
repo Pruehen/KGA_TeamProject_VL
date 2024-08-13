@@ -21,7 +21,7 @@ namespace BehaviorDesigner.Runtime.Tasks
             {
                 return TaskStatus.Failure;
             }
-            if(owner.IsTargetVisible(isAttack))
+            if(owner.IsTargetVisible())
             {
                 return TaskStatus.Success;
             }

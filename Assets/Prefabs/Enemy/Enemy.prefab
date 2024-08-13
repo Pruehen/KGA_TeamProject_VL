@@ -175,9 +175,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7d564d3bd3e7584690b336edb85b648, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _leftPatrolPoint: {fileID: 0}
-  _rightPatrolPoint: {fileID: 0}
-  _enemyId: 
   _isMovable: 1
   _combat:
     _maxHp: 100
@@ -192,21 +189,9 @@ MonoBehaviour:
     AttackRange: 3.03
     AttackCooldown: 1.5
     AttackMovableCooldown: 0.6
-    AttackThroughWall: 0
-    EnemyPatrolDistance: 4.38
-    EnemyPatrolIdleDuration: 1
     EnemyAlramDistance: 15.7
     EnemyAlramLimitTime: 2
     DetectThroughWall: 0
-    CustomPatrolPoint: 0
-    ChargeAttackForce: 80
-    CanFireProjectile: 0
-    ProjectileFirePos: {fileID: 0}
-    ProjectilePrefab: {fileID: 0}
-    HardLockOn: 0
-    ShieldAttack: 0
-    Shield: {fileID: 0}
-    ShieldEnableDelay: 0.5
   _rotateTarget: {fileID: 0}
   _pooledHitVfxPrefab: {fileID: 0}
 --- !u!114 &5187475081854777868
@@ -413,6 +398,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _halfSize: {x: 1, y: 1, z: 1}
+  _targetLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1001 &8846695151452529608
 PrefabInstance:
   m_ObjectHideFlags: 0

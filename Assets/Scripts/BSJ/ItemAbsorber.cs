@@ -27,6 +27,7 @@ public class ItemAbsorber : MonoBehaviour
     [Header("È¹µæ °ü·Ã")]
     [SerializeField] private float Radious = 5f;
     [SerializeField] private float Height = 1f;
+    [Range(0f, 1f)]
     [SerializeField] private float AbsolsionSpeed = 30f;
     [SerializeField] private AnimationCurve RadiusExpandCurve;
 
@@ -177,7 +178,7 @@ public class ItemAbsorber : MonoBehaviour
             {
                 break;
             }
-            item.localPosition = Vector3.Lerp(item.localPosition, targetPos, 0.02f);
+            item.localPosition = Vector3.Lerp(item.localPosition, targetPos, 0.02f * (1f - AbsolsionSpeed));
             yield return null;
         }
         revorvingItems.Add(item.gameObject);

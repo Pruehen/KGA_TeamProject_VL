@@ -20,7 +20,6 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] float projectionSpeed_Forward = 15;
     [SerializeField] float projectionSpeed_Up = 3;
     [SerializeField] float attack_CoolTime = 0.7f;
-    [SerializeField] float attack_Delay = 0.5f;
 
     InputManager _InputManager;
     PlayerCameraMove _PlayerCameraMove;
@@ -33,6 +32,7 @@ public class PlayerAttack : MonoBehaviour
     bool attackBool = false;
 
     [SerializeField] AttackType _currentAttackType = AttackType.CloseNormal; 
+    [SerializeField] int _initialAttackComboIndex = 0; 
 
     private void Awake()
     {
@@ -76,9 +76,7 @@ public class PlayerAttack : MonoBehaviour
             delayTime = 0;
             _PlayerMaster.OnAttackState(_PlayerCameraMove.CamRotation() * Vector3.forward);
 
-
-
-            _AttackSystem.StartAttack((int)_currentAttackType);
+            _AttackSystem.StartAttack((int)_currentAttackType, _initialAttackComboIndex);
             //StartCoroutine(Attack_Delayed(attack_Delay));
         }
         if(!attackTrigger && prevAttackTrigger)
