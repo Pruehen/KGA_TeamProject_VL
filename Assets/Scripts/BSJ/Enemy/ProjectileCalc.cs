@@ -35,4 +35,29 @@ public static class ProjectileCalc
             return Vector3.zero;
         return res;
     }
+
+    public static void Homming(Rigidbody projectile, Vector3 target, float hommingPower)
+    {
+        Vector3 targetDir = (-projectile.position + target).normalized;
+        Vector3 targetDirH = targetDir;
+        targetDirH.y = 0f;
+        targetDirH = targetDirH.normalized;
+
+        Vector3 velocityH = projectile.velocity;
+        velocityH.y = 0f;
+        float velocityHMag = velocityH.magnitude;
+
+        Vector3 newVelocityH = targetDirH * velocityHMag;
+
+        if (Vector3.Dot(velocityH, targetDirH) >= .9f)
+        {
+            Vector3 result = new Vector3(newVelocityH.x, projectile.velocity.y, newVelocityH.z);
+
+            projectile.velocity = Vector3.Lerp(projectile.velocity, result, Time.deltaTime * hommingPower);
+        }
+    }
+    public static void Homming(Rigidbody projectile, Transform target, float hommingPower)
+    {
+        Homming(projectile, target.position, hommingPower);
+    }
 }
