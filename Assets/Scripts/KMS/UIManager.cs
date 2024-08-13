@@ -1,28 +1,31 @@
-using System;
+using System.ComponentModel;
 using TMPro;
-using UI.Extension;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using Zenject.Asteroids;
 
 public class UIManager : SceneSingleton<UIManager>
 {
-    public Image stamina;
-    public Image healthPoint;
-    public Image skillPoint;
-    public Image interactive;
-    public TextMeshProUGUI TMP_BulletText;
-    public TextMeshProUGUI TMP_MeleeBulletText;
+    [SerializeField] Image stamina;
+    [SerializeField] Image healthPoint;
+    [SerializeField] Image skillPoint;
+    [SerializeField] Image interactive;
+    [SerializeField] TextMeshProUGUI TMP_BulletText;
+    [SerializeField] TextMeshProUGUI TMP_MeleeBulletText;
     [SerializeField] GameObject UI_MeleeBulletUI;
-    public GameObject inGameUI;
-    public GameObject tabUI;
-    public GameObject EscUI;
-    public GameObject blueChipUI;
+    [SerializeField] GameObject inGameUI;
+    [SerializeField] GameObject tabUI;
+    [SerializeField] GameObject EscUI;
+    [SerializeField] GameObject blueChipUI;
 
-    [SerializeField] PlayerInstanteState PlayerState;    
+    [SerializeField] PlayerInstanteState PlayerState;
 
-    
-  
+    [SerializeField] Button pickButton;
+    [SerializeField] Button holdButton;
+    [SerializeField] GameObject escImage;
+
+
     private void Start()
     {
         if (PlayerState != null)
@@ -32,6 +35,7 @@ public class UIManager : SceneSingleton<UIManager>
             PlayerState.BulletChanged += OnBulletChanged;
             PlayerState.MeleeBulletChanged += OnMeleeBulletChanged;
             PlayerState.OnMeleeModeChanged += OnMeleeModeChanged;
+          
         }
         UpdateHealthView();
         UpdateStaminaView();
@@ -49,8 +53,49 @@ public class UIManager : SceneSingleton<UIManager>
             PlayerState.MeleeBulletChanged -= OnMeleeBulletChanged;
         }
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (blueChipUI.activeSelf == true)
+            {
+                HoldButtonMove();
+            }
+             
+        }
+    }
+
+
+    private void Awake()
+    {
+        InputManager.Instance.PropertyChanged += OnInputPropertyChanged;
+    }
+
+    void OnInputPropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        switch (e.PropertyName)
+        {
+            case nameof(InputManager.Instance.IsInteractiveBtnClick):
+                if (InputManager.Instance.IsInteractiveBtnClick == true)
+                {
+                    if (blueChipUI.activeSelf == true)
+                    {
+                        Button selectedButton = EventSystem.current.currentSelectedGameObject?.GetComponent<Button>();
+                        selectedButton.onClick.Invoke();
+                        
+                        
+                       
+                    } 
+
+
+                    }
+                    break;
+        }
+    }
+
     public void setPlayer(PlayerInstanteState player)
-    {        
+    {
         PlayerState = player;
     }
     public void Damage(float amount)
@@ -82,7 +127,7 @@ public class UIManager : SceneSingleton<UIManager>
         if (PlayerState == null)
             return;
         if (TMP_BulletText != null)
-        {            
+        {
             TMP_BulletText.text = PlayerState.bullets + " / " + PlayerState.maxBullets;
         }
     }
@@ -97,7 +142,7 @@ public class UIManager : SceneSingleton<UIManager>
         {
             interactive.gameObject.SetActive(false);
         }
-       
+
 
     }
 
@@ -106,7 +151,7 @@ public class UIManager : SceneSingleton<UIManager>
         if (PlayerState == null)
             return;
         if (TMP_MeleeBulletText != null)
-        {            
+        {
             TMP_MeleeBulletText.text = PlayerState.meleeBullets + " / " + PlayerState.maxBullets;
         }
     }
@@ -132,9 +177,44 @@ public class UIManager : SceneSingleton<UIManager>
         UI_MeleeBulletUI.SetActive(value);
     }
 
-    internal void BlueChipUI()
+    public void BlueChipUI()
     {
         blueChipUI.SetActive(true);
+        TimeManager.instance.TimeStop();
+
+        HoldButtonMove();
+
+    }
+
+    //FÅ°¸¦ ´­·¯ ºí·çÄ¨À» ¼±ÅÃÇÏ¸é È£­ŒµÇ´Â ÇÔ¼ö
+    public void PickBUtton()
+    {
+        escImage.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(holdButton.gameObject);
+
+    }
+
+    public void HoldButton()
+    { 
+    
+    
+    }
+
+    //Esc¸¦ ´­·¯ ±³Ã¼¸¦ Ãë¼ÒÇÏ¸é È£ÃâµÇ´Â ÇÔ¼ö
+    public void HoldButtonMove()
+    {
+        escImage.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(pickButton.gameObject);
+
+    }
+
+    public void BkBlueChipUi()
+    {
+        Debug.Log("²¨Áü");
+        blueChipUI.SetActive(false);
+        TimeManager.instance.TimeStart();
+
+
     }
 }
 
