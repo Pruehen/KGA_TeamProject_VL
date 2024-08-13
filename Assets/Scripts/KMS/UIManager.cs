@@ -1,7 +1,9 @@
+using System;
 using TMPro;
 using UI.Extension;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject.Asteroids;
 
 public class UIManager : SceneSingleton<UIManager>
 {
@@ -14,7 +16,8 @@ public class UIManager : SceneSingleton<UIManager>
     [SerializeField] GameObject UI_MeleeBulletUI;
     public GameObject inGameUI;
     public GameObject tabUI;
-    public GameObject EscUI;    
+    public GameObject EscUI;
+    public GameObject blueChipUI;
 
     [SerializeField] PlayerInstanteState PlayerState;    
 
@@ -127,6 +130,11 @@ public class UIManager : SceneSingleton<UIManager>
     public void OnMeleeModeChanged(bool value)
     {
         UI_MeleeBulletUI.SetActive(value);
+    }
+
+    internal void BlueChipUI()
+    {
+        blueChipUI.SetActive(true);
     }
 }
 
