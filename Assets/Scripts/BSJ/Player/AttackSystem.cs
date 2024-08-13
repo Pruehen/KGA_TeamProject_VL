@@ -23,7 +23,9 @@ public class AttackSystem : MonoBehaviour
         TryGetComponent(out _closeAttack);
         TryGetComponent(out _closeSkill);
         _closeAttack.Init(_animator);
+        _closeSkill.Init(_animator);
         _PlayerMaster = GetComponent<PlayerMaster>();
+
     }
 
 
@@ -70,5 +72,30 @@ public class AttackSystem : MonoBehaviour
     public void ResetEndAttack()
     {
         _animator.ResetTrigger("AttackEnd");
+    }
+    public void ResetMod()
+    {
+        _animator.SetTrigger("Reset");
+        
+    }
+    public void Absober()
+    {
+        Debug.Log("¾Û¼Òºù");
+        _animator.SetTrigger("Absorbeing");
+    }
+    public void AbsoberEnd()
+    {
+        _animator.SetTrigger("AbsorbeingEnd");
+        _animator.ResetTrigger("Attack");
+        _animator.ResetTrigger("AttackEnd");
+        Debug.Log("absoberEnd");
+    }
+    public void ModTransform()
+    {
+        _animator.SetTrigger("Transform");
+        _animator.SetTrigger("AbsorbeingEnd");
+        _animator.ResetTrigger("Attack");
+        _animator.ResetTrigger("AttackEnd");
+        Debug.Log("Transform");
     }
 }

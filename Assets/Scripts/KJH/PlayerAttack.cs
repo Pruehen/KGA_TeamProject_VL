@@ -46,23 +46,39 @@ public class PlayerAttack : MonoBehaviour
         _PlayerMod = GetComponent<PlayerModChangeManager>();
 
         _PlayerMod.OnSucceseAbsorpt += ChangeAttackState;
+        _PlayerMod.OnEnterAbsorptState += ChangeAbsorbing;
+        _PlayerMod.OnEndAbsorptState += AbsorbingFall;
+
     }
 
     private void OnDestroy()
     {
         _PlayerMod.OnSucceseAbsorpt -= ChangeAttackState;
         _InputManager.PropertyChanged -= OnInputPropertyChanged;
+        _PlayerMod.OnEnterAbsorptState -= AbsorbingFall;
     }
 
+    private void ChangeAbsorbing()
+    {
+        Debug.Log("¤±¤¤¤·¤©");
+        _AttackSystem.Absober();
+    }
+    private void AbsorbingFall()
+    {
+        Debug.Log("AbsorbingFall");
+        _AttackSystem.AbsoberEnd();
+    }
     private void ChangeAttackState(bool isMelee)
     {
         if (isMelee)
         {
             _currentAttackType = AttackType.CloseNormal;
+            _AttackSystem.ModTransform();
         }
         else
         {
             _currentAttackType = AttackType.RangeNormal;
+            _AttackSystem.ModTransform();
         }
     }
 

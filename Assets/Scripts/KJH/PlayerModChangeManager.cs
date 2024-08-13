@@ -67,6 +67,7 @@ public class PlayerModChangeManager : MonoBehaviour
         IsAbsorptState = true;
         OnEnterAbsorptState.Invoke();
         Debug.Log($"Èí¼ö ¸ðµå ÁøÀÔ");
+
     }
     public void EnterRangeMode()
     {
@@ -76,7 +77,15 @@ public class PlayerModChangeManager : MonoBehaviour
 
         _PlayerMaster._PlayerInstanteState.AcquireBullets(value);
         Debug.Log($"{value}°³ Èí¼ö");
-        OnSucceseAbsorpt?.Invoke(IsMeleeMode);
+        if (value > 0)
+        {
+            OnSucceseAbsorpt?.Invoke(IsMeleeMode);
+        }
+        else
+        {
+            OnEndAbsorptState.Invoke();
+            IsAbsorptState = false;
+        }
     }
     public void EnterMeleeMode()
     {  
@@ -89,7 +98,11 @@ public class PlayerModChangeManager : MonoBehaviour
             IsMeleeMode = true;
             OnSucceseAbsorpt?.Invoke(IsMeleeMode);
         }
-        IsAbsorptState = false;
+        else
+        {
+            EndAbsorptState();
+        }
+        //IsAbsorptState = false;
     }
 
     public void EndAbsorptState()
@@ -97,6 +110,7 @@ public class PlayerModChangeManager : MonoBehaviour
         IsAbsorptState = false;
         IsMeleeMode = false;
         Debug.Log($"Èí¼ö ½ÇÆÐ");
+        OnEndAbsorptState.Invoke();
     }
 }
 

@@ -90,10 +90,10 @@ public class PlayerMaster : MonoBehaviour, ITargetable
 
     public void Register_PlayerModChangeManager(Action callBack_StartAbsorb, Func<int> callBack_SucceseAbsorb, Func<int> callBack_AcquireAll, Action callBack_DropAbsorbingItems)
     {
-        _PlayerModChangeManager.OnEnterAbsorptState = callBack_StartAbsorb;
-        _PlayerModChangeManager.OnSucceseAbsorptState = callBack_AcquireAll;
-        _PlayerModChangeManager.OnSucceseAbsorptState_EntryMelee = callBack_SucceseAbsorb;
-        _PlayerModChangeManager.OnEndAbsorptState = callBack_DropAbsorbingItems;
+        _PlayerModChangeManager.OnEnterAbsorptState += callBack_StartAbsorb;
+        _PlayerModChangeManager.OnSucceseAbsorptState += callBack_AcquireAll;
+        _PlayerModChangeManager.OnSucceseAbsorptState_EntryMelee += callBack_SucceseAbsorb;
+        _PlayerModChangeManager.OnEndAbsorptState += callBack_DropAbsorbingItems;
     }
 
 
