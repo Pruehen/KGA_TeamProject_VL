@@ -10,5 +10,6 @@ public class Chest : MonoBehaviour
         animator.SetTrigger("Chest");
         Collider collider = GetComponent<Collider>();
         collider.enabled = false;
+
     }
 }
