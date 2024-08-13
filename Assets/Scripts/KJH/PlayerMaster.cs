@@ -1,8 +1,6 @@
 using System;
 using UnityEngine;
 using EnumTypes;
-using static Cinemachine.DocumentationSortingAttribute;
-
 
 public class PlayerMaster : MonoBehaviour, ITargetable
 {
@@ -33,7 +31,14 @@ public class PlayerMaster : MonoBehaviour, ITargetable
 
     public void OnMeleeHit()
     {
+        _PlayerInstanteState.TryBulletConsumption_Melee(1);
+
         Execute_BlueChip1_OnMeleeHit();
+
+        if(_PlayerInstanteState.meleeBullets <= 0)
+        {
+            _PlayerModChangeManager.EnterRangeMode();
+        }
     }
     void Execute_BlueChip1_OnMeleeHit()
     {
