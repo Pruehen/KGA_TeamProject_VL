@@ -202,6 +202,17 @@ public class PlayerInstanteState : MonoBehaviour
         skillGauge = 0;
         bullets = maxBullets / 3;
     }
+
+    public void Refresh_Model()
+    {
+        UpdateHealth();
+        UpdateShild();
+        UpdateStamina();
+        UpdateBullet();
+        UpdateBullet_Melee();
+        UpdateSkillGauge();
+    }
+
     public void UpdateHealth()
     {
         HealthRatioChanged?.Invoke(hp / maxHp);

@@ -28,14 +28,22 @@ public class UIManager : SceneSingleton<UIManager>
         if (PlayerState != null)
         {
             PlayerState.HealthRatioChanged += OnHealthRatioChanged;
+            PlayerState.ShildRatioChanged += OnShildRatioChanged;
             PlayerState.StaminaRatioChanged += OnStaminaChanged;
             PlayerState.BulletChanged += OnBulletChanged;
             PlayerState.MeleeBulletChanged += OnMeleeBulletChanged;
             PlayerState.OnMeleeModeChanged += OnMeleeModeChanged;
         }
-        
+
+        Command_Refresh_View();        
+    }
+
+    void Command_Refresh_View()
+    {
+        PlayerState.Refresh_Model();
         OnMeleeModeChanged(false);
     }
+
     private void OnDestroy()
     {
         if (PlayerState != null)
