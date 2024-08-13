@@ -453,6 +453,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4224725398327422089}
+  - component: {fileID: 1994704088398004875}
   m_Layer: 0
   m_Name: Required Objects
   m_TagString: Untagged
@@ -480,6 +481,18 @@ Transform:
   - {fileID: 5747998620108434104}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1994704088398004875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3030909100458731246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c9cbaf951996854e8bf66609c72521c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3367712841829934897
 GameObject:
   m_ObjectHideFlags: 0
@@ -994,7 +1007,7 @@ PrefabInstance:
     - target: {fileID: 2223213414178075698, guid: 46a2d3f310067064f84db1700631524b, type: 3}
       propertyPath: UI_MeleeBulletUI
       value: 
-      objectReference: {fileID: 5389384419785040890}
+      objectReference: {fileID: 1757317569789998614}
     - target: {fileID: 4948640817398870840, guid: 46a2d3f310067064f84db1700631524b, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1080,9 +1093,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46a2d3f310067064f84db1700631524b, type: 3}
---- !u!1 &5389384419785040890 stripped
+--- !u!1 &1757317569789998614 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 4729646314109713018, guid: 46a2d3f310067064f84db1700631524b, type: 3}
+  m_CorrespondingSourceObject: {fileID: 1372150740773236630, guid: 46a2d3f310067064f84db1700631524b, type: 3}
   m_PrefabInstance: {fileID: 822439992380971392}
   m_PrefabAsset: {fileID: 0}
 --- !u!224 &5747998620108434104 stripped
