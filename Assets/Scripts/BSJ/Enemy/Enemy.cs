@@ -21,6 +21,7 @@ public interface AiAttackAction
     public void DoAttack();
     public void DoUpdate();
     public bool IsAttacking();
+    public void StartAttackAnim();
 }
 
 [Serializable]
@@ -230,7 +231,7 @@ public class Enemy : MonoBehaviour, ITargetable
         }
         else
         {
-            _animator.SetBool("IsLaunch", true);
+            AiAttack.StartAttackAnim();
             return;
         }
     }
