@@ -90,7 +90,6 @@ public class Enemy : MonoBehaviour, ITargetable
 
     private void Awake()
     {
-
         _rigidbody = GetComponent<Rigidbody>();
         _behaviorTree = GetComponent<BehaviorTree>();
         _navMeshAgent = GetComponent<NavMeshAgent>();
@@ -160,11 +159,11 @@ public class Enemy : MonoBehaviour, ITargetable
     float rotateSpeed = 10f;
     private void Update()
     {
-    
         if (_aiState == AIState.Dead)
         { return; }
 
         if(AiAttack != null)
+
         {
             AiAttack.DoUpdate();
             if(AiAttack.IsAttacking())
@@ -223,10 +222,10 @@ public class Enemy : MonoBehaviour, ITargetable
     public void StartAttackAnimation()
     {
         IsMovable = false;
-        _currentAttackTime = _attackCooldown;
         _animator.SetTrigger("Attack");
         if (AiAttack == null)
         {
+            _currentAttackTime = _attackCooldown;
             return;
         }
         else

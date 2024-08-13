@@ -60,6 +60,7 @@ public class Launch : AiAttackAction
     public void DoAttack()
     {
         owner.StartCoroutine(ResetLaunching());
+        isInit = false;
 
         rb.isKinematic = true;
         animator.SetBool(hashEndLaunch, false);
@@ -131,7 +132,7 @@ public class Launch : AiAttackAction
             }
             else
             {
-                Homming(curPlayerPos);
+                ProjectileCalc.Homming(rb,targetTrf,_hommingPower);
             }
             prevPlayerPos = curPlayerPos;
         }
@@ -147,25 +148,5 @@ public class Launch : AiAttackAction
     public bool IsAttacking()
     {
         return isInit;
-    }
-    private void Homming(Vector3 curPlayerPos)
-    {
-        Vector3 targetDir = (-rb.position + targetTrf.position).normalized;
-        Vector3 targetDirH = targetDir;
-        targetDirH.y = 0f;
-        targetDirH = targetDirH.normalized;
-
-        Vector3 velocityH = rb.velocity;
-        velocityH.y = 0f;
-        float velocityHMag = velocityH.magnitude;
-
-        Vector3 newVelocityH = targetDirH * velocityHMag;
-
-        if(Vector3.Dot(velocityH, targetDirH) >= .9f)
-        {
-            Vector3 result = new Vector3(newVelocityH.x, rb.velocity.y, newVelocityH.z);
-
-            rb.velocity = Vector3.Lerp(rb.velocity,result,Time.deltaTime * _hommingPower);
-        }
     }
 }
