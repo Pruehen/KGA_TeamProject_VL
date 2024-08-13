@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class BlueChip
 {
@@ -15,13 +16,7 @@ public class BlueChip
         Id = id;
         Name = name;
         Info = info;
-        //this.Level_VelueList = Level_VelueList;
-        Level_VelueList = new Dictionary<int, List<float>>();
-        Level_VelueList.Add(1, new List<float>());
-        Level_VelueList.Add(2, new List<float>());
-        Level_VelueList.Add(3, new List<float>());
-        Level_VelueList.Add(4, new List<float>());
-        Level_VelueList.Add(5, new List<float>());
+        Level_VelueList = level_VelueList;
     }
     public BlueChip(int id)
     {
@@ -34,6 +29,19 @@ public class BlueChip
         Level_VelueList.Add(3, new List<float>());
         Level_VelueList.Add(4, new List<float>());
         Level_VelueList.Add(5, new List<float>());
+    }
+
+    public void Print(int level)
+    {
+        Debug.Log($"{level}·¹º§ : {Name}");
+        int[] arr = new int[Level_VelueList[level].Count];
+
+        for (int i = 0; i < Level_VelueList[level].Count; i++)
+        {
+            arr[i] = (int)(Level_VelueList[level][i]);
+        }
+        //Info.FormatStringWithArray(arr);
+        Debug.Log(string.Format(Info, Level_VelueList[level].Cast<object>().ToArray()));
     }
 }
 public class BlueChipTable
@@ -63,5 +71,6 @@ public class JsonDataCreator : MonoBehaviour
     public void Awake()
     {
         JsonDataManager.jsonCache.Lode();
+        JsonDataManager.jsonCache.BlueChipTableCache.dic[3].Print(1);
     }
 }

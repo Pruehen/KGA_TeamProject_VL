@@ -4,6 +4,7 @@ public class DamageBox : MonoBehaviour
 {
     [SerializeField] private ITargetable _owner;
     [SerializeField] private Vector3 _halfSize = new Vector3(1f, 1f, 1f);
+    [SerializeField] private LayerMask _targetLayer;
 
     private Coroutine _DisableBoxCoroutine;
 
@@ -33,7 +34,7 @@ public class DamageBox : MonoBehaviour
     }
     private void OnEnable()
     {
-        Collider[] result = Physics.OverlapBox(transform.position, HalfSize, transform.rotation);        
+        Collider[] result = Physics.OverlapBox(transform.position, HalfSize, transform.rotation, _targetLayer);        
 
         foreach (Collider hit in result)
         {
@@ -46,10 +47,14 @@ public class DamageBox : MonoBehaviour
             {
                 continue;
             }
-            if (_owner == hit)
+            ITargetable hitTarget = null;
+            if (hit.TryGetComponent(out hitTarget))
             {
-                continue;
-            }            
+                if (_owner == hitTarget)
+                {
+                    continue;
+                }
+            }         
             combat.Hit(_damage);
         }
     }

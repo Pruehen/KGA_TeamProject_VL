@@ -8,6 +8,7 @@ public class UIManager : SceneSingleton<UIManager>
     public Image stamina;
     public Image healthPoint;
     public Image skillPoint;
+    public Image interactive;
     public TextMeshProUGUI TMP_BulletText;
     public TextMeshProUGUI TMP_MeleeBulletText;
     [SerializeField] GameObject UI_MeleeBulletUI;
@@ -33,6 +34,7 @@ public class UIManager : SceneSingleton<UIManager>
         UpdateStaminaView();
         UpdateBulletView();
         UpdateMeleeBulletView();
+        OnMeleeModeChanged(false);
     }
     private void OnDestroy()
     {
@@ -81,6 +83,21 @@ public class UIManager : SceneSingleton<UIManager>
             TMP_BulletText.text = PlayerState.bullets + " / " + PlayerState.maxBullets;
         }
     }
+
+    public void Interactable(bool chest)
+    {
+        if (chest)
+        {
+            interactive.gameObject.SetActive(true);
+        }
+        else if (!chest)
+        {
+            interactive.gameObject.SetActive(false);
+        }
+       
+
+    }
+
     public void UpdateMeleeBulletView()
     {
         if (PlayerState == null)
