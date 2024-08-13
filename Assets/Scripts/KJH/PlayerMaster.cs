@@ -28,6 +28,11 @@ public class PlayerMaster : MonoBehaviour, ITargetable
             Execute_BlueChip1_OnMeleeModeChange(value);
         }
     }
+    public int GetBlueChipLevel(BlueChipID iD)
+    {
+        return _PlayerEquipBlueChip.GetBlueChipLevel(iD);
+    }
+
 
     public void OnMeleeHit()
     {
@@ -42,7 +47,7 @@ public class PlayerMaster : MonoBehaviour, ITargetable
     }
     void Execute_BlueChip1_OnMeleeHit()
     {
-        int level = _PlayerEquipBlueChip.GetBlueChipLevel(BlueChipID.근거리2);
+        int level = GetBlueChipLevel(BlueChipID.근거리2);
 
         if(level > 0)
         {
@@ -53,7 +58,7 @@ public class PlayerMaster : MonoBehaviour, ITargetable
     {
         if (isMeleeMode)
         {
-            int level = _PlayerEquipBlueChip.GetBlueChipLevel(BlueChipID.근거리2);
+            int level = GetBlueChipLevel(BlueChipID.근거리2);
 
             if (level > 0)
             {

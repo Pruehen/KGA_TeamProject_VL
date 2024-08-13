@@ -474,7 +474,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3030909100458731246, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
       propertyPath: m_Name
-      value: Required Objects
+      value: '!!Required Objects'
       objectReference: {fileID: 0}
     - target: {fileID: 4224725398327422089, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
       propertyPath: m_LocalPosition.x
@@ -515,30 +515,6 @@ PrefabInstance:
     - target: {fileID: 4224725398327422089, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9205539715972612223, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
-      propertyPath: moveSpeed
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 9205539715972612223, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
-      propertyPath: MaxStamina
-      value: 800
-      objectReference: {fileID: 0}
-    - target: {fileID: 9205539715972612223, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
-      propertyPath: skillPower
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 9205539715972612223, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
-      propertyPath: attackPower
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 9205539715972612223, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
-      propertyPath: staminaRecoveryDelay
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 9205539715972612223, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
-      propertyPath: staminaRecoverySpeed
-      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1349,5 +1325,5 @@ SceneRoots:
   - {fileID: 414122679}
   - {fileID: 1539975227}
   - {fileID: 2103947033}
-  - {fileID: 585453235}
   - {fileID: 7716750749072086520}
+  - {fileID: 585453235}

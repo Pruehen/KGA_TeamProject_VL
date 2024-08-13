@@ -1,8 +1,10 @@
 using System;
 using UnityEngine;
-
+using EnumTypes;
 public class PlayerInstanteState : MonoBehaviour
 {
+    PlayerMaster _PlayerMaster;
+
     public float hp { get; private set; }
     public float Shield { get; private set; }
     public float stamina { get; private set; }
@@ -36,9 +38,19 @@ public class PlayerInstanteState : MonoBehaviour
 
     [SerializeField] float attackPower;
     [SerializeField] float skillPower;
-    public float GetDmg()
-    {         
-        return attackPower;
+    public float GetDmg(float coefficient)
+    {
+        float baseDmg = attackPower * coefficient;
+        if(true)
+        {
+            int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.근거리1);
+            if (level > 0)
+            {
+                baseDmg += ((hp + Shield) * JsonDataManager.GetBlueChipData(BlueChipID.근거리1).Level_VelueList[level][0]);
+            }
+        }
+
+        return baseDmg;
     }
 
     [SerializeField] float moveSpeed;
@@ -55,6 +67,8 @@ public class PlayerInstanteState : MonoBehaviour
 
     private void Awake()
     {
+        _PlayerMaster = GetComponent<PlayerMaster>();
+
         Restore();
         UIManager.Instance.setPlayer(this);
     }
