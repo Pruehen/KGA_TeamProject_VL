@@ -63,7 +63,6 @@ public class PlayerInstanteState : MonoBehaviour
 
     private void Update()
     {
-        
         StaminaAutoRecovery();
     }
 
@@ -99,22 +98,48 @@ public class PlayerInstanteState : MonoBehaviour
     }
 
     public void Hit(float dmg)
-    {
-        //dmg만큼 체력 감소
-        if (hp > 0)
+    {        
+        if(Shild > 0)
+        {
+            Shild -= dmg;
+            if (Shild <= 0)
+            {
+                Shild = 0;
+            }
+            UpdateShild();
+            return;
+        }
+
+        if(hp > 0)
         {
             hp -= dmg;
-        }
-        //체력이 0이 될 경우 IsDead를 true로.
-        if (hp == 0)
-        {
-            IsDead = true;
-            Debug.Log("죽음");
-        }
-        //체력 수치와 UI 연동.
+            if (hp <= 0)
+            {
+                hp = 0;
+                IsDead = true;                
+            }
+            UpdateHealth();
+        }                
+    }
 
-        //UIManager.Instance.UpdatehealthPoint(hp, maxHp);
+    public void HpRecovery(float value)
+    {
+        hp += value;
+        if(hp > maxHp)
+        {
+            hp = maxHp;
+        }
         UpdateHealth();
+    }
+
+    public void ShildRecovery(float value)
+    {
+        Shild += value;
+        if(Shild > maxHp)
+        {
+            Shild = maxHp;
+        }
+        UpdateShild();
     }
 
     //탄환 획득
@@ -180,6 +205,7 @@ public class PlayerInstanteState : MonoBehaviour
 
         UpdateSkillGauge();
     }
+
     public bool TryUseSkillGauge(float value)
     {
         if(skillGauge >= value)
@@ -193,7 +219,6 @@ public class PlayerInstanteState : MonoBehaviour
             return false;
         }                
     }
-
 
     void Restore()
     {

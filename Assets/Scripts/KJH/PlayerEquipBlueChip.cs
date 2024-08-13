@@ -1,18 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EnumTypes;
 
 public class PlayerEquipBlueChip : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    List<BlueChipID> useBlueChipList = new List<BlueChipID>();
 }
