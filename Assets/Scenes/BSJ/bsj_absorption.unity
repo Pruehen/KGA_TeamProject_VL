@@ -1441,7 +1441,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1004296726443850065, guid: 45e042ae835178448a596621edd0eb11, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1931853011064115872, guid: 45e042ae835178448a596621edd0eb11, type: 3}
       propertyPath: _enemyType
@@ -1503,6 +1503,10 @@ PrefabInstance:
     - target: {fileID: 1004296726443850065, guid: 95dcfa8800bcd204287acf9bb0aaa346, type: 3}
       propertyPath: m_Name
       value: Enemy_Range
+      objectReference: {fileID: 0}
+    - target: {fileID: 1004296726443850065, guid: 95dcfa8800bcd204287acf9bb0aaa346, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6809830787013622174, guid: 95dcfa8800bcd204287acf9bb0aaa346, type: 3}
       propertyPath: m_LocalPosition.x

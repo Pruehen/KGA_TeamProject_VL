@@ -25,7 +25,7 @@ public class LaunchAttack : AiAttackAction
 
     private float initialDistance;
     [SerializeField] private float _aimRotateSpeed = 10f;
-    [SerializeField] private float _jumpForce = 100f;
+    [SerializeField] private float _jumpAngle = 100f;
     [SerializeField] private float _meleeRange = 3f;
     [SerializeField] private float _hommingForce = 100f;
     [SerializeField] private float _attackDamage = 100f;
@@ -41,7 +41,7 @@ public class LaunchAttack : AiAttackAction
         agent = gameObject.GetComponent<NavMeshAgent>();
         prevPlayerPos = SentinelVec;
         _meleeRange = enemyData.MeleeRange;
-        _jumpForce = enemyData.JumpForce;
+        _jumpAngle = enemyData.JumpAngle;
         _hommingForce = enemyData.HommingForce;
         _attackDamage = enemyData.AttackDamage;
 
@@ -88,7 +88,7 @@ public class LaunchAttack : AiAttackAction
         Vector3 targetDir = (-transform.position + targetTrf.position).normalized;
         float angleV = Mathf.Atan2(targetDir.y, 1f);
         angleV = Mathf.Rad2Deg * angleV;
-        angleV = (angleV > -15f) ? angleV + 30f : -angleV;
+        angleV = -angleV + _jumpAngle;
 
         rb.velocity = ProjectileCalc.CalcLaunch(transform.position, targetTrf.position, angleV);
         animator.SetBool(hashEndLaunch, false);
