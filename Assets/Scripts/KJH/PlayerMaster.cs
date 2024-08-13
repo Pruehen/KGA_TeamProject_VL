@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 using EnumTypes;
+using static Cinemachine.DocumentationSortingAttribute;
+
 
 public class PlayerMaster : MonoBehaviour, ITargetable
 {
@@ -25,7 +27,7 @@ public class PlayerMaster : MonoBehaviour, ITargetable
         set
         {
             _PlayerInstanteState.IsMeleeMode = value;
-
+            Execute_BlueChip1_OnMeleeModeChange(value);
         }
     }
 
@@ -41,6 +43,22 @@ public class PlayerMaster : MonoBehaviour, ITargetable
         {
             _PlayerInstanteState.ChangeShield(JsonDataManager.GetBlueChipData(BlueChipID.근거리2).Level_VelueList[level][2]);
         }        
+    }
+    void Execute_BlueChip1_OnMeleeModeChange(bool isMeleeMode)
+    {
+        if (isMeleeMode)
+        {
+            int level = _PlayerEquipBlueChip.GetBlueChipLevel(BlueChipID.근거리2);
+
+            if (level > 0)
+            {
+                _PlayerInstanteState.ChangeShield(JsonDataManager.GetBlueChipData(BlueChipID.근거리2).Level_VelueList[level][0]);
+            }
+        }
+        else
+        {
+            _PlayerInstanteState.ChangeShield(-9999);
+        }
     }
 
     private void Awake()
