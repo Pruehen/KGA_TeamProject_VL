@@ -174,10 +174,9 @@ public class PlayerMove : MonoBehaviour
             {
                 newPoint = new Vector3(0, 0, 14.26f);
             }
-
             _Rigidbody.AddForce(_PlayerCameraMove.CamRotation() * newPoint * 100f, ForceMode.Acceleration);
             SetDashLock(.2f);
-
+            _animator.SetTrigger("Dash");
         }
         else
         {
