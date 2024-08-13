@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerInstanteState : MonoBehaviour
 {
     public float hp { get; private set; }
+    public float Shild { get; private set; }
     public float stamina { get; private set; }
     public int bullets { get; private set; }
     public int meleeBullets { get; private set; }
@@ -23,35 +24,27 @@ public class PlayerInstanteState : MonoBehaviour
 
     public bool IsDead { get; private set; }
 
-    [SerializeField]
-    public float maxHp;
+    [SerializeField] float maxHp;    
+    [SerializeField] float MaxStamina;
+    [SerializeField] float staminaRecoverySpeed;
 
-    [SerializeField]
-    public float MaxStamina;
-
-    [SerializeField]
-    private float staminaRecoverySpeed;
-    [SerializeField]
-    public float MaxskillGauge = 100;
-
-
-    [SerializeField] public int maxBullets = 50;
+    [SerializeField] float MaxskillGauge = 100;
+    [SerializeField] int maxBullets = 50;
     [SerializeField] int maxMeleeBullets = 50;
 
-    [SerializeField]
-    private float attackPower;
+    [SerializeField] float attackPower;
     public float GetAttackPower() { return attackPower; }
 
-    [SerializeField]
-    private float moveSpeed;
+    [SerializeField] float moveSpeed;
     public float GetMoveSpeed() { return moveSpeed; }
 
 
-    public event Action HealthChanged;
-    public event Action StaminaChanged;
-    public event Action BulletChanged;
-    public event Action MeleeBulletChanged;
-    public event Action SkillGaugeChanged;
+    public Action<float> HealthRatioChanged;
+    public Action<float> ShildRatioChanged;
+    public Action<float> StaminaRatioChanged;
+    public Action<int, int> BulletChanged;
+    public Action<int, int> MeleeBulletChanged;
+    public Action<float> SkillGaugeRatioChanged;
     public Action<bool> OnMeleeModeChanged;
 
     private void Awake()
@@ -211,22 +204,26 @@ public class PlayerInstanteState : MonoBehaviour
     }
     public void UpdateHealth()
     {
-        HealthChanged?.Invoke();
+        HealthRatioChanged?.Invoke(hp / maxHp);
+    }
+    public void UpdateShild()
+    {
+        ShildRatioChanged?.Invoke(Shild / maxHp);
     }
     public void UpdateStamina()
     {
-        StaminaChanged?.Invoke();
+        StaminaRatioChanged?.Invoke(stamina / MaxStamina);
     }
     public void UpdateBullet()
     {
-        BulletChanged?.Invoke();
+        BulletChanged?.Invoke(bullets, maxBullets);
     }
     public void UpdateBullet_Melee()
     {
-        MeleeBulletChanged?.Invoke();
+        MeleeBulletChanged?.Invoke(meleeBullets, maxMeleeBullets);
     }
     public void UpdateSkillGauge()
     {
-        SkillGaugeChanged?.Invoke();
+        SkillGaugeRatioChanged?.Invoke(skillGauge / MaxskillGauge);
     }    
 }
