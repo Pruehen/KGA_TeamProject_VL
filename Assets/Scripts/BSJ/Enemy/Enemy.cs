@@ -160,7 +160,7 @@ public class Enemy : MonoBehaviour, ITargetable
     float rotateSpeed = 10f;
     private void Update()
     {
-        Debug.Log(_rigidbody.velocity);
+    
         if (_aiState == AIState.Dead)
         { return; }
 
