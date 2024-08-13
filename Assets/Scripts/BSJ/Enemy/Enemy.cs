@@ -1,5 +1,4 @@
 using BehaviorDesigner.Runtime;
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -15,6 +14,12 @@ public enum AIState
     Attack,
     Dead
 }
+public enum EnemyType
+{
+    Normal,
+    Jump,
+    Range
+}
 
 public interface AiAttackAction
 {
@@ -24,30 +29,14 @@ public interface AiAttackAction
     public void StartAttackAnim();
 }
 
-[Serializable]
-public class EnemyEditorData
-{
-    [Space(10)]
-    [Header("기본 공격")]
-    public float AttackDamage = 2f;
-    public float AttackRange = 2f;
-    public float AttackCooldown = 2f;
-    public float AttackMovableCooldown = 0.6f;
-    [Space(10)]
-    [Header("감지")]
-    public float EnemyAlramDistance = 6f;
-    public float EnemyAlramLimitTime = 2f;
-    public bool DetectThroughWall = false;
-}
-
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(Animator))]
 public class Enemy : MonoBehaviour, ITargetable
 {
+    private EnemyType _enemyType;
     [SerializeField] private bool _isMovable = true;
     [SerializeField] private Combat _combat;
-    [SerializeField] private bool _isJumpingEnemy = false;
 
 
     private DamageBox _attackCollider;
@@ -64,7 +53,7 @@ public class Enemy : MonoBehaviour, ITargetable
 
     [SerializeField] private Detector _detector;
 
-    [SerializeField] private EnemyEditorData _editorData;
+    [SerializeField] private SO_EnemyBase _enemyData;
     [SerializeField] private Transform _rotateTarget;
 
     [SerializeField] private GameObject _pooledHitVfxPrefab;
@@ -89,6 +78,9 @@ public class Enemy : MonoBehaviour, ITargetable
 
     private AiAttackAction AiAttack = null;
 
+    [SerializeField] private GameObject _projectilePrefab;
+    [SerializeField] private Transform _firePos;
+
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -97,7 +89,6 @@ public class Enemy : MonoBehaviour, ITargetable
         _animator = GetComponent<Animator>();
 
         _characterCollider = GetComponentInChildren<Collider>();
-        _characterEnvCollider = GetComponentInChildren<Collider>();
 
         _navMeshAgent.updateRotation = false;
         _detector.Init(this, "Player", 5f, false);
@@ -107,32 +98,44 @@ public class Enemy : MonoBehaviour, ITargetable
         Init();
 
         _pooledHitVfx = new ObjectPool<GameObject>(CreatePool, OnGetPool, OnReleasePool, OnDestroyPool, true, 100, 200);
-
-        if(_isJumpingEnemy)
-        {
-            AiAttack = new LaunchAttack(this,_detector);
-        }
     }
     private void Init()
     {
         _combat = new Combat();
-        _combat.Init(100f);
+        _combat.Init(_enemyData.Hp);
         _combat.OnDead += OnDead;
 
 
-        _attackDamage = _editorData.AttackDamage;
-        _attackCooldown = _editorData.AttackCooldown;
+        _attackDamage = _enemyData.AttackDamage;
+        _attackCooldown = _enemyData.AttackCooldown;
 
         _detector.Init(this, "Player",
-            _editorData.EnemyAlramDistance,
-            _editorData.DetectThroughWall);
+            _enemyData.EnemyAlramDistance,
+            _enemyData.DetectThroughWall);
+
+        if (_enemyData is SO_EnemyBase)
+        {
+            _enemyType = EnemyType.Normal;
+            AiAttack = null;
+        }
+        else if (_enemyData is SO_JumpingEnemy)
+        {
+            _enemyType = EnemyType.Jump;
+            AiAttack = new LaunchAttack(this, _detector);
+        }
+        else if (_enemyData is SO_RangeEnemy)
+        {
+            _enemyType = EnemyType.Range;
+            AiAttack = new RangeAttack(this, _detector, _firePos, _enemyData as SO_RangeEnemy);
+        }
+
 
         SharedFloat attackRange = new SharedFloat();
-        attackRange.Value = _editorData.AttackRange;
+        attackRange.Value = _enemyData.AttackRange;
         SharedFloat detectRange = new SharedFloat();
-        detectRange.Value = _editorData.EnemyAlramDistance;
+        detectRange.Value = _enemyData.EnemyAlramDistance;
         SharedFloat enemyAlramLimitTime = new SharedFloat();
-        enemyAlramLimitTime.Value = _editorData.EnemyAlramLimitTime;
+        enemyAlramLimitTime.Value = 999999f;
 
         _behaviorTree.SetVariable("AttackRange", attackRange);
         _behaviorTree.SetVariable("DetectRange", detectRange);
@@ -163,11 +166,11 @@ public class Enemy : MonoBehaviour, ITargetable
         if (_aiState == AIState.Dead)
         { return; }
 
-        if(AiAttack != null)
+        if (AiAttack != null)
 
         {
             AiAttack.DoUpdate();
-            if(AiAttack.IsAttacking())
+            if (AiAttack.IsAttacking())
             {
                 return;
             }
@@ -248,22 +251,20 @@ public class Enemy : MonoBehaviour, ITargetable
     {
         if (AiAttack == null)
         {
-            StartCoroutine(AttackEnd(_editorData.AttackMovableCooldown));
+            StartCoroutine(AttackEnd(_enemyData.AttackMovableCooldown));
             Attack();
             return true;
         }
         else
         {
-            _animator.SetBool("IsLaunch", true);
-            StartCoroutine(AttackEnd(_editorData.AttackMovableCooldown));
-            Attack();
+            StartCoroutine(AttackEnd(_enemyData.AttackMovableCooldown));
             AiAttack.DoAttack();
             return true;
         }
     }
     private void StartLaunching()
     {
-        if(AiAttack is LaunchAttack la)
+        if (AiAttack is LaunchAttack la)
         {
             la.OnExcuteLaunch();
         }
@@ -403,9 +404,9 @@ public class Enemy : MonoBehaviour, ITargetable
     private void EnemyDebug()
     {
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(_detector.transform.position, _editorData.AttackRange);
+        Gizmos.DrawWireSphere(_detector.transform.position, _enemyData.AttackRange);
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(_detector.transform.position, _editorData.EnemyAlramDistance);
+        Gizmos.DrawWireSphere(_detector.transform.position, _enemyData.EnemyAlramDistance);
 
         Gizmos.color = GetColorByState(_aiState);
         Gizmos.DrawSphere(transform.position + Vector3.up, 1f);

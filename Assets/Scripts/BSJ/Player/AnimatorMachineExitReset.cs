@@ -26,12 +26,4 @@ public class AnimatorMachineExitReset : StateMachineBehaviour
 
     //        Debug.Log(stateInfo.normalizedTime);
     //    }
-    public override void OnStateMachineExit(Animator animator, int stateMachinePathHash)
-    {
-        Debug.Log("what");
-    }
-    public override void OnStateMachineExit(Animator animator, int stateMachinePathHash, AnimatorControllerPlayable controller)
-    {
-        Debug.Log("what");
-    }
 }
