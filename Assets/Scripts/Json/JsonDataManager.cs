@@ -3,6 +3,7 @@ using UnityEngine;
 using System.IO;
 using System;
 using System.Threading.Tasks;
+using EnumTypes;
 
 public static class JsonDataManager
 {
@@ -56,6 +57,11 @@ public static class JsonDataManager
         await File.WriteAllTextAsync(filePath, data);
 
         Debug.Log($"<color=#FFFF00>데이터 저장 완료</color> : {typeof(T).Name}");
+    }
+
+    public static BlueChip GetBlueChipData(BlueChipID id)
+    {
+        return jsonCache.BlueChipTableCache.dic[(int)id];
     }
 }
 

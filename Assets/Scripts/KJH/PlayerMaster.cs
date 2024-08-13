@@ -1,13 +1,15 @@
 using System;
 using UnityEngine;
+using EnumTypes;
 
 public class PlayerMaster : MonoBehaviour, ITargetable
 {
     public PlayerInstanteState _PlayerInstanteState { get; private set; }
+    public PlayerEquipBlueChip _PlayerEquipBlueChip { get; private set; }
     PlayerMove _PlayerMove;
     PlayerAttack _PlayerAttack;
     PlayerModChangeManager _PlayerModChangeManager;
-    [SerializeField] ItemAbsorber _ItemAbsorber;
+    [SerializeField] ItemAbsorber _ItemAbsorber;    
 
     public bool IsAbsorptState
     {
@@ -23,13 +25,52 @@ public class PlayerMaster : MonoBehaviour, ITargetable
         set
         {
             _PlayerInstanteState.IsMeleeMode = value;
+            Execute_BlueChip1_OnMeleeModeChange(value);
+        }
+    }
 
+    public void OnMeleeHit()
+    {
+        _PlayerInstanteState.TryBulletConsumption_Melee(1);
+
+        Execute_BlueChip1_OnMeleeHit();
+
+        if(_PlayerInstanteState.meleeBullets <= 0)
+        {
+            _PlayerModChangeManager.EnterRangeMode();
+        }
+    }
+    void Execute_BlueChip1_OnMeleeHit()
+    {
+        int level = _PlayerEquipBlueChip.GetBlueChipLevel(BlueChipID.근거리2);
+
+        if(level > 0)
+        {
+            _PlayerInstanteState.ChangeShield(JsonDataManager.GetBlueChipData(BlueChipID.근거리2).Level_VelueList[level][2]);
+        }        
+    }
+    void Execute_BlueChip1_OnMeleeModeChange(bool isMeleeMode)
+    {
+        if (isMeleeMode)
+        {
+            int level = _PlayerEquipBlueChip.GetBlueChipLevel(BlueChipID.근거리2);
+
+            if (level > 0)
+            {
+                _PlayerInstanteState.ChangeShield(JsonDataManager.GetBlueChipData(BlueChipID.근거리2).Level_VelueList[level][0]);
+            }
+        }
+        else
+        {
+            _PlayerInstanteState.ChangeShield(-9999);
         }
     }
 
     private void Awake()
     {
         _PlayerInstanteState = GetComponent<PlayerInstanteState>();
+        _PlayerEquipBlueChip = GetComponent<PlayerEquipBlueChip>();
+
         _PlayerMove = GetComponent<PlayerMove>();
         _PlayerAttack = GetComponent<PlayerAttack>();
         _PlayerModChangeManager = GetComponent<PlayerModChangeManager>();

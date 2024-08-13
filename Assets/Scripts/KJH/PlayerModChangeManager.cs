@@ -4,26 +4,21 @@ using UnityEngine;
 
 public class PlayerModChangeManager : MonoBehaviour
 {
-    PlayerMaster _PlayerMaster;
-
-    bool _isAbsorptState = false;
-    bool _isMeleeMode = false;
+    PlayerMaster _PlayerMaster;    
 
     public bool IsAbsorptState
     {
-        get { return _isAbsorptState; }
+        get { return _PlayerMaster.IsAbsorptState; }
         set
-        {
-            _isAbsorptState = value;
+        {            
             _PlayerMaster.IsAbsorptState = value;
         }
     }
     public bool IsMeleeMode
     {
-        get { return _isMeleeMode; }
+        get { return _PlayerMaster.IsMeleeMode; }
         set
-        {
-            _isMeleeMode = value;
+        {            
             _PlayerMaster.IsMeleeMode = value;
         }
     }

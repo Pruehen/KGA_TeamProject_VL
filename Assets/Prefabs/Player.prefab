@@ -46,12 +46,14 @@ GameObject:
   - component: {fileID: 3820283957303393746}
   - component: {fileID: 2680144560742994316}
   - component: {fileID: 516789563033613623}
+  - component: {fileID: 3848298984020166617}
   - component: {fileID: 323388105381359817}
   - component: {fileID: 6736053533579567610}
   - component: {fileID: 767856972143940028}
   - component: {fileID: 660252477575797071}
   - component: {fileID: 8909988477445564789}
   - component: {fileID: 3176383348458485747}
+  - component: {fileID: 7753793625892610601}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -146,6 +148,18 @@ MonoBehaviour:
   maxMeleeBullets: 50
   attackPower: 150
   moveSpeed: 14.26
+--- !u!114 &3848298984020166617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3370145770967923552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 558ca11a99c5c8f49afef42e7cde3021, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &323388105381359817
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,8 +190,8 @@ MonoBehaviour:
   projectionSpeed_Forward: 15
   projectionSpeed_Up: 3
   attack_CoolTime: 0.7
-  attack_Delay: 0.5
   _currentAttackType: 0
+  _initialAttackComboIndex: 0
 --- !u!95 &767856972143940028
 Animator:
   serializedVersion: 5
@@ -251,6 +265,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f80012ddb58f5846a77fcd9de5f9e6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7753793625892610601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3370145770967923552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24d435979b3aec240882a58731062d5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactiveLayerMask:
+    serializedVersion: 2
+    m_Bits: 2048
+  distance: 2
 --- !u!1 &5381824260810107129
 GameObject:
   m_ObjectHideFlags: 0
@@ -566,10 +596,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -5191472934358010437, guid: 5e6f511379ddc384cb88828d3cda0bac, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.655
+      objectReference: {fileID: 0}
+    - target: {fileID: -5191472934358010437, guid: 5e6f511379ddc384cb88828d3cda0bac, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.023
+      objectReference: {fileID: 0}
+    - target: {fileID: -720864927876840301, guid: 5e6f511379ddc384cb88828d3cda0bac, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 3071718739748270354, guid: 5e6f511379ddc384cb88828d3cda0bac, type: 3}
     - target: {fileID: 919132149155446097, guid: 5e6f511379ddc384cb88828d3cda0bac, type: 3}
       propertyPath: m_Name
       value: Characters
       objectReference: {fileID: 0}
+    - target: {fileID: 3804955923288215435, guid: 5e6f511379ddc384cb88828d3cda0bac, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 3071718739748270354, guid: 5e6f511379ddc384cb88828d3cda0bac, type: 3}
+    - target: {fileID: 8669256438428887208, guid: 5e6f511379ddc384cb88828d3cda0bac, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 3071718739748270354, guid: 5e6f511379ddc384cb88828d3cda0bac, type: 3}
     m_RemovedComponents:
     - {fileID: 5866666021909216657, guid: 5e6f511379ddc384cb88828d3cda0bac, type: 3}
     m_RemovedGameObjects: []
