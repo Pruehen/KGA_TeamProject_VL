@@ -1,13 +1,15 @@
 using System;
 using UnityEngine;
+using EnumTypes;
 
 public class PlayerMaster : MonoBehaviour, ITargetable
 {
     public PlayerInstanteState _PlayerInstanteState { get; private set; }
+    public PlayerEquipBlueChip _PlayerEquipBlueChip { get; private set; }
     PlayerMove _PlayerMove;
     PlayerAttack _PlayerAttack;
     PlayerModChangeManager _PlayerModChangeManager;
-    [SerializeField] ItemAbsorber _ItemAbsorber;
+    [SerializeField] ItemAbsorber _ItemAbsorber;    
 
     public bool IsAbsorptState
     {
@@ -29,12 +31,17 @@ public class PlayerMaster : MonoBehaviour, ITargetable
 
     public void OnMeleeHit()
     {
-        Debug.Log("근접 타격함");
+        if (_PlayerEquipBlueChip.HasBlueChip(BlueChipID.근거리2))
+        {
+            _PlayerInstanteState.ChangeShild()
+        }
     }
 
     private void Awake()
     {
         _PlayerInstanteState = GetComponent<PlayerInstanteState>();
+        _PlayerEquipBlueChip = GetComponent<PlayerEquipBlueChip>();
+
         _PlayerMove = GetComponent<PlayerMove>();
         _PlayerAttack = GetComponent<PlayerAttack>();
         _PlayerModChangeManager = GetComponent<PlayerModChangeManager>();
