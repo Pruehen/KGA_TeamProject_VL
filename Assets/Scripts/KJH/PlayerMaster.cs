@@ -31,10 +31,16 @@ public class PlayerMaster : MonoBehaviour, ITargetable
 
     public void OnMeleeHit()
     {
-        if (_PlayerEquipBlueChip.HasBlueChip(BlueChipID.근거리2))
+        Execute_BlueChip1_OnMeleeHit();
+    }
+    void Execute_BlueChip1_OnMeleeHit()
+    {
+        int level = _PlayerEquipBlueChip.GetBlueChipLevel(BlueChipID.근거리2);
+
+        if(level > 0)
         {
-            _PlayerInstanteState.ChangeShild()
-        }
+            _PlayerInstanteState.ChangeShield(JsonDataManager.GetBlueChipData(BlueChipID.근거리2).Level_VelueList[level][2]);
+        }        
     }
 
     private void Awake()

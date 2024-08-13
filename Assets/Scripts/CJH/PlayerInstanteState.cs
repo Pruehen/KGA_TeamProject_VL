@@ -4,7 +4,7 @@ using UnityEngine;
 public class PlayerInstanteState : MonoBehaviour
 {
     public float hp { get; private set; }
-    public float Shild { get; private set; }
+    public float Shield { get; private set; }
     public float stamina { get; private set; }
     public int bullets { get; private set; }
     public int meleeBullets { get; private set; }
@@ -98,12 +98,12 @@ public class PlayerInstanteState : MonoBehaviour
 
     public void Hit(float dmg)
     {        
-        if(Shild > 0)
+        if(Shield > 0)
         {
-            Shild -= dmg;
-            if (Shild <= 0)
+            Shield -= dmg;
+            if (Shield <= 0)
             {
-                Shild = 0;
+                Shield = 0;
             }
             UpdateShild();
             return;
@@ -136,16 +136,16 @@ public class PlayerInstanteState : MonoBehaviour
         UpdateHealth();
     }
 
-    public void ChangeShild(float value)
+    public void ChangeShield(float value)
     {
-        Shild += value;
-        if(Shild > maxHp)
+        Shield += value;
+        if(Shield > maxHp)
         {
-            Shild = maxHp;
+            Shield = maxHp;
         }
-        if (Shild < 0)
+        if (Shield < 0)
         {
-            Shild = 0;
+            Shield = 0;
         }
         UpdateShild();
     }
@@ -253,7 +253,7 @@ public class PlayerInstanteState : MonoBehaviour
     }
     public void UpdateShild()
     {
-        ShildRatioChanged?.Invoke(Shild / maxHp);
+        ShildRatioChanged?.Invoke(Shield / maxHp);
     }
     public void UpdateStamina()
     {
