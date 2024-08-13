@@ -122,22 +122,31 @@ public class PlayerInstanteState : MonoBehaviour
         }                
     }
 
-    public void HpRecovery(float value)
+    public void ChangeHp(float value)
     {
         hp += value;
         if(hp > maxHp)
         {
             hp = maxHp;
         }
+        if(hp < 0)
+        {
+            hp = 1;
+        }
+
         UpdateHealth();
     }
 
-    public void ShildRecovery(float value)
+    public void ChangeShild(float value)
     {
         Shild += value;
         if(Shild > maxHp)
         {
             Shild = maxHp;
+        }
+        if (Shild < 0)
+        {
+            Shild = 0;
         }
         UpdateShild();
     }
