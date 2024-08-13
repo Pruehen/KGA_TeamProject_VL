@@ -2,6 +2,7 @@ using BehaviorDesigner.Runtime;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Assertions;
 using UnityEngine.Pool;
 
 public enum AIState
@@ -23,7 +24,7 @@ public enum EnemyType
 
 public interface AiAttackAction
 {
-    public void DoAttack();
+    public void DoAttack(DamageBox damageBox);
     public void DoUpdate();
     public bool IsAttacking();
     public void StartAttackAnim();
@@ -43,7 +44,10 @@ public class Enemy : MonoBehaviour, ITargetable
 
     public bool IsMovable
     {
-        get => _isMovable;
+        get
+        {
+            return _currentMoveTime <= 0f;
+        }
         private set
         {
             _navMeshAgent.isStopped = !value;
@@ -108,25 +112,31 @@ public class Enemy : MonoBehaviour, ITargetable
 
         _attackDamage = _enemyData.AttackDamage;
         _attackCooldown = _enemyData.AttackCooldown;
+        _attackMoveCooldoown = _enemyData.AttackMovableCooldown;
 
         _detector.Init(this, "Player",
             _enemyData.EnemyAlramDistance,
-            _enemyData.DetectThroughWall);
+            false);
 
-        if (_enemyData is SO_EnemyBase)
-        {
-            _enemyType = EnemyType.Normal;
-            AiAttack = null;
-        }
-        else if (_enemyData is SO_JumpingEnemy)
+        if (_enemyData is SO_JumpingEnemy)
         {
             _enemyType = EnemyType.Jump;
-            AiAttack = new LaunchAttack(this, _detector);
+            AiAttack = new LaunchAttack(this, _detector, _enemyData as SO_JumpingEnemy);
         }
         else if (_enemyData is SO_RangeEnemy)
         {
             _enemyType = EnemyType.Range;
             AiAttack = new RangeAttack(this, _detector, _firePos, _enemyData as SO_RangeEnemy);
+        }
+        else if (_enemyData is SO_EnemyBase)
+        {
+            _enemyType = EnemyType.Normal;
+            AiAttack = null;
+        }
+        else
+        {
+            Assert.IsFalse(true, "적 데이터가 존재하지 않습니다.");
+            AiAttack = null;
         }
 
 
@@ -166,8 +176,16 @@ public class Enemy : MonoBehaviour, ITargetable
         if (_aiState == AIState.Dead)
         { return; }
 
-        if (AiAttack != null)
+        if (_navMeshAgent.velocity.magnitude > 0.1f)
+        {
+            _animator.SetBool("IsMoving", true);
+        }
+        else
+        {
+            _animator.SetBool("IsMoving", false);
+        }
 
+        if (AiAttack != null)
         {
             AiAttack.DoUpdate();
             if (AiAttack.IsAttacking())
@@ -181,55 +199,55 @@ public class Enemy : MonoBehaviour, ITargetable
         {
             _currentAttackTime -= Time.deltaTime;
         }
+        if (_currentMoveTime > 0f)
+        {
+            _currentMoveTime -= Time.deltaTime;
+            IsMovable = false;
+            return;
+        }
+        else
+        {
+            IsMovable = true;
+        }
         Vector3 dir = _navMeshAgent.destination - transform.position;
         dir = dir.normalized;
-        if (_currentAttackTime > 0f)
-        {
-            SmoothRotate(look, rotateSpeed, Time.deltaTime);
-        }
-        else if (_detector.GetTarget() != null && _aiState == AIState.Chase)
+        if (_detector.GetLatestTarget() != null && _aiState == AIState.Chase)
         {
             Vector3 orig = transform.position;
-            Vector3 target = _detector.GetPosition();
+            Vector3 target = _detector.GetLatestTarget().position;
             orig.y = 0;
             target.y = 0;
             look = Quaternion.LookRotation(target - orig, Vector3.up);
-            SmoothRotate(look, rotateSpeed, Time.deltaTime);
+            Rotator.SmoothRotate(transform, look, rotateSpeed, Time.deltaTime);
         }
         else
         {
-            SmoothRotate(look, rotateSpeed, Time.deltaTime);
+            Rotator.SmoothRotate(transform, look, rotateSpeed, Time.deltaTime);
         }
 
 
-        if (_navMeshAgent.velocity.magnitude > 0.1f)
-        {
-            _animator.SetBool("IsMoving", true);
-        }
-        else
-        {
-            _animator.SetBool("IsMoving", false);
-        }
     }
     private void ResetEnemy()
     {
         SetEnableAllCollision(true);
         _animator.SetBool("IsDead", false);
-
-        _isMovable = true;
+        _currentAttackTime = 0f;
+        _currentMoveTime = 0f;
         gameObject.SetActive(true);
     }
 
     float _attackCooldown = .8f;
+    float _attackMoveCooldoown = .8f;
     float _currentAttackTime = 0f;
+    float _currentMoveTime = 0f;
 
     public void StartAttackAnimation()
     {
-        IsMovable = false;
-        _animator.SetTrigger("Attack");
+        _currentAttackTime = _attackCooldown;
+        _currentMoveTime = _attackMoveCooldoown;
         if (AiAttack == null)
         {
-            _currentAttackTime = _attackCooldown;
+            _animator.SetTrigger("Attack");
             return;
         }
         else
@@ -258,7 +276,7 @@ public class Enemy : MonoBehaviour, ITargetable
         else
         {
             StartCoroutine(AttackEnd(_enemyData.AttackMovableCooldown));
-            AiAttack.DoAttack();
+            AiAttack.DoAttack(_attackCollider);
             return true;
         }
     }
@@ -273,7 +291,6 @@ public class Enemy : MonoBehaviour, ITargetable
     private IEnumerator AttackEnd(float delay)
     {
         yield return new WaitForFixedUpdate();
-        IsMovable = true;
     }
     private void Attack()
     {
@@ -337,7 +354,7 @@ public class Enemy : MonoBehaviour, ITargetable
         _aiState = AIState.Dead;
         _animator.SetTrigger("Dead");
         _animator.SetBool("IsDead", true);
-        _isMovable = false;
+        _currentMoveTime = 9999999999f;
         _behaviorTree.DisableBehavior();
         _navMeshAgent.isStopped = true;
 
@@ -466,11 +483,6 @@ public class Enemy : MonoBehaviour, ITargetable
         _navMeshAgent.isStopped = true;
     }
 
-    private void SmoothRotate(Quaternion targetRotation, float speed, float deltaTime)
-    {
-        transform.eulerAngles = Quaternion.Lerp(transform.rotation, targetRotation, Mathf.Min((speed) * deltaTime, 1f)).eulerAngles;
-    }
-
     // interface
     public Vector3 GetPosition()
     {
@@ -488,4 +500,22 @@ public class Enemy : MonoBehaviour, ITargetable
         return _combat.IsDead();
     }
 
+    public Vector3 GetTargetPositionAlways()
+    {
+        if (_detector.GetLatestTarget() == null)
+        {
+            Debug.Log("Cannot find target");
+            return Vector3.zero;
+        }
+        return _detector.GetLatestTarget().position;
+    }
+    public Transform GetTargetAlways()
+    {
+        if (_detector.GetLatestTarget() == null)
+        {
+            Debug.Log("Cannot find target");
+            return null;
+        }
+        return _detector.GetLatestTarget();
+    }
 }

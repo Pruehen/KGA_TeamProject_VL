@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96bc778c3f4d6ed4896c23751481483e, type: 3}
   m_Name: JumpingEnemyData
   m_EditorClassIdentifier: 
-  AttackDamage: 2
-  AttackRange: 2
+  Hp: 100
+  EnemyAlramDistance: 15
+  AttackDamage: 2.72
+  AttackRange: 15
   AttackCooldown: 2
   AttackMovableCooldown: 0.6
-  EnemyAlramDistance: 6
-  EnemyAlramLimitTime: 2
-  DetectThroughWall: 0
-  JumpForce: 0
-  JumpAttackDamage: 0
+  MeleeRange: 2
+  JumpForce: 100
+  HommingForce: 10
+  JumpAttackDamage: 7

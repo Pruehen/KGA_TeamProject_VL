@@ -5,6 +5,8 @@ public class SO_JumpingEnemy : SO_EnemyBase
 {
     [Space(10)]
     [Header("특수 점프")]
-    public float JumpForce;
-    public float JumpAttackDamage;
+    public float MeleeRange = 2f;
+    public float JumpForce = 100f;
+    public float HommingForce = 100f;
+    public float JumpAttackDamage = 6f;
 }

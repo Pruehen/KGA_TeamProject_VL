@@ -10,6 +10,7 @@ public class RangeAttack : AiAttackAction
     private Transform targetTrf;
     private Animator animator;
     private int hashAttack;
+    private int hashIsRangeAttack;
 
     private Detector detector;
 
@@ -20,6 +21,8 @@ public class RangeAttack : AiAttackAction
     [SerializeField] private float _projectileSpeed = 45f;
     [SerializeField] private float _projectileDamage = 3f;
 
+    private bool rotatable;
+
     public RangeAttack(MonoBehaviour owner, Detector detector, Transform firePos, SO_RangeEnemy enemyData)
     {
         this.owner = owner;
@@ -29,18 +32,33 @@ public class RangeAttack : AiAttackAction
         animator = gameObject.GetComponent<Animator>();
 
         hashAttack = Animator.StringToHash("Attack");
+        hashIsRangeAttack = Animator.StringToHash("IsRangeAttack");
 
         Prefab_projectile = enemyData.ProjectilePrefab;
         _firePos = firePos;
         _projectileDamage = enemyData.AttackDamage;
     }
-
+    float rotateSpeed = 10f;
+    Quaternion look;
     public void DoUpdate()
     {
+        if(rotatable)
+        {
+            if (detector.GetLatestTarget() != null)
+            {
+                Vector3 orig = transform.position;
+                Vector3 target = detector.GetLatestTarget().position;
+                orig.y = 0;
+                target.y = 0;
+                look = Quaternion.LookRotation(target - orig, Vector3.up);
+                Rotator.SmoothRotate(transform ,look, rotateSpeed, Time.deltaTime);
+            }
+        }
         return;
     }
-    public void DoAttack()
+    public void DoAttack(DamageBox damageBox)
     {
+        rotatable = false;
         Vector3 enemyToPlayerDir = (-transform.position + targetTrf.position).normalized;
         Vector3 vel = ProjectileCalc.CalculateInitialVelocity(targetTrf
             , _firePos, _projectileSpeed, Vector3.up * 1f);
@@ -58,8 +76,9 @@ public class RangeAttack : AiAttackAction
     }
     public void StartAttackAnim()
     {
+        rotatable = true;
         targetTrf = detector.GetTarget();
-        animator.SetBool("IsRangeAttack", false);
-        animator.SetTrigger("Attack");
+        animator.SetBool(hashIsRangeAttack, true);
+        animator.SetTrigger(hashAttack);
     }
 }

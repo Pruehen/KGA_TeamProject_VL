@@ -9,6 +9,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         public SharedTransform target;
         public Enemy owner;
         public bool isDynamicDestination = false;
+        public bool isChaseEvenLost = false;
 
         public override void OnAwake()
         {
@@ -22,8 +23,17 @@ namespace BehaviorDesigner.Runtime.Tasks
                 Debug.LogWarning("Unable to compare field - compare value is null");
                 return TaskStatus.Failure;
             }
-            targetPosition.Value = owner.GetTargetPosition();
-            target.Value = owner.GetTarget();
+
+            if(isChaseEvenLost)
+            {
+                target.Value = owner.GetTargetAlways();
+                targetPosition = owner.GetTargetPositionAlways();
+            }
+            else
+            {
+                targetPosition.Value = owner.GetTargetPosition();
+                target.Value = owner.GetTarget();
+            }
             return TaskStatus.Success;
         }
     }

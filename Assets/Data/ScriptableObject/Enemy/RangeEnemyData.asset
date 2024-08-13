@@ -14,10 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Hp: 100
   EnemyAlramDistance: 15
-  DetectThroughWall: 0
-  AttackDamage: 2
-  AttackRange: 2
+  AttackDamage: 9
+  AttackRange: 20
   AttackCooldown: 2
-  AttackMovableCooldown: 0.6
+  AttackMovableCooldown: 4
   ProjectilePrefab: {fileID: 6126931894786530910, guid: 1b3a1beea048433488506622740c359a, type: 3}
   ProjectileSpeed: 30

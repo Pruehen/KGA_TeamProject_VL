@@ -9,7 +9,6 @@ public class SO_EnemyBase : ScriptableObject
     [Space(10)]
     [Header("감지")]
     public float EnemyAlramDistance = 6f;
-    public bool DetectThroughWall = false;
     [Space(10)]
     [Header("기본 공격")]
     public float AttackDamage = 2f;

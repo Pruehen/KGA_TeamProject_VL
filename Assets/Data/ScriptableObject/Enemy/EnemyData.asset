@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 251ae742ae74ecf46993ae798c550d4c, type: 3}
   m_Name: EnemyData
   m_EditorClassIdentifier: 
+  Hp: 100
+  EnemyAlramDistance: 6
   AttackDamage: 2
   AttackRange: 2
-  AttackCooldown: 2
+  AttackCooldown: 0.5
   AttackMovableCooldown: 0.6
-  EnemyAlramDistance: 6
-  EnemyAlramLimitTime: 2
-  DetectThroughWall: 0
