@@ -27,13 +27,19 @@ public class PlayerInstanteState : MonoBehaviour
     [SerializeField] float maxHp;    
     [SerializeField] float MaxStamina;
     [SerializeField] float staminaRecoverySpeed;
+    [SerializeField] float staminaRecoveryDelay;
+    float staminaRecoveryDelayValue = 0;
 
     [SerializeField] float MaxskillGauge = 100;
     [SerializeField] int maxBullets = 50;
     [SerializeField] int maxMeleeBullets = 50;
 
     [SerializeField] float attackPower;
-    public float GetAttackPower() { return attackPower; }
+    [SerializeField] float skillPower;
+    public float GetDmg()
+    {         
+        return attackPower;
+    }
 
     [SerializeField] float moveSpeed;
     public float GetMoveSpeed() { return moveSpeed; }
@@ -62,16 +68,20 @@ public class PlayerInstanteState : MonoBehaviour
 
     private void Update()
     {
-        StaminaAutoRecovery();
+        staminaRecoveryDelayValue += Time.deltaTime;
+        if (staminaRecoveryDelayValue >= staminaRecoveryDelay)
+        {
+            StaminaAutoRecovery();
+        }
     }
 
     //스태미나 소모 
     public bool TryStaminaConsumption(float power)
     {
-
         if (stamina > power)
         {
-            stamina -= power;            
+            stamina -= power;    
+            staminaRecoveryDelayValue = 0;
             UpdateStamina();
             return true;
         }
@@ -85,15 +95,14 @@ public class PlayerInstanteState : MonoBehaviour
         if (stamina < MaxStamina)
         {
             stamina += staminaRecoverySpeed * Time.deltaTime;
-
-            //UIManager.Instance.UpdateStamina(stamina, MaxStamina);
-            UpdateStamina();
         }
-        else if (stamina > MaxStamina)
+
+        if(stamina > MaxStamina)
         {
             stamina = MaxStamina;
-            return;
         }
+     
+        UpdateStamina();
     }
 
     public void Hit(float dmg)
