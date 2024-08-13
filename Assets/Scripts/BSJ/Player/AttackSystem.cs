@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class AttackSystem : MonoBehaviour
 {
+    PlayerMaster _PlayerMaster;
+
     Animator _animator;
     int hashAttackType = Animator.StringToHash("AttackType");
     int hashAttack = Animator.StringToHash("Attack");
@@ -20,6 +22,7 @@ public class AttackSystem : MonoBehaviour
         TryGetComponent(out _animator);
         TryGetComponent(out _closeAttack);
         _closeAttack.Init(_animator);
+        _PlayerMaster = GetComponent<PlayerMaster>();
     }
 
 
@@ -60,7 +63,7 @@ public class AttackSystem : MonoBehaviour
 
     private void EnableDamageBox()
     {
-        _damageBox.EnableDamageBox(30);
+        _damageBox.EnableDamageBox(30, _PlayerMaster.OnMeleeHit);
     }
 
     public void ResetEndAttack()

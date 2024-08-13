@@ -27,6 +27,11 @@ public class PlayerMaster : MonoBehaviour, ITargetable
         }
     }
 
+    public void OnMeleeHit()
+    {
+        Debug.Log("근접 타격함");
+    }
+
     private void Awake()
     {
         _PlayerInstanteState = GetComponent<PlayerInstanteState>();
