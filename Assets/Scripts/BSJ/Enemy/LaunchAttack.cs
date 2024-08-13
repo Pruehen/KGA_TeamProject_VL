@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [Serializable]
-public class Launch : AiAttackAction
+public class LaunchAttack : AiAttackAction
 {
     private MonoBehaviour owner;
     private GameObject gameObject;
@@ -28,7 +28,7 @@ public class Launch : AiAttackAction
     [SerializeField] private float _hommingPower = 100f;
     [SerializeField] private float _meleeRange = 3f;
 
-    public Launch(MonoBehaviour owner, Detector detector)
+    public LaunchAttack(MonoBehaviour owner, Detector detector)
     {
         this.owner = owner;
         gameObject = owner.gameObject;
