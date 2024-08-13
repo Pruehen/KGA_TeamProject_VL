@@ -9,12 +9,15 @@ public class UIManager : SceneSingleton<UIManager>
     [SerializeField] Image shildPoint;
     [SerializeField] Image skillPoint;
     [SerializeField] Image interactive;
+
     [SerializeField] TextMeshProUGUI TMP_BulletText;
     [SerializeField] TextMeshProUGUI TMP_MeleeBulletText;
+
     [SerializeField] GameObject UI_MeleeBulletUI;
     [SerializeField] GameObject inGameUI;
     [SerializeField] GameObject tabUI;
-    [SerializeField] GameObject EscUI;    
+    [SerializeField] GameObject EscUI;
+    [SerializeField] GameObject blueChipUI;
 
     [SerializeField] PlayerInstanteState PlayerState;    
 
@@ -89,6 +92,11 @@ public class UIManager : SceneSingleton<UIManager>
     public void OnMeleeModeChanged(bool value)
     {
         UI_MeleeBulletUI.SetActive(value);
+    }
+
+    public void BlueChipUI()
+    {
+        blueChipUI.SetActive(true);
     }
 }
 
