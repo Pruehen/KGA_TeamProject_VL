@@ -31,17 +31,17 @@ public class BlueChip
         Level_VelueList.Add(5, new List<float>());
     }
 
-    public void Print(int level)
+    public string PrintName()
     {
-        Debug.Log($"{level}·¹º§ : {Name}");
-        int[] arr = new int[Level_VelueList[level].Count];
-
-        for (int i = 0; i < Level_VelueList[level].Count; i++)
-        {
-            arr[i] = (int)(Level_VelueList[level][i]);
-        }
-        //Info.FormatStringWithArray(arr);
-        Debug.Log(string.Format(Info, Level_VelueList[level].Cast<object>().ToArray()));
+        return Name;
+    }
+    public string PrintLevel(int level)
+    {
+        return $"{level} / {Level_VelueList.Count + 1}";
+    }
+    public string PrintInfo(int level)
+    {        
+        return string.Format(Info, Level_VelueList[level].Cast<object>().ToArray());
     }
 }
 public class BlueChipTable
@@ -71,6 +71,6 @@ public class JsonDataCreator : MonoBehaviour
     public void Awake()
     {
         JsonDataManager.jsonCache.Lode();
-        JsonDataManager.jsonCache.BlueChipTableCache.dic[3].Print(1);
+        //JsonDataManager.jsonCache.BlueChipTableCache.dic[3].Print(1);
     }
 }
