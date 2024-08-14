@@ -21,12 +21,11 @@ namespace EnumTypes
 
     public enum PlayerAttackType
     {
-        RangeAttack1,
-        RangeAttack2,
-        RangeAttack3,
-        RangeAttack4,
-        ChargeAttack,
+        RangeNormal,
         RangeSkill1,
-        ChargeSkill1,
+        RangeSkill2,
+        CloseNormal,
+        CloseSkill1,
+        CloseSkill2,
     }
 }
