@@ -20,6 +20,7 @@ public class PlayerModChangeManager : MonoBehaviour
         set
         {            
             _PlayerMaster.IsMeleeMode = value;
+            OnSucceseAbsorpt?.Invoke(value);
         }
     }
 
@@ -72,45 +73,83 @@ public class PlayerModChangeManager : MonoBehaviour
     public void EnterRangeMode()
     {
         IsAbsorptState = false;
-        IsMeleeMode = false;
+
         int value = OnSucceseAbsorptState.Invoke();
 
         _PlayerMaster._PlayerInstanteState.AcquireBullets(value);
         Debug.Log($"{value}개 흡수");
-        if (value > 0)
-        {
-            OnSucceseAbsorpt?.Invoke(IsMeleeMode);
-        }
-        else
-        {
-            OnEndAbsorptState.Invoke();
-            IsAbsorptState = false;
-        }
-    }
-    public void EnterMeleeMode()
-    {  
-        int value = OnSucceseAbsorptState_EntryMelee.Invoke();
-
-        if (value > 0)
-        {
-            Debug.Log($"{value}개 흡수, 근접 모드 변환");
-            _PlayerMaster._PlayerInstanteState.AcquireBullets_Melee(value);
-            IsMeleeMode = true;
-            OnSucceseAbsorpt?.Invoke(IsMeleeMode);
-        }
-        else
+        if (value <= 0)
         {
             EndAbsorptState();
         }
+
+        if (HasBlueChip5_AutoChange() == false)
+        {
+            IsMeleeMode = false;
+        }
+    }
+    public void EnterMeleeMode()
+    {
         IsAbsorptState = false;
+        if (HasBlueChip5_AutoChange() == true)
+        {
+            int value = OnSucceseAbsorptState.Invoke();
+
+            _PlayerMaster._PlayerInstanteState.AcquireBullets(value);
+            Debug.Log($"{value}개 흡수");
+            if (value <= 0)
+            {
+                EndAbsorptState();
+            }
+        }
+        else
+        {
+            int value = OnSucceseAbsorptState_EntryMelee.Invoke();
+
+            if (value > 0)
+            {
+                Debug.Log($"{value}개 흡수, 근접 모드 변환");
+                _PlayerMaster._PlayerInstanteState.AcquireBullets_Melee(value);
+                IsMeleeMode = true;                
+            }
+            else
+            {
+                EndAbsorptState();
+            }
+        }
     }
 
     public void EndAbsorptState()
     {
         IsAbsorptState = false;
-        IsMeleeMode = false;
+        if (HasBlueChip5_AutoChange() == false)
+        {
+            IsMeleeMode = false;
+        }
         Debug.Log($"흡수 실패");
         OnEndAbsorptState.Invoke();
+    }
+
+    bool HasBlueChip5_AutoChange()
+    {
+        return _PlayerMaster.GetBlueChipLevel(EnumTypes.BlueChipID.하이브리드2) > 0;
+    }
+
+    float autoChangeDelayTime = 0;
+    private void Update()
+    {
+        if(HasBlueChip5_AutoChange())
+        {
+            autoChangeDelayTime += Time.deltaTime;
+            float autoChangeDelay = JsonDataManager.GetBlueChipData(EnumTypes.BlueChipID.하이브리드2).Level_VelueList[1][0];
+
+            if(autoChangeDelay < autoChangeDelayTime)
+            {
+                Debug.Log("자동 모드 변환");
+                autoChangeDelayTime = 0;
+                IsMeleeMode = !IsMeleeMode;
+            }
+        }
     }
 }
 

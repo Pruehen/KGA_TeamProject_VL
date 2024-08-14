@@ -41,16 +41,25 @@ public class PlayerInstanteState : MonoBehaviour
     public float GetDmg(float coefficient)
     {
         float baseDmg = attackPower * coefficient;
-        if(true)
+        float dmgGain = 1;
+        if(true)//차지 공격일 경우
         {
             int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.근거리1);
             if (level > 0)
             {
-                baseDmg += ((hp + Shield) * JsonDataManager.GetBlueChipData(BlueChipID.근거리1).Level_VelueList[level][0]);
+                baseDmg += ((hp + Shield) * JsonDataManager.GetBlueChipData(BlueChipID.근거리1).Level_VelueList[level][0]) * 0.01f;
+            }
+        }
+        if(true)//원거리 평타, 근거리 평타일 경우
+        {
+            if(_PlayerMaster._PlayerBuff.blueChip4_Buff_NextHitAddDmg.TryDequeue(out float addDmgGain))
+            {
+                dmgGain += addDmgGain;
+                Debug.Log("피해증가 버프 소모");
             }
         }
 
-        return baseDmg;
+        return baseDmg * dmgGain;
     }
 
     [SerializeField] float moveSpeed;
