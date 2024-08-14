@@ -996,6 +996,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI
       objectReference: {fileID: 0}
+    - target: {fileID: 2223213414178075698, guid: 46a2d3f310067064f84db1700631524b, type: 3}
+      propertyPath: PlayerState
+      value: 
+      objectReference: {fileID: 9205539715972612223}
     - target: {fileID: 4948640817398870840, guid: 46a2d3f310067064f84db1700631524b, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1220,3 +1224,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3016948984032449336, guid: bf65563d71b0c5e43bce5d8dad0aed86, type: 3}
   m_PrefabInstance: {fileID: 8713520557291943240}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &9205539715972612223 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 516789563033613623, guid: bf65563d71b0c5e43bce5d8dad0aed86, type: 3}
+  m_PrefabInstance: {fileID: 8713520557291943240}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d62f7a5d144457440abeebf48d3d7b32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
