@@ -1,9 +1,12 @@
 using System;
 using UnityEngine;
-
+using EnumTypes;
 public class PlayerInstanteState : MonoBehaviour
 {
+    PlayerMaster _PlayerMaster;
+
     public float hp { get; private set; }
+    public float Shield { get; private set; }
     public float stamina { get; private set; }
     public int bullets { get; private set; }
     public int meleeBullets { get; private set; }
@@ -23,39 +26,49 @@ public class PlayerInstanteState : MonoBehaviour
 
     public bool IsDead { get; private set; }
 
-    [SerializeField]
-    public float maxHp;
+    [SerializeField] float maxHp;    
+    [SerializeField] float MaxStamina;
+    [SerializeField] float staminaRecoverySpeed;
+    [SerializeField] float staminaRecoveryDelay;
+    float staminaRecoveryDelayValue = 0;
 
-    [SerializeField]
-    public float MaxStamina;
-
-    [SerializeField]
-    private float staminaRecoverySpeed;
-    [SerializeField]
-    public float MaxskillGauge = 100;
-
-
-    [SerializeField] public int maxBullets = 50;
+    [SerializeField] float MaxskillGauge = 100;
+    [SerializeField] int maxBullets = 50;
     [SerializeField] int maxMeleeBullets = 50;
 
-    [SerializeField]
-    private float attackPower;
-    public float GetAttackPower() { return attackPower; }
+    [SerializeField] float attackPower;
+    [SerializeField] float skillPower;
+    public float GetDmg(float coefficient)
+    {
+        float baseDmg = attackPower * coefficient;
+        if(true)
+        {
+            int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.근거리1);
+            if (level > 0)
+            {
+                baseDmg += ((hp + Shield) * JsonDataManager.GetBlueChipData(BlueChipID.근거리1).Level_VelueList[level][0]);
+            }
+        }
 
-    [SerializeField]
-    private float moveSpeed;
+        return baseDmg;
+    }
+
+    [SerializeField] float moveSpeed;
     public float GetMoveSpeed() { return moveSpeed; }
 
 
-    public event Action HealthChanged;
-    public event Action StaminaChanged;
-    public event Action BulletChanged;
-    public event Action MeleeBulletChanged;
-    public event Action SkillGaugeChanged;
+    public Action<float> HealthRatioChanged;
+    public Action<float> ShildRatioChanged;
+    public Action<float> StaminaRatioChanged;
+    public Action<int, int> BulletChanged;
+    public Action<int, int> MeleeBulletChanged;
+    public Action<float> SkillGaugeRatioChanged;
     public Action<bool> OnMeleeModeChanged;
 
     private void Awake()
     {
+        _PlayerMaster = GetComponent<PlayerMaster>();
+
         Restore();
         UIManager.Instance.setPlayer(this);
     }
@@ -69,17 +82,20 @@ public class PlayerInstanteState : MonoBehaviour
 
     private void Update()
     {
-        
-        StaminaAutoRecovery();
+        staminaRecoveryDelayValue += Time.deltaTime;
+        if (staminaRecoveryDelayValue >= staminaRecoveryDelay)
+        {
+            StaminaAutoRecovery();
+        }
     }
 
     //스태미나 소모 
     public bool TryStaminaConsumption(float power)
     {
-
         if (stamina > power)
         {
-            stamina -= power;            
+            stamina -= power;    
+            staminaRecoveryDelayValue = 0;
             UpdateStamina();
             return true;
         }
@@ -93,34 +109,68 @@ public class PlayerInstanteState : MonoBehaviour
         if (stamina < MaxStamina)
         {
             stamina += staminaRecoverySpeed * Time.deltaTime;
-
-            //UIManager.Instance.UpdateStamina(stamina, MaxStamina);
-            UpdateStamina();
         }
-        else if (stamina > MaxStamina)
+
+        if(stamina > MaxStamina)
         {
             stamina = MaxStamina;
-            return;
         }
+     
+        UpdateStamina();
     }
 
     public void Hit(float dmg)
-    {
-        //dmg만큼 체력 감소
-        if (hp > 0)
+    {        
+        if(Shield > 0)
+        {
+            Shield -= dmg;
+            if (Shield <= 0)
+            {
+                Shield = 0;
+            }
+            UpdateShild();
+            return;
+        }
+
+        if(hp > 0)
         {
             hp -= dmg;
-        }
-        //체력이 0이 될 경우 IsDead를 true로.
-        if (hp == 0)
-        {
-            IsDead = true;
-            Debug.Log("죽음");
-        }
-        //체력 수치와 UI 연동.
+            if (hp <= 0)
+            {
+                hp = 0;
+                IsDead = true;                
+            }
+            UpdateHealth();
+        }                
+    }
 
-        //UIManager.Instance.UpdatehealthPoint(hp, maxHp);
+    public void ChangeHp(float value)
+    {
+        hp += value;
+        if(hp > maxHp)
+        {
+            hp = maxHp;
+        }
+        if(hp < 0)
+        {
+            hp = 1;
+        }
+
         UpdateHealth();
+    }
+
+    public void ChangeShield(float value)
+    {
+        Shield += value;
+        if(Shield > maxHp)
+        {
+            Shield = maxHp;
+        }
+        if (Shield < 0)
+        {
+            Shield = 0;
+        }
+        UpdateShild();
     }
 
     //탄환 획득
@@ -186,6 +236,7 @@ public class PlayerInstanteState : MonoBehaviour
 
         UpdateSkillGauge();
     }
+
     public bool TryUseSkillGauge(float value)
     {
         if(skillGauge >= value)
@@ -200,7 +251,6 @@ public class PlayerInstanteState : MonoBehaviour
         }                
     }
 
-
     void Restore()
     {
         hp = maxHp;
@@ -209,24 +259,39 @@ public class PlayerInstanteState : MonoBehaviour
         skillGauge = 0;
         bullets = maxBullets / 3;
     }
+
+    public void Refresh_Model()
+    {
+        UpdateHealth();
+        UpdateShild();
+        UpdateStamina();
+        UpdateBullet();
+        UpdateBullet_Melee();
+        UpdateSkillGauge();
+    }
+
     public void UpdateHealth()
     {
-        HealthChanged?.Invoke();
+        HealthRatioChanged?.Invoke(hp / maxHp);
+    }
+    public void UpdateShild()
+    {
+        ShildRatioChanged?.Invoke(Shield / maxHp);
     }
     public void UpdateStamina()
     {
-        StaminaChanged?.Invoke();
+        StaminaRatioChanged?.Invoke(stamina / MaxStamina);
     }
     public void UpdateBullet()
     {
-        BulletChanged?.Invoke();
+        BulletChanged?.Invoke(bullets, maxBullets);
     }
     public void UpdateBullet_Melee()
     {
-        MeleeBulletChanged?.Invoke();
+        MeleeBulletChanged?.Invoke(meleeBullets, maxMeleeBullets);
     }
     public void UpdateSkillGauge()
     {
-        SkillGaugeChanged?.Invoke();
+        SkillGaugeRatioChanged?.Invoke(skillGauge / MaxskillGauge);
     }    
 }
