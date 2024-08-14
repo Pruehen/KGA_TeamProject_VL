@@ -1,5 +1,3 @@
-using EnumTypes;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,37 +21,35 @@ public class BlueChipUIManager : MonoBehaviour
         {
             equipedSlotList.Add(item.Value);
         }                
-        for (int i = 0; i < equipedSlotList.Count; i++)
+        for (int i = 0; i < Icon_EquipChipList.Count; i++)
         {
-            Icon_EquipChipList[i].PrintChipData(equipedSlotList[i]);
-        }
-
-        //2. 중앙에 있는 UI에 임의의 3개의 블루칩 정보를 표시
-        List<BlueChipSlot> selectSlotList = new List<BlueChipSlot>();
-        List<int> usedIndexes = new List<int>();
-        for (int i = 0; i < 3; i++)
-        {
-            int randomIndex;
-
-            // 중복되지 않는 숫자를 뽑을 때까지 반복
-            do
+            if (equipedSlotList.Count > i)
             {
-                randomIndex = Random.Range(0, 9);
+                Icon_EquipChipList[i].SetChipData(equipedSlotList[i]);
             }
-            while (usedIndexes.Contains(randomIndex));
-
-            // 뽑은 숫자를 사용된 리스트에 추가
-            usedIndexes.Add(randomIndex);
-
-            selectSlotList.Add(new BlueChipSlot((BlueChipID)randomIndex, 1));
-
-
+            else
+            {
+                Icon_EquipChipList[i].SetChipData(null);
+            }    
         }
-        for (int i = 0; i < selectSlotList.Count; i++)
+
+        equipedSlotList.Clear();
+        //2. 중앙에 있는 UI에 임의의 3개의 블루칩 정보를 표시
+
+        foreach (var item in PlayerMaster.Instance._PlayerEquipBlueChip.GetRandomBlueChip())
         {
-            Icon_SelectChipList[i].PrintChipData(selectSlotList[i]);
+            equipedSlotList.Add(item.Value);
         }
-
-
+        for (int i = 0; i < Icon_SelectChipList.Count; i++)
+        {
+            if (equipedSlotList.Count > i)
+            {
+                Icon_SelectChipList[i].SetChipData(equipedSlotList[i]);
+            }
+            else
+            {
+                Icon_SelectChipList[i].SetChipData(null);
+            }
+        }
     }
 }

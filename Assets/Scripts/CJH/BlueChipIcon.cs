@@ -1,49 +1,50 @@
+using EnumTypes;
 using UnityEngine;
 using UnityEngine.UI;
-using EnumTypes;
-using System.Collections.Generic;
-using System.Linq;
 
 public class BlueChipIcon : MonoBehaviour
 {
-
+    static BlueChipID selectTempId;
 
     [SerializeField] Image iconImage;
     [SerializeField] Text iconName;
     [SerializeField] Text iconInfo;
     [SerializeField] Text iconLevel;
 
-    private HashSet<BlueChipID> iconID = new HashSet<BlueChipID>();
+    BlueChipID _id;
 
-    public void PrintChipData(BlueChipSlot slot)
+    public void SetChipData(BlueChipSlot slot)
     {
-        if (slot.Level == 0)
-        {
+        if (slot == null || slot.Level == 0)
+        {            
             iconName.text = "¾øÀ½";
             iconLevel.text = "";
             iconInfo.text = "";
         }
-        else 
-        {
-            if (iconID.Contains(slot.Id))//°ãÄ¡Áö ¾Ê´Â ID
-            {
-                Debug.Log("°ãÄ§");
-            }
-            else
-            {
-
-                Debug.Log(123);
-                BlueChip data = JsonDataManager.GetBlueChipData(slot.Id);
-                iconName.text = data.PrintName();
-                iconLevel.text = data.PrintLevel(slot.Level);
-                iconInfo.text = data.PrintInfo(slot.Level);
-            }
+        else
+        {            
+            BlueChip data = JsonDataManager.GetBlueChipData(slot.Id);
+            _id = slot.Id;
+            iconName.text = data.PrintName();
+            iconLevel.text = data.PrintLevel(slot.Level);
+            iconInfo.text = data.PrintInfo(slot.Level);
         }
     } 
     
-    public void PickBtn_OnClick()
+    public void PickBtn_OnClick_TryAddBlueChip()
     {
-        Debug.Log(this.gameObject.name);
+        selectTempId = _id;
+        if (PlayerMaster.Instance._PlayerEquipBlueChip.TryAddBlueChip(_id))
+        {
+            UIManager.Instance.BkBlueChipUi();
+            return;
+        }
         UIManager.Instance.PickBUtton();
+    }
+
+    public void PickBtn_OnClick_SwapBlueChip()
+    {
+        PlayerMaster.Instance._PlayerEquipBlueChip.SwapBlueChip(_id, selectTempId);
+        UIManager.Instance.BkBlueChipUi();
     }
 }
