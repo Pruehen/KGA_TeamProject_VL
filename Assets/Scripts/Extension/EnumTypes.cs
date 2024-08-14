@@ -19,11 +19,14 @@ namespace EnumTypes
         Jump
     }
 
-    public enum PlayerRangeAttackType
+    public enum PlayerAttackType
     {
-        First,
-        Second,
-        Third,
-        Fourth
+        RangeAttack1,
+        RangeAttack2,
+        RangeAttack3,
+        RangeAttack4,
+        ChargeAttack,
+        RangeSkill1,
+        ChargeSkill1,
     }
 }
