@@ -183,17 +183,11 @@ MonoBehaviour:
     _invincibleTimeOnHit: 0.1
     _prevHitTime: 0
   _detector: {fileID: 1206920868976007927}
-  _isChargeAttack: 0
-  _editorData:
-    AttackDamage: 2
-    AttackRange: 3.03
-    AttackCooldown: 1.5
-    AttackMovableCooldown: 0.6
-    EnemyAlramDistance: 15.7
-    EnemyAlramLimitTime: 2
-    DetectThroughWall: 0
+  _enemyData: {fileID: 11400000, guid: 00e05461beaa5ec43ace8ed2ebb7e578, type: 2}
   _rotateTarget: {fileID: 0}
   _pooledHitVfxPrefab: {fileID: 0}
+  _projectilePrefab: {fileID: 0}
+  _firePos: {fileID: 0}
 --- !u!114 &5187475081854777868
 MonoBehaviour:
   m_ObjectHideFlags: 0

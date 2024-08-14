@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [Serializable]
-public class Launch : AiAttackAction
+public class LaunchAttack : AiAttackAction
 {
     private MonoBehaviour owner;
     private GameObject gameObject;
@@ -25,10 +25,12 @@ public class Launch : AiAttackAction
 
     private float initialDistance;
     [SerializeField] private float _aimRotateSpeed = 10f;
-    [SerializeField] private float _hommingPower = 100f;
+    [SerializeField] private float _jumpAngle = 100f;
     [SerializeField] private float _meleeRange = 3f;
+    [SerializeField] private float _hommingForce = 100f;
+    [SerializeField] private float _attackDamage = 100f;
 
-    public Launch(MonoBehaviour owner, Detector detector)
+    public LaunchAttack(MonoBehaviour owner, Detector detector, SO_JumpingEnemy enemyData)
     {
         this.owner = owner;
         gameObject = owner.gameObject;
@@ -38,7 +40,10 @@ public class Launch : AiAttackAction
         animator = gameObject.GetComponent<Animator>();
         agent = gameObject.GetComponent<NavMeshAgent>();
         prevPlayerPos = SentinelVec;
-
+        _meleeRange = enemyData.MeleeRange;
+        _jumpAngle = enemyData.JumpAngle;
+        _hommingForce = enemyData.HommingForce;
+        _attackDamage = enemyData.AttackDamage;
 
         hashEndLaunch = Animator.StringToHash("EndLaunch");
         hashAttack = Animator.StringToHash("Attack");
@@ -58,15 +63,17 @@ public class Launch : AiAttackAction
     /// <summary>
     /// ¿Ã∞Õ
     /// </summary>
-    public void DoAttack()
+    public void DoAttack(DamageBox damageBox)
     {
         owner.StartCoroutine(ResetLaunching());
         isInit = false;
 
+        agent.nextPosition = transform.position;
         rb.isKinematic = true;
         animator.SetBool(hashEndLaunch, false);
         Vector3 enemyToPlayerDir = (-transform.position + targetTrf.position).normalized;
         gameObject.layer = LayerMask.NameToLayer("EnemyCollider");
+        damageBox.EnableDamageBox(_attackDamage);
     }
     public void OnExcuteLaunch()
     {
@@ -77,12 +84,11 @@ public class Launch : AiAttackAction
         prevPlayerPos = SentinelVec;
         isInit = true;
         rb.isKinematic = false;
-        targetTrf = detector.GetTarget();
         initialDistance = (transform.position - targetTrf.position).magnitude;
         Vector3 targetDir = (-transform.position + targetTrf.position).normalized;
         float angleV = Mathf.Atan2(targetDir.y, 1f);
         angleV = Mathf.Rad2Deg * angleV;
-        angleV = (angleV > -15f) ? angleV + 30f : -angleV;
+        angleV = -angleV + _jumpAngle;
 
         rb.velocity = ProjectileCalc.CalcLaunch(transform.position, targetTrf.position, angleV);
         animator.SetBool(hashEndLaunch, false);
@@ -133,7 +139,7 @@ public class Launch : AiAttackAction
             }
             else
             {
-                ProjectileCalc.Homming(rb,targetTrf,_hommingPower);
+                ProjectileCalc.Homming(rb,targetTrf,_hommingForce);
             }
             prevPlayerPos = curPlayerPos;
         }
@@ -153,7 +159,8 @@ public class Launch : AiAttackAction
 
     public void StartAttackAnim()
     {
-        if(Vector3.Distance(detector.GetPosition(),transform.position) <= _meleeRange)
+        targetTrf = detector.GetTarget();
+        if (Vector3.Distance(detector.GetPosition(),transform.position) <= _meleeRange)
         {
             agent.nextPosition = transform.position;
             animator.SetBool("IsLaunch", false);
@@ -162,6 +169,7 @@ public class Launch : AiAttackAction
         else
         {
             animator.SetBool("IsLaunch", true);
+            animator.SetTrigger("Attack");
         }
     }
 }
