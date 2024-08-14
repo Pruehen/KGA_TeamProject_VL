@@ -32,9 +32,9 @@ public class PlayerEquipBlueChip : MonoBehaviour
             return true;
         }
         else if(targetChipLevel > 0 && targetChipLevel < JsonDataManager.GetBlueChipData(targetBlueChip).Level_VelueList.Count)//칩이 있으며, 최대 레벨 미만일 경우
-        {
-            Debug.Log("칩 레벨을 강화합니다.");
+        {            
             useBlueChipDic[targetBlueChip].LevelUp();
+            Debug.Log($"칩 레벨을 강화합니다. : {useBlueChipDic[targetBlueChip].Level}레벨");
             return true;
         }
         else//칩이 최대 레벨일 경우
@@ -43,15 +43,8 @@ public class PlayerEquipBlueChip : MonoBehaviour
             return false;
         }
     }
-
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Q)) 
-        {
-            TryAddBlueChip(BlueChipID.근거리2);
-        }
-    }
 }
+
 
 public class BlueChipSlot
 {

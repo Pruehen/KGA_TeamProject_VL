@@ -1,8 +1,9 @@
 using BehaviorDesigner.Runtime;
-using System;
+using EnumTypes;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Assertions;
 using UnityEngine.Pool;
 
 public enum AIState
@@ -15,29 +16,19 @@ public enum AIState
     Attack,
     Dead
 }
+public enum EnemyType
+{
+    Normal,
+    Jump,
+    Range
+}
 
 public interface AiAttackAction
 {
-    public void DoAttack();
+    public void DoAttack(DamageBox damageBox, EnemyAttackType enemyAttackType);
     public void DoUpdate();
     public bool IsAttacking();
     public void StartAttackAnim();
-}
-
-[Serializable]
-public class EnemyEditorData
-{
-    [Space(10)]
-    [Header("ê¸°ë³¸ ê³µê²©")]
-    public float AttackDamage = 2f;
-    public float AttackRange = 2f;
-    public float AttackCooldown = 2f;
-    public float AttackMovableCooldown = 0.6f;
-    [Space(10)]
-    [Header("ê°ì§€")]
-    public float EnemyAlramDistance = 6f;
-    public float EnemyAlramLimitTime = 2f;
-    public bool DetectThroughWall = false;
 }
 
 [RequireComponent(typeof(Rigidbody))]
@@ -45,16 +36,19 @@ public class EnemyEditorData
 [RequireComponent(typeof(Animator))]
 public class Enemy : MonoBehaviour, ITargetable
 {
+    private EnemyType _enemyType;
     [SerializeField] private bool _isMovable = true;
     [SerializeField] private Combat _combat;
-    [SerializeField] private bool _isJumpingEnemy = false;
 
 
     private DamageBox _attackCollider;
 
     public bool IsMovable
     {
-        get => _isMovable;
+        get
+        {
+            return _currentMoveTime <= 0f;
+        }
         private set
         {
             _navMeshAgent.isStopped = !value;
@@ -64,7 +58,7 @@ public class Enemy : MonoBehaviour, ITargetable
 
     [SerializeField] private Detector _detector;
 
-    [SerializeField] private EnemyEditorData _editorData;
+    [SerializeField] private SO_EnemyBase _enemyData;
     [SerializeField] private Transform _rotateTarget;
 
     [SerializeField] private GameObject _pooledHitVfxPrefab;
@@ -89,6 +83,9 @@ public class Enemy : MonoBehaviour, ITargetable
 
     private AiAttackAction AiAttack = null;
 
+    [SerializeField] private GameObject _projectilePrefab;
+    [SerializeField] private Transform _firePos;
+
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -97,7 +94,6 @@ public class Enemy : MonoBehaviour, ITargetable
         _animator = GetComponent<Animator>();
 
         _characterCollider = GetComponentInChildren<Collider>();
-        _characterEnvCollider = GetComponentInChildren<Collider>();
 
         _navMeshAgent.updateRotation = false;
         _detector.Init(this, "Player", 5f, false);
@@ -107,32 +103,51 @@ public class Enemy : MonoBehaviour, ITargetable
         Init();
 
         _pooledHitVfx = new ObjectPool<GameObject>(CreatePool, OnGetPool, OnReleasePool, OnDestroyPool, true, 100, 200);
-
-        if(_isJumpingEnemy)
-        {
-            AiAttack = new Launch(this,_detector);
-        }
     }
     private void Init()
     {
         _combat = new Combat();
-        _combat.Init(100f);
+        _combat.Init(_enemyData.Hp);
         _combat.OnDead += OnDead;
 
 
-        _attackDamage = _editorData.AttackDamage;
-        _attackCooldown = _editorData.AttackCooldown;
+        _attackDamage = _enemyData.AttackDamage;
+        _attackCooldown = _enemyData.AttackCooldown;
+        _attackMoveCooldoown = _enemyData.AttackMovableCooldown;
+        AttackSpeedMulti = _enemyData.AttackSpeedMultiply;
 
         _detector.Init(this, "Player",
-            _editorData.EnemyAlramDistance,
-            _editorData.DetectThroughWall);
+            _enemyData.EnemyAlramDistance,
+            false);
+
+        if (_enemyData is SO_JumpingEnemy)
+        {
+            _enemyType = EnemyType.Jump;
+            AiAttack = new LaunchAttack(this, _detector, _enemyData as SO_JumpingEnemy);
+        }
+        else if (_enemyData is SO_RangeEnemy)
+        {
+            _enemyType = EnemyType.Range;
+            AiAttack = new RangeAttack(this, _detector, _firePos, _enemyData as SO_RangeEnemy);
+        }
+        else if (_enemyData is SO_EnemyBase)
+        {
+            _enemyType = EnemyType.Normal;
+            AiAttack = null;
+        }
+        else
+        {
+            Assert.IsFalse(true, "Àû µ¥ÀÌÅÍ°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.");
+            AiAttack = null;
+        }
+
 
         SharedFloat attackRange = new SharedFloat();
-        attackRange.Value = _editorData.AttackRange;
+        attackRange.Value = _enemyData.AttackRange;
         SharedFloat detectRange = new SharedFloat();
-        detectRange.Value = _editorData.EnemyAlramDistance;
+        detectRange.Value = _enemyData.EnemyAlramDistance;
         SharedFloat enemyAlramLimitTime = new SharedFloat();
-        enemyAlramLimitTime.Value = _editorData.EnemyAlramLimitTime;
+        enemyAlramLimitTime.Value = 999999f;
 
         _behaviorTree.SetVariable("AttackRange", attackRange);
         _behaviorTree.SetVariable("DetectRange", detectRange);
@@ -163,11 +178,19 @@ public class Enemy : MonoBehaviour, ITargetable
         if (_aiState == AIState.Dead)
         { return; }
 
-        if(AiAttack != null)
+        if (_navMeshAgent.velocity.magnitude > 0.1f)
+        {
+            _animator.SetBool("IsMoving", true);
+        }
+        else
+        {
+            _animator.SetBool("IsMoving", false);
+        }
 
+        if (AiAttack != null)
         {
             AiAttack.DoUpdate();
-            if(AiAttack.IsAttacking())
+            if (AiAttack.IsAttacking())
             {
                 return;
             }
@@ -178,55 +201,68 @@ public class Enemy : MonoBehaviour, ITargetable
         {
             _currentAttackTime -= Time.deltaTime;
         }
+        if (_currentMoveTime > 0f)
+        {
+            _currentMoveTime -= Time.deltaTime;
+            IsMovable = false;
+            return;
+        }
+        else
+        {
+            IsMovable = true;
+        }
         Vector3 dir = _navMeshAgent.destination - transform.position;
         dir = dir.normalized;
-        if (_currentAttackTime > 0f)
-        {
-            SmoothRotate(look, rotateSpeed, Time.deltaTime);
-        }
-        else if (_detector.GetTarget() != null && _aiState == AIState.Chase)
+        if (_detector.GetLatestTarget() != null && _aiState == AIState.Chase)
         {
             Vector3 orig = transform.position;
-            Vector3 target = _detector.GetPosition();
+            Vector3 target = _detector.GetLatestTarget().position;
             orig.y = 0;
             target.y = 0;
             look = Quaternion.LookRotation(target - orig, Vector3.up);
-            SmoothRotate(look, rotateSpeed, Time.deltaTime);
+            Rotator.SmoothRotate(transform, look, rotateSpeed, Time.deltaTime);
         }
         else
         {
-            SmoothRotate(look, rotateSpeed, Time.deltaTime);
+            Rotator.SmoothRotate(transform, look, rotateSpeed, Time.deltaTime);
         }
 
 
-        if (_navMeshAgent.velocity.magnitude > 0.1f)
-        {
-            _animator.SetBool("IsMoving", true);
-        }
-        else
-        {
-            _animator.SetBool("IsMoving", false);
-        }
     }
     private void ResetEnemy()
     {
         SetEnableAllCollision(true);
         _animator.SetBool("IsDead", false);
-
-        _isMovable = true;
+        _currentAttackTime = 0f;
+        _currentMoveTime = 0f;
         gameObject.SetActive(true);
     }
 
     float _attackCooldown = .8f;
+    float _attackMoveCooldoown = .8f;
     float _currentAttackTime = 0f;
+    float _currentMoveTime = 0f;
+    float _attackSpeedMulti = 1f;
+    float AttackSpeedMulti
+    {
+        get
+        {
+            return _attackSpeedMulti;
+        }
+        set
+        {
+            _attackSpeedMulti = value;
+            _animator.SetFloat("AttackSpeed", value);
+        }
+    }
 
     public void StartAttackAnimation()
     {
-        IsMovable = false;
-        _animator.SetTrigger("Attack");
+        _currentAttackTime = _attackCooldown;
+        _currentMoveTime = _attackMoveCooldoown;
         if (AiAttack == null)
         {
-            _currentAttackTime = _attackCooldown;
+            _animator.SetTrigger("Attack");
             return;
         }
         else
@@ -244,26 +280,24 @@ public class Enemy : MonoBehaviour, ITargetable
         return true;
     }
 
-    public bool CharacterAttack()
+    public bool CharacterAttack(EnemyAttackType enemyAttackType)
     {
         if (AiAttack == null)
         {
-            StartCoroutine(AttackEnd(_editorData.AttackMovableCooldown));
+            StartCoroutine(AttackEnd(_enemyData.AttackMovableCooldown));
             Attack();
             return true;
         }
         else
         {
-            _animator.SetBool("IsLaunch", true);
-            StartCoroutine(AttackEnd(_editorData.AttackMovableCooldown));
-            Attack();
-            AiAttack.DoAttack();
+            StartCoroutine(AttackEnd(_enemyData.AttackMovableCooldown));
+            AiAttack.DoAttack(_attackCollider, enemyAttackType);
             return true;
         }
     }
     private void StartLaunching()
     {
-        if(AiAttack is Launch la)
+        if (AiAttack is LaunchAttack la)
         {
             la.OnExcuteLaunch();
         }
@@ -272,7 +306,6 @@ public class Enemy : MonoBehaviour, ITargetable
     private IEnumerator AttackEnd(float delay)
     {
         yield return new WaitForFixedUpdate();
-        IsMovable = true;
     }
     private void Attack()
     {
@@ -336,7 +369,7 @@ public class Enemy : MonoBehaviour, ITargetable
         _aiState = AIState.Dead;
         _animator.SetTrigger("Dead");
         _animator.SetBool("IsDead", true);
-        _isMovable = false;
+        _currentMoveTime = 9999999999f;
         _behaviorTree.DisableBehavior();
         _navMeshAgent.isStopped = true;
 
@@ -403,9 +436,9 @@ public class Enemy : MonoBehaviour, ITargetable
     private void EnemyDebug()
     {
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(_detector.transform.position, _editorData.AttackRange);
+        Gizmos.DrawWireSphere(_detector.transform.position, _enemyData.AttackRange);
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(_detector.transform.position, _editorData.EnemyAlramDistance);
+        Gizmos.DrawWireSphere(_detector.transform.position, _enemyData.EnemyAlramDistance);
 
         Gizmos.color = GetColorByState(_aiState);
         Gizmos.DrawSphere(transform.position + Vector3.up, 1f);
@@ -465,11 +498,6 @@ public class Enemy : MonoBehaviour, ITargetable
         _navMeshAgent.isStopped = true;
     }
 
-    private void SmoothRotate(Quaternion targetRotation, float speed, float deltaTime)
-    {
-        transform.eulerAngles = Quaternion.Lerp(transform.rotation, targetRotation, Mathf.Min((speed) * deltaTime, 1f)).eulerAngles;
-    }
-
     // interface
     public Vector3 GetPosition()
     {
@@ -487,4 +515,22 @@ public class Enemy : MonoBehaviour, ITargetable
         return _combat.IsDead();
     }
 
+    public Vector3 GetTargetPositionAlways()
+    {
+        if (_detector.GetLatestTarget() == null)
+        {
+            Debug.Log("Cannot find target");
+            return Vector3.zero;
+        }
+        return _detector.GetLatestTarget().position;
+    }
+    public Transform GetTargetAlways()
+    {
+        if (_detector.GetLatestTarget() == null)
+        {
+            Debug.Log("Cannot find target");
+            return null;
+        }
+        return _detector.GetLatestTarget();
+    }
 }

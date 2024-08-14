@@ -9,6 +9,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         public NavMeshAgent agent;
         public Enemy enemy;
         public bool isDynamicDestination = false;
+        public bool isChaseEvenLose = false;
 
         public override void OnAwake()
         {
@@ -24,9 +25,16 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override TaskStatus OnUpdate()
         {
-            if(isDynamicDestination)
+            if (isDynamicDestination)
             {
-                targetPostion.Value = enemy.GetTargetPosition();
+                if (isChaseEvenLose)
+                {
+                    targetPostion.Value = enemy.GetTargetPositionAlways();
+                }
+                else
+                {
+                    targetPostion.Value = enemy.GetTargetPosition();
+                }
             }
             //네브메시가 경로 계산중인지 확인 해야함
             if (agent.pathPending == true)

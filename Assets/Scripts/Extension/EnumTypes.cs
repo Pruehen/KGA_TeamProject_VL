@@ -12,4 +12,20 @@ namespace EnumTypes
         범용2,
         범용3
     }
+
+    public enum EnemyAttackType
+    {
+        Melee,
+        Jump
+    }
+
+    public enum PlayerAttackType
+    {
+        RangeNormal,
+        RangeSkill1,
+        RangeSkill2,
+        CloseNormal,
+        CloseSkill1,
+        CloseSkill2,
+    }
 }

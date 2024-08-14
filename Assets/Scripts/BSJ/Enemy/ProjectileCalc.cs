@@ -49,12 +49,9 @@ public static class ProjectileCalc
 
         Vector3 newVelocityH = targetDirH * velocityHMag;
 
-        if (Vector3.Dot(velocityH, targetDirH) >= .9f)
-        {
-            Vector3 result = new Vector3(newVelocityH.x, projectile.velocity.y, newVelocityH.z);
+        Vector3 result = new Vector3(newVelocityH.x, projectile.velocity.y, newVelocityH.z);
 
-            projectile.velocity = Vector3.Lerp(projectile.velocity, result, Time.deltaTime * hommingPower);
-        }
+        projectile.velocity = Vector3.Lerp(projectile.velocity, result, Time.deltaTime * hommingPower);
     }
     public static void Homming(Rigidbody projectile, Transform target, float hommingPower)
     {
