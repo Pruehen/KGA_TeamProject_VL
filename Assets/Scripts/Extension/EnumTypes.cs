@@ -12,4 +12,12 @@ namespace EnumTypes
         범용2,
         범용3
     }
+
+    public enum PlayerRangeAttackType
+    {
+        First,
+        Second,
+        Third,
+        Fourth
+    }
 }
