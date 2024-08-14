@@ -33,6 +33,7 @@ public class PlayerInstanteState : MonoBehaviour
     float staminaRecoveryDelayValue = 0;
 
     [SerializeField] float MaxskillGauge = 100;
+    float skillGaugeRecoveryRestTime = 0;
     [SerializeField] int maxBullets = 50;
     [SerializeField] int maxMeleeBullets = 50;
 
@@ -100,6 +101,16 @@ public class PlayerInstanteState : MonoBehaviour
         if (staminaRecoveryDelayValue >= staminaRecoveryDelay)
         {
             StaminaAutoRecovery();
+        }
+        
+        int blueChip8Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.범용3);
+        if(blueChip8Level > 0)
+        {
+            skillGaugeRecoveryRestTime += Time.deltaTime;
+            if (skillGaugeRecoveryRestTime > JsonDataManager.GetBlueChipData(BlueChipID.범용3).Level_VelueList[blueChip8Level][4])
+            {
+                UseSkillGauge(-9999);
+            }
         }
     }
 
@@ -242,21 +253,17 @@ public class PlayerInstanteState : MonoBehaviour
             skillGauge = MaxskillGauge;
         }
 
+        skillGaugeRecoveryRestTime = 0;
         UpdateSkillGauge();
     }
 
-    public bool TryUseSkillGauge(float value)
+    public void UseSkillGauge(float value)
     {
-        if(skillGauge >= value)
-        {
-            skillGauge -= value;
-            UpdateSkillGauge();
-            return true;
-        }
-        else
-        {
-            return false;
-        }                
+        skillGauge -= value;
+        if(skillGauge < 0) 
+            skillGauge = 0;
+
+        UpdateSkillGauge();
     }
 
     void Restore()
