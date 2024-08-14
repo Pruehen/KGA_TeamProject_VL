@@ -17,8 +17,15 @@ public class EnemyAlarmTrigger : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        AlramAll();
-        GetComponent<Collider>().enabled = false;
+        if (other.attachedRigidbody == null)
+        {
+            return;
+        }
+        if (other.attachedRigidbody.CompareTag("Player"))
+        {
+            AlramAll();
+            GetComponent<Collider>().enabled = false;
+        }
     }
     private void AlramAll()
     {
