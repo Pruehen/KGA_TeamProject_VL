@@ -38,7 +38,7 @@ public class PlayerMaster : MonoBehaviour, ITargetable
 
     public void OnMeleeHit()
     {
-        _PlayerInstanteState.TryBulletConsumption_Melee(1);
+        _PlayerInstanteState.BulletConsumption_Melee();
 
         Execute_BlueChip1_OnMeleeHit();
 

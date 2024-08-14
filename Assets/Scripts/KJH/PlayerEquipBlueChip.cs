@@ -48,7 +48,7 @@ public class PlayerEquipBlueChip : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Q)) 
         {
-            TryAddBlueChip(BlueChipID.원거리1);
+            TryAddBlueChip(BlueChipID.범용2);
         }
     }
 }

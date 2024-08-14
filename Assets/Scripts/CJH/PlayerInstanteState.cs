@@ -57,8 +57,13 @@ public class PlayerInstanteState : MonoBehaviour
                 dmgGain += addDmgGain;
                 Debug.Log("ÇÇÇØÁõ°¡ ¹öÇÁ ¼Ò¸ð");
             }
-        }
-
+            int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.¹ü¿ë2);
+            if (blueChip7Level > 0)
+            {
+                float addDmg = JsonDataManager.GetBlueChipData(BlueChipID.¹ü¿ë2).Level_VelueList[blueChip7Level][1] * 0.01f;
+                dmgGain += addDmg;
+            }
+        }        
         return baseDmg * dmgGain;
     }
 
@@ -190,23 +195,21 @@ public class PlayerInstanteState : MonoBehaviour
         {
             bullets = maxBullets;
         }
-
         UpdateBullet();
     }
 
     //ÅºÈ¯ ¼Ò¸ð
     public void BulletConsumption()
-    {
-        if (bullets != 0)
-            bullets--;
-        else
-        {
-            Debug.Log("Åº¾Ë ¾øÀ½");
-            return;
-        }
+    {        
+        int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.¹ü¿ë2);
+        int cost = (blueChip7Level > 0) ? (int)JsonDataManager.GetBlueChipData(BlueChipID.¹ü¿ë2).Level_VelueList[blueChip7Level][0] : 1;
+
+        bullets -= cost;
+        if (bullets < 0)
+            bullets = 0;
         UpdateBullet();
     }
-    //ÅºÈ¯ È¹µæ
+    //±ÙÁ¢Åº È¹µæ
     public void AcquireBullets_Melee(int _bullets)
     {
         meleeBullets += _bullets;
@@ -214,23 +217,19 @@ public class PlayerInstanteState : MonoBehaviour
         {
             meleeBullets = maxBullets;
         }
-
         UpdateBullet_Melee();
     }
 
-    //ÅºÈ¯ ¼Ò¸ð
-    public bool TryBulletConsumption_Melee(int value)
+    //±ÙÁ¢Åº ¼Ò¸ð
+    public void BulletConsumption_Melee()
     {
-        if(meleeBullets >= value)
-        {
-            meleeBullets -= value;
-            UpdateBullet_Melee();
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.¹ü¿ë2);
+        int cost = (blueChip7Level > 0) ? (int)JsonDataManager.GetBlueChipData(BlueChipID.¹ü¿ë2).Level_VelueList[blueChip7Level][2] : 1;
+
+        meleeBullets -= cost;
+        if (meleeBullets < 0)
+            meleeBullets = 0;
+        UpdateBullet_Melee();        
     }
 
 
