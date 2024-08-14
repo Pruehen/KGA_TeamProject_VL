@@ -3,6 +3,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using EnumTypes;
+using static Cinemachine.DocumentationSortingAttribute;
+using System;
 
 public class UIManager : SceneSingleton<UIManager>
 {
@@ -26,6 +29,7 @@ public class UIManager : SceneSingleton<UIManager>
     [SerializeField] Button pickButton;
     [SerializeField] Button holdButton;
     [SerializeField] GameObject escImage;
+
 
 
     private void Start()
@@ -182,10 +186,13 @@ public class UIManager : SceneSingleton<UIManager>
 
     public void BkBlueChipUi()
     {
-       
         blueChipUI.SetActive(false);
         TimeManager.instance.TimeStart();
+    }
 
-
+    public void BlueChipDataUI(int level, BlueChipID targetBlueChip)
+    {
+        
+       
     }
 }
