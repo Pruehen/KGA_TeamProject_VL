@@ -102,7 +102,7 @@ public class PlayerModChangeManager : MonoBehaviour
         {
             EndAbsorptState();
         }
-        //IsAbsorptState = false;
+        IsAbsorptState = false;
     }
 
     public void EndAbsorptState()
