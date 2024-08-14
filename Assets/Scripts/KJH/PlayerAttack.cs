@@ -93,7 +93,9 @@ public class PlayerAttack : MonoBehaviour
             delayTime = 0;
             _PlayerMaster.OnAttackState(_PlayerCameraMove.CamRotation() * Vector3.forward);
 
-            _AttackSystem.StartAttack((int)_currentAttackType, _initialAttackComboIndex);
+            int blueChip2Level = _PlayerMaster.GetBlueChipLevel(EnumTypes.BlueChipID.원거리1);
+            int initialAttackComboIndex = (blueChip2Level > 0) ? (int)JsonDataManager.GetBlueChipData(EnumTypes.BlueChipID.원거리1).Level_VelueList[blueChip2Level][0] : 0;
+            _AttackSystem.StartAttack((int)_currentAttackType, initialAttackComboIndex);
             //StartCoroutine(Attack_Delayed(attack_Delay));
         }
         if(!attackTrigger && prevAttackTrigger)
