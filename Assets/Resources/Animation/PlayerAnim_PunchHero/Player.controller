@@ -91,12 +91,12 @@ AnimatorStateMachine:
   - {fileID: 6772834467654121427}
   - {fileID: 7599087744803437356}
   m_StateMachineTransitions:
-  - first: {fileID: 5670375154668993957}
-    second:
-    - {fileID: 1009339636296207970}
   - first: {fileID: 788471135628865215}
     second:
     - {fileID: 5114151607503648621}
+  - first: {fileID: 5670375154668993957}
+    second:
+    - {fileID: 1009339636296207970}
   m_StateMachineBehaviours:
   - {fileID: -2504090561729257136}
   m_AnyStatePosition: {x: 110, y: 30, z: 0}
@@ -301,7 +301,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe74780a41d3b44468a3e8066f01b330, type: 3}
   m_Name: 
@@ -314,7 +314,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe74780a41d3b44468a3e8066f01b330, type: 3}
   m_Name: 
@@ -327,7 +327,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe74780a41d3b44468a3e8066f01b330, type: 3}
   m_Name: 
@@ -704,7 +704,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe74780a41d3b44468a3e8066f01b330, type: 3}
   m_Name: 
@@ -746,7 +746,7 @@ AnimatorStateMachine:
     m_Position: {x: 280, y: 120, z: 0}
   - serializedVersion: 1
     m_StateMachine: {fileID: -7656474929277789329}
-    m_Position: {x: -320, y: 0, z: 0}
+    m_Position: {x: -330, y: 10, z: 0}
   m_AnyStateTransitions:
   - {fileID: 2639021091586542526}
   - {fileID: 5554919969184938433}
