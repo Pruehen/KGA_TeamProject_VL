@@ -5,6 +5,7 @@ public class AttackSystem : MonoBehaviour
     PlayerMaster _PlayerMaster;
 
     Animator _animator;
+    PlayerAttack _playerAttack;
     int hashAttackType = Animator.StringToHash("AttackType");
     int hashAttack = Animator.StringToHash("Attack");
     int hashAttackComboInitialIndex = Animator.StringToHash("AttackComboInitialIndex");
@@ -20,6 +21,7 @@ public class AttackSystem : MonoBehaviour
     public void Init()
     {
         TryGetComponent(out _animator);
+        TryGetComponent(out _playerAttack);
         TryGetComponent(out _closeAttack);
         TryGetComponent(out _closeSkill);
         _closeAttack.Init(_animator);
@@ -36,12 +38,6 @@ public class AttackSystem : MonoBehaviour
     {
         get => _attackLcokMove;
     }
-    public int AttackIndex
-    {
-        get => _animator.GetInteger(hashAttackType);
-        set => _animator.SetInteger(hashAttackType, value);
-    }
-
     public void StartAttack(int index, int comboIndex)
     {
         _attackLcokMove = true;
@@ -67,6 +63,7 @@ public class AttackSystem : MonoBehaviour
     private void EnableDamageBox()
     {
         _damageBox.EnableDamageBox(30, _PlayerMaster.OnMeleeHit);
+        _playerAttack.IncreaseAttackCount();
     }
 
     public void ResetEndAttack()
