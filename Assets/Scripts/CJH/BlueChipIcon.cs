@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using EnumTypes;
 using System.Collections.Generic;
+using System.Linq;
 
 public class BlueChipIcon : MonoBehaviour
 {
@@ -14,9 +15,9 @@ public class BlueChipIcon : MonoBehaviour
 
     private HashSet<BlueChipID> iconID = new HashSet<BlueChipID>();
 
-    public void PrintChipData(int chipLevel, BlueChipID chipID)
+    public void PrintChipData(BlueChipSlot slot)
     {
-        if (chipLevel == 0)
+        if (slot.Level == 0)
         {
             iconName.text = "¾øÀ½";
             iconLevel.text = "";
@@ -24,7 +25,7 @@ public class BlueChipIcon : MonoBehaviour
         }
         else 
         {
-            if (iconID.Contains(chipID))//°ãÄ¡Áö ¾Ê´Â ID
+            if (iconID.Contains(slot.Id))//°ãÄ¡Áö ¾Ê´Â ID
             {
                 Debug.Log("°ãÄ§");
             }
@@ -32,16 +33,17 @@ public class BlueChipIcon : MonoBehaviour
             {
 
                 Debug.Log(123);
-                BlueChip data = JsonDataManager.GetBlueChipData(chipID);
+                BlueChip data = JsonDataManager.GetBlueChipData(slot.Id);
                 iconName.text = data.PrintName();
-                iconLevel.text = data.PrintLevel(chipLevel);
-                iconInfo.text = data.PrintInfo(chipLevel);
+                iconLevel.text = data.PrintLevel(slot.Level);
+                iconInfo.text = data.PrintInfo(slot.Level);
             }
-
-
-
         }
     } 
     
-      
+    public void PickBtn_OnClick()
+    {
+        Debug.Log(this.gameObject.name);
+        UIManager.Instance.PickBUtton();
+    }
 }
