@@ -66,6 +66,7 @@ public class PlayerAttack : MonoBehaviour
     private void AbsorbingFall()
     {
         Debug.Log("AbsorbingFall");
+        ChangeAttackState(false);
         _AttackSystem.AbsoberEnd();
     }
     private void ChangeAttackState(bool isMelee)
