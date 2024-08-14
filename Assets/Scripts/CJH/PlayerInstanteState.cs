@@ -12,7 +12,7 @@ public class PlayerInstanteState : MonoBehaviour
     public int meleeBullets { get; private set; }
     public float skillGauge { get; private set; }
     public bool IsAbsorptState { get; set; }
-    public float AttackSpeed { get; private set; }
+    public float AttackSpeed { get => attackSpeed; private set => attackSpeed = value; }
 
     bool _isMeleeMode;
     public bool IsMeleeMode
@@ -38,6 +38,7 @@ public class PlayerInstanteState : MonoBehaviour
     [SerializeField] int maxBullets = 50;
     [SerializeField] int maxMeleeBullets = 50;
 
+    [SerializeField] float attackSpeed = 1f;
     [SerializeField] float attackPower;
     [SerializeField] float skillPower;
     public float GetDmg(PlayerAttackType type, int combo)

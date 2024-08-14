@@ -9,6 +9,7 @@ public class AttackSystem : MonoBehaviour
     int hashAttackType = Animator.StringToHash("AttackType");
     int hashAttack = Animator.StringToHash("Attack");
     int hashAttackComboInitialIndex = Animator.StringToHash("AttackComboInitialIndex");
+    int hasAttackSpeed = Animator.StringToHash("AttackSpeed");
     MeleeAttack _closeAttack;
     Skill _closeSkill; 
 
@@ -44,6 +45,7 @@ public class AttackSystem : MonoBehaviour
         _animator.SetTrigger(hashAttack);
         _animator.SetInteger(hashAttackType, index);
         _animator.SetInteger(hashAttackComboInitialIndex, comboIndex);
+        _animator.SetFloat(hasAttackSpeed, _PlayerMaster._PlayerInstanteState.AttackSpeed);
     }
 
     public void LockMove()
