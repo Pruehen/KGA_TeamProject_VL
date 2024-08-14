@@ -1,3 +1,4 @@
+using EnumTypes;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -29,6 +30,7 @@ public class LaunchAttack : AiAttackAction
     [SerializeField] private float _meleeRange = 3f;
     [SerializeField] private float _hommingForce = 100f;
     [SerializeField] private float _attackDamage = 100f;
+    [SerializeField] private float _jumpAttackDamage = 100f;
 
     public LaunchAttack(MonoBehaviour owner, Detector detector, SO_JumpingEnemy enemyData)
     {
@@ -44,6 +46,7 @@ public class LaunchAttack : AiAttackAction
         _jumpAngle = enemyData.JumpAngle;
         _hommingForce = enemyData.HommingForce;
         _attackDamage = enemyData.AttackDamage;
+        _jumpAttackDamage = enemyData.JumAttackDamage;
 
         hashEndLaunch = Animator.StringToHash("EndLaunch");
         hashAttack = Animator.StringToHash("Attack");
@@ -63,7 +66,7 @@ public class LaunchAttack : AiAttackAction
     /// <summary>
     /// ¿Ã∞Õ
     /// </summary>
-    public void DoAttack(DamageBox damageBox)
+    public void DoAttack(DamageBox damageBox, EnemyAttackType enemyAttackType)
     {
         owner.StartCoroutine(ResetLaunching());
         isInit = false;
@@ -73,7 +76,16 @@ public class LaunchAttack : AiAttackAction
         animator.SetBool(hashEndLaunch, false);
         Vector3 enemyToPlayerDir = (-transform.position + targetTrf.position).normalized;
         gameObject.layer = LayerMask.NameToLayer("EnemyCollider");
-        damageBox.EnableDamageBox(_attackDamage);
+
+        switch (enemyAttackType)
+        {
+            case EnemyAttackType.Melee:
+                damageBox.EnableDamageBox(_attackDamage);
+                break;
+            case EnemyAttackType.Jump:
+                damageBox.EnableDamageBox(_jumpAttackDamage);
+                break;
+        }
     }
     public void OnExcuteLaunch()
     {

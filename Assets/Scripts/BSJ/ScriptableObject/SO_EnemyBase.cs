@@ -15,4 +15,5 @@ public class SO_EnemyBase : ScriptableObject
     public float AttackRange = 2f;
     public float AttackCooldown = 2f;
     public float AttackMovableCooldown = 0.6f;
+    public float AttackSpeedMultiply = 1f;
 }

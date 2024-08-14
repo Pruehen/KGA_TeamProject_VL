@@ -13,11 +13,20 @@ namespace EnumTypes
         ¹ü¿ë3
     }
 
-    public enum PlayerRangeAttackType
+    public enum EnemyAttackType
     {
-        First,
-        Second,
-        Third,
-        Fourth
+        Melee,
+        Jump
+    }
+
+    public enum PlayerAttackType
+    {
+        RangeAttack1,
+        RangeAttack2,
+        RangeAttack3,
+        RangeAttack4,
+        ChargeAttack,
+        RangeSkill1,
+        ChargeSkill1,
     }
 }
