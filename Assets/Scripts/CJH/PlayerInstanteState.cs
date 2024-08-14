@@ -39,9 +39,9 @@ public class PlayerInstanteState : MonoBehaviour
 
     [SerializeField] float attackPower;
     [SerializeField] float skillPower;
-    public float GetDmg(float coefficient)
+    public float GetDmg(PlayerAttackType type, int combo)
     {
-        float baseDmg = attackPower * coefficient;
+        float baseDmg = attackPower;// * coefficient;
         float dmgGain = 1;
         if(true)//차지 공격일 경우
         {
@@ -109,7 +109,7 @@ public class PlayerInstanteState : MonoBehaviour
             skillGaugeRecoveryRestTime += Time.deltaTime;
             if (skillGaugeRecoveryRestTime > JsonDataManager.GetBlueChipData(BlueChipID.범용3).Level_VelueList[blueChip8Level][4])
             {
-                UseSkillGauge(-9999);
+                UseSkillGauge(9999);
             }
         }
     }
