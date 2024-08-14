@@ -90,10 +90,10 @@ public class UIManager : SceneSingleton<UIManager>
                     {
                         Button selectedButton = EventSystem.current.currentSelectedGameObject?.GetComponent<Button>();
                         selectedButton.onClick.Invoke();
-
-
-
-                    }
+                        
+                        
+                       
+                    } 
 
 
                 }
@@ -167,9 +167,9 @@ public class UIManager : SceneSingleton<UIManager>
     }
 
     public void HoldButton()
-    {
-
-
+    { 
+    
+    
     }
 
     //Esc를 눌러 교체를 취소하면 호출되는 함수
@@ -182,7 +182,7 @@ public class UIManager : SceneSingleton<UIManager>
 
     public void BkBlueChipUi()
     {
-        Debug.Log("꺼짐");
+       
         blueChipUI.SetActive(false);
         TimeManager.instance.TimeStart();
 
