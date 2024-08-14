@@ -1,3 +1,4 @@
+using EnumTypes;
 using System;
 using UnityEngine;
 
@@ -37,6 +38,7 @@ public class RangeAttack : AiAttackAction
         Prefab_projectile = enemyData.ProjectilePrefab;
         _firePos = firePos;
         _projectileDamage = enemyData.AttackDamage;
+        _projectileSpeed = enemyData.ProjectileSpeed;
     }
     float rotateSpeed = 10f;
     Quaternion look;
@@ -56,7 +58,7 @@ public class RangeAttack : AiAttackAction
         }
         return;
     }
-    public void DoAttack(DamageBox damageBox)
+    public void DoAttack(DamageBox damageBox, EnemyAttackType enemyAttackType)
     {
         rotatable = false;
         Vector3 enemyToPlayerDir = (-transform.position + targetTrf.position).normalized;

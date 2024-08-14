@@ -13,6 +13,12 @@ namespace EnumTypes
         ¹ü¿ë3
     }
 
+    public enum EnemyAttackType
+    {
+        Melee,
+        Jump
+    }
+
     public enum PlayerRangeAttackType
     {
         First,

@@ -1,4 +1,5 @@
 using BehaviorDesigner.Runtime;
+using EnumTypes;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -24,7 +25,7 @@ public enum EnemyType
 
 public interface AiAttackAction
 {
-    public void DoAttack(DamageBox damageBox);
+    public void DoAttack(DamageBox damageBox, EnemyAttackType enemyAttackType);
     public void DoUpdate();
     public bool IsAttacking();
     public void StartAttackAnim();
@@ -279,7 +280,7 @@ public class Enemy : MonoBehaviour, ITargetable
         return true;
     }
 
-    public bool CharacterAttack()
+    public bool CharacterAttack(EnemyAttackType enemyAttackType)
     {
         if (AiAttack == null)
         {
@@ -290,7 +291,7 @@ public class Enemy : MonoBehaviour, ITargetable
         else
         {
             StartCoroutine(AttackEnd(_enemyData.AttackMovableCooldown));
-            AiAttack.DoAttack(_attackCollider);
+            AiAttack.DoAttack(_attackCollider, enemyAttackType);
             return true;
         }
     }
