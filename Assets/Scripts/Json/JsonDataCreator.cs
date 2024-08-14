@@ -44,6 +44,27 @@ public class BlueChip
         return string.Format(Info, Level_VelueList[level].Cast<object>().ToArray());
     }
 }
+public class CoefficientTable
+{
+    public Dictionary<int, BlueChip> dic;
+    [JsonConstructor]
+    public CoefficientTable(Dictionary<int, BlueChip> dic)
+    {
+        this.dic = dic;
+    }
+    public CoefficientTable()
+    {
+        dic = new Dictionary<int, BlueChip>();
+        for (int i = 0; i < 9; i++)
+        {
+            dic.Add(i, new BlueChip(i));
+        }
+    }
+    public static string FilePath()
+    {
+        return "/Data/Table/CoefficientTable.json";
+    }
+}
 public class BlueChipTable
 {
     public Dictionary<int, BlueChip> dic;

@@ -12,6 +12,7 @@ public class PlayerInstanteState : MonoBehaviour
     public int meleeBullets { get; private set; }
     public float skillGauge { get; private set; }
     public bool IsAbsorptState { get; set; }
+    public float AttackSpeed { get; private set; }
 
     bool _isMeleeMode;
     public bool IsMeleeMode
@@ -273,6 +274,7 @@ public class PlayerInstanteState : MonoBehaviour
         stamina = MaxStamina;
         skillGauge = 0;
         bullets = maxBullets / 3;
+        AttackSpeed = 1;
     }
 
     public void Refresh_Model()
