@@ -130,7 +130,7 @@ public class PlayerAttack : MonoBehaviour
 
         Vector3 projectionVector = _PlayerCameraMove.CamRotation() * Vector3.forward * projectionSpeed_Forward + Vector3.up * projectionSpeed_Up;
         //어택시스템에서 현재 공격의 타입을 가져온다
-        projectile.Init(_PlayerMaster._PlayerInstanteState.GetDmg(100), projectile_InitPos.position, projectionVector, OnProjectileHit);
+        projectile.Init(_PlayerMaster._PlayerInstanteState.GetDmg(_currentPlayerAttackType, GetCurrentAttackCount()), projectile_InitPos.position, projectionVector, OnProjectileHit);
 
         _PlayerMaster._PlayerInstanteState.BulletConsumption();
         IncreaseAttackCount();
