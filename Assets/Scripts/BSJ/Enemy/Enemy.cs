@@ -332,7 +332,7 @@ public class Enemy : MonoBehaviour, ITargetable
     }
     public bool IsTargetFar(float range)
     {
-        Transform target = _detector.GetTarget();
+        Transform target = _detector.GetLatestTarget();
 
         if (target == null)
         {
