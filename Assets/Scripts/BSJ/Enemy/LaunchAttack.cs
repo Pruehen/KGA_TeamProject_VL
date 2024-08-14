@@ -69,13 +69,6 @@ public class LaunchAttack : AiAttackAction
     public void DoAttack(DamageBox damageBox, EnemyAttackType enemyAttackType)
     {
         owner.StartCoroutine(ResetLaunching());
-        isInit = false;
-
-        agent.nextPosition = transform.position;
-        rb.isKinematic = true;
-        animator.SetBool(hashEndLaunch, false);
-        Vector3 enemyToPlayerDir = (-transform.position + targetTrf.position).normalized;
-        gameObject.layer = LayerMask.NameToLayer("EnemyCollider");
 
         switch (enemyAttackType)
         {
@@ -86,6 +79,14 @@ public class LaunchAttack : AiAttackAction
                 damageBox.EnableDamageBox(_jumpAttackDamage);
                 break;
         }
+    }
+    private void DisablePhysics()
+    {
+        isInit = false;
+        agent.nextPosition = transform.position;
+        animator.SetBool(hashEndLaunch, false);
+        gameObject.layer = LayerMask.NameToLayer("EnemyCollider");
+        rb.isKinematic = true;
     }
     public void OnExcuteLaunch()
     {
@@ -109,7 +110,7 @@ public class LaunchAttack : AiAttackAction
 
     private IEnumerator ResetLaunching()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(.1f);
         agent.nextPosition = transform.position;
         agent.updatePosition = true;
         agent.updateRotation = true;
@@ -133,7 +134,7 @@ public class LaunchAttack : AiAttackAction
 
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiredDir), Time.deltaTime * _aimRotateSpeed);
 
-        bool isGrounded = Physics.CheckSphere(transform.position, .2f, LayerMask.GetMask("Environment"));
+        bool isGrounded = Physics.CheckSphere(transform.position, .1f, LayerMask.GetMask("Environment"));
 
         if (!isGrounded)
         {
@@ -159,8 +160,9 @@ public class LaunchAttack : AiAttackAction
         {
             if(rb.velocity.y <=-.1f)
             {
+                DisablePhysics();
                 prevPlayerPos = SentinelVec;
-                animator.SetBool(hashEndLaunch, true);
+                animator.SetTrigger(hashEndLaunch);
             }
         }
     }
