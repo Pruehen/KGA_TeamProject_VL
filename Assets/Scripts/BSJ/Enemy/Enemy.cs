@@ -113,6 +113,7 @@ public class Enemy : MonoBehaviour, ITargetable
         _attackDamage = _enemyData.AttackDamage;
         _attackCooldown = _enemyData.AttackCooldown;
         _attackMoveCooldoown = _enemyData.AttackMovableCooldown;
+        AttackSpeedMulti = _enemyData.AttackSpeedMultiply;
 
         _detector.Init(this, "Player",
             _enemyData.EnemyAlramDistance,
@@ -240,6 +241,19 @@ public class Enemy : MonoBehaviour, ITargetable
     float _attackMoveCooldoown = .8f;
     float _currentAttackTime = 0f;
     float _currentMoveTime = 0f;
+    float _attackSpeedMulti = 1f;
+    float AttackSpeedMulti
+    {
+        get
+        {
+            return _attackSpeedMulti;
+        }
+        set
+        {
+            _attackSpeedMulti = value;
+            _animator.SetFloat("AttackSpeed", value);
+        }
+    }
 
     public void StartAttackAnimation()
     {
