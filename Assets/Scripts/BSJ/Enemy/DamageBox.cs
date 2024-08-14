@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class DamageBox : MonoBehaviour
@@ -9,6 +10,8 @@ public class DamageBox : MonoBehaviour
     private Coroutine _DisableBoxCoroutine;
 
     private float _enableTimer = 0f;
+
+    public Action OnHit;
 
     private Vector3 HalfSize
     {
@@ -34,8 +37,8 @@ public class DamageBox : MonoBehaviour
     }
     private void OnEnable()
     {
-        Collider[] result = Physics.OverlapBox(transform.position, HalfSize, transform.rotation, _targetLayer);        
-
+        Collider[] result = Physics.OverlapBox(transform.position, HalfSize, transform.rotation, _targetLayer);
+        bool onHit = false;
         foreach (Collider hit in result)
         {
             if(hit.attachedRigidbody == null)
@@ -56,6 +59,12 @@ public class DamageBox : MonoBehaviour
                 }
             }         
             combat.Hit(_damage);
+            onHit = true;
+        }
+
+        if(onHit)
+        {
+            OnHit?.Invoke();
         }
     }
 
@@ -85,6 +94,15 @@ public class DamageBox : MonoBehaviour
     /// <param name="time"></param>
     public void EnableDamageBox(float damage, float time = 0f)
     {
+        _damage = damage;
+        enabled = true;
+        _enableTimer = time;
+    }
+
+    public void EnableDamageBox(float damage, Action OnHitCallBack, float time = 0f)
+    {
+        OnHit = OnHitCallBack;
+
         _damage = damage;
         enabled = true;
         _enableTimer = time;

@@ -1,8 +1,15 @@
 namespace EnumTypes
 {
-    public enum ItemType
+    public enum BlueChipID
     {
-        Material,
-        Building
+        근거리1,
+        근거리2,
+        원거리1,
+        원거리2,
+        하이브리드1,
+        하이브리드2,
+        범용1,
+        범용2,
+        범용3
     }
 }

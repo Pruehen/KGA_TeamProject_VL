@@ -169,6 +169,8 @@ public class PlayerMove : MonoBehaviour
         if (_PlayerMaster._PlayerInstanteState.TryStaminaConsumption(30))
         {
             OnlyDash();
+            _attackSystem.ReleaseLockMove();
+            _attackSystem.ResetEndAttack();
             _animator.SetTrigger("Dash");
         }
         else
