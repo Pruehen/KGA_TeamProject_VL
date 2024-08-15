@@ -1,29 +1,20 @@
-using System.Collections;
+using EnumTypes;
 using System.ComponentModel;
 using UnityEngine;
 
-public enum AttackType
-{
-    RangeNormal,
-    RangeSkill1,
-    RangeSkill2,
-    CloseNormal,
-    CloseSkill1,
-    CloseSkill2,
-}
 
 public class PlayerAttack : MonoBehaviour
 {
     [SerializeField] GameObject Prefab_Projectile;
 
-    [SerializeField] Transform projectile_InitPos;    
+    [SerializeField] Transform projectile_InitPos;
     [SerializeField] float projectionSpeed_Forward = 15;
     [SerializeField] float projectionSpeed_Up = 3;
     [SerializeField] float attack_CoolTime = 0.7f;
 
     InputManager _InputManager;
     PlayerCameraMove _PlayerCameraMove;
-    PlayerMaster _PlayerMaster; 
+    PlayerMaster _PlayerMaster;
     AttackSystem _AttackSystem;
     PlayerModChangeManager _PlayerMod;
 
@@ -36,11 +27,16 @@ public class PlayerAttack : MonoBehaviour
 
     [SerializeField] AttackType _currentAttackType = AttackType.CloseNormal; 
     [SerializeField] int _initialAttackComboIndex = 0; 
+    [SerializeField] PlayerAttackType _currentAttackType = PlayerAttackType.CloseNormal;
+    [SerializeField] int _initialAttackComboIndex = 0;
+    int _currentAttackCount;
+
+    private PlayerAttackType _currentPlayerAttackType;
 
     private void Awake()
     {
         _InputManager = InputManager.Instance;
-        _InputManager.PropertyChanged += OnInputPropertyChanged;        
+        _InputManager.PropertyChanged += OnInputPropertyChanged;
 
         _PlayerCameraMove = PlayerCameraMove.Instance;
 
@@ -63,24 +59,25 @@ public class PlayerAttack : MonoBehaviour
 
     private void ChangeAbsorbing()
     {
-        Debug.Log("¤±¤¤¤·¤©");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
         _AttackSystem.Absober();
     }
     private void AbsorbingFall()
     {
         Debug.Log("AbsorbingFall");
+        ChangeAttackState(false);
         _AttackSystem.AbsoberEnd();
     }
     private void ChangeAttackState(bool isMelee)
     {
         if (isMelee)
         {
-            _currentAttackType = AttackType.CloseNormal;
+            _currentAttackType = PlayerAttackType.CloseNormal;
             _AttackSystem.ModTransform();
         }
         else
         {
-            _currentAttackType = AttackType.RangeNormal;
+            _currentAttackType = PlayerAttackType.RangeNormal;
             _AttackSystem.ModTransform();
         }
     }
@@ -115,7 +112,7 @@ public class PlayerAttack : MonoBehaviour
         //if(!skillTrigger && prevAttackTrigger)
         if (!skillTrigger)
         {
-            if (_currentAttackType == AttackType.CloseNormal)
+            if (_currentAttackType == PlayerAttackType.CloseNormal)
             {
                 _AttackSystem.OnRelease();
             }
@@ -123,6 +120,19 @@ public class PlayerAttack : MonoBehaviour
         prevAttackTrigger = attackTrigger;
     }
 
+    public PlayerAttackType GetCurrentAttackType()
+    {
+        if (_currentAttackType == PlayerAttackType.CloseNormal)
+        {
+            //checkAttackCount
+            return PlayerAttackType.CloseNormal;
+        }
+        return _currentPlayerAttackType;
+    }
+    public int GetCurrentAttackCount()
+    {
+        return _currentAttackCount;
+    }
     void OnInputPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)
@@ -134,7 +144,7 @@ public class PlayerAttack : MonoBehaviour
             case nameof(_InputManager.IsRMouseBtnClick):
                 skillTrigger = _InputManager.IsRMouseBtnClick;
                 skillBool = _InputManager.IsRMouseBtnClick;
-                Debug.Log("R ÇÃ·¹ÀÌ¾î½ºÅ³");
+                Debug.Log("R ï¿½Ã·ï¿½ï¿½Ì¾î½ºÅ³");
                 break;
 
         }
@@ -145,16 +155,26 @@ public class PlayerAttack : MonoBehaviour
         Projectile projectile = ObjectPoolManager.Instance.DequeueObject(Prefab_Projectile).GetComponent<Projectile>();
 
         Vector3 projectionVector = _PlayerCameraMove.CamRotation() * Vector3.forward * projectionSpeed_Forward + Vector3.up * projectionSpeed_Up;
-
-        projectile.Init(_PlayerMaster._PlayerInstanteState.GetAttackPower(), projectile_InitPos.position, projectionVector, OnProjectileHit);
+        //ï¿½ï¿½ï¿½Ã½Ã½ï¿½ï¿½Û¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Â´ï¿½
+        projectile.Init(_PlayerMaster._PlayerInstanteState.GetDmg(_currentPlayerAttackType, GetCurrentAttackCount()), projectile_InitPos.position, projectionVector, OnProjectileHit);
 
         _PlayerMaster._PlayerInstanteState.BulletConsumption();
+        IncreaseAttackCount();
     }
 
     void OnProjectileHit()
     {
         _PlayerMaster._PlayerInstanteState.SkillGaugeRecovery(10);
-        Debug.Log("°ø°Ý ¼º°ø");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
+    }
+
+    public void ResetAttackCount()
+    {
+        _currentAttackCount = 0;
+    }
+    public void IncreaseAttackCount()
+    {
+        _currentAttackCount++;
     }
 
     //IEnumerator Attack_Delayed(float delayTime)

@@ -1,3 +1,4 @@
+using EnumTypes;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -25,10 +26,13 @@ public class LaunchAttack : AiAttackAction
 
     private float initialDistance;
     [SerializeField] private float _aimRotateSpeed = 10f;
-    [SerializeField] private float _hommingPower = 100f;
+    [SerializeField] private float _jumpAngle = 100f;
     [SerializeField] private float _meleeRange = 3f;
+    [SerializeField] private float _hommingForce = 100f;
+    [SerializeField] private float _attackDamage = 100f;
+    [SerializeField] private float _jumpAttackDamage = 100f;
 
-    public LaunchAttack(MonoBehaviour owner, Detector detector)
+    public LaunchAttack(MonoBehaviour owner, Detector detector, SO_JumpingEnemy enemyData)
     {
         this.owner = owner;
         gameObject = owner.gameObject;
@@ -38,7 +42,11 @@ public class LaunchAttack : AiAttackAction
         animator = gameObject.GetComponent<Animator>();
         agent = gameObject.GetComponent<NavMeshAgent>();
         prevPlayerPos = SentinelVec;
-
+        _meleeRange = enemyData.MeleeRange;
+        _jumpAngle = enemyData.JumpAngle;
+        _hommingForce = enemyData.HommingForce;
+        _attackDamage = enemyData.AttackDamage;
+        _jumpAttackDamage = enemyData.JumAttackDamage;
 
         hashEndLaunch = Animator.StringToHash("EndLaunch");
         hashAttack = Animator.StringToHash("Attack");
@@ -58,15 +66,27 @@ public class LaunchAttack : AiAttackAction
     /// <summary>
     /// ¿Ã∞Õ
     /// </summary>
-    public void DoAttack()
+    public void DoAttack(DamageBox damageBox, EnemyAttackType enemyAttackType)
     {
         owner.StartCoroutine(ResetLaunching());
-        isInit = false;
 
-        rb.isKinematic = true;
+        switch (enemyAttackType)
+        {
+            case EnemyAttackType.Melee:
+                damageBox.EnableDamageBox(_attackDamage);
+                break;
+            case EnemyAttackType.Jump:
+                damageBox.EnableDamageBox(_jumpAttackDamage);
+                break;
+        }
+    }
+    private void DisablePhysics()
+    {
+        isInit = false;
+        agent.nextPosition = transform.position;
         animator.SetBool(hashEndLaunch, false);
-        Vector3 enemyToPlayerDir = (-transform.position + targetTrf.position).normalized;
         gameObject.layer = LayerMask.NameToLayer("EnemyCollider");
+        rb.isKinematic = true;
     }
     public void OnExcuteLaunch()
     {
@@ -77,12 +97,11 @@ public class LaunchAttack : AiAttackAction
         prevPlayerPos = SentinelVec;
         isInit = true;
         rb.isKinematic = false;
-        targetTrf = detector.GetTarget();
         initialDistance = (transform.position - targetTrf.position).magnitude;
         Vector3 targetDir = (-transform.position + targetTrf.position).normalized;
         float angleV = Mathf.Atan2(targetDir.y, 1f);
         angleV = Mathf.Rad2Deg * angleV;
-        angleV = (angleV > -15f) ? angleV + 30f : -angleV;
+        angleV = -angleV + _jumpAngle;
 
         rb.velocity = ProjectileCalc.CalcLaunch(transform.position, targetTrf.position, angleV);
         animator.SetBool(hashEndLaunch, false);
@@ -91,7 +110,7 @@ public class LaunchAttack : AiAttackAction
 
     private IEnumerator ResetLaunching()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(.1f);
         agent.nextPosition = transform.position;
         agent.updatePosition = true;
         agent.updateRotation = true;
@@ -115,7 +134,7 @@ public class LaunchAttack : AiAttackAction
 
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiredDir), Time.deltaTime * _aimRotateSpeed);
 
-        bool isGrounded = Physics.CheckSphere(transform.position, .2f, LayerMask.GetMask("Environment"));
+        bool isGrounded = Physics.CheckSphere(transform.position, .1f, LayerMask.GetMask("Environment"));
 
         if (!isGrounded)
         {
@@ -133,7 +152,7 @@ public class LaunchAttack : AiAttackAction
             }
             else
             {
-                ProjectileCalc.Homming(rb,targetTrf,_hommingPower);
+                ProjectileCalc.Homming(rb,targetTrf,_hommingForce);
             }
             prevPlayerPos = curPlayerPos;
         }
@@ -141,8 +160,9 @@ public class LaunchAttack : AiAttackAction
         {
             if(rb.velocity.y <=-.1f)
             {
+                DisablePhysics();
                 prevPlayerPos = SentinelVec;
-                animator.SetBool(hashEndLaunch, true);
+                animator.SetTrigger(hashEndLaunch);
             }
         }
     }
@@ -153,7 +173,8 @@ public class LaunchAttack : AiAttackAction
 
     public void StartAttackAnim()
     {
-        if(Vector3.Distance(detector.GetPosition(),transform.position) <= _meleeRange)
+        targetTrf = detector.GetTarget();
+        if (Vector3.Distance(detector.GetPosition(),transform.position) <= _meleeRange)
         {
             agent.nextPosition = transform.position;
             animator.SetBool("IsLaunch", false);
@@ -162,6 +183,7 @@ public class LaunchAttack : AiAttackAction
         else
         {
             animator.SetBool("IsLaunch", true);
+            animator.SetTrigger("Attack");
         }
     }
 }

@@ -6,9 +6,10 @@ public class PlayerMaster : MonoBehaviour, ITargetable
 {
     public PlayerInstanteState _PlayerInstanteState { get; private set; }
     public PlayerEquipBlueChip _PlayerEquipBlueChip { get; private set; }
+    public PlayerBuff _PlayerBuff { get; private set; }
     PlayerMove _PlayerMove;
     PlayerAttack _PlayerAttack;
-    PlayerModChangeManager _PlayerModChangeManager;
+    PlayerModChangeManager _PlayerModChangeManager;    
     [SerializeField] ItemAbsorber _ItemAbsorber;    
 
     public bool IsAbsorptState
@@ -25,13 +26,19 @@ public class PlayerMaster : MonoBehaviour, ITargetable
         set
         {
             _PlayerInstanteState.IsMeleeMode = value;
-            Execute_BlueChip1_OnMeleeModeChange(value);
+            Execute_BlueChip1_OnModeChange(value);
+            Execute_BlueChip4_OnModeChange();
         }
     }
+    public int GetBlueChipLevel(BlueChipID iD)
+    {
+        return _PlayerEquipBlueChip.GetBlueChipLevel(iD);
+    }
+
 
     public void OnMeleeHit()
     {
-        _PlayerInstanteState.TryBulletConsumption_Melee(1);
+        _PlayerInstanteState.BulletConsumption_Melee();
 
         Execute_BlueChip1_OnMeleeHit();
 
@@ -42,18 +49,18 @@ public class PlayerMaster : MonoBehaviour, ITargetable
     }
     void Execute_BlueChip1_OnMeleeHit()
     {
-        int level = _PlayerEquipBlueChip.GetBlueChipLevel(BlueChipID.근거리2);
+        int level = GetBlueChipLevel(BlueChipID.근거리2);
 
         if(level > 0)
         {
             _PlayerInstanteState.ChangeShield(JsonDataManager.GetBlueChipData(BlueChipID.근거리2).Level_VelueList[level][2]);
         }        
     }
-    void Execute_BlueChip1_OnMeleeModeChange(bool isMeleeMode)
+    void Execute_BlueChip1_OnModeChange(bool isMeleeMode)
     {
         if (isMeleeMode)
         {
-            int level = _PlayerEquipBlueChip.GetBlueChipLevel(BlueChipID.근거리2);
+            int level = GetBlueChipLevel(BlueChipID.근거리2);
 
             if (level > 0)
             {
@@ -65,11 +72,28 @@ public class PlayerMaster : MonoBehaviour, ITargetable
             _PlayerInstanteState.ChangeShield(-9999);
         }
     }
+    void Execute_BlueChip4_OnModeChange()
+    {
+        int level = GetBlueChipLevel(BlueChipID.하이브리드1);
+        if (level > 0)
+        {
+            int count = (int)JsonDataManager.GetBlueChipData(BlueChipID.하이브리드1).Level_VelueList[level][0];
+            float value = JsonDataManager.GetBlueChipData(BlueChipID.하이브리드1).Level_VelueList[level][1] * 0.01f;
+
+            _PlayerBuff.blueChip4_Buff_NextHitAddDmg.Clear();
+            for (int i = 0; i < count; i++)
+            {
+                _PlayerBuff.blueChip4_Buff_NextHitAddDmg.Enqueue(value);
+                Debug.Log("데미지 버프 추가");
+            }
+        }
+    }
 
     private void Awake()
     {
         _PlayerInstanteState = GetComponent<PlayerInstanteState>();
         _PlayerEquipBlueChip = GetComponent<PlayerEquipBlueChip>();
+        _PlayerBuff = GetComponent<PlayerBuff>();
 
         _PlayerMove = GetComponent<PlayerMove>();
         _PlayerAttack = GetComponent<PlayerAttack>();

@@ -54,6 +54,7 @@ GameObject:
   - component: {fileID: 8909988477445564789}
   - component: {fileID: 3176383348458485747}
   - component: {fileID: 7753793625892610601}
+  - component: {fileID: 6615908217414374475}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -141,13 +142,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp: 100
-  MaxStamina: 100
-  staminaRecoverySpeed: 10
+  MaxStamina: 800
+  staminaRecoverySpeed: 100
+  staminaRecoveryDelay: 3
   MaxskillGauge: 100
   maxBullets: 50
   maxMeleeBullets: 50
-  attackPower: 150
-  moveSpeed: 14.26
+  attackPower: 20
+  skillPower: 20
+  moveSpeed: 6
 --- !u!114 &3848298984020166617
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -281,6 +284,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   distance: 2
+--- !u!114 &6615908217414374475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3370145770967923552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fcab4553a9134449bc73c5806e5817e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5381824260810107129
 GameObject:
   m_ObjectHideFlags: 0

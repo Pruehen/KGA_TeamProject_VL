@@ -21,6 +21,7 @@ public class Detector : MonoBehaviour
             if(value != null)
             {
                 _lastTarget = _target;
+                _latestTarget = value.transform;
             }
             _target = value;
         }
@@ -28,6 +29,7 @@ public class Detector : MonoBehaviour
     private Collider _target;
 
     private Collider _lastTarget;
+    private Transform _latestTarget;
 
     [SerializeField] private LayerMask _targetLayer;
     [SerializeField] private LayerMask _groundLayer;
@@ -125,8 +127,13 @@ public class Detector : MonoBehaviour
         return _lastTarget.transform;
     }
 
-    internal Vector3 GetLastPosition()
+    public Vector3 GetLastPosition()
     {
         return _lastTarget.bounds.center;
+    }
+
+    public Transform GetLatestTarget()
+    {
+        return _latestTarget;
     }
 }
