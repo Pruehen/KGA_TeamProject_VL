@@ -31,6 +31,9 @@ public class PlayerAttack : MonoBehaviour
     bool attackTrigger = false;
     bool attackBool = false;
 
+    bool skillTrigger = false;
+    bool skillBool = false;
+
     [SerializeField] AttackType _currentAttackType = AttackType.CloseNormal; 
     [SerializeField] int _initialAttackComboIndex = 0; 
 
@@ -95,7 +98,22 @@ public class PlayerAttack : MonoBehaviour
             _AttackSystem.StartAttack((int)_currentAttackType, _initialAttackComboIndex);
             //StartCoroutine(Attack_Delayed(attack_Delay));
         }
-        if(!attackTrigger && prevAttackTrigger)
+        if (!attackTrigger && prevAttackTrigger)
+        {
+            if (_currentAttackType == AttackType.CloseNormal)
+            {
+                _AttackSystem.OnRelease();
+            }
+        }
+        //if (skillTrigger && !prevAttackTrigger)
+        if (skillTrigger)
+        {
+            delayTime = 0;
+            _PlayerMaster.OnAttackState(_PlayerCameraMove.CamRotation() * Vector3.forward);
+            _AttackSystem.StartSkill((int)_currentAttackType, _PlayerMaster._PlayerInstanteState.skillGauge);
+        }
+        //if(!skillTrigger && prevAttackTrigger)
+        if (!skillTrigger)
         {
             if (_currentAttackType == AttackType.CloseNormal)
             {
@@ -113,6 +131,12 @@ public class PlayerAttack : MonoBehaviour
                 attackTrigger = _InputManager.IsLMouseBtnClick;
                 attackBool = _InputManager.IsLMouseBtnClick;
                 break;
+            case nameof(_InputManager.IsRMouseBtnClick):
+                skillTrigger = _InputManager.IsRMouseBtnClick;
+                skillBool = _InputManager.IsRMouseBtnClick;
+                Debug.Log("R 플레이어스킬");
+                break;
+
         }
     }
 
