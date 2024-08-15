@@ -52,11 +52,18 @@ public class AttackSystem : MonoBehaviour
     }
     public void StartSkill(int index, float skillGauge)
     {
-        _attackLcokMove = true;
-        _animator.SetTrigger(hashSkill);
-        _animator.SetInteger(hashAttackType, index);
-        _animator.SetFloat("SkillGauge", skillGauge);
-        Debug.Log(skillGauge);
+        if (skillGauge >= 100)
+        {
+            _attackLcokMove = true;
+            _animator.SetTrigger(hashSkill);
+            _animator.SetInteger(hashAttackType, index);
+            _animator.SetFloat("SkillGauge", skillGauge);
+            Debug.Log(skillGauge);
+        }
+        else
+        {
+            Debug.Log(skillGauge);
+        }
     }
     public void LockMove()
     {

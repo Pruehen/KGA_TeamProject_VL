@@ -216,6 +216,7 @@ public class PlayerInstanteState : MonoBehaviour
 
     public bool TryUseSkillGauge(float value)
     {
+
         if(skillGauge >= value)
         {
             skillGauge -= value;
@@ -226,6 +227,13 @@ public class PlayerInstanteState : MonoBehaviour
         {
             return false;
         }                
+    }
+    public void TryUseSkillGauge2()
+    {
+        float quotient = Mathf.Floor(skillGauge / 100);
+        float remainder = skillGauge % 100;
+        skillGauge = remainder;
+        UpdateSkillGauge();
     }
 
     void Restore()
