@@ -45,28 +45,28 @@ public class PlayerInstanteState : MonoBehaviour
     {
         float baseDmg = attackPower;// * coefficient;
         float dmgGain = 1;
-        if(true)//���� ������ ���
+        if (true)//차지 공격일 경우
         {
-            int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.�ٰŸ�1);
+            int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.근거리1);
             if (level > 0)
             {
-                baseDmg += ((hp + Shield) * JsonDataManager.GetBlueChipData(BlueChipID.�ٰŸ�1).Level_VelueList[level][0]) * 0.01f;
+                baseDmg += ((hp + Shield) * JsonDataManager.GetBlueChipData(BlueChipID.근거리1).Level_VelueList[level][0]) * 0.01f;
             }
         }
-        if(true)//���Ÿ� ��Ÿ, �ٰŸ� ��Ÿ�� ���
+        if (true)//원거리 평타, 근거리 평타일 경우
         {
-            if(_PlayerMaster._PlayerBuff.blueChip4_Buff_NextHitAddDmg.TryDequeue(out float addDmgGain))
+            if (_PlayerMaster._PlayerBuff.blueChip4_Buff_NextHitAddDmg.TryDequeue(out float addDmgGain))
             {
                 dmgGain += addDmgGain;
-                Debug.Log("�������� ���� �Ҹ�");
+                Debug.Log("피해증가 버프 소모");
             }
-            int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.����2);
+            int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.범용2);
             if (blueChip7Level > 0)
             {
-                float addDmg = JsonDataManager.GetBlueChipData(BlueChipID.����2).Level_VelueList[blueChip7Level][1] * 0.01f;
+                float addDmg = JsonDataManager.GetBlueChipData(BlueChipID.범용2).Level_VelueList[blueChip7Level][1] * 0.01f;
                 dmgGain += addDmg;
             }
-        }        
+        }
         return baseDmg * dmgGain;
     }
 
@@ -104,24 +104,24 @@ public class PlayerInstanteState : MonoBehaviour
         {
             StaminaAutoRecovery();
         }
-        
-        int blueChip8Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.����3);
-        if(blueChip8Level > 0)
+
+        int blueChip8Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.범용3);
+        if (blueChip8Level > 0)
         {
             skillGaugeRecoveryRestTime += Time.deltaTime;
-            if (skillGaugeRecoveryRestTime > JsonDataManager.GetBlueChipData(BlueChipID.����3).Level_VelueList[blueChip8Level][4])
+            if (skillGaugeRecoveryRestTime > JsonDataManager.GetBlueChipData(BlueChipID.범용3).Level_VelueList[blueChip8Level][4])
             {
                 UseSkillGauge(9999);
             }
         }
     }
 
-    //���¹̳� �Ҹ� 
+    //스태미나 소모 
     public bool TryStaminaConsumption(float power)
     {
         if (stamina > power)
         {
-            stamina -= power;    
+            stamina -= power;
             staminaRecoveryDelayValue = 0;
             UpdateStamina();
             return true;
@@ -130,7 +130,7 @@ public class PlayerInstanteState : MonoBehaviour
             return false;
     }
 
-    //���¹̳� �ڵ� ȸ��
+    //스태미나 자동 회복
     public void StaminaAutoRecovery()
     {
         if (stamina < MaxStamina)
@@ -200,49 +200,49 @@ public class PlayerInstanteState : MonoBehaviour
         UpdateShild();
     }
 
-    //źȯ ȹ��
+    //탄환 획득
     public void AcquireBullets(int _bullets)
     {
         bullets += _bullets;
-        if(bullets > maxBullets)
+        if (bullets > maxBullets)
         {
             bullets = maxBullets;
         }
         UpdateBullet();
     }
 
-    //źȯ �Ҹ�
+    //탄환 소모
     public void BulletConsumption()
-    {        
-        int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.����2);
-        int cost = (blueChip7Level > 0) ? (int)JsonDataManager.GetBlueChipData(BlueChipID.����2).Level_VelueList[blueChip7Level][0] : 1;
+    {
+        int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.범용2);
+        int cost = (blueChip7Level > 0) ? (int)JsonDataManager.GetBlueChipData(BlueChipID.범용2).Level_VelueList[blueChip7Level][0] : 1;
 
         bullets -= cost;
         if (bullets < 0)
             bullets = 0;
         UpdateBullet();
     }
-    //����ź ȹ��
+    //근접탄 획득
     public void AcquireBullets_Melee(int _bullets)
     {
         meleeBullets += _bullets;
-        if(meleeBullets > maxBullets)
+        if (meleeBullets > maxBullets)
         {
             meleeBullets = maxBullets;
         }
         UpdateBullet_Melee();
     }
 
-    //����ź �Ҹ�
+    //근접탄 소모
     public void BulletConsumption_Melee()
     {
-        int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.����2);
-        int cost = (blueChip7Level > 0) ? (int)JsonDataManager.GetBlueChipData(BlueChipID.����2).Level_VelueList[blueChip7Level][2] : 1;
+        int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.범용2);
+        int cost = (blueChip7Level > 0) ? (int)JsonDataManager.GetBlueChipData(BlueChipID.범용2).Level_VelueList[blueChip7Level][2] : 1;
 
         meleeBullets -= cost;
         if (meleeBullets < 0)
             meleeBullets = 0;
-        UpdateBullet_Melee();        
+        UpdateBullet_Melee();
     }
 
 
