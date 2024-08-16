@@ -539,7 +539,10 @@ AnimatorTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions: []
+  m_Conditions:
+  - m_ConditionMode: 3
+    m_ConditionEvent: SkillGauge
+    m_EventTreshold: 400
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -1447545195059225305}
   m_Solo: 0
@@ -2022,7 +2025,13 @@ AnimatorTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions: []
+  m_Conditions:
+  - m_ConditionMode: 4
+    m_ConditionEvent: SkillGauge
+    m_EventTreshold: 201
+  - m_ConditionMode: 3
+    m_ConditionEvent: SkillGauge
+    m_EventTreshold: 100
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -413653899883770765}
   m_Solo: 0
@@ -2410,7 +2419,10 @@ AnimatorTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions: []
+  m_Conditions:
+  - m_ConditionMode: 4
+    m_ConditionEvent: SkillGauge
+    m_EventTreshold: 101
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 3024068094873822856}
   m_Solo: 0
@@ -2784,7 +2796,13 @@ AnimatorTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions: []
+  m_Conditions:
+  - m_ConditionMode: 3
+    m_ConditionEvent: SkillGauge
+    m_EventTreshold: 200
+  - m_ConditionMode: 4
+    m_ConditionEvent: SkillGauge
+    m_EventTreshold: 301
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 8103801182131498385}
   m_Solo: 0
