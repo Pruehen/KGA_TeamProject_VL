@@ -61,7 +61,7 @@ public static class JsonDataManager
 
     public static BlueChip GetBlueChipData(BlueChipID id)
     {
-        return jsonCache.BlueChipTableCache.dic[(int)id];
+        return jsonCache.BlueChipTableCache.dic[id];
     }
 }
 
@@ -80,8 +80,22 @@ public class JsonCache
         }
     }
 
+    CoefficientTable _coefficientTableCache;
+    public CoefficientTable CoefficientTableCache
+    {
+        get
+        {
+            if (_coefficientTableCache == null)
+            {
+                _coefficientTableCache = JsonDataManager.DataTableListLoad<CoefficientTable>(CoefficientTable.FilePath());
+            }
+            return _coefficientTableCache;
+        }
+    }
+
     public void Lode()
     {
-        _blueChipTableCache = BlueChipTableCache;        
+        _blueChipTableCache = BlueChipTableCache;
+        _coefficientTableCache = CoefficientTableCache;
     }
 }

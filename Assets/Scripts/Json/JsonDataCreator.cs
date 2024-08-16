@@ -2,6 +2,8 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using EnumTypes;
+using System;
 
 public class BlueChip
 {
@@ -44,20 +46,41 @@ public class BlueChip
         return string.Format(Info, Level_VelueList[level].Cast<object>().ToArray());
     }
 }
+
+public class CoefficientType
+{
+    [JsonProperty] public string Name { get; private set; }
+    [JsonProperty] public float Coefficient { get; private set; }
+
+    [JsonConstructor]
+    public CoefficientType(string name, float coefficient)
+    {
+        Name = name;
+        Coefficient = coefficient;
+    }
+    public CoefficientType(PlayerAttackType type, float coefficient)
+    {
+        Name = type.ToString();
+        Coefficient = coefficient;
+    }
+}
+
 public class CoefficientTable
 {
-    public Dictionary<int, BlueChip> dic;
+    public Dictionary<PlayerAttackType, CoefficientType> dic;
     [JsonConstructor]
-    public CoefficientTable(Dictionary<int, BlueChip> dic)
+    public CoefficientTable(Dictionary<PlayerAttackType, CoefficientType> dic)
     {
         this.dic = dic;
     }
     public CoefficientTable()
     {
-        dic = new Dictionary<int, BlueChip>();
-        for (int i = 0; i < 9; i++)
+        dic = new Dictionary<PlayerAttackType, CoefficientType>();
+
+        foreach (PlayerAttackType attackType in Enum.GetValues(typeof(PlayerAttackType)))
         {
-            dic.Add(i, new BlueChip(i));
+            // 각 attackType에 대해 dic에 항목을 추가합니다.
+            dic.Add(attackType, new CoefficientType(attackType, 1));
         }
     }
     public static string FilePath()
@@ -67,18 +90,18 @@ public class CoefficientTable
 }
 public class BlueChipTable
 {
-    public Dictionary<int, BlueChip> dic;
+    public Dictionary<BlueChipID, BlueChip> dic;
     [JsonConstructor]
-    public BlueChipTable(Dictionary<int, BlueChip> dic)
+    public BlueChipTable(Dictionary<BlueChipID, BlueChip> dic)
     {
         this.dic = dic;
     }
     public BlueChipTable()
     {
-        dic = new Dictionary<int, BlueChip>();
+        dic = new Dictionary<BlueChipID, BlueChip>();
         for (int i = 0; i < 9; i++)
         {
-            dic.Add(i, new BlueChip(i));
+            dic.Add((BlueChipID)i, new BlueChip(i));
         }
     }
     public static string FilePath()
@@ -92,6 +115,6 @@ public class JsonDataCreator : MonoBehaviour
     public void Awake()
     {
         JsonDataManager.jsonCache.Lode();
-        //JsonDataManager.jsonCache.BlueChipTableCache.dic[3].Print(1);
+        JsonDataManager.DataSaveCommand(JsonDataManager.jsonCache.CoefficientTableCache, CoefficientTable.FilePath());
     }
 }

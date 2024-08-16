@@ -132,7 +132,7 @@ public class PlayerModChangeManager : MonoBehaviour
 
     bool HasBlueChip5_AutoChange()
     {
-        return _PlayerMaster.GetBlueChipLevel(EnumTypes.BlueChipID.하이브리드2) > 0;
+        return _PlayerMaster.GetBlueChipLevel(EnumTypes.BlueChipID.Hybrid2) > 0;
     }
 
     float autoChangeDelayTime = 0;
@@ -141,7 +141,7 @@ public class PlayerModChangeManager : MonoBehaviour
         if(HasBlueChip5_AutoChange())
         {
             autoChangeDelayTime += Time.deltaTime;
-            float autoChangeDelay = JsonDataManager.GetBlueChipData(EnumTypes.BlueChipID.하이브리드2).Level_VelueList[1][0];
+            float autoChangeDelay = JsonDataManager.GetBlueChipData(EnumTypes.BlueChipID.Hybrid2).Level_VelueList[1][0];
 
             if(autoChangeDelay < autoChangeDelayTime)
             {
