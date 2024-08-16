@@ -21,6 +21,7 @@ public class UIManager : SceneSingleton<UIManager>
     [SerializeField] GameObject tabUI;
     [SerializeField] GameObject EscUI;
     [SerializeField] GameObject blueChipUI;
+    [SerializeField] GameObject pickBlueChip;
 
     [SerializeField] PlayerInstanteState PlayerState;
 
@@ -72,6 +73,11 @@ public class UIManager : SceneSingleton<UIManager>
                 HoldButtonMove();
             }
 
+        }
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            MainBlueChipList();
         }
     }
 
@@ -183,6 +189,26 @@ public class UIManager : SceneSingleton<UIManager>
     {
         blueChipUI.SetActive(false);
         TimeManager.instance.TimeStart();
+    }
+
+    public void MainBlueChipList()
+    {
+
+        if (blueChipUI.activeSelf == false)
+        {
+            blueChipUI.SetActive(true);
+
+            pickBlueChip.SetActive(false);
+            blueChipUI.GetComponent<BlueChipUIManager>().Init();
+        }
+        else
+        {
+            blueChipUI.SetActive(false);
+
+            pickBlueChip.SetActive(true);
+
+        }
+       
     }
 
 }
