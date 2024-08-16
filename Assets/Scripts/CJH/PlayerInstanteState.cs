@@ -29,7 +29,7 @@ public class PlayerInstanteState : MonoBehaviour
     public bool IsDead { get; private set; }
 
     [SerializeField] float maxHp;
-    float _maxHpGain;
+    [SerializeField] float _maxHpGain;
     float Maxhp() { return maxHp * _maxHpGain; }
     [SerializeField] float MaxStamina;
     [SerializeField] float staminaRecoverySpeed;
@@ -43,10 +43,10 @@ public class PlayerInstanteState : MonoBehaviour
 
     [SerializeField] float attackSpeed = 1f;
     [SerializeField] float attackPower;
-    float _attackPowerGain;
+    [SerializeField] float _attackPowerGain;
     float AttackPower() { return attackPower * _attackPowerGain; }
     [SerializeField] float skillPower;
-    float _skillPowerGain;
+    [SerializeField] float _skillPowerGain;
     float SkillPower() { return skillPower * _skillPowerGain; }
 
     public float GetDmg(PlayerAttackType type, int combo)
@@ -166,7 +166,7 @@ public class PlayerInstanteState : MonoBehaviour
         }
 
 
-        hp = maxHp * _maxHpGain;
+        hp = Maxhp();
         IsDead = false;
         stamina = MaxStamina;
         skillGauge = 0;
@@ -232,9 +232,9 @@ public class PlayerInstanteState : MonoBehaviour
     public void ChangeHp(float value)
     {
         hp += value;
-        if (hp > maxHp)
+        if (hp > Maxhp())
         {
-            hp = maxHp;
+            hp = Maxhp();
         }
         if (hp < 0)
         {
@@ -247,9 +247,9 @@ public class PlayerInstanteState : MonoBehaviour
     public void ChangeShield(float value)
     {
         Shield += value;
-        if (Shield > maxHp)
+        if (Shield > Maxhp())
         {
-            Shield = maxHp;
+            Shield = Maxhp();
         }
         if (Shield < 0)
         {
@@ -346,11 +346,11 @@ public class PlayerInstanteState : MonoBehaviour
 
     public void UpdateHealth()
     {
-        HealthRatioChanged?.Invoke(hp / maxHp);
+        HealthRatioChanged?.Invoke(hp / Maxhp());
     }
     public void UpdateShild()
     {
-        ShildRatioChanged?.Invoke(Shield / maxHp);
+        ShildRatioChanged?.Invoke(Shield / Maxhp());
     }
     public void UpdateStamina()
     {
