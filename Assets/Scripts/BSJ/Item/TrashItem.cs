@@ -116,6 +116,8 @@ public class TrashItem : MonoBehaviour
 
     public void DropItem()
     {
+        if (State == ItemState.PullToAcquire)
+            return;
         EnablePhysics();
         transform.SetParent(null, true);
         State = ItemState.Normal;
