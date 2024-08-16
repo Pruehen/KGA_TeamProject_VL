@@ -4,7 +4,6 @@ using UnityEngine;
 using System.Linq;
 using EnumTypes;
 using System;
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityPlayerPrefs;
 
 public class BlueChip
 {    
@@ -44,6 +43,27 @@ public class BlueChip
         return string.Format(Info, Level_VelueList[level].Cast<object>().ToArray());
     }
 }
+public class BlueChipTable
+{
+    public Dictionary<BlueChipID, BlueChip> dic;
+    [JsonConstructor]
+    public BlueChipTable(Dictionary<BlueChipID, BlueChip> dic)
+    {
+        this.dic = dic;
+    }
+    public BlueChipTable()
+    {
+        dic = new Dictionary<BlueChipID, BlueChip>();
+        for (int i = 0; i < 9; i++)
+        {
+            dic.Add((BlueChipID)i, new BlueChip(i));
+        }
+    }
+    public static string FilePath()
+    {
+        return "/Data/Table/BlueChipTable.json";
+    }
+}
 
 public class CoefficientTable
 {
@@ -68,25 +88,55 @@ public class CoefficientTable
         return "/Data/Table/CoefficientTable.json";
     }
 }
-public class BlueChipTable
+
+
+public class Passive
 {
-    public Dictionary<BlueChipID, BlueChip> dic;
+    [JsonProperty] public string Name { get; private set; }
+    [JsonProperty] public string Info { get; private set; }
+    [JsonProperty] public List<float> VelueList { get; private set; }
+
     [JsonConstructor]
-    public BlueChipTable(Dictionary<BlueChipID, BlueChip> dic)
+    public Passive(string name, string info, List<float> velueList)
+    {
+        Name = name;
+        Info = info;
+        VelueList = velueList;
+    }
+    public Passive(PassiveID iD)
+    {
+        Name = iD.ToString();
+        Info = "해당 패시브에 대한 설명. 값 {0}";
+    }
+
+    public string PrintName()
+    {
+        return Name;
+    }
+    public string PrintInfo()
+    {
+        return string.Format(Info, VelueList.Cast<object>().ToArray());
+    }
+}
+public class PassiveTable
+{
+    public Dictionary<PassiveID, Passive> dic;
+    [JsonConstructor]
+    public PassiveTable(Dictionary<PassiveID, Passive> dic)
     {
         this.dic = dic;
     }
-    public BlueChipTable()
+    public PassiveTable()
     {
-        dic = new Dictionary<BlueChipID, BlueChip>();
-        for (int i = 0; i < 9; i++)
-        {
-            dic.Add((BlueChipID)i, new BlueChip(i));
+        dic = new Dictionary<PassiveID, Passive>();
+        foreach (PassiveID passiveType in Enum.GetValues(typeof(PassiveID)))
+        {            
+            dic.Add(passiveType, new Passive(passiveType));
         }
     }
     public static string FilePath()
     {
-        return "/Data/Table/BlueChipTable.json";
+        return "/Data/Table/PassiveTable.json";
     }
 }
 

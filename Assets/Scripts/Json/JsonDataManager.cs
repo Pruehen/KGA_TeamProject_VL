@@ -93,15 +93,30 @@ public class JsonCache
         }
     }
 
+    PassiveTable _passiveTableCache;
+    public PassiveTable PassiveTableCache
+    {
+        get
+        {
+            if (_passiveTableCache == null)
+            {
+                _passiveTableCache = JsonDataManager.DataTableListLoad<PassiveTable>(PassiveTable.FilePath());
+            }
+            return _passiveTableCache;
+        }
+    }
+
     public void Lode()
     {
         _blueChipTableCache = BlueChipTableCache;
         _coefficientTableCache = CoefficientTableCache;
+        _passiveTableCache = PassiveTableCache;
     }
 
     public void Save()
     {
         JsonDataManager.DataSaveCommand(_blueChipTableCache, BlueChipTable.FilePath());
         JsonDataManager.DataSaveCommand(_coefficientTableCache, CoefficientTable.FilePath());
+        JsonDataManager.DataSaveCommand(_passiveTableCache, PassiveTable.FilePath());
     }
 }

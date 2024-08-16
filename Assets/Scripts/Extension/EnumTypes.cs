@@ -13,6 +13,25 @@ namespace EnumTypes
         Generic3
     }
 
+    public enum PassiveID
+    {
+        Offensive1,
+        Offensive2,
+        Offensive3,
+        Offensive4,
+        Offensive5,
+        Defensive1,
+        Defensive2,
+        Defensive3,
+        Defensive4,
+        Defensive5,
+        Utility1,
+        Utility2,
+        Utility3,
+        Utility4,
+        Utility5
+    }
+
     public enum EnemyAttackType
     {
         Melee,
