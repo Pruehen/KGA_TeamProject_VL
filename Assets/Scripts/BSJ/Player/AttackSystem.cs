@@ -1,3 +1,5 @@
+using EnumTypes;
+using System;
 using UnityEngine;
 
 public class AttackSystem : MonoBehaviour
@@ -16,17 +18,13 @@ public class AttackSystem : MonoBehaviour
 
     [SerializeField] DamageBox _damageBox;
 
-    private void Awake()
-    {
-        Init();
-    }
-    public void Init()
+    public void Init(Action onCharged, Action onChargeFail)
     {
         TryGetComponent(out _animator);
         TryGetComponent(out _playerAttack);
         TryGetComponent(out _closeAttack);
         TryGetComponent(out _closeSkill);
-        _closeAttack.Init(_animator);
+        _closeAttack.Init(_animator, onCharged, onChargeFail);
         _closeSkill.Init(_animator);
         _PlayerMaster = GetComponent<PlayerMaster>();
 
@@ -40,14 +38,19 @@ public class AttackSystem : MonoBehaviour
     {
         get => _attackLcokMove;
     }
-    public void StartAttack(int index, int comboIndex)
+    public void StartAttack(PlayerAttackKind index, int comboIndex)
     {
         _attackLcokMove = true;
         _animator.SetTrigger(hashAttack);
-        _animator.SetInteger(hashAttackType, index);
+
+
+        _animator.SetInteger(hashAttackType, (int)index);
+
+
         _animator.SetInteger(hashAttackComboInitialIndex, comboIndex);
         _animator.SetFloat(hasAttackSpeed, _PlayerMaster._PlayerInstanteState.AttackSpeed);
     }
+
     public void StartSkill(int index, float skillGauge)
     {
         if (skillGauge >= 100)
@@ -111,5 +114,11 @@ public class AttackSystem : MonoBehaviour
         //_animator.ResetTrigger("Attack");
         //_animator.ResetTrigger("AttackEnd");
         Debug.Log("Transform");
+    }
+
+    public void ResetAttack()
+    {
+        _attackLcokMove = false;
+        _closeAttack.ChargeFail();
     }
 }
