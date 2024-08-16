@@ -19,7 +19,7 @@ public class PlayerAttack : MonoBehaviour
     PlayerModChangeManager _PlayerMod;
 
     float delayTime = 0;
-    bool attackTrigger = false;
+    public bool attackTrigger = false;
     bool attackBool = false;
 
     bool skillTrigger = false;
@@ -96,7 +96,7 @@ public class PlayerAttack : MonoBehaviour
         }
         if (!attackTrigger && prevAttackTrigger)
         {
-            if (_currentAttackType == PlayerAttackType.MeleeNormalAttack1)
+            if ( _currentAttackType == PlayerAttackType.MeleeNormalAttack1)
             {
                 _AttackSystem.OnRelease();
             }
@@ -107,14 +107,6 @@ public class PlayerAttack : MonoBehaviour
             delayTime = 0;
             _PlayerMaster.OnAttackState(_PlayerCameraMove.CamRotation() * Vector3.forward);
             _AttackSystem.StartSkill((int)_currentAttackType, _PlayerMaster._PlayerInstanteState.skillGauge);
-        }
-        //if(!skillTrigger && prevAttackTrigger)
-        if (!skillTrigger)
-        {
-            if (_currentAttackType == PlayerAttackType.MeleeNormalAttack1)
-            {
-                _AttackSystem.OnRelease();
-            }
         }
         prevAttackTrigger = attackTrigger;
     }
@@ -144,8 +136,11 @@ public class PlayerAttack : MonoBehaviour
                 }
                 break;
             case nameof(_InputManager.IsRMouseBtnClick):
-                skillTrigger = _InputManager.IsRMouseBtnClick;
-                skillBool = _InputManager.IsRMouseBtnClick;
+                if (!_PlayerMaster._PlayerInstanteState.IsAbsorptState)
+                {
+                    skillTrigger = _InputManager.IsRMouseBtnClick;
+                    skillBool = _InputManager.IsRMouseBtnClick;
+                }
                 break;
         }
     }
@@ -155,7 +150,7 @@ public class PlayerAttack : MonoBehaviour
         Projectile projectile = ObjectPoolManager.Instance.DequeueObject(Prefab_Projectile).GetComponent<Projectile>();
 
         Vector3 projectionVector = _PlayerCameraMove.CamRotation() * Vector3.forward * projectionSpeed_Forward + Vector3.up * projectionSpeed_Up;
-        //Get attacktype from attackSystem
+        //?¥ÌÉù?úÏä§?úÏóê???ÑÏû¨ Í≥µÍ≤©???Ä?ÖÏùÑ Í∞Ä?∏Ïò®??
         projectile.Init(_PlayerMaster._PlayerInstanteState.GetDmg(_currentPlayerAttackType, GetCurrentAttackCount()), projectile_InitPos.position, projectionVector, OnProjectileHit);
 
         _PlayerMaster._PlayerInstanteState.BulletConsumption();
@@ -165,7 +160,7 @@ public class PlayerAttack : MonoBehaviour
     void OnProjectileHit()
     {
         _PlayerMaster._PlayerInstanteState.SkillGaugeRecovery(10);
-        Debug.Log("AttackSucceced");
+        Debug.Log("Í≥µÍ≤© ?±Í≥µ");
     }
 
     public void ResetAttackCount()

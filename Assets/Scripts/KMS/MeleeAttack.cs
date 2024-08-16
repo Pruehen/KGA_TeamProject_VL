@@ -30,6 +30,7 @@ public class MeleeAttack: MonoBehaviour
     public void EndAttack()
     {
         _animator.SetTrigger(_animTriggerAttackEnd);
+        Debug.Log("MeleeAttackEnd");
     }
 
     public void ATKEnd()

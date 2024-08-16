@@ -23,7 +23,14 @@ public class PlayerModChangeManager : MonoBehaviour
             OnSucceseAbsorpt?.Invoke(value);
         }
     }
-
+    public bool IsAttackState
+    {
+        get { return _PlayerMaster.IsAttackState; }
+        set
+        {
+            _PlayerMaster.IsAttackState = value;
+        }
+    }
 
     private void Awake()
     {
@@ -35,11 +42,11 @@ public class PlayerModChangeManager : MonoBehaviour
         switch (e.PropertyName)
         {
             case nameof(InputManager.Instance.IsLControlBtnClick):                
-                if (InputManager.Instance.IsLControlBtnClick == true && IsAbsorptState == false)
+                if (InputManager.Instance.IsLControlBtnClick == true && IsAbsorptState == false&&IsAttackState==false)
                 {
                     EnterAbsorptState();
                 }
-                if (InputManager.Instance.IsLControlBtnClick == false && IsAbsorptState == true)
+                if (InputManager.Instance.IsLControlBtnClick == false && IsAbsorptState == true&& IsAttackState==false)
                 {
                     IsAbsorptState = false;
                     EnterRangeMode();
@@ -47,7 +54,7 @@ public class PlayerModChangeManager : MonoBehaviour
                 break;
 
             case nameof(InputManager.Instance.IsLMouseBtnClick):                
-                if (InputManager.Instance.IsLControlBtnClick == true && IsAbsorptState == true)
+                if (InputManager.Instance.IsLControlBtnClick == true && IsAbsorptState == true && IsAttackState == false)
                 {
                     EnterMeleeMode();
                 }
