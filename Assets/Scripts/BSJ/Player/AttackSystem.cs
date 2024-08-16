@@ -10,6 +10,7 @@ public class AttackSystem : MonoBehaviour
     int hashAttack = Animator.StringToHash("Attack");
     int hashAttackComboInitialIndex = Animator.StringToHash("AttackComboInitialIndex");
     int hasAttackSpeed = Animator.StringToHash("AttackSpeed");
+    int hashSkill = Animator.StringToHash("Skill");
     MeleeAttack _closeAttack;
     Skill _closeSkill; 
 
@@ -47,7 +48,21 @@ public class AttackSystem : MonoBehaviour
         _animator.SetInteger(hashAttackComboInitialIndex, comboIndex);
         _animator.SetFloat(hasAttackSpeed, _PlayerMaster._PlayerInstanteState.AttackSpeed);
     }
-
+    public void StartSkill(int index, float skillGauge)
+    {
+        if (skillGauge >= 100)
+        {
+            _attackLcokMove = true;
+            _animator.SetTrigger(hashSkill);
+            _animator.SetInteger(hashAttackType, index);
+            _animator.SetFloat("SkillGauge", skillGauge);
+            Debug.Log(skillGauge);
+        }
+        else
+        {
+            Debug.Log(skillGauge);
+        }
+    }
     public void LockMove()
     {
         _attackLcokMove = true;
@@ -79,7 +94,7 @@ public class AttackSystem : MonoBehaviour
     }
     public void Absober()
     {
-        Debug.Log("�ۼҺ�");
+        Debug.Log("흡수");
         _animator.SetTrigger("Absorbeing");
     }
     public void AbsoberEnd()

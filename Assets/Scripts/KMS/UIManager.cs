@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using EnumTypes;
 
 public class UIManager : SceneSingleton<UIManager>
 {
@@ -20,6 +21,7 @@ public class UIManager : SceneSingleton<UIManager>
     [SerializeField] GameObject tabUI;
     [SerializeField] GameObject EscUI;
     [SerializeField] GameObject blueChipUI;
+    [SerializeField] GameObject pickBlueChip;
 
     [SerializeField] PlayerInstanteState PlayerState;
 
@@ -27,9 +29,10 @@ public class UIManager : SceneSingleton<UIManager>
     [SerializeField] Button holdButton;
     [SerializeField] GameObject escImage;
 
-
     private void Start()
     {
+        blueChipUI.SetActive(false);
+
         if (PlayerState != null)
         {
             PlayerState.HealthRatioChanged += OnHealthRatioChanged;
@@ -71,6 +74,11 @@ public class UIManager : SceneSingleton<UIManager>
             }
 
         }
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            MainBlueChipList();
+        }
     }
 
 
@@ -86,15 +94,18 @@ public class UIManager : SceneSingleton<UIManager>
             case nameof(InputManager.Instance.IsInteractiveBtnClick):
                 if (InputManager.Instance.IsInteractiveBtnClick == true)
                 {
-                    if (blueChipUI.activeSelf == true)
+                    if (blueChipUI.activeSelf == true && pickBlueChip.activeSelf == true)
                     {
+
                         Button selectedButton = EventSystem.current.currentSelectedGameObject?.GetComponent<Button>();
                         selectedButton.onClick.Invoke();
-                        
-                        
-                       
-                    } 
 
+                    }
+                    else
+                    {
+                        return;
+                    }
+                   
 
                 }
                 break;
@@ -149,9 +160,16 @@ public class UIManager : SceneSingleton<UIManager>
         UI_MeleeBulletUI.SetActive(value);
     }
 
+    //시작
     public void BlueChipUI()
     {
+
+        if (blueChipUI.activeSelf == true)
+        {
+            MainBlueChipList();
+        }
         blueChipUI.SetActive(true);
+        blueChipUI.GetComponent<BlueChipUIManager>().Init();
         TimeManager.instance.TimeStop();
 
         HoldButtonMove();
@@ -166,11 +184,6 @@ public class UIManager : SceneSingleton<UIManager>
 
     }
 
-    public void HoldButton()
-    { 
-    
-    
-    }
 
     //Esc를 눌러 교체를 취소하면 호출되는 함수
     public void HoldButtonMove()
@@ -182,10 +195,28 @@ public class UIManager : SceneSingleton<UIManager>
 
     public void BkBlueChipUi()
     {
-       
         blueChipUI.SetActive(false);
         TimeManager.instance.TimeStart();
-
-
     }
+
+    public void MainBlueChipList()
+    {
+
+        if (blueChipUI.activeSelf == false)
+        {
+            blueChipUI.SetActive(true);
+
+            pickBlueChip.SetActive(false);
+            blueChipUI.GetComponent<BlueChipUIManager>().Init();
+        }
+        else
+        {
+            blueChipUI.SetActive(false);
+
+            pickBlueChip.SetActive(true);
+
+        }
+       
+    }
+
 }

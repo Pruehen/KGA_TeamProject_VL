@@ -172,6 +172,7 @@ public class PlayerMove : MonoBehaviour
             _attackSystem.ReleaseLockMove();
             _attackSystem.ResetEndAttack();
             _animator.SetTrigger("Dash");
+            _PlayerMaster.OnAttackState(_PlayerCameraMove.CamRotation() * Vector3.forward);
         }
         else
         {

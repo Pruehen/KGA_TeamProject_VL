@@ -22,6 +22,9 @@ public class PlayerAttack : MonoBehaviour
     bool attackTrigger = false;
     bool attackBool = false;
 
+    bool skillTrigger = false;
+    bool skillBool = false;
+
     [SerializeField] PlayerAttackType _currentAttackType = PlayerAttackType.CloseNormal;
     [SerializeField] int _initialAttackComboIndex = 0;
     int _currentAttackCount;
@@ -54,7 +57,6 @@ public class PlayerAttack : MonoBehaviour
 
     private void ChangeAbsorbing()
     {
-        Debug.Log("¤±¤¤¤·¤©");
         _AttackSystem.Absober();
     }
     private void AbsorbingFall()
@@ -87,10 +89,27 @@ public class PlayerAttack : MonoBehaviour
             delayTime = 0;
             _PlayerMaster.OnAttackState(_PlayerCameraMove.CamRotation() * Vector3.forward);
 
-            _AttackSystem.StartAttack((int)_currentAttackType, _initialAttackComboIndex);
+            int blueChip2Level = _PlayerMaster.GetBlueChipLevel(EnumTypes.BlueChipID.¿ø°Å¸®1);
+            int initialAttackComboIndex = (blueChip2Level > 0) ? (int)JsonDataManager.GetBlueChipData(EnumTypes.BlueChipID.¿ø°Å¸®1).Level_VelueList[blueChip2Level][0] : 0;
+            _AttackSystem.StartAttack((int)_currentAttackType, initialAttackComboIndex);
             //StartCoroutine(Attack_Delayed(attack_Delay));
         }
         if (!attackTrigger && prevAttackTrigger)
+        {
+            if (_currentAttackType == PlayerAttackType.CloseNormal)
+            {
+                _AttackSystem.OnRelease();
+            }
+        }
+        //if (skillTrigger && !prevAttackTrigger)
+        if (skillTrigger)
+        {
+            delayTime = 0;
+            _PlayerMaster.OnAttackState(_PlayerCameraMove.CamRotation() * Vector3.forward);
+            _AttackSystem.StartSkill((int)_currentAttackType, _PlayerMaster._PlayerInstanteState.skillGauge);
+        }
+        //if(!skillTrigger && prevAttackTrigger)
+        if (!skillTrigger)
         {
             if (_currentAttackType == PlayerAttackType.CloseNormal)
             {
@@ -121,6 +140,10 @@ public class PlayerAttack : MonoBehaviour
                 attackTrigger = _InputManager.IsLMouseBtnClick;
                 attackBool = _InputManager.IsLMouseBtnClick;
                 break;
+            case nameof(_InputManager.IsRMouseBtnClick):
+                skillTrigger = _InputManager.IsRMouseBtnClick;
+                skillBool = _InputManager.IsRMouseBtnClick;
+                break;
         }
     }
 
@@ -129,7 +152,7 @@ public class PlayerAttack : MonoBehaviour
         Projectile projectile = ObjectPoolManager.Instance.DequeueObject(Prefab_Projectile).GetComponent<Projectile>();
 
         Vector3 projectionVector = _PlayerCameraMove.CamRotation() * Vector3.forward * projectionSpeed_Forward + Vector3.up * projectionSpeed_Up;
-        //¾îÅÃ½Ã½ºÅÛ¿¡¼­ ÇöÀç °ø°İÀÇ Å¸ÀÔÀ» °¡Á®¿Â´Ù
+        //ì–´íƒì‹œìŠ¤í…œì—ì„œ í˜„ì¬ ê³µê²©ì˜ íƒ€ì…ì„ ê°€ì ¸ì˜¨ë‹¤
         projectile.Init(_PlayerMaster._PlayerInstanteState.GetDmg(_currentPlayerAttackType, GetCurrentAttackCount()), projectile_InitPos.position, projectionVector, OnProjectileHit);
 
         _PlayerMaster._PlayerInstanteState.BulletConsumption();
@@ -139,7 +162,7 @@ public class PlayerAttack : MonoBehaviour
     void OnProjectileHit()
     {
         _PlayerMaster._PlayerInstanteState.SkillGaugeRecovery(10);
-        Debug.Log("°ø°İ ¼º°ø");
+        Debug.Log("ê³µê²© ì„±ê³µ");
     }
 
     public void ResetAttackCount()

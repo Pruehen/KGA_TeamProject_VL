@@ -11,6 +11,10 @@ public class AnimatorResetTrigger : StateMachineBehaviour
         animator.ResetTrigger("AttackEnd");
         animator.ResetTrigger("DashEnd");
         animator.ResetTrigger("Skill");
-        Debug.Log("sadfd");
+        animator.ResetTrigger("Absorbeing");
+        animator.ResetTrigger("AbsorbeingEnd");
+        animator.ResetTrigger("Transform");
+        
+        Debug.Log("reset");
     }
 }

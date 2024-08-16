@@ -45,28 +45,28 @@ public class PlayerInstanteState : MonoBehaviour
     {
         float baseDmg = attackPower;// * coefficient;
         float dmgGain = 1;
-        if(true)//Â÷Áö °ø°İÀÏ °æ¿ì
+        if (true)//ì°¨ì§€ ê³µê²©ì¼ ê²½ìš°
         {
-            int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.±Ù°Å¸®1);
+            int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.ê·¼ê±°ë¦¬1);
             if (level > 0)
             {
-                baseDmg += ((hp + Shield) * JsonDataManager.GetBlueChipData(BlueChipID.±Ù°Å¸®1).Level_VelueList[level][0]) * 0.01f;
+                baseDmg += ((hp + Shield) * JsonDataManager.GetBlueChipData(BlueChipID.ê·¼ê±°ë¦¬1).Level_VelueList[level][0]) * 0.01f;
             }
         }
-        if(true)//¿ø°Å¸® ÆòÅ¸, ±Ù°Å¸® ÆòÅ¸ÀÏ °æ¿ì
+        if (true)//ì›ê±°ë¦¬ í‰íƒ€, ê·¼ê±°ë¦¬ í‰íƒ€ì¼ ê²½ìš°
         {
-            if(_PlayerMaster._PlayerBuff.blueChip4_Buff_NextHitAddDmg.TryDequeue(out float addDmgGain))
+            if (_PlayerMaster._PlayerBuff.blueChip4_Buff_NextHitAddDmg.TryDequeue(out float addDmgGain))
             {
                 dmgGain += addDmgGain;
-                Debug.Log("ÇÇÇØÁõ°¡ ¹öÇÁ ¼Ò¸ğ");
+                Debug.Log("í”¼í•´ì¦ê°€ ë²„í”„ ì†Œëª¨");
             }
-            int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.¹ü¿ë2);
+            int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.ë²”ìš©2);
             if (blueChip7Level > 0)
             {
-                float addDmg = JsonDataManager.GetBlueChipData(BlueChipID.¹ü¿ë2).Level_VelueList[blueChip7Level][1] * 0.01f;
+                float addDmg = JsonDataManager.GetBlueChipData(BlueChipID.ë²”ìš©2).Level_VelueList[blueChip7Level][1] * 0.01f;
                 dmgGain += addDmg;
             }
-        }        
+        }
         return baseDmg * dmgGain;
     }
 
@@ -104,24 +104,24 @@ public class PlayerInstanteState : MonoBehaviour
         {
             StaminaAutoRecovery();
         }
-        
-        int blueChip8Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.¹ü¿ë3);
-        if(blueChip8Level > 0)
+
+        int blueChip8Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.ë²”ìš©3);
+        if (blueChip8Level > 0)
         {
             skillGaugeRecoveryRestTime += Time.deltaTime;
-            if (skillGaugeRecoveryRestTime > JsonDataManager.GetBlueChipData(BlueChipID.¹ü¿ë3).Level_VelueList[blueChip8Level][4])
+            if (skillGaugeRecoveryRestTime > JsonDataManager.GetBlueChipData(BlueChipID.ë²”ìš©3).Level_VelueList[blueChip8Level][4])
             {
                 UseSkillGauge(9999);
             }
         }
     }
 
-    //½ºÅÂ¹Ì³ª ¼Ò¸ğ 
+    //ìŠ¤íƒœë¯¸ë‚˜ ì†Œëª¨ 
     public bool TryStaminaConsumption(float power)
     {
         if (stamina > power)
         {
-            stamina -= power;    
+            stamina -= power;
             staminaRecoveryDelayValue = 0;
             UpdateStamina();
             return true;
@@ -130,7 +130,7 @@ public class PlayerInstanteState : MonoBehaviour
             return false;
     }
 
-    //½ºÅÂ¹Ì³ª ÀÚµ¿ È¸º¹
+    //ìŠ¤íƒœë¯¸ë‚˜ ìë™ íšŒë³µ
     public void StaminaAutoRecovery()
     {
         if (stamina < MaxStamina)
@@ -200,49 +200,49 @@ public class PlayerInstanteState : MonoBehaviour
         UpdateShild();
     }
 
-    //ÅºÈ¯ È¹µæ
+    //íƒ„í™˜ íšë“
     public void AcquireBullets(int _bullets)
     {
         bullets += _bullets;
-        if(bullets > maxBullets)
+        if (bullets > maxBullets)
         {
             bullets = maxBullets;
         }
         UpdateBullet();
     }
 
-    //ÅºÈ¯ ¼Ò¸ğ
+    //íƒ„í™˜ ì†Œëª¨
     public void BulletConsumption()
-    {        
-        int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.¹ü¿ë2);
-        int cost = (blueChip7Level > 0) ? (int)JsonDataManager.GetBlueChipData(BlueChipID.¹ü¿ë2).Level_VelueList[blueChip7Level][0] : 1;
+    {
+        int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.ë²”ìš©2);
+        int cost = (blueChip7Level > 0) ? (int)JsonDataManager.GetBlueChipData(BlueChipID.ë²”ìš©2).Level_VelueList[blueChip7Level][0] : 1;
 
         bullets -= cost;
         if (bullets < 0)
             bullets = 0;
         UpdateBullet();
     }
-    //±ÙÁ¢Åº È¹µæ
+    //ê·¼ì ‘íƒ„ íšë“
     public void AcquireBullets_Melee(int _bullets)
     {
         meleeBullets += _bullets;
-        if(meleeBullets > maxBullets)
+        if (meleeBullets > maxBullets)
         {
             meleeBullets = maxBullets;
         }
         UpdateBullet_Melee();
     }
 
-    //±ÙÁ¢Åº ¼Ò¸ğ
+    //ê·¼ì ‘íƒ„ ì†Œëª¨
     public void BulletConsumption_Melee()
     {
-        int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.¹ü¿ë2);
-        int cost = (blueChip7Level > 0) ? (int)JsonDataManager.GetBlueChipData(BlueChipID.¹ü¿ë2).Level_VelueList[blueChip7Level][2] : 1;
+        int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.ë²”ìš©2);
+        int cost = (blueChip7Level > 0) ? (int)JsonDataManager.GetBlueChipData(BlueChipID.ë²”ìš©2).Level_VelueList[blueChip7Level][2] : 1;
 
         meleeBullets -= cost;
         if (meleeBullets < 0)
             meleeBullets = 0;
-        UpdateBullet_Melee();        
+        UpdateBullet_Melee();
     }
 
 
@@ -265,6 +265,13 @@ public class PlayerInstanteState : MonoBehaviour
         if(skillGauge < 0) 
             skillGauge = 0;
 
+        UpdateSkillGauge();
+    }
+    public void TryUseSkillGauge2()
+    {
+        float quotient = Mathf.Floor(skillGauge / 100);
+        float remainder = skillGauge % 100;
+        skillGauge = remainder;
         UpdateSkillGauge();
     }
 
