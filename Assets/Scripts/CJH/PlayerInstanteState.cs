@@ -1,7 +1,6 @@
+using EnumTypes;
 using System;
 using UnityEngine;
-using EnumTypes;
-using System.Collections.Generic;
 public class PlayerInstanteState : MonoBehaviour
 {
     PlayerMaster _PlayerMaster;
@@ -28,7 +27,7 @@ public class PlayerInstanteState : MonoBehaviour
 
     public bool IsDead { get; private set; }
 
-    [SerializeField] float maxHp;    
+    [SerializeField] float maxHp;
     [SerializeField] float MaxStamina;
     [SerializeField] float staminaRecoverySpeed;
     [SerializeField] float staminaRecoveryDelay;
@@ -83,14 +82,18 @@ public class PlayerInstanteState : MonoBehaviour
     public Action<float> SkillGaugeRatioChanged;
     public Action<bool> OnMeleeModeChanged;
 
+    [SerializeField] SO_Player _playerStatData;
     private void Awake()
     {
+        Init(_playerStatData);
+
         _PlayerMaster = GetComponent<PlayerMaster>();
-        
+
+        Restore();
         UIManager.Instance.setPlayer(this);
     }
     private void Start()
-    {        
+    {
         //UIManager.Instance.UpdateStamina(stamina, MaxStamina);
         UpdateHealth();
         UpdateStamina();
@@ -116,6 +119,24 @@ public class PlayerInstanteState : MonoBehaviour
         }
     }
 
+    private void Init(SO_Player playerData)
+    {
+        maxHp = playerData.maxHp;
+        MaxStamina = playerData.MaxStamina;
+        staminaRecoverySpeed = playerData.staminaRecoverySpeed;
+        staminaRecoveryDelay = playerData.staminaRecoveryDelay;
+
+        MaxskillGauge = playerData.MaxskillGauge;
+        maxBullets = playerData.maxBullets;
+        maxMeleeBullets = playerData.maxMeleeBullets;
+
+        attackSpeed = playerData.attackSpeed;
+        attackPower = playerData.attackPower;
+        skillPower = playerData.skillPower;
+
+        moveSpeed = playerData.moveSpeed;
+    }
+
     //스태미나 소모 
     public bool TryStaminaConsumption(float power)
     {
@@ -138,17 +159,17 @@ public class PlayerInstanteState : MonoBehaviour
             stamina += staminaRecoverySpeed * Time.deltaTime;
         }
 
-        if(stamina > MaxStamina)
+        if (stamina > MaxStamina)
         {
             stamina = MaxStamina;
         }
-     
+
         UpdateStamina();
     }
 
     public void Hit(float dmg)
-    {        
-        if(Shield > 0)
+    {
+        if (Shield > 0)
         {
             Shield -= dmg;
             if (Shield <= 0)
@@ -159,26 +180,26 @@ public class PlayerInstanteState : MonoBehaviour
             return;
         }
 
-        if(hp > 0)
+        if (hp > 0)
         {
             hp -= dmg;
             if (hp <= 0)
             {
                 hp = 0;
-                IsDead = true;                
+                IsDead = true;
             }
             UpdateHealth();
-        }                
+        }
     }
 
     public void ChangeHp(float value)
     {
         hp += value;
-        if(hp > maxHp)
+        if (hp > maxHp)
         {
             hp = maxHp;
         }
-        if(hp < 0)
+        if (hp < 0)
         {
             hp = 1;
         }
@@ -189,7 +210,7 @@ public class PlayerInstanteState : MonoBehaviour
     public void ChangeShield(float value)
     {
         Shield += value;
-        if(Shield > maxHp)
+        if (Shield > maxHp)
         {
             Shield = maxHp;
         }
@@ -250,7 +271,7 @@ public class PlayerInstanteState : MonoBehaviour
     {
         skillGauge += value;
 
-        if(skillGauge > MaxskillGauge)
+        if (skillGauge > MaxskillGauge)
         {
             skillGauge = MaxskillGauge;
         }
@@ -262,7 +283,7 @@ public class PlayerInstanteState : MonoBehaviour
     public void UseSkillGauge(float value)
     {
         skillGauge -= value;
-        if(skillGauge < 0) 
+        if (skillGauge < 0)
             skillGauge = 0;
 
         UpdateSkillGauge();
@@ -275,7 +296,7 @@ public class PlayerInstanteState : MonoBehaviour
         UpdateSkillGauge();
     }
 
-    public void Init(List<PassiveID> usePassiveList)
+    void Restore()
     {
         hp = maxHp;
         IsDead = false;
@@ -318,5 +339,5 @@ public class PlayerInstanteState : MonoBehaviour
     public void UpdateSkillGauge()
     {
         SkillGaugeRatioChanged?.Invoke(skillGauge / MaxskillGauge);
-    }    
+    }
 }

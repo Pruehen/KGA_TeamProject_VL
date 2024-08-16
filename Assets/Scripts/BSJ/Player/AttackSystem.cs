@@ -94,7 +94,7 @@ public class AttackSystem : MonoBehaviour
     }
     public void Absober()
     {
-        Debug.Log("�ۼҺ�");
+        Debug.Log("흡수");
         _animator.SetTrigger("Absorbeing");
     }
     public void AbsoberEnd()
