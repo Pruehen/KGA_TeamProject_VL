@@ -53,4 +53,9 @@ public class PlayerPassive : MonoBehaviour
             }
         }
     }
+
+    public bool ContainPassiveId(PassiveID id)
+    {
+        return PassiveDic.ContainsKey(id);
+    }
 }
