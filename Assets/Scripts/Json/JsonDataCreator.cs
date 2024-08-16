@@ -145,6 +145,26 @@ public class PassiveTable
     }
 }
 
+public class UserData
+{
+    [JsonProperty] public int SaveDataIndex { get; private set; }    
+
+    [JsonConstructor]
+    public UserData(Dictionary<PassiveID, Passive> dic)
+    {
+        //this.dic = dic;
+    }
+    public UserData()
+    {
+
+    }
+    public static string FilePath(int index)
+    {
+        string fileName = $"SaveFile_{index}";
+        return $"/Data/UserData/{fileName}.json";
+    }
+}
+
 public class JsonDataCreator : MonoBehaviour
 {
     public void Awake()
