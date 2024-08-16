@@ -64,8 +64,9 @@ namespace EnumTypes
     {
         RangeNormalAttack,
         RangeSkillAttack,
+        MeleeSkillAttack,
         MeleeNormalAttack,
-        MeleeskillAttack,
+        MeleeChargedAttack,
     }
 
     public static class EnumAttackHelper
@@ -85,10 +86,10 @@ namespace EnumTypes
             PlayerAttackType.MeleeNormalAttack1 => PlayerAttackKind.MeleeNormalAttack,
             PlayerAttackType.MeleeChargeAttack2 => PlayerAttackKind.MeleeNormalAttack,
 
-            PlayerAttackType.MeleeSkillAttack1 => PlayerAttackKind.MeleeskillAttack,
-            PlayerAttackType.MeleeSkillAttack2 => PlayerAttackKind.MeleeskillAttack,
-            PlayerAttackType.MeleeSkillAttack3 => PlayerAttackKind.MeleeskillAttack,
-            PlayerAttackType.MeleeSkillAttack4 => PlayerAttackKind.MeleeskillAttack,
+            PlayerAttackType.MeleeSkillAttack1 => PlayerAttackKind.MeleeSkillAttack,
+            PlayerAttackType.MeleeSkillAttack2 => PlayerAttackKind.MeleeSkillAttack,
+            PlayerAttackType.MeleeSkillAttack3 => PlayerAttackKind.MeleeSkillAttack,
+            PlayerAttackType.MeleeSkillAttack4 => PlayerAttackKind.MeleeSkillAttack,
             _ => (PlayerAttackKind)999,
         };
     }

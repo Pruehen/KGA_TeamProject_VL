@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackIndexReset : StateMachineBehaviour
+public class AttackExitReset : StateMachineBehaviour
 {
     int attackHash;
     PlayerAttack _playerAttack;
@@ -17,7 +17,8 @@ public class AttackIndexReset : StateMachineBehaviour
     {
         if (animator.GetAnimatorTransitionInfo(0).anyState)
         {
-            _playerAttack.ResetAttackCount();
+            _playerAttack.ResetAttack();
+            
         }
     }
 
@@ -25,7 +26,7 @@ public class AttackIndexReset : StateMachineBehaviour
     {
         if (animator.GetCurrentAnimatorStateInfo(0).tagHash != attackHash)
         {
-            _playerAttack.ResetAttackCount();
+            _playerAttack.ResetAttack();
         }
     }
 }
