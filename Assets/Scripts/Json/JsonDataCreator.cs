@@ -54,10 +54,6 @@ public class BlueChipTable
     public BlueChipTable()
     {
         dic = new Dictionary<BlueChipID, BlueChip>();
-        for (int i = 0; i < 9; i++)
-        {
-            dic.Add((BlueChipID)i, new BlueChip(i));
-        }
     }
     public static string FilePath()
     {
@@ -170,6 +166,6 @@ public class JsonDataCreator : MonoBehaviour
     public void Awake()
     {
         JsonDataManager.jsonCache.Lode();
-        JsonDataManager.jsonCache.Save();
+        //JsonDataManager.jsonCache.Save();
     }
 }

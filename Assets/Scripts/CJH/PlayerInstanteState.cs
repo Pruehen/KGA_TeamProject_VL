@@ -1,5 +1,6 @@
 using EnumTypes;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 public class PlayerInstanteState : MonoBehaviour
 {
@@ -85,11 +86,7 @@ public class PlayerInstanteState : MonoBehaviour
     [SerializeField] SO_Player _playerStatData;
     private void Awake()
     {
-        Init(_playerStatData);
-
-        _PlayerMaster = GetComponent<PlayerMaster>();
-
-        Restore();
+        _PlayerMaster = GetComponent<PlayerMaster>();        
         UIManager.Instance.setPlayer(this);
     }
     private void Start()
@@ -119,22 +116,29 @@ public class PlayerInstanteState : MonoBehaviour
         }
     }
 
-    private void Init(SO_Player playerData)
+    public void Init(PlayerPassive playerPassive)
     {
-        maxHp = playerData.maxHp;
-        MaxStamina = playerData.MaxStamina;
-        staminaRecoverySpeed = playerData.staminaRecoverySpeed;
-        staminaRecoveryDelay = playerData.staminaRecoveryDelay;
+        maxHp = _playerStatData.maxHp;
+        MaxStamina = _playerStatData.MaxStamina;
+        staminaRecoverySpeed = _playerStatData.staminaRecoverySpeed;
+        staminaRecoveryDelay = _playerStatData.staminaRecoveryDelay;
 
-        MaxskillGauge = playerData.MaxskillGauge;
-        maxBullets = playerData.maxBullets;
-        maxMeleeBullets = playerData.maxMeleeBullets;
+        MaxskillGauge = _playerStatData.MaxskillGauge;
+        maxBullets = _playerStatData.maxBullets;
+        maxMeleeBullets = _playerStatData.maxMeleeBullets;
 
-        attackSpeed = playerData.attackSpeed;
-        attackPower = playerData.attackPower;
-        skillPower = playerData.skillPower;
+        attackSpeed = _playerStatData.attackSpeed;
+        attackPower = _playerStatData.attackPower;
+        skillPower = _playerStatData.skillPower;
 
-        moveSpeed = playerData.moveSpeed;
+        moveSpeed = _playerStatData.moveSpeed;
+
+        hp = maxHp;
+        IsDead = false;
+        stamina = MaxStamina;
+        skillGauge = 0;
+        bullets = maxBullets / 3;
+        AttackSpeed = 1;
     }
 
     //스태미나 소모 
@@ -296,15 +300,6 @@ public class PlayerInstanteState : MonoBehaviour
         UpdateSkillGauge();
     }
 
-    void Restore()
-    {
-        hp = maxHp;
-        IsDead = false;
-        stamina = MaxStamina;
-        skillGauge = 0;
-        bullets = maxBullets / 3;
-        AttackSpeed = 1;
-    }
 
     public void Refresh_Model()
     {

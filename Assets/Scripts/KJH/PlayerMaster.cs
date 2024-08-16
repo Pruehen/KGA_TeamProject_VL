@@ -97,7 +97,8 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
         _PlayerBuff = GetComponent<PlayerBuff>();
         _PlayerPassive = GetComponent<PlayerPassive>();
 
-        _PlayerPassive.Init(_PlayerInstanteState);
+        _PlayerPassive.Init();
+        _PlayerInstanteState.Init(_PlayerPassive);
 
         _PlayerMove = GetComponent<PlayerMove>();
         _PlayerAttack = GetComponent<PlayerAttack>();
