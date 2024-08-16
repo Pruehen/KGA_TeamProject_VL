@@ -98,4 +98,10 @@ public class JsonCache
         _blueChipTableCache = BlueChipTableCache;
         _coefficientTableCache = CoefficientTableCache;
     }
+
+    public void Save()
+    {
+        JsonDataManager.DataSaveCommand(_blueChipTableCache, BlueChipTable.FilePath());
+        JsonDataManager.DataSaveCommand(_coefficientTableCache, CoefficientTable.FilePath());
+    }
 }

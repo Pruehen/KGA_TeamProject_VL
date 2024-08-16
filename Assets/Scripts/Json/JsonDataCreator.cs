@@ -4,25 +4,23 @@ using UnityEngine;
 using System.Linq;
 using EnumTypes;
 using System;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityPlayerPrefs;
 
 public class BlueChip
-{
-    [JsonProperty] public int Id { get; private set; }
+{    
     [JsonProperty] public string Name { get; private set; }
     [JsonProperty] public string Info { get; private set; }
     [JsonProperty] public Dictionary<int, List<float>> Level_VelueList { get; private set; }
 
     [JsonConstructor]
-    public BlueChip(int id, string name, string info, Dictionary<int, List<float>> level_VelueList)
-    {
-        Id = id;
+    public BlueChip(string name, string info, Dictionary<int, List<float>> level_VelueList)
+    {        
         Name = name;
         Info = info;
         Level_VelueList = level_VelueList;
     }
     public BlueChip(int id)
-    {
-        Id = id;
+    {        
         Name = "블루칩 이름";
         Info = "블루칩 설명";
         Level_VelueList = new Dictionary<int, List<float>>();
@@ -47,40 +45,22 @@ public class BlueChip
     }
 }
 
-public class CoefficientType
-{
-    [JsonProperty] public string Name { get; private set; }
-    [JsonProperty] public float Coefficient { get; private set; }
-
-    [JsonConstructor]
-    public CoefficientType(string name, float coefficient)
-    {
-        Name = name;
-        Coefficient = coefficient;
-    }
-    public CoefficientType(PlayerAttackType type, float coefficient)
-    {
-        Name = type.ToString();
-        Coefficient = coefficient;
-    }
-}
-
 public class CoefficientTable
 {
-    public Dictionary<PlayerAttackType, CoefficientType> dic;
+    public Dictionary<PlayerAttackType, float> dic;
     [JsonConstructor]
-    public CoefficientTable(Dictionary<PlayerAttackType, CoefficientType> dic)
+    public CoefficientTable(Dictionary<PlayerAttackType, float> dic)
     {
         this.dic = dic;
     }
     public CoefficientTable()
     {
-        dic = new Dictionary<PlayerAttackType, CoefficientType>();
+        dic = new Dictionary<PlayerAttackType, float>();
 
         foreach (PlayerAttackType attackType in Enum.GetValues(typeof(PlayerAttackType)))
         {
             // 각 attackType에 대해 dic에 항목을 추가합니다.
-            dic.Add(attackType, new CoefficientType(attackType, 1));
+            dic.Add(attackType, 1);
         }
     }
     public static string FilePath()
@@ -115,6 +95,6 @@ public class JsonDataCreator : MonoBehaviour
     public void Awake()
     {
         JsonDataManager.jsonCache.Lode();
-        JsonDataManager.DataSaveCommand(JsonDataManager.jsonCache.CoefficientTableCache, CoefficientTable.FilePath());
+        JsonDataManager.jsonCache.Save();
     }
 }
