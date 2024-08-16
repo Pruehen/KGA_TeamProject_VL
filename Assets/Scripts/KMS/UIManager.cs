@@ -22,6 +22,7 @@ public class UIManager : SceneSingleton<UIManager>
     [SerializeField] GameObject EscUI;
     [SerializeField] GameObject blueChipUI;
     [SerializeField] GameObject pickBlueChip;
+    [SerializeField] GameObject holdBlueChip;
 
     [SerializeField] PlayerInstanteState PlayerState;
 
@@ -209,14 +210,14 @@ public class UIManager : SceneSingleton<UIManager>
             pickBlueChip.SetActive(false);
             blueChipUI.GetComponent<BlueChipUIManager>().Init();
         }
-        else
+        else if (holdBlueChip.activeSelf == true && pickBlueChip.activeSelf == false)
         {
             blueChipUI.SetActive(false);
 
             pickBlueChip.SetActive(true);
-
+            TimeManager.instance.TimeStart();
         }
-       
+
     }
 
 }
