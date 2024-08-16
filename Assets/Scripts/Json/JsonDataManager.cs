@@ -80,19 +80,6 @@ public class JsonCache
         }
     }
 
-    CoefficientTable _coefficientTableCache;
-    public CoefficientTable CoefficientTableCache
-    {
-        get
-        {
-            if (_coefficientTableCache == null)
-            {
-                _coefficientTableCache = JsonDataManager.DataTableListLoad<CoefficientTable>(CoefficientTable.FilePath());
-            }
-            return _coefficientTableCache;
-        }
-    }
-
     PassiveTable _passiveTableCache;
     public PassiveTable PassiveTableCache
     {
@@ -109,14 +96,12 @@ public class JsonCache
     public void Lode()
     {
         _blueChipTableCache = BlueChipTableCache;
-        _coefficientTableCache = CoefficientTableCache;
         _passiveTableCache = PassiveTableCache;
     }
 
     public void Save()
     {
         JsonDataManager.DataSaveCommand(_blueChipTableCache, BlueChipTable.FilePath());
-        JsonDataManager.DataSaveCommand(_coefficientTableCache, CoefficientTable.FilePath());
         JsonDataManager.DataSaveCommand(_passiveTableCache, PassiveTable.FilePath());
     }
 }

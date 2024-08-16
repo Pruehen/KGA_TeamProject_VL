@@ -61,31 +61,6 @@ public class BlueChipTable
     }
 }
 
-public class CoefficientTable
-{
-    public Dictionary<PlayerAttackType, float> dic;
-    [JsonConstructor]
-    public CoefficientTable(Dictionary<PlayerAttackType, float> dic)
-    {
-        this.dic = dic;
-    }
-    public CoefficientTable()
-    {
-        dic = new Dictionary<PlayerAttackType, float>();
-
-        foreach (PlayerAttackType attackType in Enum.GetValues(typeof(PlayerAttackType)))
-        {
-            // 각 attackType에 대해 dic에 항목을 추가합니다.
-            dic.Add(attackType, 1);
-        }
-    }
-    public static string FilePath()
-    {
-        return "/Data/Table/CoefficientTable.json";
-    }
-}
-
-
 public class Passive
 {
     [JsonProperty] public string Name { get; private set; }
