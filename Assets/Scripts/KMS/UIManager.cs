@@ -94,15 +94,18 @@ public class UIManager : SceneSingleton<UIManager>
             case nameof(InputManager.Instance.IsInteractiveBtnClick):
                 if (InputManager.Instance.IsInteractiveBtnClick == true)
                 {
-                    if (blueChipUI.activeSelf == true)
+                    if (blueChipUI.activeSelf == true && pickBlueChip.activeSelf == true)
                     {
+
                         Button selectedButton = EventSystem.current.currentSelectedGameObject?.GetComponent<Button>();
                         selectedButton.onClick.Invoke();
-                        
-                        
-                       
-                    } 
 
+                    }
+                    else
+                    {
+                        return;
+                    }
+                   
 
                 }
                 break;
@@ -160,6 +163,11 @@ public class UIManager : SceneSingleton<UIManager>
     //Ω√¿€
     public void BlueChipUI()
     {
+
+        if (blueChipUI.activeSelf == true)
+        {
+            MainBlueChipList();
+        }
         blueChipUI.SetActive(true);
         blueChipUI.GetComponent<BlueChipUIManager>().Init();
         TimeManager.instance.TimeStop();

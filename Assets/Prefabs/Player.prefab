@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 3820283957303393746}
   - component: {fileID: 2680144560742994316}
   - component: {fileID: 516789563033613623}
+  - component: {fileID: 6370585067071046547}
   - component: {fileID: 3848298984020166617}
   - component: {fileID: 323388105381359817}
   - component: {fileID: 6736053533579567610}
@@ -148,9 +149,22 @@ MonoBehaviour:
   MaxskillGauge: 100
   maxBullets: 50
   maxMeleeBullets: 50
+  attackSpeed: 1
   attackPower: 20
   skillPower: 20
   moveSpeed: 6
+--- !u!114 &6370585067071046547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3370145770967923552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6322f7b4416ec04b9905138011c12f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3848298984020166617
 MonoBehaviour:
   m_ObjectHideFlags: 0
