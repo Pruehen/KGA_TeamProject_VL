@@ -100,16 +100,16 @@ public class AttackSystem : MonoBehaviour
     public void AbsoberEnd()
     {
         _animator.SetTrigger("AbsorbeingEnd");
-        _animator.ResetTrigger("Attack");
-        _animator.ResetTrigger("AttackEnd");
+        //_animator.ResetTrigger("Attack");
+        //_animator.ResetTrigger("AttackEnd");
         Debug.Log("absoberEnd");
     }
     public void ModTransform()
     {
         _animator.SetTrigger("Transform");
         _animator.SetTrigger("AbsorbeingEnd");
-        _animator.ResetTrigger("Attack");
-        _animator.ResetTrigger("AttackEnd");
+        //_animator.ResetTrigger("Attack");
+        //_animator.ResetTrigger("AttackEnd");
         Debug.Log("Transform");
     }
 }
