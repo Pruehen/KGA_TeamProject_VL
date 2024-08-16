@@ -16,7 +16,7 @@ public class LaunchAttack : AiAttackAction
     private NavMeshAgent agent;
     private int hashEndLaunch;
     private int hashAttack;
-    private float attackDistance;
+    private float nearDistance = .7f;
     private Vector3 prevPlayerPos;
     Vector3 SentinelVec = new Vector3(-9999f, -9999f, -9999f);
 
@@ -68,8 +68,6 @@ public class LaunchAttack : AiAttackAction
     /// </summary>
     public void DoAttack(DamageBox damageBox, EnemyAttackType enemyAttackType)
     {
-        owner.StartCoroutine(ResetLaunching());
-
         switch (enemyAttackType)
         {
             case EnemyAttackType.Melee:
@@ -108,15 +106,14 @@ public class LaunchAttack : AiAttackAction
         gameObject.layer = LayerMask.NameToLayer("LaunchedEnemy");
     }
 
-    private IEnumerator ResetLaunching()
+    private void ResetLaunching()
     {
-        yield return new WaitForSeconds(.1f);
+        DisablePhysics();
         agent.nextPosition = transform.position;
         agent.updatePosition = true;
         agent.updateRotation = true;
         agent.isStopped = false;
         prevPlayerPos = SentinelVec;
-        isInit = false;
     }
     void UpdateInLaunch()
     {
@@ -144,11 +141,17 @@ public class LaunchAttack : AiAttackAction
                 prevPlayerPos = curPlayerPos;
 
 
-            bool isAlmostGrouonded = Physics.CheckSphere(transform.position, .5f, LayerMask.GetMask("Environment"));
+            float distH = PhysicsHelper.Dist2D(pos, target);
+            bool isAlmostGrouonded = Physics.CheckSphere(transform.position, 1f, LayerMask.GetMask("Environment"));
             isAlmostGrouonded = isAlmostGrouonded && rb.velocity.y < 0f;
-            if (distance < attackDistance || isAlmostGrouonded)
+            if (distH < nearDistance || isAlmostGrouonded)
             {
                 animator.SetTrigger(hashEndLaunch);
+                float distV = PhysicsHelper.Dist2D(pos, target);
+                if (distH < 1.5f && distV < 1.5f)
+                {
+                    rb.velocity = new Vector3(0f,rb.velocity.y,0f);
+                }
             }
             else
             {
@@ -160,7 +163,8 @@ public class LaunchAttack : AiAttackAction
         {
             if(rb.velocity.y <=-.1f)
             {
-                DisablePhysics();
+                DisablePhysics(); 
+                ResetLaunching();
                 prevPlayerPos = SentinelVec;
                 animator.SetTrigger(hashEndLaunch);
             }
