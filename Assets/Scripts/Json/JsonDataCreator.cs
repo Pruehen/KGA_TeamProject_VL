@@ -107,6 +107,8 @@ public class Passive
     {
         Name = iD.ToString();
         Info = "해당 패시브에 대한 설명. 값 {0}";
+        VelueList = new List<float>();
+        VelueList.Add(1);
     }
 
     public string PrintName()
