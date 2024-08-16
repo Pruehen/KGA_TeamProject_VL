@@ -38,6 +38,14 @@ public class AttackSystem : MonoBehaviour
     {
         get => _attackLcokMove;
     }
+    public bool isAttackTrigger
+    {
+        get { return _PlayerMaster.isAttackTrigger; }
+        set
+        {
+            _PlayerMaster.isAttackTrigger = value;
+        }
+    }
     public void StartAttack(PlayerAttackKind index, int comboIndex)
     {
         _attackLcokMove = true;
@@ -79,7 +87,13 @@ public class AttackSystem : MonoBehaviour
     {
         _closeAttack.EndAttack();
     }
-
+    public void OnReleaseLoop()
+    {
+        if(!isAttackTrigger)
+        {
+            _animator.SetTrigger("AttackEnd");
+        }
+    }
     private void EnableDamageBox()
     {
         _damageBox.EnableDamageBox(30, _PlayerMaster.OnMeleeHit);

@@ -47,6 +47,14 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
             _PlayerMove._isDashing = value;
         }
     }
+    public bool isAttackTrigger
+    {
+        get { return _PlayerAttack.attackTrigger; }
+        set
+        {
+            _PlayerAttack.attackTrigger = value;
+        }
+    }
     public int GetBlueChipLevel(BlueChipID iD)
     {
         return _PlayerEquipBlueChip.GetBlueChipLevel(iD);

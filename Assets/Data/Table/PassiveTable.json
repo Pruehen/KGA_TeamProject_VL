@@ -2,137 +2,122 @@
   "dic": {
     "Offensive1": {
       "Name": "Offensive1",
-      "Info": "현재 체력이 {0}% 이상일 때, 일반&특수 공격력이 {1}% 증가",
-      "Cost": 0,
+      "Info": "해당 패시브에 대한 설명. 값 {0}",
+      "Cost": 100,
       "VelueList": [
-        80.0,
-        15.0,
-        15.0
+        1.0
       ]
     },
     "Offensive2": {
       "Name": "Offensive2",
-      "Info": "{0}m보다 가까이 있는 적에게 가하는 데미지가 {1}%만큼 증가",
-      "Cost": 0,
+      "Info": "해당 패시브에 대한 설명. 값 {0}",
+      "Cost": 100,
       "VelueList": [
-        5.0,
-        20.0
+        1.0
       ]
     },
     "Offensive3": {
       "Name": "Offensive3",
-      "Info": "일반&특수 공격력이 {0}% 증가. 대쉬 길이 {2}%, 대쉬 시간 {3}% 감소 및 스테미나 소모량 {4}% 증가",
-      "Cost": 0,
+      "Info": "해당 패시브에 대한 설명. 값 {0}",
+      "Cost": 100,
       "VelueList": [
-        30.0,
-        30.0,
-        50.0,
-        50.0,
-        50.0
+        1.0
       ]
     },
     "Offensive4": {
       "Name": "Offensive4",
-      "Info": "특수 공격력 {0}% 증가, 스킬의 공격 범위 {1}% 증가, 스킬 게이지 획득량 {2}% 감소",
-      "Cost": 0,
+      "Info": "해당 패시브에 대한 설명. 값 {0}",
+      "Cost": 100,
       "VelueList": [
-        40.0,
-        40.0,
-        50.0
+        1.0
       ]
     },
     "Offensive5": {
       "Name": "Offensive5",
-      "Info": "특수 공격력의 {0}%만큼을 일반 공격력으로 치환",
-      "Cost": 0,
+      "Info": "해당 패시브에 대한 설명. 값 {0}",
+      "Cost": 100,
       "VelueList": [
-        50.0
+        1.0
       ]
     },
     "Defensive1": {
       "Name": "Defensive1",
-      "Info": "최대 체력이 {0}% 증가하는 대신 일반&특수 공격력 {1}% 감소",
-      "Cost": 0,
+      "Info": "해당 패시브에 대한 설명. 값 {0}",
+      "Cost": 100,
       "VelueList": [
-        50.0,
-        20.0
-        20.0
+        1.0
       ]
     },
     "Defensive2": {
       "Name": "Defensive2",
-      "Info": "적을 {0}마리 처치할 때마다 현재 체력을 최대 체력의 {1}%만큼 회복.",
-      "Cost": 0,
+      "Info": "해당 패시브에 대한 설명. 값 {0}",
+      "Cost": 100,
       "VelueList": [
-        10.0,
-        20.0
+        1.0
       ]
     },
     "Defensive3": {
       "Name": "Defensive3",
-      "Info": "치명적 피해를 입었을 때 {0}초동안 체력이 {1}이하로 떨어지지 않는다. (게임 당 {2}회)",
-      "Cost": 0,
+      "Info": "해당 패시브에 대한 설명. 값 {0}",
+      "Cost": 100,
       "VelueList": [
-        3.0,
-        1.0,
         1.0
       ]
     },
     "Defensive4": {
       "Name": "Defensive4",
-      "Info": "적을 처치 할 때마다 다음 공격으로 입는 피해가 {0}%씩 감소한다 (최대 {1}%)",
-      "Cost": 0,
+      "Info": "해당 패시브에 대한 설명. 값 {0}",
+      "Cost": 100,
       "VelueList": [
-        1.0,
-        80.0
+        1.0
       ]
     },
     "Defensive5": {
       "Name": "Defensive5",
-      "Info": "근거리 모드에서 원거리 모드가 될 때마다 스태미나 {0}% 회복",
-      "Cost": 0,
+      "Info": "해당 패시브에 대한 설명. 값 {0}",
+      "Cost": 100,
       "VelueList": [
-        50.0
+        1.0
       ]
     },
     "Utility1": {
       "Name": "Utility1",
-      "Info": "블루칩 선택지를 새로고침 할 수 있다. (게임 당 {0}회)",
-      "Cost": 0,
+      "Info": "해당 패시브에 대한 설명. 값 {0}",
+      "Cost": 100,
       "VelueList": [
         1.0
       ]
     },
     "Utility2": {
       "Name": "Utility2",
-      "Info": "재화 획득량이 {0}% 증가",
-      "Cost": 0,
+      "Info": "해당 패시브에 대한 설명. 값 {0}",
+      "Cost": 100,
       "VelueList": [
-        50.0
+        1.0
       ]
     },
     "Utility3": {
       "Name": "Utility3",
-      "Info": "블루칩 선택지가 {0}개로 감소하지만 {1} 더 높은 레벨의 블루칩이 등장한다.",
-      "Cost": 0,
+      "Info": "해당 패시브에 대한 설명. 값 {0}",
+      "Cost": 100,
       "VelueList": [
-        1.0,
         1.0
       ]
     },
     "Utility4": {
       "Name": "Utility4",
-      "Info": "게임을 시작하면 주변에 블루칩 상자가 나온다.",
-      "Cost": 0,
-      "VelueList": []
+      "Info": "해당 패시브에 대한 설명. 값 {0}",
+      "Cost": 100,
+      "VelueList": [
+        1.0
+      ]
     },
     "Utility5": {
       "Name": "Utility5",
-      "Info": "원거리 최대 자원 보유량이 {0}만큼, 근거리 최대 자원 보유량이 {1}만큼 증가",
-      "Cost": 0,
+      "Info": "해당 패시브에 대한 설명. 값 {0}",
+      "Cost": 100,
       "VelueList": [
-        20.0,
-        10.0
+        1.0
       ]
     }
   }
