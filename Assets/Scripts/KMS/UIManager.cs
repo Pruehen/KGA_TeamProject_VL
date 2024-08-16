@@ -21,6 +21,7 @@ public class UIManager : SceneSingleton<UIManager>
     [SerializeField] GameObject tabUI;
     [SerializeField] GameObject EscUI;
     [SerializeField] GameObject blueChipUI;
+    [SerializeField] GameObject pickBlueChip;
 
     [SerializeField] PlayerInstanteState PlayerState;
 
@@ -73,6 +74,11 @@ public class UIManager : SceneSingleton<UIManager>
             }
 
         }
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            MainBlueChipList();
+        }
     }
 
 
@@ -88,15 +94,18 @@ public class UIManager : SceneSingleton<UIManager>
             case nameof(InputManager.Instance.IsInteractiveBtnClick):
                 if (InputManager.Instance.IsInteractiveBtnClick == true)
                 {
-                    if (blueChipUI.activeSelf == true)
+                    if (blueChipUI.activeSelf == true && pickBlueChip.activeSelf == true)
                     {
+
                         Button selectedButton = EventSystem.current.currentSelectedGameObject?.GetComponent<Button>();
                         selectedButton.onClick.Invoke();
-                        
-                        
-                       
-                    } 
 
+                    }
+                    else
+                    {
+                        return;
+                    }
+                   
 
                 }
                 break;
@@ -154,6 +163,11 @@ public class UIManager : SceneSingleton<UIManager>
     //Ω√¿€
     public void BlueChipUI()
     {
+
+        if (blueChipUI.activeSelf == true)
+        {
+            MainBlueChipList();
+        }
         blueChipUI.SetActive(true);
         blueChipUI.GetComponent<BlueChipUIManager>().Init();
         TimeManager.instance.TimeStop();
@@ -183,6 +197,26 @@ public class UIManager : SceneSingleton<UIManager>
     {
         blueChipUI.SetActive(false);
         TimeManager.instance.TimeStart();
+    }
+
+    public void MainBlueChipList()
+    {
+
+        if (blueChipUI.activeSelf == false)
+        {
+            blueChipUI.SetActive(true);
+
+            pickBlueChip.SetActive(false);
+            blueChipUI.GetComponent<BlueChipUIManager>().Init();
+        }
+        else
+        {
+            blueChipUI.SetActive(false);
+
+            pickBlueChip.SetActive(true);
+
+        }
+       
     }
 
 }
