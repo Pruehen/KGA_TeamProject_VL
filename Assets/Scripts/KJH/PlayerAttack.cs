@@ -137,8 +137,11 @@ public class PlayerAttack : MonoBehaviour
         switch (e.PropertyName)
         {
             case nameof(_InputManager.IsLMouseBtnClick):
-                attackTrigger = _InputManager.IsLMouseBtnClick;
-                attackBool = _InputManager.IsLMouseBtnClick;
+                if (!_PlayerMaster._PlayerInstanteState.IsAbsorptState)
+                {
+                    attackTrigger = _InputManager.IsLMouseBtnClick;
+                    attackBool = _InputManager.IsLMouseBtnClick;
+                }
                 break;
             case nameof(_InputManager.IsRMouseBtnClick):
                 skillTrigger = _InputManager.IsRMouseBtnClick;
