@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using EnumTypes;
+using System.Collections.Generic;
 public class PlayerInstanteState : MonoBehaviour
 {
     PlayerMaster _PlayerMaster;
@@ -85,8 +86,7 @@ public class PlayerInstanteState : MonoBehaviour
     private void Awake()
     {
         _PlayerMaster = GetComponent<PlayerMaster>();
-
-        Restore();
+        
         UIManager.Instance.setPlayer(this);
     }
     private void Start()
@@ -275,7 +275,7 @@ public class PlayerInstanteState : MonoBehaviour
         UpdateSkillGauge();
     }
 
-    void Restore()
+    public void Init(List<PassiveID> usePassiveList)
     {
         hp = maxHp;
         IsDead = false;

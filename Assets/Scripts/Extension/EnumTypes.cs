@@ -1,7 +1,7 @@
 namespace EnumTypes
 {
     public enum BlueChipID
-    {
+    {       
         Melee1,
         Melee2,
         Range1,
@@ -14,7 +14,7 @@ namespace EnumTypes
     }
 
     public enum PassiveID
-    {
+    {        
         Offensive1,
         Offensive2,
         Offensive3,
@@ -29,7 +29,8 @@ namespace EnumTypes
         Utility2,
         Utility3,
         Utility4,
-        Utility5
+        Utility5,
+        None
     }
 
     public enum EnemyAttackType
