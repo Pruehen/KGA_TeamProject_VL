@@ -2,9 +2,9 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public enum RewordType
+public enum RewardType
 {
-    Gold,
+    Currency,
     BlueChip
 }
 
@@ -12,7 +12,7 @@ public class GameManager : SceneSingleton<GameManager>
 {
     [SerializeField] private SO_StageList[] _stageBlocks;
     private bool _init = false;
-    private RewordType _rewordType;
+    private RewardType _rewordType;
 
     private int _currentLevel;
 
@@ -29,20 +29,20 @@ public class GameManager : SceneSingleton<GameManager>
         OnClear += HandleClear;
     }
 
-    public void SpawnReword(RewordType rewordType)
+    public void SpawnReword(RewardType rewordType)
     {
         switch (rewordType)
         {
-            case RewordType.Gold:
+            case RewardType.Currency:
                 // 골드 스폰
                 break;
-            case RewordType.BlueChip:
+            case RewardType.BlueChip:
                 // 블루칩 스폰
                 break;
         }
     }
 
-    public void SetRewordType(RewordType rewordType)
+    public void SetRewordType(RewardType rewordType)
     {
         _rewordType = rewordType;
     }
