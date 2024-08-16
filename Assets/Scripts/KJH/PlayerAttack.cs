@@ -25,7 +25,7 @@ public class PlayerAttack : MonoBehaviour
     bool skillTrigger = false;
     bool skillBool = false;
 
-    [SerializeField] PlayerAttackType _currentAttackType = PlayerAttackType.CloseNormal;
+    [SerializeField] PlayerAttackType _currentAttackType = PlayerAttackType.MeleeNormalAttack1;
     [SerializeField] int _initialAttackComboIndex = 0;
     int _currentAttackCount;
 
@@ -69,12 +69,12 @@ public class PlayerAttack : MonoBehaviour
     {
         if (isMelee)
         {
-            _currentAttackType = PlayerAttackType.CloseNormal;
+            _currentAttackType = PlayerAttackType.MeleeNormalAttack1;
             _AttackSystem.ModTransform();
         }
         else
         {
-            _currentAttackType = PlayerAttackType.RangeNormal;
+            _currentAttackType = PlayerAttackType.RangeNormalAttack1;
             _AttackSystem.ModTransform();
         }
     }
@@ -89,14 +89,14 @@ public class PlayerAttack : MonoBehaviour
             delayTime = 0;
             _PlayerMaster.OnAttackState(_PlayerCameraMove.CamRotation() * Vector3.forward);
 
-            int blueChip2Level = _PlayerMaster.GetBlueChipLevel(EnumTypes.BlueChipID.���Ÿ�1);
-            int initialAttackComboIndex = (blueChip2Level > 0) ? (int)JsonDataManager.GetBlueChipData(EnumTypes.BlueChipID.���Ÿ�1).Level_VelueList[blueChip2Level][0] : 0;
+            int blueChip2Level = _PlayerMaster.GetBlueChipLevel(EnumTypes.BlueChipID.Range1);
+            int initialAttackComboIndex = (blueChip2Level > 0) ? (int)JsonDataManager.GetBlueChipData(EnumTypes.BlueChipID.Range1).Level_VelueList[blueChip2Level][0] : 0;
             _AttackSystem.StartAttack((int)_currentAttackType, initialAttackComboIndex);
             //StartCoroutine(Attack_Delayed(attack_Delay));
         }
         if (!attackTrigger && prevAttackTrigger)
         {
-            if (_currentAttackType == PlayerAttackType.CloseNormal)
+            if (_currentAttackType == PlayerAttackType.MeleeNormalAttack1)
             {
                 _AttackSystem.OnRelease();
             }
@@ -111,7 +111,7 @@ public class PlayerAttack : MonoBehaviour
         //if(!skillTrigger && prevAttackTrigger)
         if (!skillTrigger)
         {
-            if (_currentAttackType == PlayerAttackType.CloseNormal)
+            if (_currentAttackType == PlayerAttackType.MeleeNormalAttack1)
             {
                 _AttackSystem.OnRelease();
             }
@@ -121,10 +121,10 @@ public class PlayerAttack : MonoBehaviour
 
     public PlayerAttackType GetCurrentAttackType()
     {
-        if (_currentAttackType == PlayerAttackType.CloseNormal)
+        if (_currentAttackType == PlayerAttackType.MeleeNormalAttack1)
         {
             //checkAttackCount
-            return PlayerAttackType.CloseNormal;
+            return PlayerAttackType.MeleeNormalAttack1;
         }
         return _currentPlayerAttackType;
     }
@@ -137,8 +137,11 @@ public class PlayerAttack : MonoBehaviour
         switch (e.PropertyName)
         {
             case nameof(_InputManager.IsLMouseBtnClick):
-                attackTrigger = _InputManager.IsLMouseBtnClick;
-                attackBool = _InputManager.IsLMouseBtnClick;
+                if (!_PlayerMaster._PlayerInstanteState.IsAbsorptState)
+                {
+                    attackTrigger = _InputManager.IsLMouseBtnClick;
+                    attackBool = _InputManager.IsLMouseBtnClick;
+                }
                 break;
             case nameof(_InputManager.IsRMouseBtnClick):
                 skillTrigger = _InputManager.IsRMouseBtnClick;
@@ -152,7 +155,7 @@ public class PlayerAttack : MonoBehaviour
         Projectile projectile = ObjectPoolManager.Instance.DequeueObject(Prefab_Projectile).GetComponent<Projectile>();
 
         Vector3 projectionVector = _PlayerCameraMove.CamRotation() * Vector3.forward * projectionSpeed_Forward + Vector3.up * projectionSpeed_Up;
-        //어택시스템에서 현재 공격의 타입을 가져온다
+        //Get attacktype from attackSystem
         projectile.Init(_PlayerMaster._PlayerInstanteState.GetDmg(_currentPlayerAttackType, GetCurrentAttackCount()), projectile_InitPos.position, projectionVector, OnProjectileHit);
 
         _PlayerMaster._PlayerInstanteState.BulletConsumption();
@@ -162,7 +165,7 @@ public class PlayerAttack : MonoBehaviour
     void OnProjectileHit()
     {
         _PlayerMaster._PlayerInstanteState.SkillGaugeRecovery(10);
-        Debug.Log("공격 성공");
+        Debug.Log("AttackSucceced");
     }
 
     public void ResetAttackCount()

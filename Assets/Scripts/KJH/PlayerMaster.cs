@@ -7,6 +7,7 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     public PlayerInstanteState _PlayerInstanteState { get; private set; }
     public PlayerEquipBlueChip _PlayerEquipBlueChip { get; private set; }
     public PlayerBuff _PlayerBuff { get; private set; }
+    public PlayerPassive _PlayerPassive { get; private set; }
     PlayerMove _PlayerMove;
     PlayerAttack _PlayerAttack;
     PlayerModChangeManager _PlayerModChangeManager;    
@@ -49,22 +50,22 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     }
     void Execute_BlueChip1_OnMeleeHit()
     {
-        int level = GetBlueChipLevel(BlueChipID.근거리2);
+        int level = GetBlueChipLevel(BlueChipID.Melee2);
 
         if(level > 0)
         {
-            _PlayerInstanteState.ChangeShield(JsonDataManager.GetBlueChipData(BlueChipID.근거리2).Level_VelueList[level][2]);
+            _PlayerInstanteState.ChangeShield(JsonDataManager.GetBlueChipData(BlueChipID.Melee2).Level_VelueList[level][2]);
         }        
     }
     void Execute_BlueChip1_OnModeChange(bool isMeleeMode)
     {
         if (isMeleeMode)
         {
-            int level = GetBlueChipLevel(BlueChipID.근거리2);
+            int level = GetBlueChipLevel(BlueChipID.Melee2);
 
             if (level > 0)
             {
-                _PlayerInstanteState.ChangeShield(JsonDataManager.GetBlueChipData(BlueChipID.근거리2).Level_VelueList[level][0]);
+                _PlayerInstanteState.ChangeShield(JsonDataManager.GetBlueChipData(BlueChipID.Melee2).Level_VelueList[level][0]);
             }
         }
         else
@@ -74,11 +75,11 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     }
     void Execute_BlueChip4_OnModeChange()
     {
-        int level = GetBlueChipLevel(BlueChipID.하이브리드1);
+        int level = GetBlueChipLevel(BlueChipID.Hybrid1);
         if (level > 0)
         {
-            int count = (int)JsonDataManager.GetBlueChipData(BlueChipID.하이브리드1).Level_VelueList[level][0];
-            float value = JsonDataManager.GetBlueChipData(BlueChipID.하이브리드1).Level_VelueList[level][1] * 0.01f;
+            int count = (int)JsonDataManager.GetBlueChipData(BlueChipID.Hybrid1).Level_VelueList[level][0];
+            float value = JsonDataManager.GetBlueChipData(BlueChipID.Hybrid1).Level_VelueList[level][1] * 0.01f;
 
             _PlayerBuff.blueChip4_Buff_NextHitAddDmg.Clear();
             for (int i = 0; i < count; i++)
@@ -94,6 +95,10 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
         _PlayerInstanteState = GetComponent<PlayerInstanteState>();
         _PlayerEquipBlueChip = GetComponent<PlayerEquipBlueChip>();
         _PlayerBuff = GetComponent<PlayerBuff>();
+        _PlayerPassive = GetComponent<PlayerPassive>();
+
+        _PlayerPassive.Init();
+        _PlayerInstanteState.Init(_PlayerPassive);
 
         _PlayerMove = GetComponent<PlayerMove>();
         _PlayerAttack = GetComponent<PlayerAttack>();

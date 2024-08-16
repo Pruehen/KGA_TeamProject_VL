@@ -1,16 +1,36 @@
 namespace EnumTypes
 {
     public enum BlueChipID
-    {
-        근거리1,
-        근거리2,
-        원거리1,
-        원거리2,
-        하이브리드1,
-        하이브리드2,
-        범용1,
-        범용2,
-        범용3
+    {       
+        Melee1,
+        Melee2,
+        Range1,
+        Range2,
+        Hybrid1,
+        Hybrid2,
+        Generic1,
+        Generic2,
+        Generic3
+    }
+
+    public enum PassiveID
+    {        
+        Offensive1,
+        Offensive2,
+        Offensive3,
+        Offensive4,
+        Offensive5,
+        Defensive1,
+        Defensive2,
+        Defensive3,
+        Defensive4,
+        Defensive5,
+        Utility1,
+        Utility2,
+        Utility3,
+        Utility4,
+        Utility5,
+        None
     }
 
     public enum EnemyAttackType
@@ -21,11 +41,22 @@ namespace EnumTypes
 
     public enum PlayerAttackType
     {
-        RangeNormal,
-        RangeSkill1,
-        RangeSkill2,
-        CloseNormal,
-        CloseSkill1,
-        CloseSkill2,
+        RangeNormalAttack1,
+        RangeNormalAttack2,
+        RangeNormalAttack3,
+        RangeNormalAttack4,
+
+        RangeSkillAttack1,
+        RangeSkillAttack2,
+        RangeSkillAttack3,
+        RangeSkillAttack4,
+
+        MeleeNormalAttack1,
+        MeleeChargeAttack2,
+
+        MeleeSkillAttack1,
+        MeleeSkillAttack2,
+        MeleeSkillAttack3,
+        MeleeSkillAttack4
     }
 }

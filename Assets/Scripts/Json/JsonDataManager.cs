@@ -61,7 +61,7 @@ public static class JsonDataManager
 
     public static BlueChip GetBlueChipData(BlueChipID id)
     {
-        return jsonCache.BlueChipTableCache.dic[(int)id];
+        return jsonCache.BlueChipTableCache.dic[id];
     }
 }
 
@@ -80,8 +80,28 @@ public class JsonCache
         }
     }
 
+    PassiveTable _passiveTableCache;
+    public PassiveTable PassiveTableCache
+    {
+        get
+        {
+            if (_passiveTableCache == null)
+            {
+                _passiveTableCache = JsonDataManager.DataTableListLoad<PassiveTable>(PassiveTable.FilePath());
+            }
+            return _passiveTableCache;
+        }
+    }
+
     public void Lode()
     {
-        _blueChipTableCache = BlueChipTableCache;        
+        _blueChipTableCache = BlueChipTableCache;
+        _passiveTableCache = PassiveTableCache;
+    }
+
+    public void Save()
+    {
+        JsonDataManager.DataSaveCommand(_blueChipTableCache, BlueChipTable.FilePath());
+        JsonDataManager.DataSaveCommand(_passiveTableCache, PassiveTable.FilePath());
     }
 }
