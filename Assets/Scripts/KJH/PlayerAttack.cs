@@ -19,7 +19,7 @@ public class PlayerAttack : MonoBehaviour
     PlayerModChangeManager _PlayerMod;
 
     float delayTime = 0;
-    bool attackTrigger = false;
+    public bool attackTrigger = false;
     bool attackBool = false;
 
     bool skillTrigger = false;
@@ -136,8 +136,11 @@ public class PlayerAttack : MonoBehaviour
                 }
                 break;
             case nameof(_InputManager.IsRMouseBtnClick):
-                skillTrigger = _InputManager.IsRMouseBtnClick;
-                skillBool = _InputManager.IsRMouseBtnClick;
+                if (!_PlayerMaster._PlayerInstanteState.IsAbsorptState)
+                {
+                    skillTrigger = _InputManager.IsRMouseBtnClick;
+                    skillBool = _InputManager.IsRMouseBtnClick;
+                }
                 break;
         }
     }

@@ -10,8 +10,17 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     PlayerMove _PlayerMove;
     PlayerAttack _PlayerAttack;
     PlayerModChangeManager _PlayerModChangeManager;    
-    [SerializeField] ItemAbsorber _ItemAbsorber;    
+    [SerializeField] ItemAbsorber _ItemAbsorber;
+    [SerializeField] AttackSystem _AttackSystem;
 
+    public bool IsAttackState
+    {
+        get { return _AttackSystem._attackLcokMove; }
+        set
+        {
+            _AttackSystem._attackLcokMove = value;
+        }
+    }
     public bool IsAbsorptState
     {
         get { return _PlayerInstanteState.IsAbsorptState; }

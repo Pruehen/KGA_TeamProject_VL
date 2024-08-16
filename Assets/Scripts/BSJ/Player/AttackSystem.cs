@@ -34,7 +34,7 @@ public class AttackSystem : MonoBehaviour
 
 
 
-    bool _attackLcokMove;
+    public bool _attackLcokMove;
 
     public bool AttackLockMove
     {
