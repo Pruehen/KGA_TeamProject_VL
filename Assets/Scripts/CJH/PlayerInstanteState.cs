@@ -29,6 +29,8 @@ public class PlayerInstanteState : MonoBehaviour
     public bool IsDead { get; private set; }
 
     [SerializeField] float maxHp;
+    float _maxHpGain;
+    float Maxhp() { return maxHp * _maxHpGain; }
     [SerializeField] float MaxStamina;
     [SerializeField] float staminaRecoverySpeed;
     [SerializeField] float staminaRecoveryDelay;
@@ -41,10 +43,15 @@ public class PlayerInstanteState : MonoBehaviour
 
     [SerializeField] float attackSpeed = 1f;
     [SerializeField] float attackPower;
+    float _attackPowerGain;
+    float AttackPower() { return attackPower * _attackPowerGain; }
     [SerializeField] float skillPower;
+    float _skillPowerGain;
+    float SkillPower() { return skillPower * _skillPowerGain; }
+
     public float GetDmg(PlayerAttackType type, int combo)
     {
-        float baseDmg = attackPower;// * coefficient;
+        float baseDmg = AttackPower();// * coefficient;
         float dmgGain = 1;
         if (true)//차지 공격일 경우
         {
@@ -133,7 +140,33 @@ public class PlayerInstanteState : MonoBehaviour
 
         moveSpeed = _playerStatData.moveSpeed;
 
-        hp = maxHp;
+        _attackPowerGain = 1;
+        _skillPowerGain = 1;
+        _maxHpGain = 1;
+
+        if (playerPassive.ContainPassiveId(PassiveID.Offensive3))
+        {
+            Passive offensive3 = JsonDataManager.GetPassive(PassiveID.Offensive3);
+            _attackPowerGain += offensive3.VelueList[0] * 0.01f;
+            _skillPowerGain += offensive3.VelueList[1] * 0.01f;
+
+            //대시 길이, 대시 시간 감소 로직 추가
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Offensive4))
+        {
+            Passive offensive4 = JsonDataManager.GetPassive(PassiveID.Offensive4);
+            _skillPowerGain += offensive4.VelueList[0] * 0.01f;
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Defensive1))
+        {
+            Passive defensive1 = JsonDataManager.GetPassive(PassiveID.Defensive1);
+            _maxHpGain += defensive1.VelueList[0] * 0.01f;
+            _attackPowerGain -= defensive1.VelueList[1] * 0.01f;
+            _skillPowerGain -= defensive1.VelueList[2] * 0.01f;
+        }
+
+
+        hp = maxHp * _maxHpGain;
         IsDead = false;
         stamina = MaxStamina;
         skillGauge = 0;
