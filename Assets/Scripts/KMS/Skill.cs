@@ -6,9 +6,9 @@ public class Skill : MonoBehaviour
     InputManager _InputManager;
     Animator _animator;
 
-    int _animTriggerAttack;
-    int _animBoolChargingEnd;
-    int _animTriggerAttackEnd;
+    int _animTriggerSkill;
+    int _animFloatSkillGauge;
+    int _animTriggerSkillEnd;
     bool _isAttacking;
 
     private void Awake()
@@ -19,20 +19,20 @@ public class Skill : MonoBehaviour
     public void Init(Animator animator)
     {
         _animator = animator;
-        _animTriggerAttack = Animator.StringToHash("Attack");
-        _animBoolChargingEnd = Animator.StringToHash("ChargingEnd");
-        _animTriggerAttackEnd = Animator.StringToHash("AttackEnd");
+        _animTriggerSkill = Animator.StringToHash("Skill");
+        _animFloatSkillGauge = Animator.StringToHash("SkillGauge");
+        _animTriggerSkillEnd = Animator.StringToHash("SkillEnd");
     }
-    public void EndAttack()
+    public void EndSkill()
     {
-        _animator.SetTrigger(_animTriggerAttackEnd);
+        _animator.SetTrigger(_animTriggerSkillEnd);
     }
 
-    public void ATKEnd()
+    public void SkillEnd()
     {
-        if (!_animator.GetBool(_animTriggerAttack))
+        if (!_animator.GetBool(_animTriggerSkill))
         {
-            _animator.SetTrigger(_animTriggerAttackEnd);
+            _animator.SetTrigger(_animTriggerSkillEnd);
             Debug.Log("ATKEnd");
         }
     }

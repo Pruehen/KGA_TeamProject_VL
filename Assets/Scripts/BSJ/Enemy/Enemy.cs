@@ -1,5 +1,6 @@
 using BehaviorDesigner.Runtime;
 using EnumTypes;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -36,6 +37,7 @@ public interface AiAttackAction
 [RequireComponent(typeof(Animator))]
 public class Enemy : MonoBehaviour, ITargetable
 {
+    [SerializeField] private SO_EnemyBase _enemyData;
     private EnemyType _enemyType;
     [SerializeField] private bool _isMovable = true;
     [SerializeField] private Combat _combat;
@@ -58,7 +60,6 @@ public class Enemy : MonoBehaviour, ITargetable
 
     [SerializeField] private Detector _detector;
 
-    [SerializeField] private SO_EnemyBase _enemyData;
     [SerializeField] private Transform _rotateTarget;
 
     [SerializeField] private GameObject _pooledHitVfxPrefab;
@@ -331,7 +332,7 @@ public class Enemy : MonoBehaviour, ITargetable
     }
     public bool IsTargetFar(float range)
     {
-        Transform target = _detector.GetTarget();
+        Transform target = _detector.GetLatestTarget();
 
         if (target == null)
         {
@@ -532,5 +533,14 @@ public class Enemy : MonoBehaviour, ITargetable
             return null;
         }
         return _detector.GetLatestTarget();
+    }
+
+    public void ForceAlram()
+    {
+        _detector._detectionRadius = 9999f;
+        _detector._detectThroughWall = true;
+        SharedFloat detectRange = new SharedFloat();
+        detectRange.Value = 9999f;
+        _behaviorTree.SetVariable("DetectRange", detectRange);
     }
 }
