@@ -94,19 +94,22 @@ public class Passive
 {
     [JsonProperty] public string Name { get; private set; }
     [JsonProperty] public string Info { get; private set; }
+    [JsonProperty] public int Cost { get; private set; }
     [JsonProperty] public List<float> VelueList { get; private set; }
 
     [JsonConstructor]
-    public Passive(string name, string info, List<float> velueList)
+    public Passive(string name, string info, int cost, List<float> velueList)
     {
         Name = name;
         Info = info;
+        Cost = cost;
         VelueList = velueList;
     }
     public Passive(PassiveID iD)
     {
         Name = iD.ToString();
         Info = "해당 패시브에 대한 설명. 값 {0}";
+        Cost = 100;
         VelueList = new List<float>();
         VelueList.Add(1);
     }
