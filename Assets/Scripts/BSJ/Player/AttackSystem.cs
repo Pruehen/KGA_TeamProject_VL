@@ -1,3 +1,4 @@
+using EnumTypes;
 using UnityEngine;
 
 public class AttackSystem : MonoBehaviour
@@ -40,14 +41,19 @@ public class AttackSystem : MonoBehaviour
     {
         get => _attackLcokMove;
     }
-    public void StartAttack(int index, int comboIndex)
+    public void StartAttack(PlayerAttackType index, int comboIndex)
     {
         _attackLcokMove = true;
         _animator.SetTrigger(hashAttack);
-        _animator.SetInteger(hashAttackType, index);
+
+
+        _animator.SetInteger(hashAttackType, (int)EnumAttackHelper.GetKindOfAttack(index));
+
+
         _animator.SetInteger(hashAttackComboInitialIndex, comboIndex);
         _animator.SetFloat(hasAttackSpeed, _PlayerMaster._PlayerInstanteState.AttackSpeed);
     }
+
     public void StartSkill(int index, float skillGauge)
     {
         if (skillGauge >= 100)

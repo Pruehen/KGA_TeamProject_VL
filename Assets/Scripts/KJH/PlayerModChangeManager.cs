@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerModChangeManager : MonoBehaviour
 {
-    PlayerMaster _PlayerMaster;    
+    PlayerMaster _PlayerMaster;
 
     public bool IsAbsorptState
     {

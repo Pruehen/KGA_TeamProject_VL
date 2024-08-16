@@ -91,7 +91,7 @@ public class PlayerAttack : MonoBehaviour
 
             int blueChip2Level = _PlayerMaster.GetBlueChipLevel(EnumTypes.BlueChipID.Range1);
             int initialAttackComboIndex = (blueChip2Level > 0) ? (int)JsonDataManager.GetBlueChipData(EnumTypes.BlueChipID.Range1).Level_VelueList[blueChip2Level][0] : 0;
-            _AttackSystem.StartAttack((int)_currentAttackType, initialAttackComboIndex);
+            _AttackSystem.StartAttack(_currentAttackType, initialAttackComboIndex);
             //StartCoroutine(Attack_Delayed(attack_Delay));
         }
         if (!attackTrigger && prevAttackTrigger)

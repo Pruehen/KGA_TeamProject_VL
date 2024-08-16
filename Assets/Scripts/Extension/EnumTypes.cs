@@ -1,3 +1,5 @@
+using UnityEngine.Assertions;
+
 namespace EnumTypes
 {
     public enum BlueChipID
@@ -57,5 +59,37 @@ namespace EnumTypes
         MeleeSkillAttack2,
         MeleeSkillAttack3,
         MeleeSkillAttack4
+    }
+    public enum PlayerAttackKind
+    {
+        RangeNormalAttack,
+        RangeSkillAttack,
+        MeleeNormalAttack,
+        MeleeskillAttack,
+    }
+
+    public static class EnumAttackHelper
+    {
+        public static PlayerAttackKind GetKindOfAttack(PlayerAttackType attackType) => attackType switch
+        {
+            PlayerAttackType.RangeNormalAttack1 => PlayerAttackKind.RangeNormalAttack,
+            PlayerAttackType.RangeNormalAttack2 => PlayerAttackKind.RangeNormalAttack,
+            PlayerAttackType.RangeNormalAttack3 => PlayerAttackKind.RangeNormalAttack,
+            PlayerAttackType.RangeNormalAttack4 => PlayerAttackKind.RangeNormalAttack,
+
+            PlayerAttackType.RangeSkillAttack1 => PlayerAttackKind.RangeSkillAttack,
+            PlayerAttackType.RangeSkillAttack2 => PlayerAttackKind.RangeSkillAttack,
+            PlayerAttackType.RangeSkillAttack3 => PlayerAttackKind.RangeSkillAttack,
+            PlayerAttackType.RangeSkillAttack4 => PlayerAttackKind.RangeSkillAttack,
+
+            PlayerAttackType.MeleeNormalAttack1 => PlayerAttackKind.MeleeNormalAttack,
+            PlayerAttackType.MeleeChargeAttack2 => PlayerAttackKind.MeleeNormalAttack,
+
+            PlayerAttackType.MeleeSkillAttack1 => PlayerAttackKind.MeleeskillAttack,
+            PlayerAttackType.MeleeSkillAttack2 => PlayerAttackKind.MeleeskillAttack,
+            PlayerAttackType.MeleeSkillAttack3 => PlayerAttackKind.MeleeskillAttack,
+            PlayerAttackType.MeleeSkillAttack4 => PlayerAttackKind.MeleeskillAttack,
+            _ => (PlayerAttackKind)999,
+        };
     }
 }
