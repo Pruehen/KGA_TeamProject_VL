@@ -37,7 +37,7 @@ public class BlueChip
     }
     public string PrintLevel(int level)
     {
-        return $"{level} / {Level_VelueList.Count + 1}";
+        return $"{level} / {Level_VelueList.Count}";
     }
     public string PrintInfo(int level)
     {        

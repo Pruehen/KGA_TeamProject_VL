@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using EnumTypes;
 
-public class PlayerMaster : MonoBehaviour, ITargetable
+public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
 {
     public PlayerInstanteState _PlayerInstanteState { get; private set; }
     public PlayerEquipBlueChip _PlayerEquipBlueChip { get; private set; }

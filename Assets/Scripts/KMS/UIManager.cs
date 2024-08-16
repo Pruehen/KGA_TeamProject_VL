@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using EnumTypes;
 
 public class UIManager : SceneSingleton<UIManager>
 {
@@ -27,9 +28,10 @@ public class UIManager : SceneSingleton<UIManager>
     [SerializeField] Button holdButton;
     [SerializeField] GameObject escImage;
 
-
     private void Start()
     {
+        blueChipUI.SetActive(false);
+
         if (PlayerState != null)
         {
             PlayerState.HealthRatioChanged += OnHealthRatioChanged;
@@ -149,9 +151,11 @@ public class UIManager : SceneSingleton<UIManager>
         UI_MeleeBulletUI.SetActive(value);
     }
 
+    //시작
     public void BlueChipUI()
     {
         blueChipUI.SetActive(true);
+        blueChipUI.GetComponent<BlueChipUIManager>().Init();
         TimeManager.instance.TimeStop();
 
         HoldButtonMove();
@@ -166,11 +170,6 @@ public class UIManager : SceneSingleton<UIManager>
 
     }
 
-    public void HoldButton()
-    { 
-    
-    
-    }
 
     //Esc를 눌러 교체를 취소하면 호출되는 함수
     public void HoldButtonMove()
@@ -182,10 +181,8 @@ public class UIManager : SceneSingleton<UIManager>
 
     public void BkBlueChipUi()
     {
-       
         blueChipUI.SetActive(false);
         TimeManager.instance.TimeStart();
-
-
     }
+
 }
