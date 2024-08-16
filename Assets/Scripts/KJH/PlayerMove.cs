@@ -31,7 +31,7 @@ public class PlayerMove : MonoBehaviour
 
     bool _isMoving = true;
     bool _isGrounded = true;
-    bool _isDashing = false;
+    public bool _isDashing = false;
     public void SetMoveLock(float time)
     {
         //_Rigidbody.velocity = Vector3.zero;
