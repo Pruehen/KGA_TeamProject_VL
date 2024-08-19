@@ -29,7 +29,7 @@ public class PlayerInstanteState : MonoBehaviour
 
     [SerializeField] float maxHpBase;
     public float MaxHpMulti { get; set; }
-    float GetMaxHp() { return maxHpBase * MaxHpMulti; }
+    public float GetMaxHp() { return maxHpBase * MaxHpMulti; }
     [SerializeField] float MaxStamina;
     [SerializeField] float staminaRecoverySpeed;
     [SerializeField] float staminaRecoveryDelay;
