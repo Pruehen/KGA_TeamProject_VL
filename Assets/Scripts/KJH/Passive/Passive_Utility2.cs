@@ -1,18 +1,18 @@
 using EnumTypes;
 
-public class Passive_Offensive1 : Passive
+public class Passive_Utility2 : Passive
 {
     public override void SetPassiveData()
     {
-        base._passiveData = JsonDataManager.GetPassive(PassiveID.Offensive1);
+        base._passiveData = JsonDataManager.GetPassive(PassiveID.Utility2);
     }
     public override void Active()
     {
-        
+
     }
 
     public override void DeActive()
     {
-        
+
     }
 }

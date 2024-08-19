@@ -1,18 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
+using EnumTypes;
 using UnityEngine;
 
-public class Passive_Offensive2 : MonoBehaviour
+public class Passive_Offensive2 : Passive
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void SetPassiveData()
     {
-        
+        base._passiveData = JsonDataManager.GetPassive(PassiveID.Offensive2);
+    }
+    public override void Active()
+    {
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void DeActive()
     {
-        
+
     }
 }

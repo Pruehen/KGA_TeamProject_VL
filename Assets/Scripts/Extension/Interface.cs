@@ -15,3 +15,18 @@ public interface ITargetable
     public void Hit(float dmg);
     public bool IsDead();
 }
+
+public abstract class Passive
+{
+    protected PlayerInstanteState _state;
+    protected PassiveData _passiveData;
+
+    public void Init(PlayerInstanteState playerState)
+    {
+        _state = playerState;
+        SetPassiveData();
+    }
+    public abstract void SetPassiveData();
+    public abstract void Active();
+    public abstract void DeActive();    
+}
