@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 using EnumTypes;
 using System;
+using Unity.VisualScripting;
 
 public class BlueChip
 {    
@@ -118,21 +119,71 @@ public class PassiveTable
 
 public class UserData
 {
-    [JsonProperty] public int SaveDataIndex { get; private set; }    
+    [JsonProperty] public int SaveDataIndex { get; private set; }
+    [JsonProperty] public int Gold { get; private set; }
+    [JsonProperty] public HashSet<PassiveID> UsePassiveHashSet { get; private set; }
 
     [JsonConstructor]
-    public UserData(Dictionary<PassiveID, Passive> dic)
+    public UserData(int saveDataIndex, int gold, HashSet<PassiveID> usePassiveHashSet)
     {
-        //this.dic = dic;
+        SaveDataIndex = saveDataIndex;
+        Gold = gold;
+        UsePassiveHashSet = usePassiveHashSet;
+        if(UsePassiveHashSet == null)
+        {
+            UsePassiveHashSet = new HashSet<PassiveID>();
+        }
     }
-    public UserData()
-    {
 
-    }
-    public static string FilePath(int index)
+    public UserData(int saveDataIndex)
     {
-        string fileName = $"SaveFile_{index}";
-        return $"/Data/UserData/{fileName}.json";
+        SaveDataIndex = saveDataIndex;
+        Gold = 0;
+        UsePassiveHashSet = new HashSet<PassiveID>();
+    }
+
+    public void TryAddPassive(PassiveID id)
+    {
+        if(UsePassiveHashSet.Add(id))
+        {
+            Debug.Log($"패시브 추가 : {id.DisplayName()}");
+        }
+        else
+        {
+            Debug.LogWarning($"이미 존재하는 패시브 : {id.DisplayName()}");
+        }
+    }
+
+    public void TryRemovePassive(PassiveID id)
+    {
+        if (UsePassiveHashSet.Remove(id))
+        {
+            Debug.Log($"패시브 제거 : {id.DisplayName()}");
+        }
+        else
+        {
+            Debug.LogWarning($"존재하지 않는 패시브 : {id.DisplayName()}");
+        }
+    }
+}
+
+public class UserDataList
+{
+    public List<UserData> list;
+
+    [JsonConstructor]
+    public UserDataList(List<UserData> list)
+    {
+        this.list = list;
+    }
+    public UserDataList()
+    {
+        list = new List<UserData>();
+        list.Add(new UserData(0));
+    }
+    public static string FilePath()
+    {        
+        return $"/Data/UserData/SaveFile.json";
     }
 }
 
@@ -141,6 +192,6 @@ public class JsonDataCreator : MonoBehaviour
     public void Awake()
     {
         JsonDataManager.jsonCache.Lode();
-        //JsonDataManager.jsonCache.Save();
+        JsonDataManager.jsonCache.Save();
     }
 }

@@ -19,43 +19,50 @@ public class PlayerPassive : MonoBehaviour
     [Header("디버그 모드 사용 : 체크 시, 에디터상에서 선택한 패시브를 적용함.")]
     [SerializeField] bool IsDebugMode = false;
 
-    public Dictionary<PassiveID, bool> PassiveDic { get; private set; }
+    public HashSet<PassiveID> PassiveHashSet_OnDebugMode { get; private set; }
 
     public void Init()
     {
-        PassiveDic = new Dictionary<PassiveID, bool>();
+        PassiveHashSet_OnDebugMode = new HashSet<PassiveID>();
 
         if (IsDebugMode)
         {
             if (PassiveID_Offensive1 != PassiveID.None)
             {
-                PassiveDic.TryAdd(PassiveID_Offensive1, true);
+                PassiveHashSet_OnDebugMode.Add(PassiveID_Offensive1);
             }
             if (PassiveID_Offensive2 != PassiveID.None)
             {
-                PassiveDic.TryAdd(PassiveID_Offensive2, true);
+                PassiveHashSet_OnDebugMode.Add(PassiveID_Offensive2);
             }
             if (PassiveID_Defensive1 != PassiveID.None)
             {
-                PassiveDic.TryAdd(PassiveID_Defensive1, true);
+                PassiveHashSet_OnDebugMode.Add(PassiveID_Defensive1);
             }
             if (PassiveID_Defensive2 != PassiveID.None)
             {
-                PassiveDic.TryAdd(PassiveID_Defensive2, true);
+                PassiveHashSet_OnDebugMode.Add(PassiveID_Defensive2);
             }
             if (PassiveID_Utility1 != PassiveID.None)
             {
-                PassiveDic.TryAdd(PassiveID_Utility1, true);
+                PassiveHashSet_OnDebugMode.Add(PassiveID_Utility1);
             }
             if (PassiveID_Utility2 != PassiveID.None)
             {
-                PassiveDic.TryAdd(PassiveID_Utility2, true);
+                PassiveHashSet_OnDebugMode.Add(PassiveID_Utility2);
             }
         }
     }
 
     public bool ContainPassiveId(PassiveID id)
     {
-        return PassiveDic.ContainsKey(id);
+        if (IsDebugMode)
+        {
+            return PassiveHashSet_OnDebugMode.Contains(id);
+        }
+        else
+        {
+            return JsonDataManager.GetUserData(0).UsePassiveHashSet.Contains(id);
+        }
     }
 }
