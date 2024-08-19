@@ -31,6 +31,14 @@ public class PlayerModChangeManager : MonoBehaviour
             _PlayerMaster.IsAttackState = value;
         }
     }
+     public bool isDashing
+    {
+        get { return _PlayerMaster.isDashing; }
+        set
+        {
+            _PlayerMaster.isDashing = value;
+        }
+    }
 
     private void Awake()
     {
@@ -42,11 +50,11 @@ public class PlayerModChangeManager : MonoBehaviour
         switch (e.PropertyName)
         {
             case nameof(InputManager.Instance.IsLControlBtnClick):                
-                if (InputManager.Instance.IsLControlBtnClick == true && IsAbsorptState == false&&IsAttackState==false)
+                if (InputManager.Instance.IsLControlBtnClick == true && IsAbsorptState == false&&IsAttackState==false&& isDashing==false)
                 {
                     EnterAbsorptState();
                 }
-                if (InputManager.Instance.IsLControlBtnClick == false && IsAbsorptState == true&& IsAttackState==false)
+                if (InputManager.Instance.IsLControlBtnClick == false && IsAbsorptState == true&& IsAttackState==false && isDashing == false)
                 {
                     IsAbsorptState = false;
                     EnterRangeMode();
@@ -54,7 +62,7 @@ public class PlayerModChangeManager : MonoBehaviour
                 break;
 
             case nameof(InputManager.Instance.IsLMouseBtnClick):                
-                if (InputManager.Instance.IsLControlBtnClick == true && IsAbsorptState == true && IsAttackState == false)
+                if (InputManager.Instance.IsLControlBtnClick == true && IsAbsorptState == true && IsAttackState == false && isDashing == false)
                 {
                     EnterMeleeMode();
                 }

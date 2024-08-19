@@ -18,13 +18,13 @@ public class AttackSystem : MonoBehaviour
 
     [SerializeField] DamageBox _damageBox;
 
-    public void Init(Action onCharged = null, Action onChargeFail = null, Action onChargeEnd = null)
+    public void Init(Action onCharged, Action onChargeFail)
     {
         TryGetComponent(out _animator);
         TryGetComponent(out _playerAttack);
         TryGetComponent(out _closeAttack);
         TryGetComponent(out _closeSkill);
-        _closeAttack.Init(_animator, onCharged, onChargeEnd, onChargeFail);
+        _closeAttack.Init(_animator, onCharged, onChargeFail);
         _closeSkill.Init(_animator);
         _PlayerMaster = GetComponent<PlayerMaster>();
 
@@ -37,6 +37,14 @@ public class AttackSystem : MonoBehaviour
     public bool AttackLockMove
     {
         get => _attackLcokMove;
+    }
+    public bool isAttackTrigger
+    {
+        get { return _PlayerMaster.isAttackTrigger; }
+        set
+        {
+            _PlayerMaster.isAttackTrigger = value;
+        }
     }
     public void StartAttack(PlayerAttackKind index, int comboIndex)
     {
@@ -79,10 +87,16 @@ public class AttackSystem : MonoBehaviour
     {
         _closeAttack.EndAttack();
     }
-
-    public void EnableDamageBox(float dmg, float range, Action OnHitCallback)
+    public void OnReleaseLoop()
     {
-        _damageBox.EnableDamageBox(dmg, range, OnHitCallback);
+        if(!isAttackTrigger)
+        {
+            _animator.SetTrigger("AttackEnd");
+        }
+    }
+    private void EnableDamageBox()
+    {
+        _damageBox.EnableDamageBox(30, _PlayerMaster.OnMeleeHit);
         _playerAttack.IncreaseAttackCount();
     }
 
@@ -120,5 +134,9 @@ public class AttackSystem : MonoBehaviour
     {
         _attackLcokMove = false;
         _closeAttack.ChargeFail();
+    }
+    public void OnUseSkillGauge()
+    {
+        _PlayerMaster._PlayerInstanteState.TryUseSkillGauge2();
     }
 }

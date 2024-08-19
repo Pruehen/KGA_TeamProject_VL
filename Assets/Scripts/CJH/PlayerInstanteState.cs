@@ -33,7 +33,7 @@ public class PlayerInstanteState : MonoBehaviour
     [SerializeField] float staminaRecoveryDelay;
     float staminaRecoveryDelayValue = 0;
 
-    [SerializeField] float MaxskillGauge = 100;
+    [SerializeField] float MaxskillGauge = 400;
     float skillGaugeRecoveryRestTime = 0;
     [SerializeField] int maxBullets = 50;
     [SerializeField] int maxMeleeBullets = 50;
@@ -121,6 +121,7 @@ public class PlayerInstanteState : MonoBehaviour
 
     private void Update()
     {
+        TestSkill();
         staminaRecoveryDelayValue += Time.deltaTime;
         if (staminaRecoveryDelayValue >= staminaRecoveryDelay)
         {
@@ -358,5 +359,24 @@ public class PlayerInstanteState : MonoBehaviour
     public void UpdateSkillGauge()
     {
         SkillGaugeRatioChanged?.Invoke(skillGauge / MaxskillGauge);
+    }
+    public void TestSkill()
+    {
+        if(Input.GetKeyDown(KeyCode.F1))
+        {
+            SkillGaugeRecovery(100f);
+        }
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            SkillGaugeRecovery(200f);
+        }
+        if (Input.GetKeyDown(KeyCode.F3))
+        {
+            SkillGaugeRecovery(300f);
+        }
+        if (Input.GetKeyDown(KeyCode.F4))
+        {
+            SkillGaugeRecovery(400f);
+        }
     }
 }

@@ -40,6 +40,22 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
             Execute_BlueChip4_OnModeChange();
         }
     }
+    public bool isDashing
+    {
+        get { return _PlayerMove._isDashing; }
+        set
+        {
+            _PlayerMove._isDashing = value;
+        }
+    }
+    public bool isAttackTrigger
+    {
+        get { return _PlayerAttack.attackTrigger; }
+        set
+        {
+            _PlayerAttack.attackTrigger = value;
+        }
+    }
     public int GetBlueChipLevel(BlueChipID iD)
     {
         return _PlayerEquipBlueChip.GetBlueChipLevel(iD);

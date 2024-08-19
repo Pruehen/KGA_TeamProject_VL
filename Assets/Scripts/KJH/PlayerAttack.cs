@@ -186,6 +186,10 @@ public class PlayerAttack : MonoBehaviour
             Debug.Log("차-지 실패");
         }
     }
+    public void OnUseSkillGauge()
+    {
+        _PlayerMaster._PlayerInstanteState.TryUseSkillGauge2();
+    }
 
     private void EnableDamageBox_Player()
     {
