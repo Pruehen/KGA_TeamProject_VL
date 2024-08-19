@@ -166,7 +166,7 @@ public class PlayerMove : MonoBehaviour
     public void Dash()
     {
 
-        if (_PlayerMaster._PlayerInstanteState.TryStaminaConsumption(30))
+        if (_PlayerMaster._PlayerInstanteState.TryStaminaConsumption(_PlayerMaster._PlayerInstanteState.DashCost))
         {
             OnlyDash();
             _attackSystem.ReleaseLockMove();
@@ -191,13 +191,13 @@ public class PlayerMove : MonoBehaviour
     //원거리4타시 호출
     public void OnlyDash()
     {
-        Vector3 newPoint = _moveVector3_Origin;
+        Vector3 newPoint = _moveVector3_Origin.normalized;
 
         if (newPoint == Vector3.zero)
         {
-            newPoint = new Vector3(0, 0, 14.26f);
+            newPoint = new Vector3(0, 0, 1f);
         }
-        _Rigidbody.AddForce(_PlayerCameraMove.CamRotation() * newPoint * 100f, ForceMode.Acceleration);
-        SetDashLock(.2f);
+        _Rigidbody.AddForce(_PlayerCameraMove.CamRotation() * newPoint * _PlayerMaster._PlayerInstanteState.DashForce, ForceMode.Acceleration);
+        SetDashLock(_PlayerMaster._PlayerInstanteState.DashTime);
     }
 }

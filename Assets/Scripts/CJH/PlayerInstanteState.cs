@@ -52,6 +52,12 @@ public class PlayerInstanteState : MonoBehaviour
     public float SkillPowerMulti {get; set;}
     float GetSkillPower() { return skillPower * SkillPowerMulti; }
     public float DmgMulti { get; set; } = 1f;
+
+    [SerializeField] public float DashTime = .5f;
+    [SerializeField] public float DashForce = 3f;
+    [SerializeField] public float DashCost = 300f;
+
+
     public float GetDmg(PlayerAttackKind type, int combo)
     {
         float baseDmg = GetAttackPower();// * coefficient;
@@ -165,6 +171,10 @@ public class PlayerInstanteState : MonoBehaviour
         moveSpeed = _playerStatData.moveSpeed;
 
         maxShieldBase = _playerStatData.shieldMax;
+
+        DashTime = _playerStatData.dashTime;
+        DashForce = _playerStatData.dashForce;
+        DashCost = _playerStatData.dashCost;
     }
 
     //스태미나 소모 
@@ -296,7 +306,33 @@ public class PlayerInstanteState : MonoBehaviour
         UpdateBullet_Melee();
     }
 
-
+    public float GetSkillRegainOnHit(PlayerAttackType attackMod ,PlayerAttackType attackType, bool enhanced) 
+    {
+        if(attackMod == PlayerAttackType.MeleeNormalAttack1)
+        {
+            if (attackType == PlayerAttackType.MeleeNormalAttack1) return _playerStatData.atkMelee101;
+            if (attackType == PlayerAttackType.MeleeChargeAttack2) return _playerStatData.atkMelee111;
+            if (attackType == PlayerAttackType.MeleeDashAttack) return _playerStatData.atkMelee121;
+        }
+        if( enhanced )
+        {
+                 if (attackType == PlayerAttackType.RangeNormalAttack1) return _playerStatData.atkRanged111;
+            else if (attackType == PlayerAttackType.RangeNormalAttack2) return _playerStatData.atkRanged111;
+            else if (attackType == PlayerAttackType.RangeNormalAttack3) return _playerStatData.atkRanged111;
+            else if (attackType == PlayerAttackType.RangeNormalAttack4) return _playerStatData.atkRanged112;
+            else if (attackType == PlayerAttackType.RangeDashAttack) return _playerStatData.atkRanged113;
+        }
+        else
+        {
+                 if (attackType == PlayerAttackType.RangeNormalAttack1) return _playerStatData.atkRanged101;
+            else if (attackType == PlayerAttackType.RangeNormalAttack2) return _playerStatData.atkRanged101;
+            else if (attackType == PlayerAttackType.RangeNormalAttack3) return _playerStatData.atkRanged101;
+            else if (attackType == PlayerAttackType.RangeNormalAttack4) return _playerStatData.atkRanged102;
+            else if (attackType == PlayerAttackType.RangeDashAttack) return _playerStatData.atkRanged103;
+        }
+        Debug.LogError("오류");
+        return -1f;
+    }
     public void SkillGaugeRecovery(float value)
     {
         skillGauge += value;

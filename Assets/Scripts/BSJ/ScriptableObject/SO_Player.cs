@@ -16,8 +16,8 @@ public class SO_Player : ScriptableObject
     public float attackSpeed = 1f;
 
     public float shieldMax = 100f;
-    public float dashTime = 2f;
-    public float dashDistance = 3f;
+    public float dashTime = .5f;
+    public float dashForce = 3f;
     public float dashCost = 300f;
 
     public float MaxskillGauge = 100f;
