@@ -11,7 +11,6 @@ public class RangeAttack : AiAttackAction
     private Transform targetTrf;
     private Animator animator;
     private int hashAttack;
-    private int hashIsRangeAttack;
 
     private Detector detector;
 
@@ -33,7 +32,6 @@ public class RangeAttack : AiAttackAction
         animator = gameObject.GetComponent<Animator>();
 
         hashAttack = Animator.StringToHash("Attack");
-        hashIsRangeAttack = Animator.StringToHash("IsRangeAttack");
 
         Prefab_projectile = enemyData.ProjectilePrefab;
         _firePos = firePos;
@@ -80,7 +78,6 @@ public class RangeAttack : AiAttackAction
     {
         rotatable = true;
         targetTrf = detector.GetTarget();
-        animator.SetBool(hashIsRangeAttack, true);
         animator.SetTrigger(hashAttack);
     }
 }
