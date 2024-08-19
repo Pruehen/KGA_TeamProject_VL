@@ -29,10 +29,10 @@ public class PlayerInstanteState : MonoBehaviour
 
     [SerializeField] float maxHpBase;
     public float MaxHpMulti { get; set; }
-    float GetMaxHp() { return maxHpBase * MaxHpMulti; }
+    public float GetMaxHp() { return maxHpBase * MaxHpMulti; }
     [SerializeField] float maxShieldBase;
     public float MaxShieldMulti { get; set; }
-    float GetMaxShield() { return maxShieldBase * MaxShieldMulti; }
+    public float GetMaxShield() { return maxShieldBase * MaxShieldMulti; }
     [SerializeField] float MaxStamina;
     [SerializeField] float staminaRecoverySpeed;
     [SerializeField] float staminaRecoveryDelay;
@@ -46,11 +46,11 @@ public class PlayerInstanteState : MonoBehaviour
     [SerializeField] float attackSpeed = 1f;
     [SerializeField] float attackPowerBase;
     public float AttackPowerMulti { get; set; }
-    float GetAttackPower() { return attackPowerBase * AttackPowerMulti; }
+    public float GetAttackPower() { return attackPowerBase * AttackPowerMulti; }
     [SerializeField] float attackRange = 1f;
     [SerializeField] float skillPower;
     public float SkillPowerMulti { get; set; }
-    float GetSkillPower() { return skillPower * SkillPowerMulti; }
+    public float GetSkillPower() { return skillPower * SkillPowerMulti; }
     public float DmgMulti { get; set; } = 1f;
 
     [SerializeField] public float DashTime = .5f;
