@@ -54,7 +54,7 @@ public class PlayerPassive : MonoBehaviour
         }
         else
         {
-            PassiveHashSet = JsonDataManager.GetUserData(0).UsePassiveHashSet;
+            PassiveHashSet = JsonDataManager.GetUserData().UsePassiveHashSet;
         }
     }
 

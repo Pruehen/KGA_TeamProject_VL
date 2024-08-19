@@ -5,6 +5,8 @@ using System.Linq;
 using EnumTypes;
 using System;
 using Unity.VisualScripting;
+using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
+using UnityEditor;
 
 public class BlueChip
 {    
@@ -118,28 +120,55 @@ public class PassiveTable
 }
 
 public class UserData
-{
+{    
     [JsonProperty] public int SaveDataIndex { get; private set; }
+    [JsonProperty] public int SaveTime { get; private set; }
+    [JsonProperty] public int PlayTime { get; private set; }
     [JsonProperty] public int Gold { get; private set; }
+    [JsonProperty] public int Count_Try { get; private set; }
+    [JsonProperty] public int Count_Clear { get; private set; }
+    [JsonProperty] public HashSet<PassiveID> UnlockPassiveHashSet { get; private set; }
     [JsonProperty] public HashSet<PassiveID> UsePassiveHashSet { get; private set; }
+    [JsonProperty] public HashSet<string> IsClearAchievementsKey { get; private set; }
+    [JsonProperty] public PlayData PlayData { get; private set; }
 
-    [JsonConstructor]
-    public UserData(int saveDataIndex, int gold, HashSet<PassiveID> usePassiveHashSet)
+    [JsonConstructor]   
+    public UserData(
+        int saveDataIndex,
+        int saveTime,
+        int playTime,
+        int gold,
+        int countTry,
+        int countClear,
+        HashSet<PassiveID> unlockPassiveHashSet,
+        HashSet<PassiveID> usePassiveHashSet,
+        HashSet<string> isClearAchievementsKey,
+        PlayData playData)
     {
         SaveDataIndex = saveDataIndex;
+        SaveTime = saveTime;
+        PlayTime = playTime;
         Gold = gold;
-        UsePassiveHashSet = usePassiveHashSet;
-        if(UsePassiveHashSet == null)
-        {
-            UsePassiveHashSet = new HashSet<PassiveID>();
-        }
+        Count_Try = countTry;
+        Count_Clear = countClear;
+        UnlockPassiveHashSet = unlockPassiveHashSet ?? new HashSet<PassiveID>();
+        UsePassiveHashSet = usePassiveHashSet ?? new HashSet<PassiveID>();
+        IsClearAchievementsKey = isClearAchievementsKey ?? new HashSet<string>();
+        PlayData = playData ?? null;
     }
 
     public UserData(int saveDataIndex)
     {
         SaveDataIndex = saveDataIndex;
+        SaveTime = 0;
+        PlayTime = 0;
         Gold = 0;
+        Count_Try = 0;
+        Count_Clear = 0;
+        UnlockPassiveHashSet = new HashSet<PassiveID>();
         UsePassiveHashSet = new HashSet<PassiveID>();
+        IsClearAchievementsKey = new HashSet<string>();
+        PlayData = null;
     }
 
     public void TryAddPassive(PassiveID id)
@@ -167,19 +196,53 @@ public class UserData
     }
 }
 
-public class UserDataList
+public class PlayData
 {
-    public List<UserData> list;
+    [JsonProperty] public int InGame_Gold { get; private set; }
+    [JsonProperty] public Dictionary<BlueChipID, int> InGame_BlueChip_Level { get; private set; }
+    [JsonProperty] public int InGame_Stage { get; private set; }
 
     [JsonConstructor]
-    public UserDataList(List<UserData> list)
+    public PlayData(int InGame_Gold, Dictionary<BlueChipID, int> InGame_BlueChip_Level, int InGame_Stage)
     {
-        this.list = list;
+        this.InGame_Gold = InGame_Gold;
+        this.InGame_BlueChip_Level = InGame_BlueChip_Level;
+        this.InGame_Stage = InGame_Stage;
+    }
+
+    public PlayData()
+    {
+        this.InGame_Gold = 0;
+        this.InGame_BlueChip_Level = new Dictionary<BlueChipID, int>();
+        this.InGame_Stage = 0;
+    }
+}
+
+public class UserDataList
+{
+    public Dictionary<int, UserData> dic;
+    public int UseIndex { get; set; }
+    
+    public UserDataList(Dictionary<int, UserData> dic)
+    {
+        this.dic = dic;
     }
     public UserDataList()
     {
-        list = new List<UserData>();
-        list.Add(new UserData(0));
+        dic = new Dictionary<int, UserData>();
+        dic.Add(0, new UserData(0));
+    }
+    public UserData GetUserData()
+    {
+        if(dic.ContainsKey(UseIndex))
+        {
+            return dic[UseIndex];
+        }
+        else
+        {
+            Debug.Log("해당하는 키가 없습니다");
+            return null;
+        }
     }
     public static string FilePath()
     {        
