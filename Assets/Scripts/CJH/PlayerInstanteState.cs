@@ -27,7 +27,9 @@ public class PlayerInstanteState : MonoBehaviour
 
     public bool IsDead { get; private set; }
 
-    [SerializeField] float maxHp;
+    [SerializeField] float maxHpBase;
+    public float MaxHpMulti { get; set; }
+    float GetMaxHp() { return maxHpBase * MaxHpMulti; }
     [SerializeField] float MaxStamina;
     [SerializeField] float staminaRecoverySpeed;
     [SerializeField] float staminaRecoveryDelay;
@@ -39,12 +41,16 @@ public class PlayerInstanteState : MonoBehaviour
     [SerializeField] int maxMeleeBullets = 50;
 
     [SerializeField] float attackSpeed = 1f;
-    [SerializeField] float attackPower;
+    [SerializeField] float attackPowerBase;
+    public float AttackPowerMulti { get; set; }
+    float GetAttackPower() { return attackPowerBase * AttackPowerMulti; }
     [SerializeField] float attackRange = 1f;
     [SerializeField] float skillPower;
+    public float SkillPowerMulti {get; set;}
+    float GetSkillPower() { return skillPower * SkillPowerMulti; }
     public float GetDmg(PlayerAttackKind type, int combo)
     {
-        float baseDmg = attackPower;// * coefficient;
+        float baseDmg = GetAttackPower();// * coefficient;
         float dmgGain = 1;
         if (type == PlayerAttackKind.MeleeChargedAttack)//차지 공격일 경우
         {
@@ -101,7 +107,7 @@ public class PlayerInstanteState : MonoBehaviour
     public Action<float> SkillGaugeRatioChanged;
     public Action<bool> OnMeleeModeChanged;
 
-    [SerializeField] SO_Player _playerStatData;
+    [SerializeField] public SO_Player _playerStatData;
     private void Awake()
     {
         _PlayerMaster = GetComponent<PlayerMaster>();
@@ -139,7 +145,7 @@ public class PlayerInstanteState : MonoBehaviour
 
     public void Init(PlayerPassive playerPassive)
     {
-        maxHp = _playerStatData.maxHp;
+        maxHpBase = _playerStatData.maxHp;
         MaxStamina = _playerStatData.MaxStamina;
         staminaRecoverySpeed = _playerStatData.staminaRecoverySpeed;
         staminaRecoveryDelay = _playerStatData.staminaRecoveryDelay;
@@ -149,7 +155,7 @@ public class PlayerInstanteState : MonoBehaviour
         maxMeleeBullets = _playerStatData.maxMeleeBullets;
 
         attackSpeed = _playerStatData.attackSpeed;
-        attackPower = _playerStatData.attackPower;
+        attackPowerBase = _playerStatData.attackPower;
         skillPower = _playerStatData.skillPower;
 
         moveSpeed = _playerStatData.moveSpeed;
@@ -213,9 +219,9 @@ public class PlayerInstanteState : MonoBehaviour
     public void ChangeHp(float value)
     {
         hp += value;
-        if (hp > maxHp)
+        if (hp > GetMaxHp())
         {
-            hp = maxHp;
+            hp = GetMaxHp();
         }
         if (hp < 0)
         {
@@ -228,9 +234,9 @@ public class PlayerInstanteState : MonoBehaviour
     public void ChangeShield(float value)
     {
         Shield += value;
-        if (Shield > maxHp)
+        if (Shield > GetMaxHp())
         {
-            Shield = maxHp;
+            Shield = GetMaxHp();
         }
         if (Shield < 0)
         {
@@ -316,7 +322,7 @@ public class PlayerInstanteState : MonoBehaviour
 
     void Restore()
     {
-        hp = maxHp;
+        hp = GetMaxHp();
         IsDead = false;
         stamina = MaxStamina;
         skillGauge = 0;
@@ -336,11 +342,11 @@ public class PlayerInstanteState : MonoBehaviour
 
     public void UpdateHealth()
     {
-        HealthRatioChanged?.Invoke(hp / maxHp);
+        HealthRatioChanged?.Invoke(hp / GetMaxHp());
     }
     public void UpdateShild()
     {
-        ShildRatioChanged?.Invoke(Shield / maxHp);
+        ShildRatioChanged?.Invoke(Shield / GetMaxHp());
     }
     public void UpdateStamina()
     {

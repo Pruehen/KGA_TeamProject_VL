@@ -1,6 +1,5 @@
 using EnumTypes;
 using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -86,16 +85,38 @@ public class LaunchAttack : AiAttackAction
         gameObject.layer = LayerMask.NameToLayer("EnemyCollider");
         rb.isKinematic = true;
     }
+
+
+    public void StartAttackAnim()
+    {
+        _isFalling = false;
+        _hasJumped = 0;
+        wait = false;
+
+
+        targetTrf = detector.GetTarget();
+        if (Vector3.Distance(detector.GetPosition(), transform.position) <= _meleeRange)
+        {
+            agent.nextPosition = transform.position;
+            animator.SetBool("IsLaunch", false);
+            animator.SetTrigger("Attack");
+        }
+        else
+        {
+            animator.SetBool("IsLaunch", true);
+            animator.SetTrigger("Attack");
+        }
+    }
+
     public void OnExcuteLaunch()
     {
+        _hasJumped = 1;
+
         agent.nextPosition = transform.position;
         agent.updatePosition = false;
         agent.updateRotation = false;
         agent.isStopped = true;
         isInit = true;
-        _isFalling = false;
-        _hasJumped = 0;
-        wait = false;
         rb.isKinematic = false;
         initialDistance = (transform.position - targetTrf.position).magnitude;
         Vector3 targetDir = (-transform.position + targetTrf.position).normalized;
@@ -132,11 +153,11 @@ public class LaunchAttack : AiAttackAction
 
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiredDir), Time.deltaTime * _aimRotateSpeed);
 
-        bool isGrounded = Physics.CheckSphere(transform.position, .1f, LayerMask.GetMask("Environment"));
+        bool isGrounded = Physics.CheckSphere(transform.position, .01f, LayerMask.GetMask("Environment"));
 
         if (!isGrounded)
         {
-            if(_isFalling)
+            if (_isFalling)
             {
                 transform.Translate(-Vector3.up * Time.deltaTime * 10f);
             }
@@ -160,10 +181,9 @@ public class LaunchAttack : AiAttackAction
         {
             if (_hasJumped <= 5)
             {
-                _hasJumped++;
                 return;
             }
-            DisablePhysics(); 
+            DisablePhysics();
             ResetLaunching();
             animator.SetTrigger(hashEndLaunch);
         }
@@ -173,33 +193,15 @@ public class LaunchAttack : AiAttackAction
         return isInit;
     }
 
-    public void StartAttackAnim()
-    {
-        targetTrf = detector.GetTarget();
-        if (Vector3.Distance(detector.GetPosition(),transform.position) <= _meleeRange)
-        {
-            agent.nextPosition = transform.position;
-            animator.SetBool("IsLaunch", false);
-            animator.SetTrigger("Attack");
-        }
-        else
-        {
-            animator.SetBool("IsLaunch", true);
-            animator.SetTrigger("Attack");
-        }
-    }
 
 
     bool wait = false;
     public void TriggerOnEnterCollider()
     {
-        if(!wait)
+        if (_hasJumped >= 1)
         {
-            wait = true;
-        }
-        else
-        {
-            if (!_isFalling)
+            _hasJumped++;
+            if(_hasJumped >= 4)
             {
                 _isFalling = true;
                 rb.isKinematic = true;

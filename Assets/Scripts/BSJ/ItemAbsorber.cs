@@ -37,8 +37,16 @@ public class ItemAbsorber : MonoBehaviour
 
     bool _isInit = false;
 
-    public void Init()
+    public void Init(SO_Player playerData)
     {
+        RevolveRadious = playerData.RevolveRadious;
+        RevolveSpeed = playerData.RevolveSpeed;
+        RevolveSpeedCurve = playerData.RevolveSpeedCurve;
+        Radious = playerData.Radious;
+        Height = playerData.Height;
+        AbsolsionSpeed = playerData.AbsolsionSpeed;
+        RadiusExpandCurve = playerData.RadiusExpandCurve;
+
         _collider = GetComponent<CapsuleCollider>();
         SetRadius(0f);
         SetHeight(Height);
