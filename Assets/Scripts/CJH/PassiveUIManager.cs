@@ -1,6 +1,3 @@
-using EnumTypes;
-using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -16,14 +13,13 @@ public class PassiveUIManager : MonoBehaviour
         InputManager.Instance.PropertyChanged += OnInputPropertyChanged;
     }
 
-
     void OnInputPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)
         {
             case nameof(InputManager.Instance.IsInteractiveBtnClick):
                 if (InputManager.Instance.IsInteractiveBtnClick == true)
-                {
+                {                  
                     if (gameObject.activeSelf == true)
                     {
                         Button selectedButton = EventSystem.current.currentSelectedGameObject?.GetComponent<Button>();
@@ -35,13 +31,8 @@ public class PassiveUIManager : MonoBehaviour
                     {
                         return;
                     }
-
-
                 }
                 break;
         }
     }
-
-
-
 }

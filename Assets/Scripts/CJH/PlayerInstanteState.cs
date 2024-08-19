@@ -49,7 +49,7 @@ public class PlayerInstanteState : MonoBehaviour
     [SerializeField] float _skillPowerGain;
     float SkillPower() { return skillPower * _skillPowerGain; }
 
-    public float GetDmg(PlayerAttackType type, int combo)
+    public float GetDmg(PlayerAttackKind type, int combo)
     {
         float baseDmg = AttackPower();// * coefficient;
         float dmgGain = 1;

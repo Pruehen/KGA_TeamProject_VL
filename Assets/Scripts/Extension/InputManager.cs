@@ -2,7 +2,7 @@ using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputManager : GlobalSingleton<InputManager>
+public class InputManager : SceneSingleton<InputManager>
 {   
     Vector2 _moveVector2_Left_WASD;
     Vector2 _moveVector2_Right_Mouse;
