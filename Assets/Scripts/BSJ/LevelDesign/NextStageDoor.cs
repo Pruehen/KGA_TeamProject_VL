@@ -26,7 +26,10 @@ public class NextStageDoor : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        GameManager.Instance.SetRewordType(_rewardType);
-        GameManager.Instance.LoadNextStage();
+        if (other.CompareTag("Player") && other.attachedRigidbody != null)
+        {
+            GameManager.Instance.SetRewordType(_rewardType);
+            GameManager.Instance.LoadNextStage();
+        }
     }
 }
