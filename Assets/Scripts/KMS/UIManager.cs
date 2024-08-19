@@ -42,7 +42,7 @@ public class UIManager : SceneSingleton<UIManager>
             PlayerState.BulletChanged += OnBulletChanged;
             PlayerState.MeleeBulletChanged += OnMeleeBulletChanged;
             PlayerState.OnMeleeModeChanged += OnMeleeModeChanged;
-
+            PlayerState.SkillGaugeRatioChanged += OnSkillRatioChanged;
         }
 
         Command_Refresh_View();
@@ -62,6 +62,7 @@ public class UIManager : SceneSingleton<UIManager>
             PlayerState.BulletChanged -= OnBulletChanged;
             PlayerState.StaminaRatioChanged -= OnStaminaChanged;
             PlayerState.MeleeBulletChanged -= OnMeleeBulletChanged;
+            PlayerState.SkillGaugeRatioChanged -= OnSkillRatioChanged;
         }
     }
 
@@ -159,6 +160,10 @@ public class UIManager : SceneSingleton<UIManager>
     public void OnMeleeModeChanged(bool value)
     {
         UI_MeleeBulletUI.SetActive(value);
+    }
+    public void OnSkillRatioChanged(float value)
+    {
+        skillPoint.fillAmount = value;
     }
 
     //Ω√¿€
