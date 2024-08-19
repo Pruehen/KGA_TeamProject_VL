@@ -49,7 +49,7 @@ public class PlayerInstanteState : MonoBehaviour
     float GetAttackPower() { return attackPowerBase * AttackPowerMulti; }
     [SerializeField] float attackRange = 1f;
     [SerializeField] float skillPower;
-    public float SkillPowerMulti {get; set;}
+    public float SkillPowerMulti { get; set; }
     float GetSkillPower() { return skillPower * SkillPowerMulti; }
     public float DmgMulti { get; set; } = 1f;
 
@@ -194,7 +194,7 @@ public class PlayerInstanteState : MonoBehaviour
     public void StaminaRatioChange(float value)
     {
         stamina += MaxStamina * value * 0.01f;
-        if(stamina > MaxStamina)
+        if (stamina > MaxStamina)
         {
             stamina = MaxStamina;
         }
@@ -316,32 +316,37 @@ public class PlayerInstanteState : MonoBehaviour
         UpdateBullet_Melee();
     }
 
-    public float GetSkillRegainOnHit(PlayerAttackType attackMod ,PlayerAttackType attackType, bool enhanced) 
+    private float GetSkillGainOnHit(PlayerAttackKind attackKind, bool enhanced = false, bool isLastAttack = false)
     {
-        if(attackMod == PlayerAttackType.MeleeNormalAttack1)
+        if (attackKind == PlayerAttackKind.MeleeNormalAttack) return _playerStatData.statGaugeGainMelee1;
+        if (attackKind == PlayerAttackKind.MeleeChargedAttack) return _playerStatData.statGaugeGainMelee2;
+        if (attackKind == PlayerAttackKind.MeleeDashAttack) return _playerStatData.statGaugeGainMelee3;
+
+        if (attackKind == PlayerAttackKind.RangeNormalAttack && !isLastAttack) return _playerStatData.statGaugeGainRanged1;
+        else if (attackKind == PlayerAttackKind.RangeNormalAttack && isLastAttack) return _playerStatData.statGaugeGainRanged2;
+        else if (attackKind == PlayerAttackKind.RangeDashAttack) return _playerStatData.statGaugeGainRanged3;
+        return 0f;
+    }
+    private float GetDamageMultiByAttakcType(PlayerAttackKind attackKind, bool enhanced, bool isLastAttack = false)
+    {
+        if (enhanced)
         {
-            if (attackType == PlayerAttackType.MeleeNormalAttack1) return _playerStatData.atkMelee101;
-            if (attackType == PlayerAttackType.MeleeChargeAttack2) return _playerStatData.atkMelee111;
-            if (attackType == PlayerAttackType.MeleeDashAttack) return _playerStatData.atkMelee121;
-        }
-        if( enhanced )
-        {
-                 if (attackType == PlayerAttackType.RangeNormalAttack1) return _playerStatData.atkRanged111;
-            else if (attackType == PlayerAttackType.RangeNormalAttack2) return _playerStatData.atkRanged111;
-            else if (attackType == PlayerAttackType.RangeNormalAttack3) return _playerStatData.atkRanged111;
-            else if (attackType == PlayerAttackType.RangeNormalAttack4) return _playerStatData.atkRanged112;
-            else if (attackType == PlayerAttackType.RangeDashAttack) return _playerStatData.atkRanged113;
+            if (attackKind == PlayerAttackKind.RangeNormalAttack && !isLastAttack) return _playerStatData.atkRanged111;
+            else if (attackKind == PlayerAttackKind.RangeNormalAttack && isLastAttack) return _playerStatData.atkRanged112;
+            else if (attackKind == PlayerAttackKind.RangeDashAttack) return _playerStatData.atkRanged113;
         }
         else
         {
-                 if (attackType == PlayerAttackType.RangeNormalAttack1) return _playerStatData.atkRanged101;
-            else if (attackType == PlayerAttackType.RangeNormalAttack2) return _playerStatData.atkRanged101;
-            else if (attackType == PlayerAttackType.RangeNormalAttack3) return _playerStatData.atkRanged101;
-            else if (attackType == PlayerAttackType.RangeNormalAttack4) return _playerStatData.atkRanged102;
-            else if (attackType == PlayerAttackType.RangeDashAttack) return _playerStatData.atkRanged103;
+            if (attackKind == PlayerAttackKind.RangeNormalAttack && !isLastAttack) return _playerStatData.atkRanged101;
+            else if (attackKind == PlayerAttackKind.RangeNormalAttack && isLastAttack) return _playerStatData.atkRanged102;
+            else if (attackKind == PlayerAttackKind.RangeDashAttack) return _playerStatData.atkRanged103;
         }
-        Debug.LogError("오류");
-        return -1f;
+
+        if (attackKind == PlayerAttackKind.MeleeNormalAttack) return _playerStatData.atkMelee101;
+        if (attackKind == PlayerAttackKind.MeleeChargedAttack) return _playerStatData.atkMelee111;
+        if (attackKind == PlayerAttackKind.MeleeDashAttack) return _playerStatData.atkMelee121;
+
+        return 1f;
     }
     public void SkillGaugeRecovery(float value)
     {
@@ -354,6 +359,18 @@ public class PlayerInstanteState : MonoBehaviour
 
         skillGaugeRecoveryRestTime = 0;
         UpdateSkillGauge();
+    }
+    public void SkillGaugeRecovery(PlayerAttackKind attackKind, bool isLastAttack)
+    {
+        if (attackKind == PlayerAttackKind.RangeNormalAttack)
+        {
+            bool hasBullet = bullets > 0;
+            SkillGaugeRecovery(GetSkillGainOnHit(attackKind, hasBullet, isLastAttack));
+        }
+        else
+        {
+            SkillGaugeRecovery(GetSkillGainOnHit(attackKind));
+        }
     }
 
     public void UseSkillGauge(float value)
@@ -418,7 +435,7 @@ public class PlayerInstanteState : MonoBehaviour
     }
     public void TestSkill()
     {
-        if(Input.GetKeyDown(KeyCode.F1))
+        if (Input.GetKeyDown(KeyCode.F1))
         {
             SkillGaugeRecovery(100f);
         }

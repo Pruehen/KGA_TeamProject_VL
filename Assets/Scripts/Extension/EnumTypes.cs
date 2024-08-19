@@ -74,6 +74,8 @@ namespace EnumTypes
         MeleeSkillAttack,
         MeleeNormalAttack,
         MeleeChargedAttack,
+        RangeDashAttack,
+        MeleeDashAttack,
     }
 
     public static class EnumAttackHelper

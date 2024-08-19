@@ -23,9 +23,9 @@ public class SO_Player : ScriptableObject
     public float MaxskillGauge = 100f;
 
     public float statGaugeGainRanged1 = 30f;
-    public float statGaugeGainRanged3 = 30f;
-    public float statGaugeGainMelee1 = 20f;
-    public float statGaugeGainRanged2 = 40f;
+    public float statGaugeGainRanged2 = 30f;
+    public float statGaugeGainRanged3 = 20f;
+    public float statGaugeGainMelee1 = 40f;
     public float statGaugeGainMelee2 = 60f;
     public float statGaugeGainMelee3 = 20f;
 
