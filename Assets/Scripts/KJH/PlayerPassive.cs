@@ -19,50 +19,47 @@ public class PlayerPassive : MonoBehaviour
     [Header("디버그 모드 사용 : 체크 시, 에디터상에서 선택한 패시브를 적용함.")]
     [SerializeField] bool IsDebugMode = false;
 
-    public HashSet<PassiveID> PassiveHashSet_OnDebugMode { get; private set; }
+    public HashSet<PassiveID> PassiveHashSet { get; private set; }
 
     public void Init()
     {
-        PassiveHashSet_OnDebugMode = new HashSet<PassiveID>();
-
         if (IsDebugMode)
         {
+            PassiveHashSet = new HashSet<PassiveID>();
+
             if (PassiveID_Offensive1 != PassiveID.None)
             {
-                PassiveHashSet_OnDebugMode.Add(PassiveID_Offensive1);
+                PassiveHashSet.Add(PassiveID_Offensive1);
             }
             if (PassiveID_Offensive2 != PassiveID.None)
             {
-                PassiveHashSet_OnDebugMode.Add(PassiveID_Offensive2);
+                PassiveHashSet.Add(PassiveID_Offensive2);
             }
             if (PassiveID_Defensive1 != PassiveID.None)
             {
-                PassiveHashSet_OnDebugMode.Add(PassiveID_Defensive1);
+                PassiveHashSet.Add(PassiveID_Defensive1);
             }
             if (PassiveID_Defensive2 != PassiveID.None)
             {
-                PassiveHashSet_OnDebugMode.Add(PassiveID_Defensive2);
+                PassiveHashSet.Add(PassiveID_Defensive2);
             }
             if (PassiveID_Utility1 != PassiveID.None)
             {
-                PassiveHashSet_OnDebugMode.Add(PassiveID_Utility1);
+                PassiveHashSet.Add(PassiveID_Utility1);
             }
             if (PassiveID_Utility2 != PassiveID.None)
             {
-                PassiveHashSet_OnDebugMode.Add(PassiveID_Utility2);
+                PassiveHashSet.Add(PassiveID_Utility2);
             }
+        }
+        else
+        {
+            PassiveHashSet = JsonDataManager.GetUserData(0).UsePassiveHashSet;
         }
     }
 
     public bool ContainPassiveId(PassiveID id)
     {
-        if (IsDebugMode)
-        {
-            return PassiveHashSet_OnDebugMode.Contains(id);
-        }
-        else
-        {
-            return JsonDataManager.GetUserData(0).UsePassiveHashSet.Contains(id);
-        }
+        return PassiveHashSet.Contains(id);
     }
 }
