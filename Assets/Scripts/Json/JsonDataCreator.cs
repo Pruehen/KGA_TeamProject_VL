@@ -118,21 +118,43 @@ public class PassiveTable
 
 public class UserData
 {
-    [JsonProperty] public int SaveDataIndex { get; private set; }    
+    [JsonProperty] public int SaveDataIndex { get; private set; }
+    [JsonProperty] public int Gold { get; private set; }
+    [JsonProperty] public Dictionary<PassiveID, bool> UsePassiveDic { get; private set; }
 
     [JsonConstructor]
-    public UserData(Dictionary<PassiveID, Passive> dic)
+    public UserData(int saveDataIndex, int gold, Dictionary<PassiveID, bool> usePassiveDic)
     {
-        //this.dic = dic;
+        SaveDataIndex = saveDataIndex;
+        Gold = gold;
+        UsePassiveDic = usePassiveDic;
     }
-    public UserData()
-    {
 
-    }
-    public static string FilePath(int index)
+    public UserData(int saveDataIndex)
     {
-        string fileName = $"SaveFile_{index}";
-        return $"/Data/UserData/{fileName}.json";
+        SaveDataIndex = saveDataIndex;
+        Gold = 0;
+        UsePassiveDic = new Dictionary<PassiveID, bool>();
+    }
+}
+
+public class UserDataList
+{
+    public List<UserData> list;
+
+    [JsonConstructor]
+    public UserDataList(List<UserData> list)
+    {
+        this.list = list;
+    }
+    public UserDataList()
+    {
+        list = new List<UserData>();
+        list.Add(new UserData(0));
+    }
+    public static string FilePath()
+    {        
+        return $"/Data/UserData/SaveFile.json";
     }
 }
 
@@ -141,6 +163,6 @@ public class JsonDataCreator : MonoBehaviour
     public void Awake()
     {
         JsonDataManager.jsonCache.Lode();
-        //JsonDataManager.jsonCache.Save();
+        JsonDataManager.jsonCache.Save();
     }
 }

@@ -24,15 +24,15 @@ public static class JsonDataManager
             if (data == null)
             {
                 data = new T();
-                Debug.Log("새 저장 데이터 생성");
+                Debug.Log("<color=#00FF00>새 저장 데이터 생성</color>");
             }
 
-            Debug.Log($"데이터 불러오기 완료 : {typeof(T).Name}");
+            Debug.Log($"<color=#00FF00>데이터 불러오기 완료</color> : {typeof(T).Name}");
             return data;
         }
         catch (Exception e)
         {
-            Debug.LogError($"데이터 불러오기 실패 : {e.Message}");
+            Debug.LogError($"<color=#FF0000>데이터 불러오기 실패</color> : {e.Message}");
             return new T();
         }
     }
@@ -44,7 +44,7 @@ public static class JsonDataManager
         {
             if (t.IsFaulted)
             {
-                Debug.LogError($"데이터 저장 중 오류 발생: {t.Exception}");
+                Debug.LogError($"<color=#FF0000>데이터 저장 중 오류 발생</color>: {t.Exception}");
             }
         });
     }
@@ -66,6 +66,10 @@ public static class JsonDataManager
     public static Passive GetPassive(PassiveID id)
     {
         return jsonCache.PassiveTableCache.dic[id];
+    }
+    public static UserData GetUserData(int index)
+    {
+        return jsonCache.UserDataCache.list[index];
     }
 }
 
@@ -97,15 +101,30 @@ public class JsonCache
         }
     }
 
+    UserDataList _userDataCache;
+    public UserDataList UserDataCache
+    {
+        get
+        {
+            if (_userDataCache == null)
+            {
+                _userDataCache = JsonDataManager.DataTableListLoad<UserDataList>(UserDataList.FilePath());
+            }
+            return _userDataCache;
+        }
+    }
+
     public void Lode()
     {
         _blueChipTableCache = BlueChipTableCache;
         _passiveTableCache = PassiveTableCache;
+        _userDataCache = UserDataCache;
     }
 
     public void Save()
     {
         JsonDataManager.DataSaveCommand(_blueChipTableCache, BlueChipTable.FilePath());
         JsonDataManager.DataSaveCommand(_passiveTableCache, PassiveTable.FilePath());
+        JsonDataManager.DataSaveCommand(_userDataCache, UserDataList.FilePath());
     }
 }
