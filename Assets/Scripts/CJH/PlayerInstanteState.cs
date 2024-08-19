@@ -104,8 +104,6 @@ public class PlayerInstanteState : MonoBehaviour
     [SerializeField] SO_Player _playerStatData;
     private void Awake()
     {
-        Init(_playerStatData);
-
         _PlayerMaster = GetComponent<PlayerMaster>();
 
         Restore();
@@ -139,22 +137,22 @@ public class PlayerInstanteState : MonoBehaviour
         }
     }
 
-    private void Init(SO_Player playerData)
+    public void Init(PlayerPassive playerPassive)
     {
-        maxHp = playerData.maxHp;
-        MaxStamina = playerData.MaxStamina;
-        staminaRecoverySpeed = playerData.staminaRecoverySpeed;
-        staminaRecoveryDelay = playerData.staminaRecoveryDelay;
+        maxHp = _playerStatData.maxHp;
+        MaxStamina = _playerStatData.MaxStamina;
+        staminaRecoverySpeed = _playerStatData.staminaRecoverySpeed;
+        staminaRecoveryDelay = _playerStatData.staminaRecoveryDelay;
 
-        MaxskillGauge = playerData.MaxskillGauge;
-        maxBullets = playerData.maxBullets;
-        maxMeleeBullets = playerData.maxMeleeBullets;
+        MaxskillGauge = _playerStatData.MaxskillGauge;
+        maxBullets = _playerStatData.maxBullets;
+        maxMeleeBullets = _playerStatData.maxMeleeBullets;
 
-        attackSpeed = playerData.attackSpeed;
-        attackPower = playerData.attackPower;
-        skillPower = playerData.skillPower;
+        attackSpeed = _playerStatData.attackSpeed;
+        attackPower = _playerStatData.attackPower;
+        skillPower = _playerStatData.skillPower;
 
-        moveSpeed = playerData.moveSpeed;
+        moveSpeed = _playerStatData.moveSpeed;
     }
 
     //스태미나 소모 
