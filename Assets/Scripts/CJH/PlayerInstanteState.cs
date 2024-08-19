@@ -30,6 +30,9 @@ public class PlayerInstanteState : MonoBehaviour
     [SerializeField] float maxHpBase;
     public float MaxHpMulti { get; set; }
     float GetMaxHp() { return maxHpBase * MaxHpMulti; }
+    [SerializeField] float maxShieldBase;
+    public float MaxShieldMulti { get; set; }
+    float GetMaxShield() { return maxShieldBase * MaxShieldMulti; }
     [SerializeField] float MaxStamina;
     [SerializeField] float staminaRecoverySpeed;
     [SerializeField] float staminaRecoveryDelay;
@@ -48,10 +51,11 @@ public class PlayerInstanteState : MonoBehaviour
     [SerializeField] float skillPower;
     public float SkillPowerMulti {get; set;}
     float GetSkillPower() { return skillPower * SkillPowerMulti; }
+    public float DmgMulti { get; set; } = 1f;
     public float GetDmg(PlayerAttackKind type, int combo)
     {
         float baseDmg = GetAttackPower();// * coefficient;
-        float dmgGain = 1;
+        float dmgGain = DmgMulti;
         if (type == PlayerAttackKind.MeleeChargedAttack)//차지 공격일 경우
         {
             int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Melee1);
@@ -159,6 +163,8 @@ public class PlayerInstanteState : MonoBehaviour
         skillPower = _playerStatData.skillPower;
 
         moveSpeed = _playerStatData.moveSpeed;
+
+        maxShieldBase = _playerStatData.shieldMax;
     }
 
     //스태미나 소모 
@@ -234,9 +240,9 @@ public class PlayerInstanteState : MonoBehaviour
     public void ChangeShield(float value)
     {
         Shield += value;
-        if (Shield > GetMaxHp())
+        if (Shield > GetMaxShield())
         {
-            Shield = GetMaxHp();
+            Shield = GetMaxShield();
         }
         if (Shield < 0)
         {

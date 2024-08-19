@@ -35,9 +35,9 @@ public class SO_Player : ScriptableObject
     [Space (10)]
     [Header ("°ø°Ý±â")]
 
-    public float RangeNormalAttack = 1.0f;
-    public float RangeLastAttack = 2.0f;
-    public float RangeDashAttack = 0.5f;
+    public float atkRanged101 = 1.0f;
+    public float atkRanged102 = 2.0f;
+    public float atkRanged103 = 0.5f;
     public float atkRanged111 = 2.5f;
     public float atkRanged112 = 5.0f;
     public float atkRanged113 = 1.25f;
