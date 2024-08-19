@@ -11,8 +11,17 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     PlayerMove _PlayerMove;
     PlayerAttack _PlayerAttack;
     PlayerModChangeManager _PlayerModChangeManager;    
-    [SerializeField] ItemAbsorber _ItemAbsorber;    
+    [SerializeField] ItemAbsorber _ItemAbsorber;
+    [SerializeField] AttackSystem _AttackSystem;
 
+    public bool IsAttackState
+    {
+        get { return _AttackSystem._attackLcokMove; }
+        set
+        {
+            _AttackSystem._attackLcokMove = value;
+        }
+    }
     public bool IsAbsorptState
     {
         get { return _PlayerInstanteState.IsAbsorptState; }
@@ -29,6 +38,22 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
             _PlayerInstanteState.IsMeleeMode = value;
             Execute_BlueChip1_OnModeChange(value);
             Execute_BlueChip4_OnModeChange();
+        }
+    }
+    public bool isDashing
+    {
+        get { return _PlayerMove._isDashing; }
+        set
+        {
+            _PlayerMove._isDashing = value;
+        }
+    }
+    public bool isAttackTrigger
+    {
+        get { return _PlayerAttack.attackTrigger; }
+        set
+        {
+            _PlayerAttack.attackTrigger = value;
         }
     }
     public int GetBlueChipLevel(BlueChipID iD)

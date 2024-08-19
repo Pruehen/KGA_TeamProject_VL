@@ -118,6 +118,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ItemAbsorber: {fileID: 6544024869024547094}
+  _AttackSystem: {fileID: 8909988477445564789}
 --- !u!114 &2680144560742994316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,7 +209,9 @@ MonoBehaviour:
   projectionSpeed_Forward: 15
   projectionSpeed_Up: 3
   attack_CoolTime: 0.7
-  _currentAttackType: 0
+  attackTrigger: 0
+  _currentAttackMod: 0
+  _currentAttackKind: 0
   _initialAttackComboIndex: 0
 --- !u!95 &767856972143940028
 Animator:
@@ -271,6 +274,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damageBox: {fileID: 6358046432031639509}
+  _attackLcokMove: 0
 --- !u!114 &3176383348458485747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -283,6 +287,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f80012ddb58f5846a77fcd9de5f9e6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ChargeTime: 1.5
 --- !u!114 &7753793625892610601
 MonoBehaviour:
   m_ObjectHideFlags: 0

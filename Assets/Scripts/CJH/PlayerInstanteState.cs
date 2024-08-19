@@ -42,11 +42,11 @@ public class PlayerInstanteState : MonoBehaviour
     [SerializeField] float attackSpeed = 1f;
     [SerializeField] float attackPower;
     [SerializeField] float skillPower;
-    public float GetDmg(PlayerAttackType type, int combo)
+    public float GetDmg(PlayerAttackKind type, int combo)
     {
         float baseDmg = attackPower;// * coefficient;
         float dmgGain = 1;
-        if (true)//차지 공격일 경우
+        if (type == PlayerAttackKind.MeleeChargedAttack)//차지 공격일 경우
         {
             int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Melee1);
             if (level > 0)
@@ -54,7 +54,7 @@ public class PlayerInstanteState : MonoBehaviour
                 baseDmg += ((hp + Shield) * JsonDataManager.GetBlueChipData(BlueChipID.Melee1).Level_VelueList[level][0]) * 0.01f;
             }
         }
-        if (true)//원거리 평타, 근거리 평타일 경우
+        if (type == PlayerAttackKind.MeleeNormalAttack || type == PlayerAttackKind.RangeNormalAttack)//원거리 평타, 근거리 평타일 경우
         {
             if (_PlayerMaster._PlayerBuff.blueChip4_Buff_NextHitAddDmg.TryDequeue(out float addDmgGain))
             {
