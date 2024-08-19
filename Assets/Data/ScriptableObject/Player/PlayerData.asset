@@ -16,10 +16,46 @@ MonoBehaviour:
   MaxStamina: 800
   staminaRecoverySpeed: 100
   staminaRecoveryDelay: 3
-  MaxskillGauge: 400
-  maxBullets: 50
-  maxMeleeBullets: 50
-  attackSpeed: 1
   attackPower: 20
   skillPower: 20
   moveSpeed: 6
+  attackSpeed: 1
+  shieldMax: 100
+  dashTime: 0.5
+  dashForce: 900
+  dashCost: 300
+  MaxskillGauge: 400
+  statGaugeGainRanged1: 30
+  statGaugeGainRanged2: 30
+  statGaugeGainRanged3: 20
+  statGaugeGainMelee1: 40
+  statGaugeGainMelee2: 60
+  statGaugeGainMelee3: 20
+  maxBullets: 50
+  maxMeleeBullets: 50
+  atkRanged101: 1
+  atkRanged102: 2
+  atkRanged103: 0.5
+  atkRanged111: 2.5
+  atkRanged112: 5
+  atkRanged113: 1.25
+  atkMelee101: 5
+  atkMelee111: 7.5
+  atkMelee121: 2.5
+  RevolveRadious: 5
+  RevolveSpeed: 30
+  RevolveSpeedCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  Radious: 5
+  Height: 1
+  AbsolsionSpeed: 1
+  RadiusExpandCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

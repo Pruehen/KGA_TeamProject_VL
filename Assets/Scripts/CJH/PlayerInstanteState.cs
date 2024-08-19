@@ -29,7 +29,7 @@ public class PlayerInstanteState : MonoBehaviour
 
     [SerializeField] float maxHpBase;
     public float MaxHpMulti { get; set; }
-    float GetMaxHp() { return maxHpBase * MaxHpMulti; }
+    public float GetMaxHp() { return maxHpBase * MaxHpMulti; }
     [SerializeField] float maxShieldBase;
     public float MaxShieldMulti { get; set; }
     float GetMaxShield() { return maxShieldBase * MaxShieldMulti; }
@@ -107,7 +107,7 @@ public class PlayerInstanteState : MonoBehaviour
 
     public float GetSkillDmg(PlayerAttackKind type)
     {
-        float baseDmg = attackPower;// * coefficient;
+        float baseDmg = skillPower;// * coefficient;
         float dmgGain = 1;
 
             int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Melee1);
