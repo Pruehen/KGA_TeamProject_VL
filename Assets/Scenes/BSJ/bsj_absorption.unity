@@ -1045,11 +1045,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2306109296777327351, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.99966735
       objectReference: {fileID: 0}
     - target: {fileID: 2306109296777327351, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
       propertyPath: m_LocalRotation.x
+      value: 0.025792714
+      objectReference: {fileID: 0}
+    - target: {fileID: 2364659515411706525, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
+      propertyPath: _offset.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2364659515411706525, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
+      propertyPath: _offset.z
+      value: 0.51
+      objectReference: {fileID: 0}
+    - target: {fileID: 2364659515411706525, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3030909100458731246, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
       propertyPath: m_Name
@@ -1142,6 +1154,26 @@ PrefabInstance:
     - target: {fileID: 4224725398327422089, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6638776597582202637, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6638776597582202637, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6638776597582202637, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6638776597582202637, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 6638776597582202637, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6813270909696184528, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1276,8 +1308,8 @@ SceneRoots:
   - {fileID: 2058985978}
   - {fileID: 823646781}
   - {fileID: 568574390}
-  - {fileID: 7749796588424566269}
   - {fileID: 2146299403}
   - {fileID: 6644478490340080700}
   - {fileID: 1111724232}
   - {fileID: 8355380252558042537}
+  - {fileID: 7749796588424566269}

@@ -172,7 +172,16 @@ public class PlayerMove : MonoBehaviour
             _attackSystem.ReleaseLockMove();
             _attackSystem.ResetEndAttack();
             _animator.SetTrigger("Dash");
-            _PlayerMaster.OnAttackState(_PlayerCameraMove.CamRotation() * Vector3.forward);
+            Debug.Log("DashPlayerMove");
+            if (_moveVector3 == Vector3.zero)
+            {
+                _PlayerMaster.OnAttackState(_PlayerCameraMove.CamRotation() * Vector3.forward);
+            }
+            else
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(_lookTargetPos, Vector3.up);
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed);
+            }
         }
         else
         {

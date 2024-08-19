@@ -1,3 +1,5 @@
+using EnumTypes;
+using System;
 using UnityEngine;
 
 public class AttackSystem : MonoBehaviour
@@ -16,17 +18,13 @@ public class AttackSystem : MonoBehaviour
 
     [SerializeField] DamageBox _damageBox;
 
-    private void Awake()
-    {
-        Init();
-    }
-    public void Init()
+    public void Init(Action onCharged = null, Action onChargeFail = null, Action onChargeEnd = null)
     {
         TryGetComponent(out _animator);
         TryGetComponent(out _playerAttack);
         TryGetComponent(out _closeAttack);
         TryGetComponent(out _closeSkill);
-        _closeAttack.Init(_animator);
+        _closeAttack.Init(_animator, onCharged, onChargeEnd, onChargeFail);
         _closeSkill.Init(_animator);
         _PlayerMaster = GetComponent<PlayerMaster>();
 
@@ -34,20 +32,25 @@ public class AttackSystem : MonoBehaviour
 
 
 
-    bool _attackLcokMove;
+    public bool _attackLcokMove;
 
     public bool AttackLockMove
     {
         get => _attackLcokMove;
     }
-    public void StartAttack(int index, int comboIndex)
+    public void StartAttack(PlayerAttackKind index, int comboIndex)
     {
         _attackLcokMove = true;
         _animator.SetTrigger(hashAttack);
-        _animator.SetInteger(hashAttackType, index);
+
+
+        _animator.SetInteger(hashAttackType, (int)index);
+
+
         _animator.SetInteger(hashAttackComboInitialIndex, comboIndex);
         _animator.SetFloat(hasAttackSpeed, _PlayerMaster._PlayerInstanteState.AttackSpeed);
     }
+
     public void StartSkill(int index, float skillGauge)
     {
         if (skillGauge >= 100)
@@ -77,9 +80,9 @@ public class AttackSystem : MonoBehaviour
         _closeAttack.EndAttack();
     }
 
-    private void EnableDamageBox()
+    public void EnableDamageBox(float dmg, float range, Action OnHitCallback)
     {
-        _damageBox.EnableDamageBox(30, _PlayerMaster.OnMeleeHit);
+        _damageBox.EnableDamageBox(dmg, range, OnHitCallback);
         _playerAttack.IncreaseAttackCount();
     }
 
@@ -100,16 +103,22 @@ public class AttackSystem : MonoBehaviour
     public void AbsoberEnd()
     {
         _animator.SetTrigger("AbsorbeingEnd");
-        _animator.ResetTrigger("Attack");
-        _animator.ResetTrigger("AttackEnd");
+        //_animator.ResetTrigger("Attack");
+        //_animator.ResetTrigger("AttackEnd");
         Debug.Log("absoberEnd");
     }
     public void ModTransform()
     {
         _animator.SetTrigger("Transform");
         _animator.SetTrigger("AbsorbeingEnd");
-        _animator.ResetTrigger("Attack");
-        _animator.ResetTrigger("AttackEnd");
+        //_animator.ResetTrigger("Attack");
+        //_animator.ResetTrigger("AttackEnd");
         Debug.Log("Transform");
+    }
+
+    public void ResetAttack()
+    {
+        _attackLcokMove = false;
+        _closeAttack.ChargeFail();
     }
 }

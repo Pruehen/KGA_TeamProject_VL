@@ -1,6 +1,5 @@
 using EnumTypes;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 public class PlayerInstanteState : MonoBehaviour
 {
@@ -29,8 +28,6 @@ public class PlayerInstanteState : MonoBehaviour
     public bool IsDead { get; private set; }
 
     [SerializeField] float maxHp;
-    [SerializeField] float _maxHpGain;
-    float Maxhp() { return maxHp * _maxHpGain; }
     [SerializeField] float MaxStamina;
     [SerializeField] float staminaRecoverySpeed;
     [SerializeField] float staminaRecoveryDelay;
@@ -43,17 +40,13 @@ public class PlayerInstanteState : MonoBehaviour
 
     [SerializeField] float attackSpeed = 1f;
     [SerializeField] float attackPower;
-    [SerializeField] float _attackPowerGain;
-    float AttackPower() { return attackPower * _attackPowerGain; }
+    [SerializeField] float attackRange = 1f;
     [SerializeField] float skillPower;
-    [SerializeField] float _skillPowerGain;
-    float SkillPower() { return skillPower * _skillPowerGain; }
-
-    public float GetDmg(PlayerAttackType type, int combo)
+    public float GetDmg(PlayerAttackKind type, int combo)
     {
-        float baseDmg = AttackPower();// * coefficient;
+        float baseDmg = attackPower;// * coefficient;
         float dmgGain = 1;
-        if (true)//차지 공격일 경우
+        if (type == PlayerAttackKind.MeleeChargedAttack)//차지 공격일 경우
         {
             int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Melee1);
             if (level > 0)
@@ -61,7 +54,7 @@ public class PlayerInstanteState : MonoBehaviour
                 baseDmg += ((hp + Shield) * JsonDataManager.GetBlueChipData(BlueChipID.Melee1).Level_VelueList[level][0]) * 0.01f;
             }
         }
-        if (true)//원거리 평타, 근거리 평타일 경우
+        if (type == PlayerAttackKind.MeleeNormalAttack || type == PlayerAttackKind.RangeNormalAttack)//원거리 평타, 근거리 평타일 경우
         {
             if (_PlayerMaster._PlayerBuff.blueChip4_Buff_NextHitAddDmg.TryDequeue(out float addDmgGain))
             {
@@ -76,6 +69,24 @@ public class PlayerInstanteState : MonoBehaviour
             }
         }
         return baseDmg * dmgGain;
+    }
+    public float GetRange(PlayerAttackKind type, int combo)
+    {
+        float baseRange = attackRange;// * coefficient;
+        float rangeGain = 1;
+        if (type == PlayerAttackKind.MeleeChargedAttack || type == PlayerAttackKind.RangeNormalAttack)//차지 공격일 경우
+        {
+            int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Melee1);
+            if (level > 0)
+            {
+                rangeGain = (JsonDataManager.GetBlueChipData(BlueChipID.Melee1).Level_VelueList[level][1]);
+            }
+            else
+            {
+                rangeGain = 1f;
+            }
+        }
+        return baseRange * rangeGain;
     }
 
     [SerializeField] float moveSpeed;
@@ -93,7 +104,11 @@ public class PlayerInstanteState : MonoBehaviour
     [SerializeField] SO_Player _playerStatData;
     private void Awake()
     {
-        _PlayerMaster = GetComponent<PlayerMaster>();        
+        Init(_playerStatData);
+
+        _PlayerMaster = GetComponent<PlayerMaster>();
+
+        Restore();
         UIManager.Instance.setPlayer(this);
     }
     private void Start()
@@ -123,55 +138,22 @@ public class PlayerInstanteState : MonoBehaviour
         }
     }
 
-    public void Init(PlayerPassive playerPassive)
+    private void Init(SO_Player playerData)
     {
-        maxHp = _playerStatData.maxHp;
-        MaxStamina = _playerStatData.MaxStamina;
-        staminaRecoverySpeed = _playerStatData.staminaRecoverySpeed;
-        staminaRecoveryDelay = _playerStatData.staminaRecoveryDelay;
+        maxHp = playerData.maxHp;
+        MaxStamina = playerData.MaxStamina;
+        staminaRecoverySpeed = playerData.staminaRecoverySpeed;
+        staminaRecoveryDelay = playerData.staminaRecoveryDelay;
 
-        MaxskillGauge = _playerStatData.MaxskillGauge;
-        maxBullets = _playerStatData.maxBullets;
-        maxMeleeBullets = _playerStatData.maxMeleeBullets;
+        MaxskillGauge = playerData.MaxskillGauge;
+        maxBullets = playerData.maxBullets;
+        maxMeleeBullets = playerData.maxMeleeBullets;
 
-        attackSpeed = _playerStatData.attackSpeed;
-        attackPower = _playerStatData.attackPower;
-        skillPower = _playerStatData.skillPower;
+        attackSpeed = playerData.attackSpeed;
+        attackPower = playerData.attackPower;
+        skillPower = playerData.skillPower;
 
-        moveSpeed = _playerStatData.moveSpeed;
-
-        _attackPowerGain = 1;
-        _skillPowerGain = 1;
-        _maxHpGain = 1;
-
-        if (playerPassive.ContainPassiveId(PassiveID.Offensive3))
-        {
-            Passive offensive3 = JsonDataManager.GetPassive(PassiveID.Offensive3);
-            _attackPowerGain += offensive3.VelueList[0] * 0.01f;
-            _skillPowerGain += offensive3.VelueList[1] * 0.01f;
-
-            //대시 길이, 대시 시간 감소 로직 추가
-        }
-        if (playerPassive.ContainPassiveId(PassiveID.Offensive4))
-        {
-            Passive offensive4 = JsonDataManager.GetPassive(PassiveID.Offensive4);
-            _skillPowerGain += offensive4.VelueList[0] * 0.01f;
-        }
-        if (playerPassive.ContainPassiveId(PassiveID.Defensive1))
-        {
-            Passive defensive1 = JsonDataManager.GetPassive(PassiveID.Defensive1);
-            _maxHpGain += defensive1.VelueList[0] * 0.01f;
-            _attackPowerGain -= defensive1.VelueList[1] * 0.01f;
-            _skillPowerGain -= defensive1.VelueList[2] * 0.01f;
-        }
-
-
-        hp = Maxhp();
-        IsDead = false;
-        stamina = MaxStamina;
-        skillGauge = 0;
-        bullets = maxBullets / 3;
-        AttackSpeed = 1;
+        moveSpeed = playerData.moveSpeed;
     }
 
     //스태미나 소모 
@@ -232,9 +214,9 @@ public class PlayerInstanteState : MonoBehaviour
     public void ChangeHp(float value)
     {
         hp += value;
-        if (hp > Maxhp())
+        if (hp > maxHp)
         {
-            hp = Maxhp();
+            hp = maxHp;
         }
         if (hp < 0)
         {
@@ -247,9 +229,9 @@ public class PlayerInstanteState : MonoBehaviour
     public void ChangeShield(float value)
     {
         Shield += value;
-        if (Shield > Maxhp())
+        if (Shield > maxHp)
         {
-            Shield = Maxhp();
+            Shield = maxHp;
         }
         if (Shield < 0)
         {
@@ -333,6 +315,15 @@ public class PlayerInstanteState : MonoBehaviour
         UpdateSkillGauge();
     }
 
+    void Restore()
+    {
+        hp = maxHp;
+        IsDead = false;
+        stamina = MaxStamina;
+        skillGauge = 0;
+        bullets = maxBullets / 3;
+        AttackSpeed = 1;
+    }
 
     public void Refresh_Model()
     {
@@ -346,11 +337,11 @@ public class PlayerInstanteState : MonoBehaviour
 
     public void UpdateHealth()
     {
-        HealthRatioChanged?.Invoke(hp / Maxhp());
+        HealthRatioChanged?.Invoke(hp / maxHp);
     }
     public void UpdateShild()
     {
-        ShildRatioChanged?.Invoke(Shield / Maxhp());
+        ShildRatioChanged?.Invoke(Shield / maxHp);
     }
     public void UpdateStamina()
     {

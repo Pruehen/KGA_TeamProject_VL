@@ -6,6 +6,7 @@ public class DamageBox : MonoBehaviour
     [SerializeField] private ITargetable _owner;
     [SerializeField] private Vector3 _halfSize = new Vector3(1f, 1f, 1f);
     [SerializeField] private LayerMask _targetLayer;
+    [SerializeField] private Vector3 _offset;
 
     private Coroutine _DisableBoxCoroutine;
 
@@ -35,13 +36,21 @@ public class DamageBox : MonoBehaviour
     {
         enabled = false;
     }
+
+    private Vector3 Center
+    {
+        get
+        {
+            return transform.position + Vector3.Scale(_offset, transform.lossyScale);
+        }
+    }
     private void OnEnable()
     {
-        Collider[] result = Physics.OverlapBox(transform.position, HalfSize, transform.rotation, _targetLayer);
+        Collider[] result = Physics.OverlapBox(Center, HalfSize, transform.rotation, _targetLayer);
         bool onHit = false;
         foreach (Collider hit in result)
         {
-            if(hit.attachedRigidbody == null)
+            if (hit.attachedRigidbody == null)
             {
                 continue;
             }
@@ -57,12 +66,12 @@ public class DamageBox : MonoBehaviour
                 {
                     continue;
                 }
-            }         
+            }
             combat.Hit(_damage);
             onHit = true;
         }
 
-        if(onHit)
+        if (onHit)
         {
             OnHit?.Invoke();
         }
@@ -71,7 +80,7 @@ public class DamageBox : MonoBehaviour
     private void Update()
     {
         _enableTimer -= Time.deltaTime;
-        if(_enableTimer <= 0f)
+        if (_enableTimer <= 0f)
         {
             enabled = false;
         }
@@ -84,7 +93,7 @@ public class DamageBox : MonoBehaviour
             return;
         }
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position, HalfSize);
+        Gizmos.DrawWireCube(Center, HalfSize);
     }
 
     /// <summary>
@@ -92,19 +101,28 @@ public class DamageBox : MonoBehaviour
     /// 시간만큼 데미지 박스를 켜 둠
     /// </summary>
     /// <param name="time"></param>
-    public void EnableDamageBox(float damage, float time = 0f)
+    public void EnableDamageBox(float damage, float range = 1f, Action onHitCallBack = null, float time = 0f)
     {
+        if(onHitCallBack != null)
+        {
+            OnHit += onHitCallBack;
+        }
+
+        SetRange(range);
+
         _damage = damage;
         enabled = true;
         _enableTimer = time;
+
     }
 
-    public void EnableDamageBox(float damage, Action OnHitCallBack, float time = 0f)
+    private void SetRange(float range)
     {
-        OnHit = OnHitCallBack;
+        transform.localScale = new Vector3(range, range, range);
+    }
 
-        _damage = damage;
-        enabled = true;
-        _enableTimer = time;
+    private void OnDestroy()
+    {
+        OnHit = null;
     }
 }

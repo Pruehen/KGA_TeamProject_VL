@@ -220,7 +220,7 @@ public class Enemy : MonoBehaviour, ITargetable
             Vector3 target = _detector.GetLatestTarget().position;
             orig.y = 0;
             target.y = 0;
-            look = Quaternion.LookRotation(target - orig, Vector3.up);
+            look = Quaternion.LookRotation(target - orig, Vector3.up).normalized;
             Rotator.SmoothRotate(transform, look, rotateSpeed, Time.deltaTime);
         }
         else
