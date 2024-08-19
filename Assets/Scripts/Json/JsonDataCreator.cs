@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 using EnumTypes;
 using System;
+using Unity.VisualScripting;
 
 public class BlueChip
 {    
@@ -120,21 +121,49 @@ public class UserData
 {
     [JsonProperty] public int SaveDataIndex { get; private set; }
     [JsonProperty] public int Gold { get; private set; }
-    [JsonProperty] public Dictionary<PassiveID, bool> UsePassiveDic { get; private set; }
+    [JsonProperty] public HashSet<PassiveID> UsePassiveHashSet { get; private set; }
 
     [JsonConstructor]
-    public UserData(int saveDataIndex, int gold, Dictionary<PassiveID, bool> usePassiveDic)
+    public UserData(int saveDataIndex, int gold, HashSet<PassiveID> usePassiveHashSet)
     {
         SaveDataIndex = saveDataIndex;
         Gold = gold;
-        UsePassiveDic = usePassiveDic;
+        UsePassiveHashSet = usePassiveHashSet;
+        if(UsePassiveHashSet == null)
+        {
+            UsePassiveHashSet = new HashSet<PassiveID>();
+        }
     }
 
     public UserData(int saveDataIndex)
     {
         SaveDataIndex = saveDataIndex;
         Gold = 0;
-        UsePassiveDic = new Dictionary<PassiveID, bool>();
+        UsePassiveHashSet = new HashSet<PassiveID>();
+    }
+
+    public void TryAddPassive(PassiveID id)
+    {
+        if(UsePassiveHashSet.Add(id))
+        {
+            Debug.Log($"패시브 추가 : {id.DisplayName()}");
+        }
+        else
+        {
+            Debug.LogWarning($"이미 존재하는 패시브 : {id.DisplayName()}");
+        }
+    }
+
+    public void TryRemovePassive(PassiveID id)
+    {
+        if (UsePassiveHashSet.Remove(id))
+        {
+            Debug.Log($"패시브 제거 : {id.DisplayName()}");
+        }
+        else
+        {
+            Debug.LogWarning($"존재하지 않는 패시브 : {id.DisplayName()}");
+        }
     }
 }
 
