@@ -135,4 +135,8 @@ public class AttackSystem : MonoBehaviour
         _attackLcokMove = false;
         _closeAttack.ChargeFail();
     }
+    public void OnUseSkillGauge()
+    {
+        _PlayerMaster._PlayerInstanteState.TryUseSkillGauge2();
+    }
 }

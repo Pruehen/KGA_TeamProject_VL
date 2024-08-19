@@ -181,6 +181,10 @@ public class PlayerAttack : MonoBehaviour
             Debug.Log("차-지 실패 혹은 끝");
         }
     }
+    public void OnUseSkillGauge()
+    {
+        _PlayerMaster._PlayerInstanteState.TryUseSkillGauge2();
+    }
 
     //IEnumerator Attack_Delayed(float delayTime)
     //{
