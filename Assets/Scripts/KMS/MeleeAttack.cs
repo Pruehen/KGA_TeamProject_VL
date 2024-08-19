@@ -22,7 +22,8 @@ public class MeleeAttack: MonoBehaviour
     public float ChargingTime { get => _chargingTime; set => _chargingTime = value; }
 
     Action OnCharged;
-    Action OnChargedEndOrFail;
+    Action OnChargeEnd;
+    Action OnChargeFail;
 
     private void Update()
     {
@@ -42,7 +43,7 @@ public class MeleeAttack: MonoBehaviour
         }
     }
 
-    public void Init(Animator animator, Action onCharged, Action onChargeEndOrFail)
+    public void Init(Animator animator, Action onCharged = null, Action onChargeEnd = null, Action onChargeFail = null)
     {
         _animator = animator;
         _animTriggerAttack = Animator.StringToHash("Attack");
@@ -52,12 +53,14 @@ public class MeleeAttack: MonoBehaviour
         _animTriggerDash = Animator.StringToHash("Dash");
 
         OnCharged = onCharged;
-        OnChargedEndOrFail = onChargeEndOrFail;
+        OnChargeEnd = onChargeEnd;
+        OnChargeFail = onChargeFail;
     }
 
     private void OnDestroy()
     {
-        OnChargedEndOrFail = null;
+        OnChargeFail = null;
+        OnChargeEnd = null;
         OnCharged = null;
     }
     public void EndAttack()
@@ -96,13 +99,13 @@ public class MeleeAttack: MonoBehaviour
     public void ChargeEnd()
     {
         _isCharging = false;
-        OnChargedEndOrFail?.Invoke();
+        OnChargeEnd?.Invoke();
     }
 
     public void ChargeFail()
     {
         _isCharging = false;
         _chargingTime = 0f;
-        OnChargedEndOrFail?.Invoke();
+        OnChargeFail?.Invoke();
     }
 }

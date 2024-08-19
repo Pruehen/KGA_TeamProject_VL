@@ -45,7 +45,7 @@ public class PlayerAttack : MonoBehaviour
         _PlayerMod.OnEnterAbsorptState += ChangeAbsorbing;
         _PlayerMod.OnEndAbsorptState += AbsorbingFall;
 
-        _AttackSystem.Init(Callback_IsCharged, Callback_IsChargedEndOrFail);
+        _AttackSystem.Init(Callback_IsCharged, Callback_IsChargedFail, Callback_IsChargedEnd);
     }
 
     private void OnDestroy()
@@ -173,13 +173,27 @@ public class PlayerAttack : MonoBehaviour
             Debug.Log("차-지 완료");
         }
     }
-    private void Callback_IsChargedEndOrFail()
+    private void Callback_IsChargedEnd()
+    {
+        Debug.Log("차-지 끝");
+    }
+    
+    private void Callback_IsChargedFail()
     {
         if (_currentAttackMod == PlayerAttackKind.MeleeNormalAttack)
         {
             _currentAttackKind = PlayerAttackKind.MeleeNormalAttack;
-            Debug.Log("차-지 실패 혹은 끝");
+            Debug.Log("차-지 실패");
         }
+    }
+
+    private void EnableDamageBox_Player()
+    {
+        _AttackSystem.EnableDamageBox(
+            _PlayerMaster._PlayerInstanteState.GetDmg(_currentAttackKind, GetCurrentAttackCount()),
+            _PlayerMaster._PlayerInstanteState.GetRange(_currentAttackKind, GetCurrentAttackCount()),
+_PlayerMaster.OnMeleeHit
+            );
     }
 
     //IEnumerator Attack_Delayed(float delayTime)

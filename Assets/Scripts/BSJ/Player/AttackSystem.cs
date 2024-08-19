@@ -18,13 +18,13 @@ public class AttackSystem : MonoBehaviour
 
     [SerializeField] DamageBox _damageBox;
 
-    public void Init(Action onCharged, Action onChargeFail)
+    public void Init(Action onCharged = null, Action onChargeFail = null, Action onChargeEnd = null)
     {
         TryGetComponent(out _animator);
         TryGetComponent(out _playerAttack);
         TryGetComponent(out _closeAttack);
         TryGetComponent(out _closeSkill);
-        _closeAttack.Init(_animator, onCharged, onChargeFail);
+        _closeAttack.Init(_animator, onCharged, onChargeEnd, onChargeFail);
         _closeSkill.Init(_animator);
         _PlayerMaster = GetComponent<PlayerMaster>();
 
@@ -80,9 +80,9 @@ public class AttackSystem : MonoBehaviour
         _closeAttack.EndAttack();
     }
 
-    private void EnableDamageBox()
+    public void EnableDamageBox(float dmg, float range, Action OnHitCallback)
     {
-        _damageBox.EnableDamageBox(30, _PlayerMaster.OnMeleeHit);
+        _damageBox.EnableDamageBox(dmg, range, OnHitCallback);
         _playerAttack.IncreaseAttackCount();
     }
 
