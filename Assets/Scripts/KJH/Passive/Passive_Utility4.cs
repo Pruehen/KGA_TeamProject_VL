@@ -6,7 +6,7 @@ public class Passive_Utility4 : Passive
     {
         base._passiveData = JsonDataManager.GetPassive(PassiveID.Utility4);
     }
-    public override void Active()
+    public override void Active()//"게임을 시작하면 주변에 블루칩 상자가 나온다.",
     {
 
     }

@@ -191,6 +191,16 @@ public class PlayerInstanteState : MonoBehaviour
             return false;
     }
 
+    public void StaminaRatioChange(float value)
+    {
+        stamina += MaxStamina * value * 0.01f;
+        if(stamina > MaxStamina)
+        {
+            stamina = MaxStamina;
+        }
+
+        UpdateStamina();
+    }
     //스태미나 자동 회복
     public void StaminaAutoRecovery()
     {
