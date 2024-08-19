@@ -30,7 +30,7 @@ public class PlayerInstanteState : MonoBehaviour
     [SerializeField] float maxHpBase;
     public float MaxHpMulti { get; set; }
     public float GetMaxHp() { return maxHpBase * MaxHpMulti; }
-    [SerializeField] float MaxStamina;
+    [SerializeField] public float MaxStamina;
     [SerializeField] float staminaRecoverySpeed;
     [SerializeField] float staminaRecoveryDelay;
     float staminaRecoveryDelayValue = 0;
@@ -175,6 +175,16 @@ public class PlayerInstanteState : MonoBehaviour
             return false;
     }
 
+    public void StaminaRatioChange(float value)
+    {
+        stamina += MaxStamina * value * 0.01f;
+        if(stamina > MaxStamina)
+        {
+            stamina = MaxStamina;
+        }
+
+        UpdateStamina();
+    }
     //스태미나 자동 회복
     public void StaminaAutoRecovery()
     {
