@@ -7,6 +7,7 @@ using System;
 using Unity.VisualScripting;
 using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 using UnityEditor;
+using System.Reflection;
 
 public class BlueChip
 {    
@@ -122,7 +123,7 @@ public class PassiveTable
 public class UserData
 {    
     [JsonProperty] public int SaveDataIndex { get; private set; }
-    [JsonProperty] public int SaveTime { get; private set; }
+    [JsonProperty] public DateTime SaveTime { get; private set; }
     [JsonProperty] public int PlayTime { get; private set; }
     [JsonProperty] public int Gold { get; private set; }
     [JsonProperty] public int Count_Try { get; private set; }
@@ -135,7 +136,7 @@ public class UserData
     [JsonConstructor]   
     public UserData(
         int saveDataIndex,
-        int saveTime,
+        DateTime saveTime,
         int playTime,
         int gold,
         int countTry,
@@ -160,7 +161,7 @@ public class UserData
     public UserData(int saveDataIndex)
     {
         SaveDataIndex = saveDataIndex;
-        SaveTime = 0;
+        SaveTime = DateTime.Now;
         PlayTime = 0;
         Gold = 0;
         Count_Try = 0;
@@ -229,8 +230,7 @@ public class UserDataList
     }
     public UserDataList()
     {
-        dic = new Dictionary<int, UserData>();
-        dic.Add(0, new UserData(0));
+        dic = new Dictionary<int, UserData>();        
     }
     public UserData GetUserData()
     {
@@ -240,8 +240,22 @@ public class UserDataList
         }
         else
         {
-            Debug.Log("해당하는 키가 없습니다");
-            return null;
+            Debug.Log("해당하는 키가 없습니다. 세이브파일을 생성합니다.");
+            dic.Add(UseIndex, new UserData(UseIndex));
+            return dic[UseIndex];
+        }
+    }
+    public void SetUserDataIndex(int index)
+    {
+        if (dic.ContainsKey(index))
+        {            
+            UseIndex = index;
+        }
+        else
+        {
+            Debug.Log("세이브파일 생성");
+            UseIndex = index;
+            dic.Add(index, new UserData(index));
         }
     }
     public static string FilePath()
@@ -254,7 +268,7 @@ public class JsonDataCreator : MonoBehaviour
 {
     public void Awake()
     {
-        JsonDataManager.jsonCache.Lode();
+        JsonDataManager.jsonCache.Lode();        
         JsonDataManager.jsonCache.Save();
     }
 }
