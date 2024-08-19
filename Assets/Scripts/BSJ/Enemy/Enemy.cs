@@ -543,4 +543,12 @@ public class Enemy : MonoBehaviour, ITargetable
         detectRange.Value = 9999f;
         _behaviorTree.SetVariable("DetectRange", detectRange);
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(AiAttack is LaunchAttack la)
+        {
+            la.TriggerOnEnterCollider();
+        }
+    }
 }
