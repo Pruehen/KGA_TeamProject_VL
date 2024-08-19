@@ -63,7 +63,7 @@ public static class JsonDataManager
     {
         return jsonCache.BlueChipTableCache.dic[id];
     }
-    public static Passive GetPassive(PassiveID id)
+    public static PassiveData GetPassive(PassiveID id)
     {
         return jsonCache.PassiveTableCache.dic[id];
     }

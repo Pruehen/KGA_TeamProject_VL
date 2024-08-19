@@ -5,9 +5,6 @@ using System.Linq;
 using EnumTypes;
 using System;
 using Unity.VisualScripting;
-using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
-using UnityEditor;
-using System.Reflection;
 
 public class BlueChip
 {    
@@ -65,7 +62,7 @@ public class BlueChipTable
     }
 }
 
-public class Passive
+public class PassiveData
 {
     [JsonProperty] public string Name { get; private set; }
     [JsonProperty] public string Info { get; private set; }
@@ -73,14 +70,14 @@ public class Passive
     [JsonProperty] public List<float> VelueList { get; private set; }
 
     [JsonConstructor]
-    public Passive(string name, string info, int cost, List<float> velueList)
+    public PassiveData(string name, string info, int cost, List<float> velueList)
     {
         Name = name;
         Info = info;
         Cost = cost;
         VelueList = velueList;
     }
-    public Passive(PassiveID iD)
+    public PassiveData(PassiveID iD)
     {
         Name = iD.ToString();
         Info = "해당 패시브에 대한 설명. 값 {0}";
@@ -100,18 +97,18 @@ public class Passive
 }
 public class PassiveTable
 {
-    public Dictionary<PassiveID, Passive> dic;
+    public Dictionary<PassiveID, PassiveData> dic;
     [JsonConstructor]
-    public PassiveTable(Dictionary<PassiveID, Passive> dic)
+    public PassiveTable(Dictionary<PassiveID, PassiveData> dic)
     {
         this.dic = dic;
     }
     public PassiveTable()
     {
-        dic = new Dictionary<PassiveID, Passive>();
+        dic = new Dictionary<PassiveID, PassiveData>();
         foreach (PassiveID passiveType in Enum.GetValues(typeof(PassiveID)))
         {            
-            dic.Add(passiveType, new Passive(passiveType));
+            dic.Add(passiveType, new PassiveData(passiveType));
         }
     }
     public static string FilePath()

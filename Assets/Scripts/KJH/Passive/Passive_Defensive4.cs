@@ -1,18 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using EnumTypes;
 
-public class Passive_Defensive4 : MonoBehaviour
+public class Passive_Defensive4 : Passive
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void SetPassiveData()
     {
-        
+        base._passiveData = JsonDataManager.GetPassive(PassiveID.Defensive4);
+    }
+    public override void Active()
+    {
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void DeActive()
     {
-        
+
     }
 }
