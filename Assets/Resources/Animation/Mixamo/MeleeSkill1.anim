@@ -22423,7 +22423,7 @@ AnimationClip:
     m_LoopBlend: 0
     m_LoopBlendOrientation: 1
     m_LoopBlendPositionY: 0
-    m_LoopBlendPositionXZ: 0
+    m_LoopBlendPositionXZ: 1
     m_KeepOriginalOrientation: 0
     m_KeepOriginalPositionY: 1
     m_KeepOriginalPositionXZ: 0
@@ -43603,14 +43603,21 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0
-    functionName: LockMove
+    functionName: OnUseSkillGauge
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.033333335
-    functionName: OnUseSkillGauge
+    functionName: LockMove
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 1.0333333
+    functionName: ReleaseLockMove
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
