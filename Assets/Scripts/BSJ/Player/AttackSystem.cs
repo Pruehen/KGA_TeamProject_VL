@@ -62,10 +62,10 @@ public class AttackSystem : MonoBehaviour
     {
         if (skillGauge >= 100)
         {
-            _attackLcokMove = true;
             _animator.SetTrigger(hashSkill);
             _animator.SetInteger(hashAttackType, index);
             _animator.SetFloat("SkillGauge", skillGauge);
+            _attackLcokMove = true;
             Debug.Log(skillGauge);
         }
         else
