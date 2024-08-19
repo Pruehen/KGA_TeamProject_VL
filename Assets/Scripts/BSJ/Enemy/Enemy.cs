@@ -546,9 +546,9 @@ public class Enemy : MonoBehaviour, ITargetable
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(AiAttack is LaunchAttack la)
-        {
-            la.TriggerOnEnterCollider();
-        }
+        //if(AiAttack is LaunchAttack la)
+        //{
+        //    la.TriggerOnEnterCollider();
+        //}
     }
 }
