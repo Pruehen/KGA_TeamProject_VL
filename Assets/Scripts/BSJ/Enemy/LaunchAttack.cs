@@ -1,5 +1,6 @@
 using EnumTypes;
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -16,6 +17,8 @@ public class LaunchAttack : AiAttackAction
     private int hashEndLaunch;
     private int hashAttack;
     private float nearDistance = .7f;
+    private Vector3 prevPlayerPos;
+    Vector3 SentinelVec = new Vector3(-9999f, -9999f, -9999f);
 
     private bool isInit = false;
 
@@ -29,9 +32,6 @@ public class LaunchAttack : AiAttackAction
     [SerializeField] private float _attackDamage = 100f;
     [SerializeField] private float _jumpAttackDamage = 100f;
 
-    private bool _isFalling = false;
-    private int _hasJumped = 0;
-
     public LaunchAttack(MonoBehaviour owner, Detector detector, SO_JumpingEnemy enemyData)
     {
         this.owner = owner;
@@ -41,6 +41,7 @@ public class LaunchAttack : AiAttackAction
         rb = gameObject.GetComponent<Rigidbody>();
         animator = gameObject.GetComponent<Animator>();
         agent = gameObject.GetComponent<NavMeshAgent>();
+        prevPlayerPos = SentinelVec;
         _meleeRange = enemyData.MeleeRange;
         _jumpAngle = enemyData.JumpAngle;
         _hommingForce = enemyData.HommingForce;
@@ -85,37 +86,13 @@ public class LaunchAttack : AiAttackAction
         gameObject.layer = LayerMask.NameToLayer("EnemyCollider");
         rb.isKinematic = true;
     }
-
-
-    public void StartAttackAnim()
-    {
-        _isFalling = false;
-        _hasJumped = 0;
-        wait = false;
-
-
-        targetTrf = detector.GetTarget();
-        if (Vector3.Distance(detector.GetPosition(), transform.position) <= _meleeRange)
-        {
-            agent.nextPosition = transform.position;
-            animator.SetBool("IsLaunch", false);
-            animator.SetTrigger("Attack");
-        }
-        else
-        {
-            animator.SetBool("IsLaunch", true);
-            animator.SetTrigger("Attack");
-        }
-    }
-
     public void OnExcuteLaunch()
     {
-        _hasJumped = 1;
-
         agent.nextPosition = transform.position;
         agent.updatePosition = false;
         agent.updateRotation = false;
         agent.isStopped = true;
+        prevPlayerPos = SentinelVec;
         isInit = true;
         rb.isKinematic = false;
         initialDistance = (transform.position - targetTrf.position).magnitude;
@@ -136,6 +113,7 @@ public class LaunchAttack : AiAttackAction
         agent.updatePosition = true;
         agent.updateRotation = true;
         agent.isStopped = false;
+        prevPlayerPos = SentinelVec;
     }
     void UpdateInLaunch()
     {
@@ -153,39 +131,43 @@ public class LaunchAttack : AiAttackAction
 
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiredDir), Time.deltaTime * _aimRotateSpeed);
 
-        bool isGrounded = Physics.CheckSphere(transform.position, .01f, LayerMask.GetMask("Environment"));
+        bool isGrounded = Physics.CheckSphere(transform.position, .1f, LayerMask.GetMask("Environment"));
 
         if (!isGrounded)
         {
-            if (_isFalling)
+            Vector3 curPlayerPos = targetTrf.position;
+            // �ʱⰪ
+            if (prevPlayerPos == SentinelVec)
+                prevPlayerPos = curPlayerPos;
+
+
+            float distH = PhysicsHelper.Dist2D(pos, target);
+            bool isAlmostGrouonded = Physics.CheckSphere(transform.position, 1f, LayerMask.GetMask("Environment"));
+            isAlmostGrouonded = isAlmostGrouonded && rb.velocity.y < 0f;
+            if (distH < nearDistance || isAlmostGrouonded)
             {
-                transform.Translate(-Vector3.up * Time.deltaTime * 10f);
+                animator.SetTrigger(hashEndLaunch);
+                float distV = PhysicsHelper.Dist2D(pos, target);
+                if (distH < 1.5f && distV < 1.5f)
+                {
+                    rb.velocity = new Vector3(0f, rb.velocity.y, 0f);
+                }
             }
             else
             {
-                float distH = PhysicsHelper.Dist2D(pos, target);
-                bool isAlmostGrouonded = Physics.CheckSphere(transform.position, 1f, LayerMask.GetMask("Environment"));
-                isAlmostGrouonded = isAlmostGrouonded && rb.velocity.y < 0f;
-                if (distH < nearDistance || isAlmostGrouonded)
-                {
-                    animator.SetTrigger(hashEndLaunch);
-                    float distV = PhysicsHelper.Dist2D(pos, target);
-                }
-                else
-                {
-                    ProjectileCalc.Homming(rb, targetTrf, _hommingForce);
-                }
+                ProjectileCalc.Homming(rb, targetTrf, _hommingForce);
             }
+            prevPlayerPos = curPlayerPos;
         }
         else
         {
-            if (_hasJumped <= 5)
+            if (rb.velocity.y <= -.1f)
             {
-                return;
+                DisablePhysics();
+                ResetLaunching();
+                prevPlayerPos = SentinelVec;
+                animator.SetTrigger(hashEndLaunch);
             }
-            DisablePhysics();
-            ResetLaunching();
-            animator.SetTrigger(hashEndLaunch);
         }
     }
     public bool IsAttacking()
@@ -193,19 +175,19 @@ public class LaunchAttack : AiAttackAction
         return isInit;
     }
 
-
-
-    bool wait = false;
-    public void TriggerOnEnterCollider()
+    public void StartAttackAnim()
     {
-        if (_hasJumped >= 1)
+        targetTrf = detector.GetTarget();
+        if (Vector3.Distance(detector.GetPosition(), transform.position) <= _meleeRange)
         {
-            _hasJumped++;
-            if(_hasJumped >= 4)
-            {
-                _isFalling = true;
-                rb.isKinematic = true;
-            }
+            agent.nextPosition = transform.position;
+            animator.SetBool("IsLaunch", false);
+            animator.SetTrigger("Attack");
+        }
+        else
+        {
+            animator.SetBool("IsLaunch", true);
+            animator.SetTrigger("Attack");
         }
     }
 }

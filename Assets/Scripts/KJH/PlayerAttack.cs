@@ -82,6 +82,11 @@ public class PlayerAttack : MonoBehaviour
     }
 
     bool prevAttackTrigger = false;
+
+
+    int initialAttackComboIndex;
+    [Header ("total count of attack animation")]
+    [SerializeField] int _totalAttackAnimCount = 4;
     private void Update()
     {
         delayTime += Time.deltaTime;
@@ -92,7 +97,7 @@ public class PlayerAttack : MonoBehaviour
             _PlayerMaster.OnAttackState(_PlayerCameraMove.CamRotation() * Vector3.forward);
 
             int blueChip2Level = _PlayerMaster.GetBlueChipLevel(EnumTypes.BlueChipID.Range1);
-            int initialAttackComboIndex = (blueChip2Level > 0) ? (int)JsonDataManager.GetBlueChipData(EnumTypes.BlueChipID.Range1).Level_VelueList[blueChip2Level][0] : 0;
+            initialAttackComboIndex = (blueChip2Level > 0) ? (int)JsonDataManager.GetBlueChipData(EnumTypes.BlueChipID.Range1).Level_VelueList[blueChip2Level][0] : 0;
             _AttackSystem.StartAttack(_currentAttackKind, initialAttackComboIndex);
             //StartCoroutine(Attack_Delayed(attack_Delay));
         }
@@ -145,16 +150,14 @@ public class PlayerAttack : MonoBehaviour
 
         Vector3 projectionVector = _PlayerCameraMove.CamRotation() * Vector3.forward * projectionSpeed_Forward + Vector3.up * projectionSpeed_Up;
         //?¥ÌÉù?úÏä§?úÏóê???ÑÏû¨ Í≥µÍ≤©???Ä?ÖÏùÑ Í∞Ä?∏Ïò®??
-        projectile.Init(_PlayerMaster._PlayerInstanteState.GetDmg(_currentAttackKind, GetCurrentAttackCount()), projectile_InitPos.position, projectionVector, OnProjectileHit);
+        projectile.Init(_PlayerMaster._PlayerInstanteState.GetDmg(_currentAttackKind,
+            IsLastAttack()),
+            projectile_InitPos.position,
+            projectionVector,
+            OnRangeHit);
 
         _PlayerMaster._PlayerInstanteState.BulletConsumption();
         IncreaseAttackCount();
-    }
-
-    void OnProjectileHit()
-    {
-        _PlayerMaster._PlayerInstanteState.SkillGaugeRecovery(10);
-        Debug.Log("Í≥µÍ≤© ?±Í≥µ");
     }
 
     public void ResetAttack()
@@ -197,12 +200,33 @@ public class PlayerAttack : MonoBehaviour
     private void EnableDamageBox_Player()
     {
         _AttackSystem.EnableDamageBox(
-            _PlayerMaster._PlayerInstanteState.GetDmg(_currentAttackKind, GetCurrentAttackCount()),
+            _PlayerMaster._PlayerInstanteState.GetDmg(_currentAttackKind),
             _PlayerMaster._PlayerInstanteState.GetRange(_currentAttackKind, GetCurrentAttackCount()),
-_PlayerMaster.OnMeleeHit
+OnMeleeHit
             );
     }
+    private void OnMeleeHit()
+    {
+        PlayerInstanteState stat = _PlayerMaster._PlayerInstanteState;
+        stat.SkillGaugeRecovery(_currentAttackKind, false);
+        _PlayerMaster.OnMeleeHit();
+    }
+    private void OnRangeHit()
+    {
+        PlayerInstanteState stat = _PlayerMaster._PlayerInstanteState;
+        stat.SkillGaugeRecovery(_currentAttackKind, IsLastAttack());
+    }
 
+    private bool IsLastAttack()
+    {
+        if((_currentAttackCount + 1) % (_totalAttackAnimCount - initialAttackComboIndex) == 0)
+        {
+            Debug.Log("∏∑≈∏");
+            return true;
+        }
+        return false;
+
+    }
     //IEnumerator Attack_Delayed(float delayTime)
     //{
     //    yield return new WaitForSeconds(delayTime);

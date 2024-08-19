@@ -29,8 +29,11 @@ public class PlayerInstanteState : MonoBehaviour
 
     [SerializeField] float maxHpBase;
     public float MaxHpMulti { get; set; }
-    public float GetMaxHp() { return maxHpBase * MaxHpMulti; }
-    [SerializeField] public float MaxStamina;
+    float GetMaxHp() { return maxHpBase * MaxHpMulti; }
+    [SerializeField] float maxShieldBase;
+    public float MaxShieldMulti { get; set; }
+    float GetMaxShield() { return maxShieldBase * MaxShieldMulti; }
+    [SerializeField] float MaxStamina;
     [SerializeField] float staminaRecoverySpeed;
     [SerializeField] float staminaRecoveryDelay;
     float staminaRecoveryDelayValue = 0;
@@ -46,12 +49,19 @@ public class PlayerInstanteState : MonoBehaviour
     float GetAttackPower() { return attackPowerBase * AttackPowerMulti; }
     [SerializeField] float attackRange = 1f;
     [SerializeField] float skillPower;
-    public float SkillPowerMulti {get; set;}
+    public float SkillPowerMulti { get; set; }
     float GetSkillPower() { return skillPower * SkillPowerMulti; }
-    public float GetDmg(PlayerAttackKind type, int combo)
+    public float DmgMulti { get; set; } = 1f;
+
+    [SerializeField] public float DashTime = .5f;
+    [SerializeField] public float DashForce = 3f;
+    [SerializeField] public float DashCost = 300f;
+
+
+    public float GetDmg(PlayerAttackKind type, bool isLastAttack = false)
     {
-        float baseDmg = GetAttackPower();// * coefficient;
-        float dmgGain = 1;
+        float baseDmg = GetAttackPower() * GetDamageMultiByAttakcType(type,isLastAttack);// * coefficient;
+        float dmgGain = DmgMulti;
         if (type == PlayerAttackKind.MeleeChargedAttack)//차지 공격일 경우
         {
             int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Melee1);
@@ -185,6 +195,12 @@ public class PlayerInstanteState : MonoBehaviour
         skillPower = _playerStatData.skillPower;
 
         moveSpeed = _playerStatData.moveSpeed;
+
+        maxShieldBase = _playerStatData.shieldMax;
+
+        DashTime = _playerStatData.dashTime;
+        DashForce = _playerStatData.dashForce;
+        DashCost = _playerStatData.dashCost;
     }
 
     //스태미나 소모 
@@ -204,7 +220,7 @@ public class PlayerInstanteState : MonoBehaviour
     public void StaminaRatioChange(float value)
     {
         stamina += MaxStamina * value * 0.01f;
-        if(stamina > MaxStamina)
+        if (stamina > MaxStamina)
         {
             stamina = MaxStamina;
         }
@@ -270,9 +286,9 @@ public class PlayerInstanteState : MonoBehaviour
     public void ChangeShield(float value)
     {
         Shield += value;
-        if (Shield > GetMaxHp())
+        if (Shield > GetMaxShield())
         {
-            Shield = GetMaxHp();
+            Shield = GetMaxShield();
         }
         if (Shield < 0)
         {
@@ -326,7 +342,39 @@ public class PlayerInstanteState : MonoBehaviour
         UpdateBullet_Melee();
     }
 
+    private float GetSkillGainOnHit(PlayerAttackKind attackKind, bool enhanced = false, bool isLastAttack = false)
+    {
+        if (attackKind == PlayerAttackKind.MeleeNormalAttack) return _playerStatData.statGaugeGainMelee1;
+        if (attackKind == PlayerAttackKind.MeleeChargedAttack) return _playerStatData.statGaugeGainMelee2;
+        if (attackKind == PlayerAttackKind.MeleeDashAttack) return _playerStatData.statGaugeGainMelee3;
 
+        if (attackKind == PlayerAttackKind.RangeNormalAttack && !isLastAttack) return _playerStatData.statGaugeGainRanged1;
+        else if (attackKind == PlayerAttackKind.RangeNormalAttack && isLastAttack) return _playerStatData.statGaugeGainRanged2;
+        else if (attackKind == PlayerAttackKind.RangeDashAttack) return _playerStatData.statGaugeGainRanged3;
+        return 0f;
+    }
+    private float GetDamageMultiByAttakcType(PlayerAttackKind attackKind, bool isLastAttack = false)
+    {
+        bool enhanced = bullets > 0;
+        if (enhanced)
+        {
+            if (attackKind == PlayerAttackKind.RangeNormalAttack && !isLastAttack) return _playerStatData.atkRanged111;
+            else if (attackKind == PlayerAttackKind.RangeNormalAttack && isLastAttack) return _playerStatData.atkRanged112;
+            else if (attackKind == PlayerAttackKind.RangeDashAttack) return _playerStatData.atkRanged113;
+        }
+        else
+        {
+            if (attackKind == PlayerAttackKind.RangeNormalAttack && !isLastAttack) return _playerStatData.atkRanged101;
+            else if (attackKind == PlayerAttackKind.RangeNormalAttack && isLastAttack) return _playerStatData.atkRanged102;
+            else if (attackKind == PlayerAttackKind.RangeDashAttack) return _playerStatData.atkRanged103;
+        }
+
+        if (attackKind == PlayerAttackKind.MeleeNormalAttack) return _playerStatData.atkMelee101;
+        if (attackKind == PlayerAttackKind.MeleeChargedAttack) return _playerStatData.atkMelee111;
+        if (attackKind == PlayerAttackKind.MeleeDashAttack) return _playerStatData.atkMelee121;
+
+        return 1f;
+    }
     public void SkillGaugeRecovery(float value)
     {
         skillGauge += value;
@@ -338,6 +386,18 @@ public class PlayerInstanteState : MonoBehaviour
 
         skillGaugeRecoveryRestTime = 0;
         UpdateSkillGauge();
+    }
+    public void SkillGaugeRecovery(PlayerAttackKind attackKind, bool isLastAttack)
+    {
+        if (attackKind == PlayerAttackKind.RangeNormalAttack)
+        {
+            bool hasBullet = bullets > 0;
+            SkillGaugeRecovery(GetSkillGainOnHit(attackKind, hasBullet, isLastAttack));
+        }
+        else
+        {
+            SkillGaugeRecovery(GetSkillGainOnHit(attackKind));
+        }
     }
 
     public void UseSkillGauge(float value)
@@ -402,7 +462,7 @@ public class PlayerInstanteState : MonoBehaviour
     }
     public void TestSkill()
     {
-        if(Input.GetKeyDown(KeyCode.F1))
+        if (Input.GetKeyDown(KeyCode.F1))
         {
             SkillGaugeRecovery(100f);
         }

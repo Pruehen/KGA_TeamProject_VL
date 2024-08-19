@@ -16,16 +16,16 @@ public class SO_Player : ScriptableObject
     public float attackSpeed = 1f;
 
     public float shieldMax = 100f;
-    public float dashTime = 2f;
-    public float dashDistance = 3f;
+    public float dashTime = .5f;
+    public float dashForce = 3f;
     public float dashCost = 300f;
 
     public float MaxskillGauge = 100f;
 
     public float statGaugeGainRanged1 = 30f;
-    public float statGaugeGainRanged3 = 30f;
-    public float statGaugeGainMelee1 = 20f;
-    public float statGaugeGainRanged2 = 40f;
+    public float statGaugeGainRanged2 = 30f;
+    public float statGaugeGainRanged3 = 20f;
+    public float statGaugeGainMelee1 = 40f;
     public float statGaugeGainMelee2 = 60f;
     public float statGaugeGainMelee3 = 20f;
 
@@ -35,9 +35,9 @@ public class SO_Player : ScriptableObject
     [Space (10)]
     [Header ("°ø°Ý±â")]
 
-    public float RangeNormalAttack = 1.0f;
-    public float RangeLastAttack = 2.0f;
-    public float RangeDashAttack = 0.5f;
+    public float atkRanged101 = 1.0f;
+    public float atkRanged102 = 2.0f;
+    public float atkRanged103 = 0.5f;
     public float atkRanged111 = 2.5f;
     public float atkRanged112 = 5.0f;
     public float atkRanged113 = 1.25f;
