@@ -58,9 +58,9 @@ public class PlayerInstanteState : MonoBehaviour
     [SerializeField] public float DashCost = 300f;
 
 
-    public float GetDmg(PlayerAttackKind type, int combo)
+    public float GetDmg(PlayerAttackKind type, bool isLastAttack = false)
     {
-        float baseDmg = GetAttackPower();// * coefficient;
+        float baseDmg = GetAttackPower() * GetDamageMultiByAttakcType(type,isLastAttack);// * coefficient;
         float dmgGain = DmgMulti;
         if (type == PlayerAttackKind.MeleeChargedAttack)//차지 공격일 경우
         {
@@ -327,8 +327,9 @@ public class PlayerInstanteState : MonoBehaviour
         else if (attackKind == PlayerAttackKind.RangeDashAttack) return _playerStatData.statGaugeGainRanged3;
         return 0f;
     }
-    private float GetDamageMultiByAttakcType(PlayerAttackKind attackKind, bool enhanced, bool isLastAttack = false)
+    private float GetDamageMultiByAttakcType(PlayerAttackKind attackKind, bool isLastAttack = false)
     {
+        bool enhanced = bullets > 0;
         if (enhanced)
         {
             if (attackKind == PlayerAttackKind.RangeNormalAttack && !isLastAttack) return _playerStatData.atkRanged111;

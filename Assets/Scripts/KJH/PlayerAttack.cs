@@ -149,7 +149,7 @@ public class PlayerAttack : MonoBehaviour
         Vector3 projectionVector = _PlayerCameraMove.CamRotation() * Vector3.forward * projectionSpeed_Forward + Vector3.up * projectionSpeed_Up;
         //?´íƒ?œìŠ¤?œì—???„ì¬ ê³µê²©???€?…ì„ ê°€?¸ì˜¨??
         projectile.Init(_PlayerMaster._PlayerInstanteState.GetDmg(_currentAttackKind,
-            GetCurrentAttackCount()),
+            IsLastAttack()),
             projectile_InitPos.position,
             projectionVector,
             OnRangeHit);
@@ -197,7 +197,7 @@ public class PlayerAttack : MonoBehaviour
     private void EnableDamageBox_Player()
     {
         _AttackSystem.EnableDamageBox(
-            _PlayerMaster._PlayerInstanteState.GetDmg(_currentAttackKind, GetCurrentAttackCount()),
+            _PlayerMaster._PlayerInstanteState.GetDmg(_currentAttackKind),
             _PlayerMaster._PlayerInstanteState.GetRange(_currentAttackKind, GetCurrentAttackCount()),
 OnMeleeHit
             );
