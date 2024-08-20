@@ -448,8 +448,10 @@ public class PlayerInstanteState : MonoBehaviour
     void InitPassive()
     {
         PlayerPassive playerPassive = _PlayerMaster._PlayerPassive;
-
-        if(playerPassive.ContainPassiveId(PassiveID.Offensive1))
+        //=======================================================================================
+        //=======================================================================================
+        //=======================================================================================
+        if (playerPassive.ContainPassiveId(PassiveID.Offensive1))
         {
             passive_Offensive1 = new Passive_Offensive1();
             passive_Offensive1.Init(this);
@@ -463,6 +465,7 @@ public class PlayerInstanteState : MonoBehaviour
         {
             passive_Offensive3 = new Passive_Offensive3();
             passive_Offensive3.Init(this);
+            passive_Offensive3.Active();
         }
         if (playerPassive.ContainPassiveId(PassiveID.Offensive4))
         {
@@ -474,6 +477,9 @@ public class PlayerInstanteState : MonoBehaviour
             passive_Offensive5 = new Passive_Offensive5();
             passive_Offensive5.Init(this);
         }
+        //=======================================================================================
+        //=======================================================================================
+        //=======================================================================================
         if (playerPassive.ContainPassiveId(PassiveID.Defensive1))
         {
             passive_Defensive1 = new Passive_Defensive1();
@@ -499,6 +505,9 @@ public class PlayerInstanteState : MonoBehaviour
             passive_Defensive5 = new Passive_Defensive5();
             passive_Defensive5.Init(this);
         }
+        //=======================================================================================
+        //=======================================================================================
+        //=======================================================================================
         if (playerPassive.ContainPassiveId(PassiveID.Utility1))
         {
             passive_Utility1 = new Passive_Utility1();
@@ -524,7 +533,10 @@ public class PlayerInstanteState : MonoBehaviour
             passive_Utility5 = new Passive_Utility5();
             passive_Utility5.Init(this);
         }
-    }    
+        //=======================================================================================
+        //=======================================================================================
+        //=======================================================================================
+    }
 
     public void Refresh_Model()
     {
