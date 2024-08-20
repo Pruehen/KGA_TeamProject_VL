@@ -13,7 +13,7 @@ public class DamageBox : MonoBehaviour
     private float _enableTimer = 0f;
 
     public Action OnHit;
-
+    public Vector3 target;
     private Vector3 HalfSize
     {
         get
@@ -41,13 +41,14 @@ public class DamageBox : MonoBehaviour
     {
         get
         {
-            return transform.position + Vector3.Scale(_offset, transform.lossyScale);
+            return transform.position + Vector3.Scale(_offset+ target, transform.lossyScale);
         }
     }
     private void OnEnable()
     {
         Collider[] result = Physics.OverlapBox(Center, HalfSize, transform.rotation, _targetLayer);
         bool onHit = false;
+        Debug.Break();
         foreach (Collider hit in result)
         {
             if (hit.attachedRigidbody == null)
