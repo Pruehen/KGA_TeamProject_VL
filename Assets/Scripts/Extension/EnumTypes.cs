@@ -71,8 +71,8 @@ namespace EnumTypes
     {
         RangeNormalAttack,
         RangeSkillAttack,
-        MeleeSkillAttack,
         MeleeNormalAttack,
+        MeleeSkillAttack,
         MeleeChargedAttack,
         RangeDashAttack,
         MeleeDashAttack,
