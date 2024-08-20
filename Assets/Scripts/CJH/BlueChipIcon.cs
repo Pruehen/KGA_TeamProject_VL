@@ -20,6 +20,7 @@ public class BlueChipIcon : MonoBehaviour
             iconName.text = "¾øÀ½";
             iconLevel.text = "";
             iconInfo.text = "";
+            iconImage.gameObject.SetActive(false);
         }
         else
         {            
@@ -28,6 +29,8 @@ public class BlueChipIcon : MonoBehaviour
             iconName.text = data.PrintName();
             iconLevel.text = data.PrintLevel(slot.Level);
             iconInfo.text = data.PrintInfo(slot.Level);
+            iconImage.gameObject.SetActive(true);
+            iconImage.sprite = Resources.Load<Sprite>($"Icon/bluechip/{data.IconName}");
         }
     } 
     
