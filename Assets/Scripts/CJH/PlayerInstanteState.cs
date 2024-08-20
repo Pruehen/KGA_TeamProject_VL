@@ -58,6 +58,24 @@ public class PlayerInstanteState : MonoBehaviour
     [SerializeField] public float DashCost = 300f;
 
 
+    Passive_Offensive1 passive_Offensive1;
+    Passive_Offensive2 passive_Offensive2;
+    Passive_Offensive3 passive_Offensive3;
+    Passive_Offensive4 passive_Offensive4;
+    Passive_Offensive5 passive_Offensive5;
+
+    Passive_Defensive1 passive_Defensive1;
+    Passive_Defensive2 passive_Defensive2;
+    Passive_Defensive3 passive_Defensive3;
+    Passive_Defensive4 passive_Defensive4;
+    Passive_Defensive5 passive_Defensive5;
+
+    Passive_Utility1 passive_Utility1;
+    Passive_Utility2 passive_Utility2;
+    Passive_Utility3 passive_Utility3;
+    Passive_Utility4 passive_Utility4;
+    Passive_Utility5 passive_Utility5;
+
     public float GetDmg(PlayerAttackKind type, bool isLastAttack = false)
     {
         float baseDmg = GetAttackPower() * GetDamageMultiByAttakcType(type,isLastAttack);// * coefficient;
@@ -107,7 +125,7 @@ public class PlayerInstanteState : MonoBehaviour
 
     public float GetSkillDmg(PlayerAttackKind type)
     {
-        float baseDmg = attackPower;// * coefficient;
+        float baseDmg = GetSkillPower();// * coefficient;
         float dmgGain = 1;
 
             int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Melee1);
@@ -202,6 +220,7 @@ public class PlayerInstanteState : MonoBehaviour
         DashForce = _playerStatData.dashForce;
         DashCost = _playerStatData.dashCost;
         Restore();
+        InitPassive();
     }
 
     //스태미나 소모 
@@ -426,6 +445,86 @@ public class PlayerInstanteState : MonoBehaviour
         bullets = maxBullets / 3;
         AttackSpeed = 1;
     }
+    void InitPassive()
+    {
+        PlayerPassive playerPassive = _PlayerMaster._PlayerPassive;
+
+        if(playerPassive.ContainPassiveId(PassiveID.Offensive1))
+        {
+            passive_Offensive1 = new Passive_Offensive1();
+            passive_Offensive1.Init(this);
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Offensive2))
+        {
+            passive_Offensive2 = new Passive_Offensive2();
+            passive_Offensive2.Init(this);
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Offensive3))
+        {
+            passive_Offensive3 = new Passive_Offensive3();
+            passive_Offensive3.Init(this);
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Offensive4))
+        {
+            passive_Offensive4 = new Passive_Offensive4();
+            passive_Offensive4.Init(this);
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Offensive5))
+        {
+            passive_Offensive5 = new Passive_Offensive5();
+            passive_Offensive5.Init(this);
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Defensive1))
+        {
+            passive_Defensive1 = new Passive_Defensive1();
+            passive_Defensive1.Init(this);
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Defensive2))
+        {
+            passive_Defensive2 = new Passive_Defensive2();
+            passive_Defensive2.Init(this);
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Defensive3))
+        {
+            passive_Defensive3 = new Passive_Defensive3();
+            passive_Defensive3.Init(this);
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Defensive4))
+        {
+            passive_Defensive4 = new Passive_Defensive4();
+            passive_Defensive4.Init(this);
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Defensive5))
+        {
+            passive_Defensive5 = new Passive_Defensive5();
+            passive_Defensive5.Init(this);
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Utility1))
+        {
+            passive_Utility1 = new Passive_Utility1();
+            passive_Utility1.Init(this);
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Utility2))
+        {
+            passive_Utility2 = new Passive_Utility2();
+            passive_Utility2.Init(this);
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Utility3))
+        {
+            passive_Utility3 = new Passive_Utility3();
+            passive_Utility3.Init(this);
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Utility4))
+        {
+            passive_Utility4 = new Passive_Utility4();
+            passive_Utility4.Init(this);
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Utility5))
+        {
+            passive_Utility5 = new Passive_Utility5();
+            passive_Utility5.Init(this);
+        }
+    }    
 
     public void Refresh_Model()
     {
@@ -439,7 +538,20 @@ public class PlayerInstanteState : MonoBehaviour
 
     public void UpdateHealth()
     {
-        HealthRatioChanged?.Invoke(hp / GetMaxHp());
+        float hpRatio = hp / GetMaxHp();
+        HealthRatioChanged?.Invoke(hpRatio);
+
+        if(passive_Offensive1 != null)
+        {
+            if(passive_Offensive1.HpCheckRetio <= hpRatio)
+            {
+                passive_Offensive1.Active();
+            }
+            else
+            {
+                passive_Offensive1.DeActive();
+            }
+        }
     }
     public void UpdateShild()
     {
