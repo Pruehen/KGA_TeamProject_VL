@@ -316,21 +316,29 @@ public class PlayerInstanteState : MonoBehaviour
             {
                 if(passive_Defensive3 != null && passive_Defensive3.ActiveCount > 0)
                 {
-                    passive_Defensive3.Active(out _holdTime_Passive_Defensive3);                    
+                    passive_Defensive3.Active(out _holdTime_Passive_Defensive3);
+                    Debug.Log("무적 발동!");
                 }
 
                 if (_holdTime_Passive_Defensive3 > 0)
                 {
                     hp = passive_Defensive3.HpHoldValue;
+                    Debug.Log("핫하 무적이다!");
                 }
                 else
                 {
                     hp = 0;
                     IsDead = true;
+                    OnDead();
                 }
             }
             UpdateHealth();
         }
+    }
+    void OnDead()
+    {
+        Debug.Log("플레이어 사망");
+        Destroy(this.gameObject);
     }
 
     public void ChangeHp(float value)
