@@ -17,6 +17,7 @@ public class PlayerAttack : MonoBehaviour
     PlayerMaster _PlayerMaster;
     AttackSystem _AttackSystem;
     PlayerModChangeManager _PlayerMod;
+    Animator _animator;
 
     float delayTime = 0;
     public bool attackTrigger = false;
@@ -26,11 +27,12 @@ public class PlayerAttack : MonoBehaviour
     bool skillBool = false;
 
     [SerializeField] PlayerAttackKind _currentAttackMod = PlayerAttackKind.RangeNormalAttack;
-    [SerializeField] PlayerAttackKind CurrentAttackKind 
+    [SerializeField]
+    PlayerAttackKind CurrentAttackKind
     {
         get
         {
-            if(_PlayerMaster.isDashing && !IsLastAttack())
+            if (IsDashAttack() && !IsLastAttack())
             {
                 return (_currentAttackMod == PlayerAttackKind.RangeNormalAttack) ? PlayerAttackKind.RangeDashAttack : PlayerAttackKind.MeleeDashAttack;
             }
@@ -61,6 +63,8 @@ public class PlayerAttack : MonoBehaviour
         _PlayerMod.OnEndAbsorptState += AbsorbingFall;
 
         _AttackSystem.Init(Callback_IsCharged, Callback_IsChargedFail, Callback_IsChargedEnd);
+
+        _animator = GetComponent<Animator>();
     }
 
     private void OnDestroy()
@@ -100,7 +104,7 @@ public class PlayerAttack : MonoBehaviour
 
 
     int initialAttackComboIndex;
-    [Header ("total count of attack animation")]
+    [Header("total count of attack animation")]
     [SerializeField] int _totalAttackAnimCount = 4;
     private void Update()
     {
@@ -124,7 +128,7 @@ public class PlayerAttack : MonoBehaviour
             }
         }
         //if (skillTrigger && !prevAttackTrigger)
-        if (skillTrigger&& skillBool)
+        if (skillTrigger && skillBool)
         {
             skillBool = false;
             delayTime = 0;
@@ -152,7 +156,7 @@ public class PlayerAttack : MonoBehaviour
                 if (!_PlayerMaster._PlayerInstanteState.IsAbsorptState)
                 {
                     skillTrigger = _InputManager.IsRMouseBtnClick;
-                    skillBool= _InputManager.IsRMouseBtnClick;
+                    skillBool = _InputManager.IsRMouseBtnClick;
                 }
                 break;
         }
@@ -160,18 +164,18 @@ public class PlayerAttack : MonoBehaviour
 
     void ShootProjectile()
     {
+        IncreaseAttackCount();
         Projectile projectile = ObjectPoolManager.Instance.DequeueObject(Prefab_Projectile).GetComponent<Projectile>();
 
         Vector3 projectionVector = _PlayerCameraMove.CamRotation() * Vector3.forward * projectionSpeed_Forward + Vector3.up * projectionSpeed_Up;
         //?¥ÌÉù?úÏä§?úÏóê???ÑÏû¨ Í≥µÍ≤©???Ä?ÖÏùÑ Í∞Ä?∏Ïò®??
         projectile.Init(_PlayerMaster._PlayerInstanteState.GetDmg(CurrentAttackKind,
             IsLastAttack()),
-            projectile_InitPos.position,
-            projectionVector,
+            projectile_InitPos.position, projectionVector,
+            _currentAttackMod, CurrentAttackKind, _currentAttackCount,
             OnRangeHit);
 
         _PlayerMaster._PlayerInstanteState.BulletConsumption();
-        IncreaseAttackCount();
     }
     private void EnableDamageBox_Player()
     {
@@ -204,7 +208,7 @@ OnMeleeHit
     {
         Debug.Log("¬˜-¡ˆ ≥°");
     }
-    
+
     private void Callback_IsChargedFail()
     {
         if (_currentAttackMod == PlayerAttackKind.MeleeNormalAttack)
@@ -222,24 +226,36 @@ OnMeleeHit
     private void OnMeleeHit()
     {
         PlayerInstanteState stat = _PlayerMaster._PlayerInstanteState;
-        stat.SkillGaugeRecovery(CurrentAttackKind, false);
+        stat.SkillGaugeRecovery(_currentAttackMod, CurrentAttackKind, false);
         _PlayerMaster.OnMeleeHit();
     }
-    private void OnRangeHit()
+    private void OnRangeHit(PlayerAttackKind mod, PlayerAttackKind kind,int currentAttackCount)
     {
         PlayerInstanteState stat = _PlayerMaster._PlayerInstanteState;
-        stat.SkillGaugeRecovery(CurrentAttackKind, IsLastAttack());
+        stat.SkillGaugeRecovery(mod, kind, IsLastAttack(currentAttackCount));
     }
 
     private bool IsLastAttack()
     {
-        if((_currentAttackCount + 1) % (_totalAttackAnimCount - initialAttackComboIndex) == 0)
+        return IsLastAttack(_currentAttackCount);
+    }
+    private bool IsLastAttack(int currentAttackCount)
+    {
+        if(currentAttackCount == 0)
+            return false;
+        if ((currentAttackCount) % (_totalAttackAnimCount - initialAttackComboIndex) == 0)
         {
             Debug.Log("∏∑≈∏");
             return true;
         }
         return false;
+    }
 
+    private bool IsDashAttack()
+    {
+        bool ran = AnimatorHelper.IsAnimationPlaying(_animator, 0, "Base Layer.Dash Attack");
+        bool mel = AnimatorHelper.IsAnimationPlaying(_animator, 0, "Base Layer.Dash Range");
+        return ran || mel;
     }
     //IEnumerator Attack_Delayed(float delayTime)
     //{
