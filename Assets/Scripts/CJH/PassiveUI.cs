@@ -1,9 +1,11 @@
 using EnumTypes;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class PassiveUI : MonoBehaviour
+public class PassiveUI : MonoBehaviour, ISelectHandler
 {
     public PassiveID passiveID;
 
@@ -13,29 +15,24 @@ public class PassiveUI : MonoBehaviour
     {
         if(passiveID != PassiveID.None)
         {
-            PassiveUIManager.Instance.ID_PassiveUI_Dic.Add(passiveID, this);
+            PassiveUIManager.Instance.ID_PassiveUI_Dic.Add(passiveID, this);            
         }
     }
-
-    public void ImageChange(List<Sprite> iconImage)
+    public void OnSelect(BaseEventData eventData)
     {
-        int index = (int)passiveID;
-        if (index >= 0 && index < iconImage.Count)
+        PassiveUIManager.Instance.InfoText(passiveID);
+    }
+
+    public void ImageChange()
+    {
+        if (passiveID == PassiveID.None)
         {
-            if (passiveID == PassiveID.None)
-            {
-                Image_Icon.gameObject.SetActive(false);
-            }
-            else
-            {
-                Image_Icon.gameObject.SetActive(true);
-                Image_Icon.sprite = iconImage[index];
-            }
+            Image_Icon.gameObject.SetActive(false);
         }
         else
         {
-            Debug.Log("이미지 없음");
-            return;
+            Image_Icon.gameObject.SetActive(true);
+            Image_Icon.sprite = Resources.Load<Sprite>(JsonDataManager.GetPassive(passiveID).IconPath);
         }
     }
 
@@ -44,7 +41,7 @@ public class PassiveUI : MonoBehaviour
         if (PassiveUIManager.Instance.Try_EquipPassive(this))
         {
             passiveID = PassiveID.None;
-            PassiveUIManager.Instance.Command_IconImage(this);
+            ImageChange();
         }
         else
         {
@@ -56,6 +53,9 @@ public class PassiveUI : MonoBehaviour
     {
         PassiveUIManager.Instance.Try_EquipUnPassive(this);
         passiveID = PassiveID.None;
-        PassiveUIManager.Instance.Command_IconImage(this);
+        ImageChange();
     }
+
+  
+
 }

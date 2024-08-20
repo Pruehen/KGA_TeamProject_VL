@@ -51,8 +51,8 @@ public class MainSceneUIManager : MonoBehaviour
             case nameof(InputManager.Instance.IsInteractiveBtnClick):
                 if (InputManager.Instance.IsInteractiveBtnClick == true)
                 {
-                       Button selectedButton = EventSystem.current.currentSelectedGameObject?.GetComponent<Button>();
-                        selectedButton.onClick.Invoke();
+                    Button selectedButton = EventSystem.current.currentSelectedGameObject?.GetComponent<Button>();
+                    selectedButton.onClick.Invoke();
                 }
                 break;
         }
