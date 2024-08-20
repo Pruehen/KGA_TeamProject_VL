@@ -28,11 +28,11 @@ public class PlayerInstanteState : MonoBehaviour
     public bool IsDead { get; private set; }
 
     [SerializeField] float maxHpBase;
-    public float MaxHpMulti { get; set; }
+    public float MaxHpMulti { get; set; } = 1f;
     public float GetMaxHp() { return maxHpBase * MaxHpMulti; }
     [SerializeField] float maxShieldBase;
-    public float MaxShieldMulti { get; set; }
-    float GetMaxShield() { return maxShieldBase * MaxShieldMulti; }
+    public float MaxShieldMulti { get; set; } = 1f;
+    public float GetMaxShield() { return maxShieldBase * MaxShieldMulti; }
     [SerializeField] float MaxStamina;
     [SerializeField] float staminaRecoverySpeed;
     [SerializeField] float staminaRecoveryDelay;
@@ -45,12 +45,12 @@ public class PlayerInstanteState : MonoBehaviour
 
     [SerializeField] float attackSpeed = 1f;
     [SerializeField] float attackPowerBase;
-    public float AttackPowerMulti { get; set; }
-    float GetAttackPower() { return attackPowerBase * AttackPowerMulti; }
+    public float AttackPowerMulti { get; set; } = 1f;
+    public float GetAttackPower() { return attackPowerBase * AttackPowerMulti; }
     [SerializeField] float attackRange = 1f;
     [SerializeField] float skillPower;
-    public float SkillPowerMulti { get; set; }
-    float GetSkillPower() { return skillPower * SkillPowerMulti; }
+    public float SkillPowerMulti { get; set; } = 1f;
+    public float GetSkillPower() { return skillPower * SkillPowerMulti; }
     public float DmgMulti { get; set; } = 1f;
 
     [SerializeField] public float DashTime = .5f;
@@ -107,7 +107,7 @@ public class PlayerInstanteState : MonoBehaviour
 
     public float GetSkillDmg(PlayerAttackKind type)
     {
-        float baseDmg = skillPower;// * coefficient;
+        float baseDmg = attackPower;// * coefficient;
         float dmgGain = 1;
 
             int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Melee1);
@@ -201,6 +201,7 @@ public class PlayerInstanteState : MonoBehaviour
         DashTime = _playerStatData.dashTime;
         DashForce = _playerStatData.dashForce;
         DashCost = _playerStatData.dashCost;
+        Restore();
     }
 
     //스태미나 소모 
