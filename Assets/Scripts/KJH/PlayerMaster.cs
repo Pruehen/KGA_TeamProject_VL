@@ -153,8 +153,8 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
 
     public void Hit(float dmg)
     {
-        _PlayerInstanteState.Hit(dmg);
-        DmgTextManager.Instance.OnDmged(dmg, this.transform.position);
+        _PlayerInstanteState.Hit(dmg, out float finalDmg);
+        DmgTextManager.Instance.OnDmged(finalDmg, this.transform.position);
     }
 
     public bool IsDead()

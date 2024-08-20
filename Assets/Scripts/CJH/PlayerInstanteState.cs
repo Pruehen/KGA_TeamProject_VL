@@ -84,15 +84,30 @@ public class PlayerInstanteState : MonoBehaviour
     {
         get { return executionCount; }        
     }
-    public void AddExcutionCount_OnEnemyDestroy()
+    public void OnEnemyDestroy()
+    {
+        Passive_Defensive2_AddExcutionCount();
+        Passive_Defensive4_Active();
+    }
+    
+    void Passive_Defensive2_AddExcutionCount()
     {
         executionCount++;
-        if(passive_Defensive2 != null && executionCount >= passive_Defensive2.CountCheck)
+        if (passive_Defensive2 != null && executionCount >= passive_Defensive2.CountCheck)
         {
             executionCount = 0;
             passive_Defensive2.Active();
         }
     }
+
+    void Passive_Defensive4_Active()
+    {
+        if(passive_Defensive4 != null)
+        {
+            passive_Defensive4.Active();
+        }
+    }
+
     float _holdTime_Passive_Defensive3 = 0;//체력3 패시브에서 사용
 
     public float GetDmg(PlayerAttackKind type, bool isLastAttack = false)
@@ -296,13 +311,23 @@ public class PlayerInstanteState : MonoBehaviour
         UpdateStamina();
     }
 
-    public void Hit(float dmg)
+    public void Hit(float dmg, out float finalDmg)
     {
-        if (Shield > 0)
+        finalDmg = dmg;
+
+        if (passive_Defensive4 != null)
         {
+            dmg -= dmg * passive_Defensive4.Value_DamageReductionPercentage * 0.01f;
+            passive_Defensive4.DeActive();
+        }
+
+        if (Shield > 0)
+        {            
             Shield -= dmg;
+            finalDmg = dmg;
             if (Shield <= 0)
             {
+                finalDmg = dmg + Shield;
                 Shield = 0;
             }
             UpdateShild();
@@ -312,18 +337,20 @@ public class PlayerInstanteState : MonoBehaviour
         if (hp > 0)
         {
             hp -= dmg;
+            finalDmg = dmg;
             if (hp <= 0)
             {
                 if(passive_Defensive3 != null && passive_Defensive3.ActiveCount > 0)
                 {
-                    passive_Defensive3.Active(out _holdTime_Passive_Defensive3);
+                    passive_Defensive3.Active(out _holdTime_Passive_Defensive3);                    
                     Debug.Log("무적 발동!");
-                }
 
+                }
                 if (_holdTime_Passive_Defensive3 > 0)
                 {
                     hp = passive_Defensive3.HpHoldValue;
                     Debug.Log("핫하 무적이다!");
+                    finalDmg = 0;
                 }
                 else
                 {
