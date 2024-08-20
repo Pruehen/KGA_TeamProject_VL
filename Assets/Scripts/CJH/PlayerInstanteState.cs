@@ -47,6 +47,7 @@ public class PlayerInstanteState : MonoBehaviour
     public float SkillGaugeRecoveryMulti { get; set; } = 1;
     [SerializeField] int maxBullets = 50;
     [SerializeField] int maxMeleeBullets = 50;
+    public void Passive_Utility5_Active(int value1, int value2) { maxBullets += value1; maxMeleeBullets += value2; }
 
     [SerializeField] float attackSpeed = 1f;
     [SerializeField] float attackPowerBase;
@@ -625,6 +626,7 @@ public class PlayerInstanteState : MonoBehaviour
         {
             passive_Utility5 = new Passive_Utility5();
             passive_Utility5.Init(this);
+            passive_Utility5.Active();
         }
         //=======================================================================================
         //=======================================================================================
