@@ -107,7 +107,7 @@ public class PlayerInstanteState : MonoBehaviour
 
     public float GetSkillDmg(PlayerAttackKind type)
     {
-        float baseDmg = attackPower;// * coefficient;
+        float baseDmg = skillPower;// * coefficient;
         float dmgGain = 1;
 
             int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Melee1);
