@@ -153,7 +153,7 @@ public class LaunchAttack : AiAttackAction
 
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiredDir), Time.deltaTime * _aimRotateSpeed);
 
-        bool isGrounded = Physics.CheckSphere(transform.position, .1f, LayerMask.GetMask("Environment"));
+        bool isGrounded = Physics.CheckSphere(transform.position + (Vector3.up * .35f) , .4f, LayerMask.GetMask("Environment"));
 
         if (!isGrounded)
         {
