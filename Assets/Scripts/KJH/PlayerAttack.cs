@@ -26,6 +26,21 @@ public class PlayerAttack : MonoBehaviour
     bool skillBool = false;
 
     [SerializeField] PlayerAttackKind _currentAttackMod = PlayerAttackKind.RangeNormalAttack;
+    [SerializeField] PlayerAttackKind CurrentAttackKind 
+    {
+        get
+        {
+            if(_PlayerMaster.isDashing && !IsLastAttack())
+            {
+                return (_currentAttackMod == PlayerAttackKind.RangeNormalAttack) ? PlayerAttackKind.RangeDashAttack : PlayerAttackKind.MeleeDashAttack;
+            }
+            return _currentAttackKind;
+        }
+        set
+        {
+            _currentAttackKind = value;
+        }
+    }
     [SerializeField] PlayerAttackKind _currentAttackKind = PlayerAttackKind.RangeNormalAttack;
     [SerializeField] int _initialAttackComboIndex = 0;
     int _currentAttackCount;
@@ -69,13 +84,13 @@ public class PlayerAttack : MonoBehaviour
     {
         if (isMelee)
         {
-            _currentAttackKind = PlayerAttackKind.MeleeNormalAttack;
+            CurrentAttackKind = PlayerAttackKind.MeleeNormalAttack;
             _currentAttackMod = PlayerAttackKind.MeleeNormalAttack;
             _AttackSystem.ModTransform();
         }
         else
         {
-            _currentAttackKind = PlayerAttackKind.RangeNormalAttack;
+            CurrentAttackKind = PlayerAttackKind.RangeNormalAttack;
             _currentAttackMod = PlayerAttackKind.RangeNormalAttack;
             _AttackSystem.ModTransform();
         }
@@ -98,7 +113,7 @@ public class PlayerAttack : MonoBehaviour
 
             int blueChip2Level = _PlayerMaster.GetBlueChipLevel(EnumTypes.BlueChipID.Range1);
             initialAttackComboIndex = (blueChip2Level > 0) ? (int)JsonDataManager.GetBlueChipData(EnumTypes.BlueChipID.Range1).Level_VelueList[blueChip2Level][0] : 0;
-            _AttackSystem.StartAttack(_currentAttackKind, initialAttackComboIndex);
+            _AttackSystem.StartAttack(_currentAttackMod, _currentAttackKind, initialAttackComboIndex);
             //StartCoroutine(Attack_Delayed(attack_Delay));
         }
         if (!attackTrigger && prevAttackTrigger)
@@ -113,7 +128,7 @@ public class PlayerAttack : MonoBehaviour
         {
             delayTime = 0;
             _PlayerMaster.OnAttackState(_PlayerCameraMove.CamRotation() * Vector3.forward);
-            _AttackSystem.StartSkill((int)_currentAttackKind, _PlayerMaster._PlayerInstanteState.skillGauge);
+            _AttackSystem.StartSkill((int)CurrentAttackKind, _PlayerMaster._PlayerInstanteState.skillGauge);
         }
         prevAttackTrigger = attackTrigger;
     }
@@ -148,7 +163,7 @@ public class PlayerAttack : MonoBehaviour
 
         Vector3 projectionVector = _PlayerCameraMove.CamRotation() * Vector3.forward * projectionSpeed_Forward + Vector3.up * projectionSpeed_Up;
         //?¥ÌÉù?úÏä§?úÏóê???ÑÏû¨ Í≥µÍ≤©???Ä?ÖÏùÑ Í∞Ä?∏Ïò®??
-        projectile.Init(_PlayerMaster._PlayerInstanteState.GetDmg(_currentAttackKind,
+        projectile.Init(_PlayerMaster._PlayerInstanteState.GetDmg(CurrentAttackKind,
             IsLastAttack()),
             projectile_InitPos.position,
             projectionVector,
@@ -156,6 +171,14 @@ public class PlayerAttack : MonoBehaviour
 
         _PlayerMaster._PlayerInstanteState.BulletConsumption();
         IncreaseAttackCount();
+    }
+    private void EnableDamageBox_Player()
+    {
+        _AttackSystem.EnableDamageBox(
+            _PlayerMaster._PlayerInstanteState.GetDmg(CurrentAttackKind),
+            _PlayerMaster._PlayerInstanteState.GetRange(CurrentAttackKind, GetCurrentAttackCount()),
+OnMeleeHit
+            );
     }
 
     public void ResetAttack()
@@ -172,7 +195,7 @@ public class PlayerAttack : MonoBehaviour
     {
         if (_currentAttackMod == PlayerAttackKind.MeleeNormalAttack)
         {
-            _currentAttackKind = PlayerAttackKind.MeleeChargedAttack;
+            CurrentAttackKind = PlayerAttackKind.MeleeChargedAttack;
             Debug.Log("¬˜-¡ˆ øœ∑·");
         }
     }
@@ -185,7 +208,7 @@ public class PlayerAttack : MonoBehaviour
     {
         if (_currentAttackMod == PlayerAttackKind.MeleeNormalAttack)
         {
-            _currentAttackKind = PlayerAttackKind.MeleeNormalAttack;
+            CurrentAttackKind = PlayerAttackKind.MeleeNormalAttack;
             Debug.Log("¬˜-¡ˆ Ω«∆–");
         }
     }
@@ -194,24 +217,16 @@ public class PlayerAttack : MonoBehaviour
         _PlayerMaster._PlayerInstanteState.TryUseSkillGauge2();
     }
 
-    private void EnableDamageBox_Player()
-    {
-        _AttackSystem.EnableDamageBox(
-            _PlayerMaster._PlayerInstanteState.GetDmg(_currentAttackKind),
-            _PlayerMaster._PlayerInstanteState.GetRange(_currentAttackKind, GetCurrentAttackCount()),
-OnMeleeHit
-            );
-    }
     private void OnMeleeHit()
     {
         PlayerInstanteState stat = _PlayerMaster._PlayerInstanteState;
-        stat.SkillGaugeRecovery(_currentAttackKind, false);
+        stat.SkillGaugeRecovery(CurrentAttackKind, false);
         _PlayerMaster.OnMeleeHit();
     }
     private void OnRangeHit()
     {
         PlayerInstanteState stat = _PlayerMaster._PlayerInstanteState;
-        stat.SkillGaugeRecovery(_currentAttackKind, IsLastAttack());
+        stat.SkillGaugeRecovery(CurrentAttackKind, IsLastAttack());
     }
 
     private bool IsLastAttack()
