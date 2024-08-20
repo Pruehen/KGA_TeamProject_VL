@@ -42,11 +42,7 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     }
     public bool isDashing
     {
-        get { return _PlayerMove._isDashing; }
-        set
-        {
-            _PlayerMove._isDashing = value;
-        }
+        get { return _PlayerMove.IsDashing; }
     }
     public bool isAttackTrigger
     {

@@ -34,10 +34,6 @@ public class PlayerModChangeManager : MonoBehaviour
      public bool isDashing
     {
         get { return _PlayerMaster.isDashing; }
-        set
-        {
-            _PlayerMaster.isDashing = value;
-        }
     }
 
     private void Awake()
