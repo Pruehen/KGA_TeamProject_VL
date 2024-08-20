@@ -105,6 +105,32 @@ public class PlayerInstanteState : MonoBehaviour
         return baseRange * rangeGain;
     }
 
+    public float GetSkillDmg(PlayerAttackKind type)
+    {
+        float baseDmg = attackPower;// * coefficient;
+        float dmgGain = 1;
+
+            int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Melee1);
+            if (level > 0)
+            {
+                baseDmg += ((hp + Shield) * JsonDataManager.GetBlueChipData(BlueChipID.Melee1).Level_VelueList[level][0]) * 0.01f;
+            }
+
+
+            if (_PlayerMaster._PlayerBuff.blueChip4_Buff_NextHitAddDmg.TryDequeue(out float addDmgGain))
+            {
+                dmgGain += addDmgGain;
+                Debug.Log("피해증가 버프 소모");
+            }
+            int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Generic2);
+            if (blueChip7Level > 0)
+            {
+                float addDmg = JsonDataManager.GetBlueChipData(BlueChipID.Generic2).Level_VelueList[blueChip7Level][1] * 0.01f;
+                dmgGain += addDmg;
+            }
+        return baseDmg * dmgGain;
+    }
+
     [SerializeField] float moveSpeed;
     public float GetMoveSpeed() { return moveSpeed; }
 

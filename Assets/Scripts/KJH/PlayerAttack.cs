@@ -124,8 +124,9 @@ public class PlayerAttack : MonoBehaviour
             }
         }
         //if (skillTrigger && !prevAttackTrigger)
-        if (skillTrigger)
+        if (skillTrigger&& skillBool)
         {
+            skillBool = false;
             delayTime = 0;
             _PlayerMaster.OnAttackState(_PlayerCameraMove.CamRotation() * Vector3.forward);
             _AttackSystem.StartSkill((int)CurrentAttackKind, _PlayerMaster._PlayerInstanteState.skillGauge);
@@ -151,7 +152,7 @@ public class PlayerAttack : MonoBehaviour
                 if (!_PlayerMaster._PlayerInstanteState.IsAbsorptState)
                 {
                     skillTrigger = _InputManager.IsRMouseBtnClick;
-                    skillBool = _InputManager.IsRMouseBtnClick;
+                    skillBool= _InputManager.IsRMouseBtnClick;
                 }
                 break;
         }
@@ -184,7 +185,7 @@ OnMeleeHit
     public void ResetAttack()
     {
         _currentAttackCount = 0;
-        _AttackSystem.ResetAttack();
+        //_AttackSystem.ResetAttack();
     }
     public void IncreaseAttackCount()
     {
@@ -215,6 +216,7 @@ OnMeleeHit
     public void OnUseSkillGauge()
     {
         _PlayerMaster._PlayerInstanteState.TryUseSkillGauge2();
+        skillBool = false;
     }
 
     private void OnMeleeHit()
