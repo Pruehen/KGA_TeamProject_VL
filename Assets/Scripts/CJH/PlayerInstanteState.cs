@@ -20,8 +20,12 @@ public class PlayerInstanteState : MonoBehaviour
         get { return _isMeleeMode; }
         set
         {
-            _isMeleeMode = value;
-            OnMeleeModeChanged?.Invoke(_isMeleeMode);
+            if (_isMeleeMode != value)
+            {
+                _isMeleeMode = value;
+                OnMeleeModeChanged?.Invoke(_isMeleeMode);
+                OnMeleeModeChange();
+            }
         }
     }
 
@@ -105,6 +109,13 @@ public class PlayerInstanteState : MonoBehaviour
         if(passive_Defensive4 != null)
         {
             passive_Defensive4.Active();
+        }
+    }
+    public void OnMeleeModeChange()
+    {
+        if(passive_Defensive5 != null && IsMeleeMode == false)
+        {
+            passive_Defensive5.Active();
         }
     }
 
@@ -287,7 +298,7 @@ public class PlayerInstanteState : MonoBehaviour
 
     public void StaminaRatioChange(float value)
     {
-        stamina += MaxStamina * value * 0.01f;
+        stamina += MaxStamina * value;
         if (stamina > MaxStamina)
         {
             stamina = MaxStamina;

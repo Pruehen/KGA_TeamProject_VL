@@ -35,9 +35,12 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
         get { return _PlayerInstanteState.IsMeleeMode; }
         set
         {
-            _PlayerInstanteState.IsMeleeMode = value;
-            Execute_BlueChip1_OnModeChange(value);
-            Execute_BlueChip4_OnModeChange();
+            if (_PlayerInstanteState.IsMeleeMode != value)
+            {
+                _PlayerInstanteState.IsMeleeMode = value;
+                Execute_BlueChip1_OnModeChange(value);
+                Execute_BlueChip4_OnModeChange();
+            }
         }
     }
     public bool isDashing
