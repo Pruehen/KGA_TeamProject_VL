@@ -41,7 +41,7 @@ public class PlayerInstanteState : MonoBehaviour
     [SerializeField] float attackSpeed = 1f;
     [SerializeField] float attackPower;
     [SerializeField] float attackRange = 1f;
-    [SerializeField] float skillPower;
+    public float skillPower;
     public float GetDmg(PlayerAttackKind type, int combo)
     {
         float baseDmg = attackPower;// * coefficient;
