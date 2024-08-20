@@ -126,6 +126,7 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
         _PlayerModChangeManager = GetComponent<PlayerModChangeManager>();
 
         _ItemAbsorber.Init(_PlayerInstanteState._playerStatData);
+        _PlayerAttack.Init();
     }
 
     public void OnAttackState(Vector3 lookTarget)

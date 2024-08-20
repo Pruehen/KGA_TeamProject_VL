@@ -47,7 +47,7 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] int _initialAttackComboIndex = 0;
     int _currentAttackCount;
 
-    private void Awake()
+    public void Init()
     {
         _InputManager = InputManager.Instance;
         _InputManager.PropertyChanged += OnInputPropertyChanged;
@@ -65,6 +65,8 @@ public class PlayerAttack : MonoBehaviour
         _AttackSystem.Init(Callback_IsCharged, Callback_IsChargedFail, Callback_IsChargedEnd);
 
         _animator = GetComponent<Animator>();
+        _PlayerMaster._PlayerInstanteState.OnMeleeModeChanged += OnModChanged;
+        
     }
 
     private void OnDestroy()
@@ -97,6 +99,23 @@ public class PlayerAttack : MonoBehaviour
             CurrentAttackKind = PlayerAttackKind.RangeNormalAttack;
             _currentAttackMod = PlayerAttackKind.RangeNormalAttack;
             _AttackSystem.ModTransform();
+        }
+    }
+
+    private void OnModChanged(bool isMelee)
+    {
+        if((int)_currentAttackMod == (isMelee ? 1:0))
+        {
+            if(!isMelee)
+            {
+                CurrentAttackKind = PlayerAttackKind.RangeNormalAttack;
+                _currentAttackMod = PlayerAttackKind.RangeNormalAttack;
+            }
+            else
+            {
+                CurrentAttackKind = PlayerAttackKind.MeleeNormalAttack;
+                _currentAttackMod = PlayerAttackKind.MeleeNormalAttack;
+            }
         }
     }
 
@@ -189,7 +208,7 @@ public class PlayerAttack : MonoBehaviour
     public void ResetAttack()
     {
         _currentAttackCount = 0;
-        //_AttackSystem.ResetAttack();
+        _AttackSystem.ResetAttack();
     }
     public void IncreaseAttackCount()
     {

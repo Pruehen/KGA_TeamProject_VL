@@ -70,8 +70,8 @@ namespace EnumTypes
     public enum PlayerAttackKind
     {
         RangeNormalAttack,
-        RangeSkillAttack,
         MeleeNormalAttack,
+        RangeSkillAttack,
         MeleeSkillAttack,
         MeleeChargedAttack,
         RangeDashAttack,
