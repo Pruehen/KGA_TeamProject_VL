@@ -51,9 +51,9 @@ public class PlayerInstanteState : MonoBehaviour
     [SerializeField] float attackRangeBase = 1f;
     public float attackRangeMulti { get; set; } = 1;
     public float GetAttackRange() { return attackRangeMulti * attackRangeMulti; }
-    [SerializeField] float skillPower;
+    [SerializeField] float skillPowerBase;
     public float SkillPowerMulti { get; set; } = 1f;
-    public float GetSkillPower() { return skillPower * SkillPowerMulti; }
+    public float GetSkillPower() { return skillPowerBase * SkillPowerMulti; }
     public float DmgMulti { get; set; } = 1f;
 
     [SerializeField] public float DashTime = .5f;
@@ -105,7 +105,12 @@ public class PlayerInstanteState : MonoBehaviour
                 dmgGain += addDmg;
             }
         }
-        return baseDmg * dmgGain;
+        float finalDmg = baseDmg * dmgGain;
+        if(passive_Offensive5 != null)
+        {
+            finalDmg += passive_Offensive5.ValueChangeRatio * (GetSkillPower());
+        }    
+        return finalDmg;
     }
     public float GetRange(PlayerAttackKind type, int combo)
     {
@@ -213,7 +218,7 @@ public class PlayerInstanteState : MonoBehaviour
 
         attackSpeed = _playerStatData.attackSpeed;
         attackPowerBase = _playerStatData.attackPower;
-        skillPower = _playerStatData.skillPower;
+        skillPowerBase = _playerStatData.skillPower;
 
         moveSpeed = _playerStatData.moveSpeed;
 
