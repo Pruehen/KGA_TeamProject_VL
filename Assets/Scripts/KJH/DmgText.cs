@@ -14,7 +14,7 @@ public class DmgText : MonoBehaviour
         _originPos = originPos;
 
         activeTime = 0;
-        text.text = dmg.ToString("0.##");
+        text.text = dmg.ToString("0");
     }
 
     private void Update()
