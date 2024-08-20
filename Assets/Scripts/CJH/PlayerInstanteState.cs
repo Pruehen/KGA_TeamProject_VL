@@ -226,9 +226,10 @@ public class PlayerInstanteState : MonoBehaviour
 
         DashTime = _playerStatData.dashTime;
         DashForce = _playerStatData.dashForce;
-        DashCost = _playerStatData.dashCost;
-        Restore();
+        DashCost = _playerStatData.dashCost;        
+
         InitPassive();
+        Restore();
     }
 
     //스태미나 소모 
@@ -499,6 +500,7 @@ public class PlayerInstanteState : MonoBehaviour
         {
             passive_Defensive1 = new Passive_Defensive1();
             passive_Defensive1.Init(this);
+            passive_Defensive1.Active();
         }
         if (playerPassive.ContainPassiveId(PassiveID.Defensive2))
         {
