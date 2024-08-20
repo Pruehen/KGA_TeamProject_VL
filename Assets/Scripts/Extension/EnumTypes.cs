@@ -48,6 +48,8 @@ namespace EnumTypes
         RangeNormalAttack3,
         RangeNormalAttack4,
 
+        RangeDashAttack,
+
         RangeSkillAttack1,
         RangeSkillAttack2,
         RangeSkillAttack3,
@@ -56,18 +58,24 @@ namespace EnumTypes
         MeleeNormalAttack1,
         MeleeChargeAttack2,
 
+        MeleeDashAttack,
+
         MeleeSkillAttack1,
         MeleeSkillAttack2,
         MeleeSkillAttack3,
-        MeleeSkillAttack4
+        MeleeSkillAttack4,
+
+
     }
     public enum PlayerAttackKind
     {
         RangeNormalAttack,
         RangeSkillAttack,
-        MeleeSkillAttack,
         MeleeNormalAttack,
+        MeleeSkillAttack,
         MeleeChargedAttack,
+        RangeDashAttack,
+        MeleeDashAttack,
     }
 
     public static class EnumAttackHelper

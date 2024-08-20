@@ -18,16 +18,16 @@ public class ItemAbsorber : MonoBehaviour
     List<TrashItem> absorbingItems = new List<TrashItem>();
     List<TrashItem> revorvingItems = new List<TrashItem>();
 
+    [Header("Èí¼ö °ü·Ã")]
+    [SerializeField] private float Radious = 5f;
+    [SerializeField] private float Height = 1f;
+    [SerializeField] private float AbsolsionSpeed = 30f;
     [Header("È¸Àü °ü·Ã")]
     [SerializeField] private float RevolveRadious = 5f;
     [SerializeField] private float RevolveSpeed = 30f;
     [SerializeField] private AnimationCurve RevolveSpeedCurve;
-
     [Header("È¹µæ °ü·Ã")]
-    [SerializeField] private float Radious = 5f;
-    [SerializeField] private float Height = 1f;
-    [Range(0f, 1f)]
-    [SerializeField] private float AbsolsionSpeed = 30f;
+    [SerializeField] private float AcquireSpeed = 30f;
     [SerializeField] private AnimationCurve RadiusExpandCurve;
 
 
@@ -37,8 +37,17 @@ public class ItemAbsorber : MonoBehaviour
 
     bool _isInit = false;
 
-    public void Init()
+    public void Init(SO_Player playerData)
     {
+        RevolveRadious = playerData.RevolveRadious;
+        RevolveSpeed = playerData.RevolveSpeed;
+        RevolveSpeedCurve = playerData.RevolveSpeedCurve;
+        Radious = playerData.Radious;
+        Height = playerData.Height;
+        AbsolsionSpeed = playerData.AbsolsionSpeed;
+        AcquireSpeed = playerData.AcquireSpeed;
+        RadiusExpandCurve = playerData.RadiusExpandCurve;
+
         _collider = GetComponent<CapsuleCollider>();
         SetRadius(0f);
         SetHeight(Height);
@@ -86,7 +95,7 @@ public class ItemAbsorber : MonoBehaviour
 
         foreach (TrashItem item in revorvingItems)
         {
-            item.PullToCenterAndDestroy();
+            item.PullToCenterAndDestroy(AcquireSpeed);
             absorbingItems.Remove(item);
         }
 
@@ -105,11 +114,11 @@ public class ItemAbsorber : MonoBehaviour
 
         foreach (TrashItem item in absorbingItems)
         {
-            item.PullToCenterAndDestroy();
+            item.PullToCenterAndDestroy(AcquireSpeed);
         }
         foreach (TrashItem item in revorvingItems)
         {
-            item.PullToCenterAndDestroy();
+            item.PullToCenterAndDestroy(AcquireSpeed);
         }
 
         return count;

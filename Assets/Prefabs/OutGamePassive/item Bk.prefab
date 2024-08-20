@@ -162,6 +162,7 @@ GameObject:
   - component: {fileID: 7687734663786928281}
   - component: {fileID: 7694967446240046543}
   - component: {fileID: 2560938522472808501}
+  - component: {fileID: 2075976311567673749}
   m_Layer: 0
   m_Name: item Bk
   m_TagString: Untagged
@@ -271,7 +272,33 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7694967446240046543}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2075976311567673749}
+        m_TargetAssemblyTypeName: PassiveUI, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2075976311567673749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6464191489297397837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f919e1396a58c404395d94310e6f6fe8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  passiveID: 0
+  Image_Icon: {fileID: 7831305867688529031}
 --- !u!1 &7919639476391311073
 GameObject:
   m_ObjectHideFlags: 0

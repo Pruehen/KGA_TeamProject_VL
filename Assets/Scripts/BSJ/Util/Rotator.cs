@@ -6,6 +6,6 @@ public class Rotator : MonoBehaviour
 {
     public static void SmoothRotate(Transform transform, Quaternion targetRotation, float speed, float deltaTime)
     {
-        transform.eulerAngles = Quaternion.Lerp(transform.rotation, targetRotation, Mathf.Clamp01((speed) * deltaTime)).eulerAngles;
+        transform.eulerAngles = Quaternion.Lerp(transform.rotation, targetRotation, Mathf.Clamp((speed) * deltaTime, 0f, .99f)).eulerAngles;
     }
 }

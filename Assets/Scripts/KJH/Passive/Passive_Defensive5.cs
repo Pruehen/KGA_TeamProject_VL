@@ -1,18 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using EnumTypes;
 
-public class Passive_Defensive5 : MonoBehaviour
+public class Passive_Defensive5 : Passive
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void SetPassiveData()
     {
-        
+        base._passiveData = JsonDataManager.GetPassive(PassiveID.Defensive5);
+    }
+    public override void Active()//"근거리 모드에서 원거리 모드가 될 때마다 스태미나 {0}% 회복",
+    {
+        _state.StaminaRatioChange(_passiveData.VelueList[0] * 0.01f);        
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void DeActive()
     {
-        
+
     }
 }

@@ -374,6 +374,8 @@ public class Enemy : MonoBehaviour, ITargetable
         _behaviorTree.DisableBehavior();
         _navMeshAgent.isStopped = true;
 
+        PlayerMaster.Instance._PlayerInstanteState.AddExcutionCount_OnEnemyDestroy();
+
         StopAllCoroutines();
         StartCoroutine(DelayedDisable());
     }
@@ -542,5 +544,13 @@ public class Enemy : MonoBehaviour, ITargetable
         SharedFloat detectRange = new SharedFloat();
         detectRange.Value = 9999f;
         _behaviorTree.SetVariable("DetectRange", detectRange);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (AiAttack is LaunchAttack la)
+        {
+            la.TriggerOnEnterCollider();
+        }
     }
 }

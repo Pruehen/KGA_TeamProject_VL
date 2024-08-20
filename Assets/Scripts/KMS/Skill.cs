@@ -42,11 +42,7 @@ public class Skill : MonoBehaviour
 
     public float SkillPower
     {
-        get { return _master._PlayerInstanteState.skillPower; }
-        set
-        {
-            _master._PlayerInstanteState.skillPower = value;
-        }
+        get { return _master._PlayerInstanteState.GetSkillDmg(); }
     }
 
 

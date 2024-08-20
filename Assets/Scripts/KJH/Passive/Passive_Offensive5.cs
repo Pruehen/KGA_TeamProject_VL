@@ -1,18 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using EnumTypes;
 
-public class Passive_Offensive5 : MonoBehaviour
+public class Passive_Offensive5 : Passive
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void SetPassiveData()
     {
-        
+        base._passiveData = JsonDataManager.GetPassive(PassiveID.Offensive5);
+        ValueChangeRatio = _passiveData.VelueList[0] * 0.01f;
+    }
+    public float ValueChangeRatio { get; private set; }
+    public override void Active()//"특수 공격력의 {0}%만큼을 일반 공격력으로 치환",
+    {
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void DeActive()
     {
-        
+
     }
 }

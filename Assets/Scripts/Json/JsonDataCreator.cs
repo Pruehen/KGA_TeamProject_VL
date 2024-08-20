@@ -9,20 +9,23 @@ using Unity.VisualScripting;
 public class BlueChip
 {    
     [JsonProperty] public string Name { get; private set; }
-    [JsonProperty] public string Info { get; private set; }
+    [JsonProperty] public string Desc { get; private set; }
+    [JsonProperty] public string IconName { get; private set; }
     [JsonProperty] public Dictionary<int, List<float>> Level_VelueList { get; private set; }
 
     [JsonConstructor]
-    public BlueChip(string name, string info, Dictionary<int, List<float>> level_VelueList)
+    public BlueChip(string name, string desc, string iconName, Dictionary<int, List<float>> level_VelueList)
     {        
         Name = name;
-        Info = info;
+        Desc = desc;
+        IconName = iconName;
         Level_VelueList = level_VelueList;
     }
     public BlueChip(int id)
     {        
         Name = "블루칩 이름";
-        Info = "블루칩 설명";
+        Desc = "블루칩 설명";
+        IconName = "아이콘 이름";
         Level_VelueList = new Dictionary<int, List<float>>();
         Level_VelueList.Add(1, new List<float>());
         Level_VelueList.Add(2, new List<float>());
@@ -41,7 +44,7 @@ public class BlueChip
     }
     public string PrintInfo(int level)
     {        
-        return string.Format(Info, Level_VelueList[level].Cast<object>().ToArray());
+        return string.Format(Desc, Level_VelueList[level].Cast<object>().ToArray());
     }
 }
 public class BlueChipTable
@@ -62,25 +65,28 @@ public class BlueChipTable
     }
 }
 
-public class Passive
+public class PassiveData
 {
     [JsonProperty] public string Name { get; private set; }
-    [JsonProperty] public string Info { get; private set; }
+    [JsonProperty] public string Desc { get; private set; }
+    [JsonProperty] public string IconName { get; private set; }
     [JsonProperty] public int Cost { get; private set; }
     [JsonProperty] public List<float> VelueList { get; private set; }
 
     [JsonConstructor]
-    public Passive(string name, string info, int cost, List<float> velueList)
+    public PassiveData(string name, string desc, string iconName, int cost, List<float> velueList)
     {
         Name = name;
-        Info = info;
+        Desc = desc;
+        IconName = iconName;
         Cost = cost;
         VelueList = velueList;
     }
-    public Passive(PassiveID iD)
+    public PassiveData(PassiveID iD)
     {
         Name = iD.ToString();
-        Info = "해당 패시브에 대한 설명. 값 {0}";
+        Desc = "해당 패시브에 대한 설명. 값 {0}";
+        IconName = "아이콘 이름";
         Cost = 100;
         VelueList = new List<float>();
         VelueList.Add(1);
@@ -92,23 +98,23 @@ public class Passive
     }
     public string PrintInfo()
     {
-        return string.Format(Info, VelueList.Cast<object>().ToArray());
+        return string.Format(Desc, VelueList.Cast<object>().ToArray());
     }
 }
 public class PassiveTable
 {
-    public Dictionary<PassiveID, Passive> dic;
+    public Dictionary<PassiveID, PassiveData> dic;
     [JsonConstructor]
-    public PassiveTable(Dictionary<PassiveID, Passive> dic)
+    public PassiveTable(Dictionary<PassiveID, PassiveData> dic)
     {
         this.dic = dic;
     }
     public PassiveTable()
     {
-        dic = new Dictionary<PassiveID, Passive>();
+        dic = new Dictionary<PassiveID, PassiveData>();
         foreach (PassiveID passiveType in Enum.GetValues(typeof(PassiveID)))
         {            
-            dic.Add(passiveType, new Passive(passiveType));
+            dic.Add(passiveType, new PassiveData(passiveType));
         }
     }
     public static string FilePath()
@@ -118,28 +124,55 @@ public class PassiveTable
 }
 
 public class UserData
-{
+{    
     [JsonProperty] public int SaveDataIndex { get; private set; }
+    [JsonProperty] public DateTime SaveTime { get; private set; }
+    [JsonProperty] public int PlayTime { get; private set; }
     [JsonProperty] public int Gold { get; private set; }
+    [JsonProperty] public int Count_Try { get; private set; }
+    [JsonProperty] public int Count_Clear { get; private set; }
+    [JsonProperty] public HashSet<PassiveID> UnlockPassiveHashSet { get; private set; }
     [JsonProperty] public HashSet<PassiveID> UsePassiveHashSet { get; private set; }
+    [JsonProperty] public HashSet<string> IsClearAchievementsKey { get; private set; }
+    [JsonProperty] public PlayData PlayData { get; private set; }
 
-    [JsonConstructor]
-    public UserData(int saveDataIndex, int gold, HashSet<PassiveID> usePassiveHashSet)
+    [JsonConstructor]   
+    public UserData(
+        int saveDataIndex,
+        DateTime saveTime,
+        int playTime,
+        int gold,
+        int countTry,
+        int countClear,
+        HashSet<PassiveID> unlockPassiveHashSet,
+        HashSet<PassiveID> usePassiveHashSet,
+        HashSet<string> isClearAchievementsKey,
+        PlayData playData)
     {
         SaveDataIndex = saveDataIndex;
+        SaveTime = saveTime;
+        PlayTime = playTime;
         Gold = gold;
-        UsePassiveHashSet = usePassiveHashSet;
-        if(UsePassiveHashSet == null)
-        {
-            UsePassiveHashSet = new HashSet<PassiveID>();
-        }
+        Count_Try = countTry;
+        Count_Clear = countClear;
+        UnlockPassiveHashSet = unlockPassiveHashSet ?? new HashSet<PassiveID>();
+        UsePassiveHashSet = usePassiveHashSet ?? new HashSet<PassiveID>();
+        IsClearAchievementsKey = isClearAchievementsKey ?? new HashSet<string>();
+        PlayData = playData ?? null;
     }
 
     public UserData(int saveDataIndex)
     {
         SaveDataIndex = saveDataIndex;
+        SaveTime = DateTime.Now;
+        PlayTime = 0;
         Gold = 0;
+        Count_Try = 0;
+        Count_Clear = 0;
+        UnlockPassiveHashSet = new HashSet<PassiveID>();
         UsePassiveHashSet = new HashSet<PassiveID>();
+        IsClearAchievementsKey = new HashSet<string>();
+        PlayData = null;
     }
 
     public void TryAddPassive(PassiveID id)
@@ -167,19 +200,66 @@ public class UserData
     }
 }
 
-public class UserDataList
+public class PlayData
 {
-    public List<UserData> list;
+    [JsonProperty] public int InGame_Gold { get; private set; }
+    [JsonProperty] public Dictionary<BlueChipID, int> InGame_BlueChip_Level { get; private set; }
+    [JsonProperty] public int InGame_Stage { get; private set; }
 
     [JsonConstructor]
-    public UserDataList(List<UserData> list)
+    public PlayData(int InGame_Gold, Dictionary<BlueChipID, int> InGame_BlueChip_Level, int InGame_Stage)
     {
-        this.list = list;
+        this.InGame_Gold = InGame_Gold;
+        this.InGame_BlueChip_Level = InGame_BlueChip_Level;
+        this.InGame_Stage = InGame_Stage;
+    }
+
+    public PlayData()
+    {
+        this.InGame_Gold = 0;
+        this.InGame_BlueChip_Level = new Dictionary<BlueChipID, int>();
+        this.InGame_Stage = 0;
+    }
+}
+
+public class UserDataList
+{
+    public Dictionary<int, UserData> dic;
+    public int UseIndex { get; set; }
+    
+    public UserDataList(Dictionary<int, UserData> dic)
+    {
+        this.dic = dic;
     }
     public UserDataList()
     {
-        list = new List<UserData>();
-        list.Add(new UserData(0));
+        dic = new Dictionary<int, UserData>();        
+    }
+    public UserData GetUserData()
+    {
+        if(dic.ContainsKey(UseIndex))
+        {
+            return dic[UseIndex];
+        }
+        else
+        {
+            Debug.Log("해당하는 키가 없습니다. 세이브파일을 생성합니다.");
+            dic.Add(UseIndex, new UserData(UseIndex));
+            return dic[UseIndex];
+        }
+    }
+    public void SetUserDataIndex(int index)
+    {
+        if (dic.ContainsKey(index))
+        {            
+            UseIndex = index;
+        }
+        else
+        {
+            Debug.Log("세이브파일 생성");
+            UseIndex = index;
+            dic.Add(index, new UserData(index));
+        }
     }
     public static string FilePath()
     {        
@@ -191,7 +271,7 @@ public class JsonDataCreator : MonoBehaviour
 {
     public void Awake()
     {
-        JsonDataManager.jsonCache.Lode();
+        JsonDataManager.jsonCache.Lode();        
         JsonDataManager.jsonCache.Save();
     }
 }
