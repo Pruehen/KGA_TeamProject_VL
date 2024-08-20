@@ -37,6 +37,5 @@ public class AnimatorResetTrigger : StateMachineBehaviour
         animator.ResetTrigger("AbsorbeingEnd");
         if(Transform)
         animator.ResetTrigger("Transform");
-        Debug.Log("reset");
     }
 }

@@ -3,7 +3,7 @@ using System.ComponentModel;
 using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
-{    
+{
     [SerializeField] float rotSpeed = 0.2f;
 
     Vector3 _moveVector3_Origin;
@@ -14,7 +14,7 @@ public class PlayerMove : MonoBehaviour
 
     Animator _animator;
 
- 
+
 
     private void Start()
     {
@@ -30,8 +30,9 @@ public class PlayerMove : MonoBehaviour
     }
 
     bool _isMoving = true;
+    bool _isDashing = false;
     bool _isGrounded = true;
-    public bool _isDashing = false;
+    public bool IsDashing => IsInDashAnimation();
     public void SetMoveLock(float time)
     {
         //_Rigidbody.velocity = Vector3.zero;
@@ -51,9 +52,12 @@ public class PlayerMove : MonoBehaviour
     }
     IEnumerator SetDashLock_Coroutine(float time)
     {
+        _isMoving = false;
         _isDashing = true;
         yield return new WaitForSeconds(time);
-
+        if (IsInDashAnimation())
+            _animator.SetTrigger("DashEnd");
+        _isMoving = true;
         _isDashing = false;
     }
 
@@ -88,7 +92,7 @@ public class PlayerMove : MonoBehaviour
                 _moveVector3_Origin = new Vector3(_InputManager.MoveVector2_Left_WASD.x * moveSpeed, 0, _InputManager.MoveVector2_Left_WASD.y * moveSpeed);
                 break;
             case nameof(_InputManager.IsDashBtnClick):
-                if(_InputManager.IsDashBtnClick)
+                if (_InputManager.IsDashBtnClick)
                 {
                     Dash();
                 }
@@ -101,7 +105,7 @@ public class PlayerMove : MonoBehaviour
     }
     void Move_OnFixedUpdate()
     {
-        if (_isMoving && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove && _isGrounded && !_isDashing)
+        if (_isMoving && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove && _isGrounded)
         {
             _moveVector3 = new Vector3(_moveVector3_Origin.x, 0, _moveVector3_Origin.z);
 
@@ -118,7 +122,7 @@ public class PlayerMove : MonoBehaviour
         }
         else if (_isDashing)
         {
-            //_animator.SetBool("IsDashing", true);
+
         }
         else if (_isGrounded)
         {
@@ -129,10 +133,6 @@ public class PlayerMove : MonoBehaviour
         {
             _animator.SetBool("IsMoving", false);
             _animator.SetBool("IsFalling", true);
-        }
-        if (!_isDashing)
-        {
-            //_animator.SetBool("IsDashing", false);
         }
         _animator.SetFloat("XSpeed", _moveVector3.x);
         _animator.SetFloat("ZSpeed", _moveVector3.z);
@@ -166,13 +166,12 @@ public class PlayerMove : MonoBehaviour
     public void Dash()
     {
 
-        if (_PlayerMaster._PlayerInstanteState.TryStaminaConsumption(30))
+        if (_PlayerMaster._PlayerInstanteState.TryStaminaConsumption(_PlayerMaster._PlayerInstanteState.DashCost))
         {
             OnlyDash();
             _attackSystem.ReleaseLockMove();
             _attackSystem.ResetEndAttack();
             _animator.SetTrigger("Dash");
-            Debug.Log("DashPlayerMove");
             if (_moveVector3 == Vector3.zero)
             {
                 _PlayerMaster.OnAttackState(_PlayerCameraMove.CamRotation() * Vector3.forward);
@@ -191,13 +190,23 @@ public class PlayerMove : MonoBehaviour
     //원거리4타시 호출
     public void OnlyDash()
     {
-        Vector3 newPoint = _moveVector3_Origin;
+        Vector3 newPoint = _moveVector3_Origin.normalized;
 
         if (newPoint == Vector3.zero)
         {
-            newPoint = new Vector3(0, 0, 14.26f);
+            newPoint = new Vector3(0, 0, 1f);
         }
-        _Rigidbody.AddForce(_PlayerCameraMove.CamRotation() * newPoint * 100f, ForceMode.Acceleration);
-        SetDashLock(.2f);
+        _Rigidbody.AddForce(_PlayerCameraMove.CamRotation() * newPoint * _PlayerMaster._PlayerInstanteState.DashForce, ForceMode.Acceleration);
+        SetDashLock(_PlayerMaster._PlayerInstanteState.DashTime);
+    }
+
+    public bool IsInDashAnimation()
+    {
+        int c = _animator.GetCurrentAnimatorStateInfo(0).fullPathHash;
+        int n = _animator.GetNextAnimatorStateInfo(0).fullPathHash;
+        if (n == 0) n = c;
+        bool isInExitTransition = n != c;
+        return AnimatorHelper.IsAnimationIn(_animator, 0, "Base Layer.Dash") &&
+        !isInExitTransition;
     }
 }
