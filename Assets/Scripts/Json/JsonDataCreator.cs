@@ -9,20 +9,20 @@ using Unity.VisualScripting;
 public class BlueChip
 {    
     [JsonProperty] public string Name { get; private set; }
-    [JsonProperty] public string Info { get; private set; }
+    [JsonProperty] public string Desc { get; private set; }
     [JsonProperty] public Dictionary<int, List<float>> Level_VelueList { get; private set; }
 
     [JsonConstructor]
-    public BlueChip(string name, string info, Dictionary<int, List<float>> level_VelueList)
+    public BlueChip(string name, string desc, Dictionary<int, List<float>> level_VelueList)
     {        
         Name = name;
-        Info = info;
+        Desc = desc;
         Level_VelueList = level_VelueList;
     }
     public BlueChip(int id)
     {        
         Name = "블루칩 이름";
-        Info = "블루칩 설명";
+        Desc = "블루칩 설명";
         Level_VelueList = new Dictionary<int, List<float>>();
         Level_VelueList.Add(1, new List<float>());
         Level_VelueList.Add(2, new List<float>());
@@ -41,7 +41,7 @@ public class BlueChip
     }
     public string PrintInfo(int level)
     {        
-        return string.Format(Info, Level_VelueList[level].Cast<object>().ToArray());
+        return string.Format(Desc, Level_VelueList[level].Cast<object>().ToArray());
     }
 }
 public class BlueChipTable
@@ -65,22 +65,22 @@ public class BlueChipTable
 public class PassiveData
 {
     [JsonProperty] public string Name { get; private set; }
-    [JsonProperty] public string Info { get; private set; }
+    [JsonProperty] public string Desc { get; private set; }
     [JsonProperty] public int Cost { get; private set; }
     [JsonProperty] public List<float> VelueList { get; private set; }
 
     [JsonConstructor]
-    public PassiveData(string name, string info, int cost, List<float> velueList)
+    public PassiveData(string name, string desc, int cost, List<float> velueList)
     {
         Name = name;
-        Info = info;
+        Desc = desc;
         Cost = cost;
         VelueList = velueList;
     }
     public PassiveData(PassiveID iD)
     {
         Name = iD.ToString();
-        Info = "해당 패시브에 대한 설명. 값 {0}";
+        Desc = "해당 패시브에 대한 설명. 값 {0}";
         Cost = 100;
         VelueList = new List<float>();
         VelueList.Add(1);
@@ -92,7 +92,7 @@ public class PassiveData
     }
     public string PrintInfo()
     {
-        return string.Format(Info, VelueList.Cast<object>().ToArray());
+        return string.Format(Desc, VelueList.Cast<object>().ToArray());
     }
 }
 public class PassiveTable
