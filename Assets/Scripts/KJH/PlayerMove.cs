@@ -32,6 +32,7 @@ public class PlayerMove : MonoBehaviour
     bool _isMoving = true;
     bool _isDashing = false;
     bool _isGrounded = true;
+    float _dashTimeStamp;
     public bool IsDashing => IsInDashAnimation();
     public void SetMoveLock(float time)
     {
@@ -48,17 +49,10 @@ public class PlayerMove : MonoBehaviour
     public void SetDashLock(float time)
     {
         //_Rigidbody.velocity = Vector3.zero;
-        StartCoroutine(SetDashLock_Coroutine(time));
-    }
-    IEnumerator SetDashLock_Coroutine(float time)
-    {
         _isMoving = false;
         _isDashing = true;
-        yield return new WaitForSeconds(time);
-        if (IsInDashAnimation())
-            _animator.SetTrigger("DashEnd");
-        _isMoving = true;
-        _isDashing = false;
+
+        _dashTimeStamp = Time.time;
     }
 
     InputManager _InputManager;
@@ -105,7 +99,18 @@ public class PlayerMove : MonoBehaviour
     }
     void Move_OnFixedUpdate()
     {
-        if (_isMoving && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove && _isGrounded)
+        if (_isDashing)
+        {
+            if (Time.time - _dashTimeStamp >= _PlayerMaster._PlayerInstanteState.DashTime)
+            {
+                if (IsInDashAnimation())
+                    _animator.SetTrigger("DashEnd");
+                _isMoving = true;
+                _isDashing = false;
+            }
+            return;
+        }
+        if (_isMoving && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove && _isGrounded )
         {
             _moveVector3 = new Vector3(_moveVector3_Origin.x, 0, _moveVector3_Origin.z);
 
@@ -119,10 +124,6 @@ public class PlayerMove : MonoBehaviour
             _Rigidbody.velocity = _moveVector3;
 
             _animator.SetBool("IsMoving", _moveVector3.x != 0f || _moveVector3.z != 0f);
-        }
-        else if (_isDashing)
-        {
-
         }
         else if (_isGrounded)
         {
@@ -147,6 +148,15 @@ public class PlayerMove : MonoBehaviour
 
             Quaternion targetRotation = Quaternion.LookRotation(_lookTargetPos, Vector3.up);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed);
+        }
+
+        if (_isDashing)
+        {
+            _lookTargetPos = _Rigidbody.velocity;
+            _lookTargetPos.y = 0f;
+
+            Quaternion targetRotation = Quaternion.LookRotation(_lookTargetPos, Vector3.up);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed * 4f);
         }
     }
 
@@ -196,7 +206,7 @@ public class PlayerMove : MonoBehaviour
         {
             newPoint = new Vector3(0, 0, 1f);
         }
-        _Rigidbody.AddForce(_PlayerCameraMove.CamRotation() * newPoint * _PlayerMaster._PlayerInstanteState.DashForce, ForceMode.Acceleration);
+        _Rigidbody.velocity = _PlayerCameraMove.CamRotation() * newPoint * _PlayerMaster._PlayerInstanteState.DashForce;
         SetDashLock(_PlayerMaster._PlayerInstanteState.DashTime);
     }
 
