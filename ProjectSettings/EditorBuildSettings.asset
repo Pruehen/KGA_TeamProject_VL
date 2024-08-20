@@ -5,20 +5,26 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Data/ScriptableObject/Stage/bsj_absorption 1.unity
     guid: a105ea350ab562a409b03ecdafc8ff2c
-  - enabled: 1
+  - enabled: 0
     path: Assets/Data/ScriptableObject/Stage/bsj_absorption 2.unity
     guid: ed51a1775c82b714090171a076508486
-  - enabled: 1
+  - enabled: 0
     path: Assets/Data/ScriptableObject/Stage/bsj_absorption 3.unity
     guid: 74b90c9976b6da945b338914a669818e
-  - enabled: 1
+  - enabled: 0
     path: Assets/Data/ScriptableObject/Stage/bsj_absorption boss.unity
     guid: db266390df89da045a1cc8b9481f7d8d
   - enabled: 1
     path: Assets/Data/ScriptableObject/Stage/bsj_absorption main.unity
     guid: 384b9424c4cd4884ba283ed4bffa0e7d
+  - enabled: 1
+    path: Assets/Scenes/mainGame.unity
+    guid: 585d5aec86fff3b498513eda27d8a839
+  - enabled: 1
+    path: Assets/Scenes/CJH/Jihe.unity
+    guid: 4286e057ddfa8ac40a13c987e1ae2016
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 8a3be054f43d8184c8b4c0f6df66f757, type: 2}

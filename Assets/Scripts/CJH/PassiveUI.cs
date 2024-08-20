@@ -9,6 +9,14 @@ public class PassiveUI : MonoBehaviour
 
     [SerializeField] Image Image_Icon;//PassiveId 가 변경되면 해당 이미지를 변경함.
 
+    private void Awake()
+    {
+        if(passiveID != PassiveID.None)
+        {
+            PassiveUIManager.Instance.ID_PassiveUI_Dic.Add(passiveID, this);
+        }
+    }
+
     public void ImageChange(List<Sprite> iconImage)
     {
         int index = (int)passiveID;
@@ -31,8 +39,22 @@ public class PassiveUI : MonoBehaviour
         }
     }
 
-    public void OnClick()
-    {        
+    public void OnClick_TryEquip()
+    {
+        if (PassiveUIManager.Instance.Try_EquipPassive(this))
+        {
+            passiveID = PassiveID.None;
+            PassiveUIManager.Instance.Command_IconImage(this);
+        }
+        else
+        {
+            Debug.Log("추가 실패");
+        }
+    }
+
+    public void OnClick_TryUnEquip()
+    {
+        PassiveUIManager.Instance.Try_EquipUnPassive(this);
         passiveID = PassiveID.None;
         PassiveUIManager.Instance.Command_IconImage(this);
     }
