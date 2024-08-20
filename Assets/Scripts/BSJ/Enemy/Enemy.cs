@@ -374,6 +374,8 @@ public class Enemy : MonoBehaviour, ITargetable
         _behaviorTree.DisableBehavior();
         _navMeshAgent.isStopped = true;
 
+        PlayerMaster.Instance._PlayerInstanteState.AddExcutionCount_OnEnemyDestroy();
+
         StopAllCoroutines();
         StartCoroutine(DelayedDisable());
     }
