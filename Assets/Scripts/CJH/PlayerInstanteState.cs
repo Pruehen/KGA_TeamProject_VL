@@ -28,10 +28,10 @@ public class PlayerInstanteState : MonoBehaviour
     public bool IsDead { get; private set; }
 
     [SerializeField] float maxHpBase;
-    public float MaxHpMulti { get; set; }
+    public float MaxHpMulti { get; set; } = 1f;
     public float GetMaxHp() { return maxHpBase * MaxHpMulti; }
     [SerializeField] float maxShieldBase;
-    public float MaxShieldMulti { get; set; }
+    public float MaxShieldMulti { get; set; } = 1f;
     public float GetMaxShield() { return maxShieldBase * MaxShieldMulti; }
     [SerializeField] float MaxStamina;
     [SerializeField] float staminaRecoverySpeed;
@@ -45,11 +45,11 @@ public class PlayerInstanteState : MonoBehaviour
 
     [SerializeField] float attackSpeed = 1f;
     [SerializeField] float attackPowerBase;
-    public float AttackPowerMulti { get; set; }
+    public float AttackPowerMulti { get; set; } = 1f;
     public float GetAttackPower() { return attackPowerBase * AttackPowerMulti; }
     [SerializeField] float attackRange = 1f;
     [SerializeField] float skillPower;
-    public float SkillPowerMulti { get; set; }
+    public float SkillPowerMulti { get; set; } = 1f;
     public float GetSkillPower() { return skillPower * SkillPowerMulti; }
     public float DmgMulti { get; set; } = 1f;
 
@@ -175,6 +175,7 @@ public class PlayerInstanteState : MonoBehaviour
         DashTime = _playerStatData.dashTime;
         DashForce = _playerStatData.dashForce;
         DashCost = _playerStatData.dashCost;
+        Restore();
     }
 
     //스태미나 소모 
