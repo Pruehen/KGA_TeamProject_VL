@@ -269,7 +269,7 @@ public class PlayerInstanteState : MonoBehaviour
         _holdTime_Passive_Defensive3 -= Time.deltaTime;
     }
 
-    public void Init(PlayerPassive playerPassive)
+    public void Init()
     {
         maxHpBase = _playerStatData.maxHp;
         MaxStamina = _playerStatData.MaxStamina;

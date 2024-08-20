@@ -126,7 +126,7 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
         _PlayerPassive = GetComponent<PlayerPassive>();
 
         _PlayerPassive.Init();
-        _PlayerInstanteState.Init(_PlayerPassive);
+        _PlayerInstanteState.Init();
 
         _PlayerMove = GetComponent<PlayerMove>();
         _PlayerAttack = GetComponent<PlayerAttack>();
