@@ -56,6 +56,7 @@ GameObject:
   - component: {fileID: 3176383348458485747}
   - component: {fileID: 7753793625892610601}
   - component: {fileID: 6615908217414374475}
+  - component: {fileID: 7278532214112620415}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -143,7 +144,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d62f7a5d144457440abeebf48d3d7b32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHp: 100
+  maxHpBase: 0
+  maxShieldBase: 0
   MaxStamina: 800
   staminaRecoverySpeed: 100
   staminaRecoveryDelay: 3
@@ -151,8 +153,13 @@ MonoBehaviour:
   maxBullets: 50
   maxMeleeBullets: 50
   attackSpeed: 1
-  attackPower: 20
-  skillPower: 20
+  attackPowerBase: 0
+  attackRangeBase: 1
+  skillPowerBase: 0
+  DashTime: 0.5
+  DashForce: 3
+  DashCost: 300
+  executionCount: 0
   moveSpeed: 6
   _playerStatData: {fileID: 11400000, guid: ebc369b68647668448baaa8562d27f32, type: 2}
 --- !u!114 &6370585067071046547
@@ -213,6 +220,7 @@ MonoBehaviour:
   _currentAttackMod: 0
   _currentAttackKind: 0
   _initialAttackComboIndex: 0
+  _totalAttackAnimCount: 4
 --- !u!95 &767856972143940028
 Animator:
   serializedVersion: 5
@@ -316,6 +324,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fcab4553a9134449bc73c5806e5817e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _damageBox: {fileID: 6358046432031639509}
+  _master: {fileID: 3820283957303393746}
+  _rangedSkill1: 5
+  _rangedSkill2: 7
+  _rangedSkill3: 1
+  _rangedSkill4: 10
+  _meleeSkill1: 10
+  _meleeSkill2: 10
+  _meleeSkill3_1: 0.25
+  _meleeSkill3_2: 0.25
+  _meleeSkill3_3: 0.5
+  _meleeSkill3_4: 10
+  _meleeSkill4: 15
+  _rangedSkill1Range: 1
+  _rangedSkill2Range: 1
+  _rangedSkill3Range: 1
+  _rangedSkill4Range: 1
+  _meleeSkill1Range: 1
+  _meleeSkill2Range: 1
+  _meleeSkill3Range: 1
+  _meleeSkill4Range: 1
+  _rangedSkill1Distance: 1
+  _rangedSkill2Distance: 1
+  _rangedSkill3Distance: 1
+  _rangedSkill4Distance: 1
+  _meleeSkill4Distance: 20
+  so_Skill: {fileID: 11400000, guid: 697fc365c538ef2438aa6f635eb536b1, type: 2}
+--- !u!114 &7278532214112620415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3370145770967923552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5391c14e76fc1444e8b8238f17059315, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  VFX1: {fileID: 8269927165116809473, guid: 9bf5f28d91199f94bb5547276e4d3831, type: 3}
+  TargetTransfom1: {fileID: 4743214376694680169}
+  VFX2: {fileID: 0}
+  TargetTransfom2: {fileID: 0}
+  VFX3: {fileID: 0}
+  TargetTransfom3: {fileID: 0}
+  VFX4: {fileID: 0}
+  TargetTransfom4: {fileID: 0}
+  VFX5: {fileID: 0}
+  TargetTransfom5: {fileID: 0}
 --- !u!1 &5381824260810107129
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,6 +421,7 @@ MonoBehaviour:
   _targetLayer:
     serializedVersion: 2
     m_Bits: 512
+  _offset: {x: 0, y: 0, z: 0}
 --- !u!1 &5420167877736599697
 GameObject:
   m_ObjectHideFlags: 0
@@ -664,6 +722,11 @@ PrefabInstance:
 --- !u!4 &3366401875506266921 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5e6f511379ddc384cb88828d3cda0bac, type: 3}
+  m_PrefabInstance: {fileID: 2971643299040847042}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4743214376694680169 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -1662341123100217685, guid: 5e6f511379ddc384cb88828d3cda0bac, type: 3}
   m_PrefabInstance: {fileID: 2971643299040847042}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7801427841416473191
