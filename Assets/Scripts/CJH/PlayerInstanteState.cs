@@ -84,11 +84,27 @@ public class PlayerInstanteState : MonoBehaviour
     Passive_Utility4 passive_Utility4;
     Passive_Utility5 passive_Utility5;
 
+    [SerializeField] LayerMask LayerMask_EnemyCheck;
+    void Passive_Offensive2_Active_OnUpdate()
+    {
+        if(passive_Offensive2 != null)
+        {
+            Collider[] colliders = Physics.OverlapSphere(this.transform.position, passive_Offensive2.CheckDistance_ToEnemy, LayerMask_EnemyCheck);
+            foreach (var item in colliders)
+            {
+                if(item.transform.parent != null && item.transform.parent.TryGetComponent(out Enemy enemy))
+                {
+                    enemy.ActiveDebuff_Passive_Offensive2(passive_Offensive2.DmgGain);
+                }
+            }
+        }
+    }
+
     [SerializeField] int executionCount = 0;//체력2 패시브에서 사용
     public int ExecutionCount
     {
         get { return executionCount; }        
-    }
+    }    
     public void OnEnemyDestroy()
     {
         Passive_Defensive2_AddExcutionCount();
@@ -231,6 +247,9 @@ public class PlayerInstanteState : MonoBehaviour
     private void Update()
     {
         TestSkill();
+
+        Passive_Offensive2_Active_OnUpdate();
+
         staminaRecoveryDelayValue += Time.deltaTime;
         if (staminaRecoveryDelayValue >= staminaRecoveryDelay)
         {
