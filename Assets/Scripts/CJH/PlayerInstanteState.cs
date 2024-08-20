@@ -40,6 +40,7 @@ public class PlayerInstanteState : MonoBehaviour
 
     [SerializeField] float MaxskillGauge = 400;
     float skillGaugeRecoveryRestTime = 0;
+    public float SkillGaugeRecoveryMulti { get; set; } = 1;
     [SerializeField] int maxBullets = 50;
     [SerializeField] int maxMeleeBullets = 50;
 
@@ -47,7 +48,9 @@ public class PlayerInstanteState : MonoBehaviour
     [SerializeField] float attackPowerBase;
     public float AttackPowerMulti { get; set; } = 1f;
     public float GetAttackPower() { return attackPowerBase * AttackPowerMulti; }
-    [SerializeField] float attackRange = 1f;
+    [SerializeField] float attackRangeBase = 1f;
+    public float attackRangeMulti { get; set; } = 1;
+    public float GetAttackRange() { return attackRangeMulti * attackRangeMulti; }
     [SerializeField] float skillPower;
     public float SkillPowerMulti { get; set; } = 1f;
     public float GetSkillPower() { return skillPower * SkillPowerMulti; }
@@ -106,7 +109,7 @@ public class PlayerInstanteState : MonoBehaviour
     }
     public float GetRange(PlayerAttackKind type, int combo)
     {
-        float baseRange = attackRange;// * coefficient;
+        float baseRange = GetAttackRange();// * coefficient;
         float rangeGain = 1;
         if (type == PlayerAttackKind.MeleeChargedAttack || type == PlayerAttackKind.RangeNormalAttack)//차지 공격일 경우
         {
@@ -403,7 +406,7 @@ public class PlayerInstanteState : MonoBehaviour
     }
     public void SkillGaugeRecovery(float value)
     {
-        skillGauge += value;
+        skillGauge += value * SkillGaugeRecoveryMulti;
 
         if (skillGauge > MaxskillGauge)
         {
@@ -477,6 +480,7 @@ public class PlayerInstanteState : MonoBehaviour
         {
             passive_Offensive4 = new Passive_Offensive4();
             passive_Offensive4.Init(this);
+            passive_Offensive4.Active();
         }
         if (playerPassive.ContainPassiveId(PassiveID.Offensive5))
         {
