@@ -147,7 +147,7 @@ public class PlayerInstanteState : MonoBehaviour
         return baseRange * rangeGain;
     }
 
-    public float GetSkillDmg(PlayerAttackKind type)
+    public float GetSkillDmg()
     {
         float baseDmg = GetSkillPower();// * coefficient;
         float dmgGain = 1;
