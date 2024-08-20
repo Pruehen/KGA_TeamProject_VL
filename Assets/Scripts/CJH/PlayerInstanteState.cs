@@ -36,7 +36,7 @@ public class PlayerInstanteState : MonoBehaviour
     [SerializeField] float MaxStamina;
     [SerializeField] float staminaRecoverySpeed;
     [SerializeField] float staminaRecoveryDelay;
-    float staminaRecoveryDelayValue = 0;
+    float staminaRecoveryDelayValue = 99;
 
     [SerializeField] float MaxskillGauge = 400;
     float skillGaugeRecoveryRestTime = 0;
@@ -226,15 +226,21 @@ public class PlayerInstanteState : MonoBehaviour
     //스태미나 소모 
     public bool TryStaminaConsumption(float power)
     {
-        if (stamina > power)
+        if (stamina <= 0)
+        {
+            return false;
+        }
+        else
         {
             stamina -= power;
-            staminaRecoveryDelayValue = 0;
+            if(stamina <= 0)
+            {
+                stamina = 0;
+                staminaRecoveryDelayValue = 0;
+            }
             UpdateStamina();
             return true;
         }
-        else
-            return false;
     }
 
     public void StaminaRatioChange(float value)
