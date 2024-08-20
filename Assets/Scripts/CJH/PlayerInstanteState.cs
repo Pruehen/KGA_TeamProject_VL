@@ -68,7 +68,7 @@ public class PlayerInstanteState : MonoBehaviour
     Passive_Offensive5 passive_Offensive5;
 
     Passive_Defensive1 passive_Defensive1;
-    Passive_Defensive2 passive_Defensive2;
+    Passive_Defensive2 passive_Defensive2;    
     Passive_Defensive3 passive_Defensive3;
     Passive_Defensive4 passive_Defensive4;
     Passive_Defensive5 passive_Defensive5;
@@ -78,6 +78,21 @@ public class PlayerInstanteState : MonoBehaviour
     Passive_Utility3 passive_Utility3;
     Passive_Utility4 passive_Utility4;
     Passive_Utility5 passive_Utility5;
+
+    [SerializeField] int executionCount = 0;//체력2 패시브에서 사용
+    public int ExecutionCount
+    {
+        get { return executionCount; }        
+    }
+    public void AddExcutionCount_OnEnemyDestroy()
+    {
+        executionCount++;
+        if(passive_Defensive2 != null && executionCount >= passive_Defensive2.CountCheck)
+        {
+            executionCount = 0;
+            passive_Defensive2.Active();
+        }
+    }
 
     public float GetDmg(PlayerAttackKind type, bool isLastAttack = false)
     {
