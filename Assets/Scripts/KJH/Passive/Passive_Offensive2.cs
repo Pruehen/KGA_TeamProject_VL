@@ -1,18 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using EnumTypes;
 
-public class Passive_Offensive2 : MonoBehaviour
+public class Passive_Offensive2 : Passive
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void SetPassiveData()
     {
-        
+        base._passiveData = JsonDataManager.GetPassive(PassiveID.Offensive2);
+        CheckDistance_ToEnemy = _passiveData.VelueList[0];
+        DmgGain = (_passiveData.VelueList[1] * 0.01f);
+    }
+    public float CheckDistance_ToEnemy { get; private set; }
+    public float DmgGain { get; private set; }
+    public override void Active()//"{0}m보다 가까이 있는 적에게 가하는 데미지가 {1}%만큼 증가",
+    {
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void DeActive()
     {
-        
+
     }
 }

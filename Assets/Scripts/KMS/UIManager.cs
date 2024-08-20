@@ -118,10 +118,6 @@ public class UIManager : SceneSingleton<UIManager>
     {
         PlayerState = player;
     }
-    public void Damage(float amount)
-    {
-        PlayerState?.Hit(amount);
-    }
 
 
     public void Interactable(bool chest)

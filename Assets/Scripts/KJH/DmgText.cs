@@ -9,12 +9,12 @@ public class DmgText : MonoBehaviour
     float activeTime = 0;
     Vector3 _originPos;
 
-    public void Init(int dmg, Vector3 originPos)
+    public void Init(float dmg, Vector3 originPos)
     {
         _originPos = originPos;
 
         activeTime = 0;
-        text.text = dmg.ToString();
+        text.text = dmg.ToString("0");
     }
 
     private void Update()

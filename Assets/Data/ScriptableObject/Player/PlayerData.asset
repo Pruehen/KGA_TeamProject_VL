@@ -16,10 +16,83 @@ MonoBehaviour:
   MaxStamina: 800
   staminaRecoverySpeed: 100
   staminaRecoveryDelay: 3
-  MaxskillGauge: 400
-  maxBullets: 50
-  maxMeleeBullets: 50
-  attackSpeed: 1
   attackPower: 20
   skillPower: 20
   moveSpeed: 6
+  attackSpeed: 1
+  shieldMax: 50
+  dashTime: 0.5
+  dashForce: 500
+  dashCost: 99
+  MaxskillGauge: 400
+  statGaugeGainRanged1: 30
+  statGaugeGainRanged2: 30
+  statGaugeGainRanged3: 20
+  statGaugeGainMelee1: 40
+  statGaugeGainMelee2: 60
+  statGaugeGainMelee3: 20
+  maxBullets: 50
+  maxMeleeBullets: 50
+  atkRanged101: 1
+  atkRanged102: 2
+  atkRanged103: 0.5
+  atkRanged111: 2.5
+  atkRanged112: 5
+  atkRanged113: 1.25
+  atkMelee101: 5
+  atkMelee111: 7.5
+  atkMelee121: 2.5
+  AbsolsionSpeed: 3
+  Radious: 5
+  Height: 1
+  RevolveRadious: 2.5
+  RevolveSpeed: 90
+  RevolveSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  AcquireSpeed: 3
+  RadiusExpandCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

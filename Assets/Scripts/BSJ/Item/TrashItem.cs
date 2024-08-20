@@ -41,7 +41,7 @@ public class TrashItem : MonoBehaviour
                 UpdatePullToRevolve(_revolveRadius,_abolsionSpeed);
                 break;
             case ItemState.PullToAcquire:
-                UpdatePullToCenterAndDestroy();
+                UpdatePullToCenterAndDestroy(_acquireSpeed);
                 break;
         }
     }
@@ -73,23 +73,25 @@ public class TrashItem : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public void PullToCenterAndDestroy()
+    public void PullToCenterAndDestroy(float acquireSpeed)
     {
         State = ItemState.PullToAcquire;
+        _acquireSpeed = acquireSpeed;
     }
-    private void UpdatePullToCenterAndDestroy()
+    private void UpdatePullToCenterAndDestroy(float aquireSpeed)
     {
         Vector3 targetPos = Vector3.zero;
         if (Vector3.Distance(targetPos, transform.localPosition) <= 0.1f)
         {
             Destroy(transform.gameObject);
         }
-        transform.localPosition = Vector3.Lerp(transform.localPosition, targetPos, 0.02f);
+        transform.localPosition = Vector3.Lerp(transform.localPosition, targetPos, Time.deltaTime * aquireSpeed);
         Debug.Log("EndOfAbsolsion");
     }
 
     float _revolveRadius;
     float _abolsionSpeed;
+    float _acquireSpeed;
     public void PullToRevolve(float revolveRadius, float abolsionSpeed)
     {
         State = ItemState.PullToRevolve;
@@ -103,7 +105,7 @@ public class TrashItem : MonoBehaviour
         targetPos = targetPos.normalized * revolveRadius;
         if (Vector3.Distance(targetPos, transform.localPosition) >= 0.1f)
         {
-            transform.localPosition = Vector3.Lerp(transform.localPosition, targetPos, 0.02f * (1f - abolsionSpeed));
+            transform.localPosition = Vector3.Lerp(transform.localPosition, targetPos, Time.deltaTime * abolsionSpeed);
         }
         else
         {
