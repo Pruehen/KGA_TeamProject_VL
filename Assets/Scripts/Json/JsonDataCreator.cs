@@ -10,19 +10,22 @@ public class BlueChip
 {    
     [JsonProperty] public string Name { get; private set; }
     [JsonProperty] public string Desc { get; private set; }
+    [JsonProperty] public string IconName { get; private set; }
     [JsonProperty] public Dictionary<int, List<float>> Level_VelueList { get; private set; }
 
     [JsonConstructor]
-    public BlueChip(string name, string desc, Dictionary<int, List<float>> level_VelueList)
+    public BlueChip(string name, string desc, string iconName, Dictionary<int, List<float>> level_VelueList)
     {        
         Name = name;
         Desc = desc;
+        IconName = iconName;
         Level_VelueList = level_VelueList;
     }
     public BlueChip(int id)
     {        
         Name = "블루칩 이름";
         Desc = "블루칩 설명";
+        IconName = "아이콘 이름";
         Level_VelueList = new Dictionary<int, List<float>>();
         Level_VelueList.Add(1, new List<float>());
         Level_VelueList.Add(2, new List<float>());
@@ -66,14 +69,16 @@ public class PassiveData
 {
     [JsonProperty] public string Name { get; private set; }
     [JsonProperty] public string Desc { get; private set; }
+    [JsonProperty] public string IconName { get; private set; }
     [JsonProperty] public int Cost { get; private set; }
     [JsonProperty] public List<float> VelueList { get; private set; }
 
     [JsonConstructor]
-    public PassiveData(string name, string desc, int cost, List<float> velueList)
+    public PassiveData(string name, string desc, string iconName, int cost, List<float> velueList)
     {
         Name = name;
         Desc = desc;
+        IconName = iconName;
         Cost = cost;
         VelueList = velueList;
     }
@@ -81,6 +86,7 @@ public class PassiveData
     {
         Name = iD.ToString();
         Desc = "해당 패시브에 대한 설명. 값 {0}";
+        IconName = "아이콘 이름";
         Cost = 100;
         VelueList = new List<float>();
         VelueList.Add(1);
