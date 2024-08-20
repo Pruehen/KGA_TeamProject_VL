@@ -38,12 +38,6 @@ public class MainSceneUIManager : MonoBehaviour
 
     }
 
-    public void OnClick_ExitButton()
-    {
-        Application.Quit();
-    }
-
-
     void OnInputPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)
