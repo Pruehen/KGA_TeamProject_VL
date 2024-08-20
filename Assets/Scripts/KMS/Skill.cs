@@ -10,9 +10,10 @@ public class Skill : MonoBehaviour
     int _animFloatSkillGauge;
     int _animTriggerSkillEnd;
     bool _isAttacking;
+    [SerializeField] DamageBox _damageBox;
+    [SerializeField] PlayerMaster _master;
 
-
-     [SerializeField] public float _rangedSkill1 = 5f;
+    [SerializeField] public float _rangedSkill1 = 5f;
      [SerializeField] public float _rangedSkill2 = 7f;
      [SerializeField] public float _rangedSkill3 = 1f;
      [SerializeField] public float _rangedSkill4 = 10f;
@@ -39,10 +40,21 @@ public class Skill : MonoBehaviour
     [SerializeField] public float _rangedSkill4Distance = 1f;
     [SerializeField] public float _meleeSkill4Distance = 20f;
 
+    public float SkillPower
+    {
+        get { return _master._PlayerInstanteState.skillPower; }
+        set
+        {
+            _master._PlayerInstanteState.skillPower = value;
+        }
+    }
+
+
 
     [SerializeField] SO_Skill so_Skill;
     private void Awake()
     {
+        _master = GetComponent<PlayerMaster>();
         _animator = GetComponent<Animator>();
         Init(_animator);
         InitSkillData(so_Skill);
@@ -97,6 +109,38 @@ public class Skill : MonoBehaviour
         {
             _animator.SetTrigger(_animTriggerSkillEnd);
             Debug.Log("ATKEnd");
+        }
+    }
+    public void SkillDamege()
+    {
+        //_damageBox.EnableDamageBox(float damage, float range = 1f, Action onHitCallBack = null, float time = 0f)
+    }
+    public void InvokeSkillDamage(string skillName)
+    {
+        Debug.Log(SkillPower);
+        Debug.Log(skillName);
+        switch (skillName)
+        {
+            case "Skill1":
+                _damageBox.EnableDamageBox(so_Skill._rangedSkill1*SkillPower, so_Skill._rangedSkill1Range, null, 0f) ;
+                break;
+
+            case "Skill2":
+                _damageBox.EnableDamageBox(so_Skill._rangedSkill2* SkillPower, so_Skill._rangedSkill2Range, null, 0f);
+                break;
+
+            case "Skill3":
+                _damageBox.EnableDamageBox(so_Skill._rangedSkill3* SkillPower, so_Skill._rangedSkill3Range, null, 0f);
+                break;
+
+            case "Skill4":
+                _damageBox.EnableDamageBox(so_Skill._rangedSkill4*SkillPower, so_Skill._rangedSkill4Range, null, 0f);
+                break;
+
+            // 필요에 따라 더 많은 스킬 추가 가능
+            default:
+                Debug.LogWarning($"Unrecognized skill: {skillName}");
+                break;
         }
     }
 }
