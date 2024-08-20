@@ -387,10 +387,11 @@ public class PlayerInstanteState : MonoBehaviour
 
         skillGaugeRecoveryRestTime = 0;
         UpdateSkillGauge();
+        Debug.Log($"SkillGauge recover {value}");
     }
-    public void SkillGaugeRecovery(PlayerAttackKind attackKind, bool isLastAttack)
+    public void SkillGaugeRecovery(PlayerAttackKind attackMod, PlayerAttackKind attackKind, bool isLastAttack)
     {
-        if (attackKind == PlayerAttackKind.RangeNormalAttack)
+        if (attackMod == PlayerAttackKind.RangeNormalAttack)
         {
             bool hasBullet = bullets > 0;
             SkillGaugeRecovery(GetSkillGainOnHit(attackKind, hasBullet, isLastAttack));
