@@ -93,6 +93,7 @@ public class PlayerInstanteState : MonoBehaviour
             passive_Defensive2.Active();
         }
     }
+    float _holdTime_Passive_Defensive3 = 0;//체력3 패시브에서 사용
 
     public float GetDmg(PlayerAttackKind type, bool isLastAttack = false)
     {
@@ -218,6 +219,8 @@ public class PlayerInstanteState : MonoBehaviour
                 UseSkillGauge(9999);
             }
         }
+
+        _holdTime_Passive_Defensive3 -= Time.deltaTime;
     }
 
     public void Init(PlayerPassive playerPassive)
@@ -311,8 +314,20 @@ public class PlayerInstanteState : MonoBehaviour
             hp -= dmg;
             if (hp <= 0)
             {
-                hp = 0;
-                IsDead = true;
+                if(passive_Defensive3 != null && passive_Defensive3.ActiveCount > 0)
+                {
+                    passive_Defensive3.Active(out _holdTime_Passive_Defensive3);                    
+                }
+
+                if (_holdTime_Passive_Defensive3 > 0)
+                {
+                    hp = passive_Defensive3.HpHoldValue;
+                }
+                else
+                {
+                    hp = 0;
+                    IsDead = true;
+                }
             }
             UpdateHealth();
         }
