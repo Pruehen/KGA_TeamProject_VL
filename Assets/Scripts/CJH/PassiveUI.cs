@@ -24,6 +24,15 @@ public class PassiveUI : MonoBehaviour, ISelectHandler
             }
         }
         ImageChange();
+
+        if (JsonDataManager.TryGetUserData(0, out UserData data))
+        {
+            Debug.Log(data.SaveTime);
+        }
+        else
+        {
+
+        }
     }
     public void OnSelect(BaseEventData eventData)
     {
@@ -59,7 +68,7 @@ public class PassiveUI : MonoBehaviour, ISelectHandler
         }
         else
         {
-            Debug.Log("추가 실패");
+            Debug.Log("추가 실패");            
         }
     }
 

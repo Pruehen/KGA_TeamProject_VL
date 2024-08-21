@@ -3,6 +3,7 @@ using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 
 public class MainSceneUIManager : MonoBehaviour
@@ -110,6 +111,11 @@ public class MainSceneUIManager : MonoBehaviour
             startPanel.SetActive(false);
             overwriteStartPanel.SetActive(true);
             EventSystem.current.SetSelectedGameObject(selectSlot[0].gameObject);
+
+            for (int i = 0; i < selectSlot.Length; i++)
+            {
+                selectSlot[i].GetComponent<SaveFillSlot>().SetData(i);
+            }
         }      
     }
 }

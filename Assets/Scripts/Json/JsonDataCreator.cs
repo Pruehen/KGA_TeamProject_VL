@@ -259,6 +259,18 @@ public class UserDataList
             return dic[UseIndex];
         }
     }
+    public UserData GetUserData(int index)
+    {
+        if (dic.ContainsKey(index))
+        {
+            //Debug.Log($"{UseIndex} 세이브파일 로드");
+            return dic[index];
+        }
+        else
+        {
+            return null;
+        }
+    }
     public void SetUserDataIndex(int index)
     {
         if (dic.ContainsKey(index))

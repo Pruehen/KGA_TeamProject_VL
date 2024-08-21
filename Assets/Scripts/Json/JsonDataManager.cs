@@ -71,6 +71,14 @@ public static class JsonDataManager
     {        
         return jsonCache.UserDataCache.GetUserData();
     }
+    public static bool TryGetUserData(int index, out UserData userData)
+    {
+        userData = jsonCache.UserDataCache.GetUserData(index);
+        if (userData == null)
+            return false;
+        else
+            return true;
+    }
     public static void SetUserDataIndex(int index)
     {
         jsonCache.UserDataCache.SetUserDataIndex(index);
