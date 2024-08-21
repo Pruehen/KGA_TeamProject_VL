@@ -1,6 +1,7 @@
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditorInternal.ReorderableList;
 
 public class DamageBox : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class DamageBox : MonoBehaviour
     [SerializeField] private Vector3 _halfSize = new Vector3(1f, 1f, 1f);
     [SerializeField] private LayerMask _targetLayer;
     [SerializeField] private Vector3 _offset;
-
+    private Vector3 Default;
     private Coroutine _DisableBoxCoroutine;
 
     private float _enableTimer = 0f;
@@ -31,6 +32,7 @@ public class DamageBox : MonoBehaviour
 
     private void Awake()
     {
+        Default = transform.localPosition;
         _owner = transform.parent.GetComponent<ITargetable>();
     }
     private void Start()
@@ -49,7 +51,6 @@ public class DamageBox : MonoBehaviour
     {
         Collider[] result = Physics.OverlapBox(Center, HalfSize, transform.rotation, _targetLayer);
         bool onHit = false;
-        
         foreach (Collider hit in result)
         {
             if (hit.attachedRigidbody == null)
@@ -111,9 +112,23 @@ public class DamageBox : MonoBehaviour
         SetRange(range);
 
         _damage = damage;
+        transform.localPosition = Default;
         enabled = true;
         _enableTimer = time;
+    }
+    public void EnableSkillDamageBox(float damage, float range = 1f, Action onHitCallBack = null, float time = 0f)
+    {
+        if (onHitCallBack != null)
+        {
+            OnHit += onHitCallBack;
+        }
+        //transform.localPosition = target;
+        SetRange(range);
 
+        _damage = damage;
+
+        enabled = true;
+        _enableTimer = time;
     }
 
     private void SetRange(float range)
