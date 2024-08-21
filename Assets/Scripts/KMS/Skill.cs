@@ -207,7 +207,6 @@ public class Skill : MonoBehaviour
             case PlayerSkill.MeleeSkillAttack4:
                 damage = so_Skill._meleeSkill4 * SkillPower;
                 range = so_Skill._meleeSkill4Range;
-                distance = so_Skill._meleeSkill4Distance;
                 break;
 
             default:
