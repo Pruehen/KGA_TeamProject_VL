@@ -1,6 +1,7 @@
+using EnumTypes;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
+
 
 public class Skill : MonoBehaviour
 {
@@ -147,7 +148,7 @@ public class Skill : MonoBehaviour
             Debug.Log("레이 맞춘 게 없음");
         }
     }
-    public void InvokeSkillDamage(string skillName)
+    public void InvokeSkillDamage(PlayerSkill skillType)
     {
         Camera mainCamera = Camera.main;
         if (mainCamera == null) return;
@@ -158,36 +159,53 @@ public class Skill : MonoBehaviour
 
         float damage = 0f;
         float range = 1f;
-        float distance = 1f;
+        float distance = 0.5f;
 
-        switch (skillName)
+        switch (skillType)
         {
-            case "Skill1":
+            case PlayerSkill.RangeSkillAttack1:
                 damage = so_Skill._rangedSkill1 * SkillPower;
                 range = so_Skill._rangedSkill1Range;
                 distance = so_Skill._rangedSkill1Distance;
                 break;
 
-            case "Skill2":
+            case PlayerSkill.RangeSkillAttack2:
                 damage = so_Skill._rangedSkill2 * SkillPower;
                 range = so_Skill._rangedSkill2Range;
                 distance = so_Skill._rangedSkill2Distance;
                 break;
 
-            case "Skill3":
+            case PlayerSkill.RangeSkillAttack3:
                 damage = so_Skill._rangedSkill3 * SkillPower;
                 range = so_Skill._rangedSkill3Range;
                 distance = so_Skill._rangedSkill3Distance;
                 break;
 
-            case "Skill4":
+            case PlayerSkill.RangeSkillAttack4:
                 damage = so_Skill._rangedSkill4 * SkillPower;
                 range = so_Skill._rangedSkill4Range;
                 distance = so_Skill._meleeSkill4Distance;
                 break;
+            case PlayerSkill.MeleeSkillAttack1:
+                damage = so_Skill._meleeSkill1 * SkillPower;
+                range = so_Skill._meleeSkill1Range;
+                break;
+            case PlayerSkill.MeleeSkillAttack2:
+                damage = so_Skill._meleeSkill1 * SkillPower;
+                range = so_Skill._meleeSkill1Range;
+                break;
+            case PlayerSkill.MeleeSkillAttack3:
+                damage = so_Skill._meleeSkill1 * SkillPower;
+                range = so_Skill._meleeSkill1Range;
+                break;
+            case PlayerSkill.MeleeSkillAttack4:
+                damage = so_Skill._meleeSkill1 * SkillPower;
+                range = so_Skill._meleeSkill1Range;
+                distance = so_Skill._meleeSkill4Distance;
+                break;
 
             default:
-                Debug.LogWarning($"Unrecognized skill: {skillName}");
+                Debug.LogWarning($"Unrecognized skill: {skillType}");
                 return;
         }
 
@@ -212,33 +230,58 @@ public class Skill : MonoBehaviour
         }
         moveCoroutine = StartCoroutine(MoveToTargetCoroutine());
     }
-    public void SkillDamege(EnumTypes.PassiveID passiveID)
+    public void SkillDamege(PlayerSkill skillType)
     {
        
         float damage = 0f;
         float range = 1f;
-        /*switch (skillName)
+        float distance = 1f;
+        switch (skillType)
         {
-            case "Skill1":
+            case PlayerSkill.RangeSkillAttack1:
                 damage = so_Skill._rangedSkill1 * SkillPower;
                 range = so_Skill._rangedSkill1Range;
+                distance = so_Skill._rangedSkill1Distance;
                 break;
-            case "Skill2":
+
+            case PlayerSkill.RangeSkillAttack2:
                 damage = so_Skill._rangedSkill2 * SkillPower;
                 range = so_Skill._rangedSkill2Range;
+                distance = so_Skill._rangedSkill2Distance;
                 break;
-            case "Skill3":
+
+            case PlayerSkill.RangeSkillAttack3:
                 damage = so_Skill._rangedSkill3 * SkillPower;
                 range = so_Skill._rangedSkill3Range;
+                distance = so_Skill._rangedSkill3Distance;
                 break;
-            case "Skill4":
+
+            case PlayerSkill.RangeSkillAttack4:
                 damage = so_Skill._rangedSkill4 * SkillPower;
                 range = so_Skill._rangedSkill4Range;
+                distance = so_Skill._meleeSkill4Distance;
+                break;
+            case PlayerSkill.MeleeSkillAttack1:
+                damage = so_Skill._meleeSkill1 * SkillPower;
+                range = so_Skill._meleeSkill1Range;
+                break;
+            case PlayerSkill.MeleeSkillAttack2:
+                damage = so_Skill._meleeSkill1 * SkillPower;
+                range = so_Skill._meleeSkill1Range;
+                break;
+            case PlayerSkill.MeleeSkillAttack3:
+                damage = so_Skill._meleeSkill1 * SkillPower;
+                range = so_Skill._meleeSkill1Range;
+                break;
+            case PlayerSkill.MeleeSkillAttack4:
+                damage = so_Skill._meleeSkill1 * SkillPower;
+                range = so_Skill._meleeSkill1Range;
+                distance = so_Skill._meleeSkill4Distance;
                 break;
             default:
-                Debug.LogWarning($"Unrecognized skill: {skillName}");
+                Debug.LogWarning($"Unrecognized skill: {skillType}");
                 return;
-        }*/
+        }
         _damageBox.EnableDamageBox(damage, range, null, 0f);
     }
     private IEnumerator MoveToTargetCoroutine()
