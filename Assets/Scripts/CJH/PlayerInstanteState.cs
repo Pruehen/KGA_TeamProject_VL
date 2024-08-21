@@ -150,20 +150,40 @@ public class PlayerInstanteState : MonoBehaviour
                 baseDmg += ((hp + Shield) * JsonDataManager.GetBlueChipData(BlueChipID.Melee1).Level_VelueList[level][0]) * 0.01f;
             }
         }
-        if (type == PlayerAttackKind.MeleeNormalAttack || type == PlayerAttackKind.RangeNormalAttack)//원거리 평타, 근거리 평타일 경우
+
+        if (type == PlayerAttackKind.MeleeNormalAttack || type == PlayerAttackKind.MeleeDashAttack || type == PlayerAttackKind.MeleeChargedAttack ||
+            type == PlayerAttackKind.RangeDashAttack || type == PlayerAttackKind.RangeNormalAttack)//평타, 대시공격, 차지공격일 경우
         {
             if (_PlayerMaster._PlayerBuff.blueChip4_Buff_NextHitAddDmg.TryDequeue(out float addDmgGain))
             {
                 dmgGain += addDmgGain;
                 Debug.Log("피해증가 버프 소모");
             }
-            int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Generic2);
-            if (blueChip7Level > 0)
+        }
+
+        //"원거리 공격 시 탄환을 {0}만큼 추가로 소모. 원거리 타격 피해량 {1}% 증가. 근거리 공격 시 근접 게이지를 {2}만큼 추가로 소모. 근거리 타격 피해량 {3}% 증가",
+        int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Generic2);
+        if (blueChip7Level > 0)
+        {
+            if (type == PlayerAttackKind.MeleeNormalAttack || type == PlayerAttackKind.MeleeDashAttack || type == PlayerAttackKind.MeleeChargedAttack)//근접 공격일 경우
             {
-                float addDmg = JsonDataManager.GetBlueChipData(BlueChipID.Generic2).Level_VelueList[blueChip7Level][1] * 0.01f;
-                dmgGain += addDmg;
+                if(meleeBullets > 0)
+                {
+                    float addDmg = JsonDataManager.GetBlueChipData(BlueChipID.Generic2).Level_VelueList[blueChip7Level][1] * 0.01f;
+                    dmgGain += addDmg;
+                }
+            }
+            else if(type == PlayerAttackKind.RangeDashAttack || type == PlayerAttackKind.RangeNormalAttack)//원거리 공격일 경우
+            {
+                if (bullets > 0)
+                {
+                    float addDmg = JsonDataManager.GetBlueChipData(BlueChipID.Generic2).Level_VelueList[blueChip7Level][1] * 0.01f;
+                    dmgGain += addDmg;
+                }
             }
         }
+        //=========================================================================================================================================================
+
         float finalDmg = baseDmg * dmgGain;
         if(passive_Offensive5 != null)
         {
