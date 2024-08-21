@@ -58,9 +58,29 @@ public class PlayerInstanteState : MonoBehaviour
 
     public int Gold { get; set; }
 
-    [SerializeField] public float DashTime = .5f;
-    [SerializeField] public float DashForce = 3f;
-    [SerializeField] public float DashCost = 300f;
+    [SerializeField] public float _dashTime = .5f;
+    [SerializeField] public float _dashForce = 3f;
+    [SerializeField] public float _dashCost = 300f;
+
+    public float DashTime
+    {
+        get { return _dashTime * (1f + DashTimeMulti); }
+        set { _dashTime = value; }
+    }
+    public float DashForce
+    {
+        get { return _dashForce * (1f + DashForceMulti); }
+        set { _dashForce = value; }
+    }
+    public float DashCost
+    {
+        get { return _dashCost * (1f + DashCostMulti); }
+        set { _dashCost = value; }
+    }
+
+    public float DashTimeMulti = 0f;
+    public float DashForceMulti = 0f;
+    public float DashCostMulti = 0f;
 
 
     Passive_Offensive1 passive_Offensive1;
@@ -70,7 +90,7 @@ public class PlayerInstanteState : MonoBehaviour
     Passive_Offensive5 passive_Offensive5;
 
     Passive_Defensive1 passive_Defensive1;
-    Passive_Defensive2 passive_Defensive2;    
+    Passive_Defensive2 passive_Defensive2;
     Passive_Defensive3 passive_Defensive3;
     Passive_Defensive4 passive_Defensive4;
     Passive_Defensive5 passive_Defensive5;
@@ -84,12 +104,12 @@ public class PlayerInstanteState : MonoBehaviour
     [SerializeField] int executionCount = 0;//체력2 패시브에서 사용
     public int ExecutionCount
     {
-        get { return executionCount; }        
+        get { return executionCount; }
     }
     public void AddExcutionCount_OnEnemyDestroy()
     {
         executionCount++;
-        if(passive_Defensive2 != null && executionCount >= passive_Defensive2.CountCheck)
+        if (passive_Defensive2 != null && executionCount >= passive_Defensive2.CountCheck)
         {
             executionCount = 0;
             passive_Defensive2.Active();
@@ -99,7 +119,7 @@ public class PlayerInstanteState : MonoBehaviour
 
     public float GetDmg(PlayerAttackKind type, bool isLastAttack = false)
     {
-        float baseDmg = GetAttackPower() * GetDamageMultiByAttakcType(type,isLastAttack);// * coefficient;
+        float baseDmg = GetAttackPower() * GetDamageMultiByAttakcType(type, isLastAttack);// * coefficient;
         float dmgGain = DmgMulti;
         if (type == PlayerAttackKind.MeleeChargedAttack)//차지 공격일 경우
         {
@@ -124,10 +144,10 @@ public class PlayerInstanteState : MonoBehaviour
             }
         }
         float finalDmg = baseDmg * dmgGain;
-        if(passive_Offensive5 != null)
+        if (passive_Offensive5 != null)
         {
             finalDmg += passive_Offensive5.ValueChangeRatio * (GetSkillPower());
-        }    
+        }
         return finalDmg;
     }
     public float GetRange(PlayerAttackKind type, int combo)
@@ -154,24 +174,24 @@ public class PlayerInstanteState : MonoBehaviour
         float baseDmg = GetSkillPower();// * coefficient;
         float dmgGain = 1;
 
-            int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Melee1);
-            if (level > 0)
-            {
-                baseDmg += ((hp + Shield) * JsonDataManager.GetBlueChipData(BlueChipID.Melee1).Level_VelueList[level][0]) * 0.01f;
-            }
+        int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Melee1);
+        if (level > 0)
+        {
+            baseDmg += ((hp + Shield) * JsonDataManager.GetBlueChipData(BlueChipID.Melee1).Level_VelueList[level][0]) * 0.01f;
+        }
 
 
-            if (_PlayerMaster._PlayerBuff.blueChip4_Buff_NextHitAddDmg.TryDequeue(out float addDmgGain))
-            {
-                dmgGain += addDmgGain;
-                Debug.Log("피해증가 버프 소모");
-            }
-            int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Generic2);
-            if (blueChip7Level > 0)
-            {
-                float addDmg = JsonDataManager.GetBlueChipData(BlueChipID.Generic2).Level_VelueList[blueChip7Level][1] * 0.01f;
-                dmgGain += addDmg;
-            }
+        if (_PlayerMaster._PlayerBuff.blueChip4_Buff_NextHitAddDmg.TryDequeue(out float addDmgGain))
+        {
+            dmgGain += addDmgGain;
+            Debug.Log("피해증가 버프 소모");
+        }
+        int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Generic2);
+        if (blueChip7Level > 0)
+        {
+            float addDmg = JsonDataManager.GetBlueChipData(BlueChipID.Generic2).Level_VelueList[blueChip7Level][1] * 0.01f;
+            dmgGain += addDmg;
+        }
         return baseDmg * dmgGain;
     }
 
@@ -246,8 +266,7 @@ public class PlayerInstanteState : MonoBehaviour
 
         DashTime = _playerStatData.dashTime;
         DashForce = _playerStatData.dashForce;
-        DashCost = _playerStatData.dashCost;        
-
+        DashCost = _playerStatData.dashCost;
         InitPassive();
         Restore();
     }
@@ -262,7 +281,7 @@ public class PlayerInstanteState : MonoBehaviour
         else
         {
             stamina -= power;
-            if(stamina <= 0)
+            if (stamina <= 0)
             {
                 stamina = 0;
                 staminaRecoveryDelayValue = 0;
@@ -316,7 +335,7 @@ public class PlayerInstanteState : MonoBehaviour
             hp -= dmg;
             if (hp <= 0)
             {
-                if(passive_Defensive3 != null && passive_Defensive3.ActiveCount > 0)
+                if (passive_Defensive3 != null && passive_Defensive3.ActiveCount > 0)
                 {
                     passive_Defensive3.Active(out _holdTime_Passive_Defensive3);
                     Debug.Log("무적 발동!");
@@ -611,9 +630,9 @@ public class PlayerInstanteState : MonoBehaviour
         float hpRatio = hp / GetMaxHp();
         HealthRatioChanged?.Invoke(hpRatio);
 
-        if(passive_Offensive1 != null)
+        if (passive_Offensive1 != null)
         {
-            if(passive_Offensive1.HpCheckRetio <= hpRatio)
+            if (passive_Offensive1.HpCheckRetio <= hpRatio)
             {
                 passive_Offensive1.Active();
             }
