@@ -41,65 +41,67 @@ namespace EnumTypes
         Jump
     }
 
-    public enum PlayerAttackType
-    {
-        RangeNormalAttack1,
-        RangeNormalAttack2,
-        RangeNormalAttack3,
-        RangeNormalAttack4,
+    //AttackKind로 대체 타수는 따로 카운팅
+    //public enum PlayerAttackType
+    //{
+    //    RangeNormalAttack1,
+    //    RangeNormalAttack2,
+    //    RangeNormalAttack3,
+    //    RangeNormalAttack4,
 
-        RangeDashAttack,
+    //    RangeDashAttack,
 
-        RangeSkillAttack1,
-        RangeSkillAttack2,
-        RangeSkillAttack3,
-        RangeSkillAttack4,
+    //    RangeSkillAttack1,
+    //    RangeSkillAttack2,
+    //    RangeSkillAttack3,
+    //    RangeSkillAttack4,
 
-        MeleeNormalAttack1,
-        MeleeChargeAttack2,
+    //    MeleeNormalAttack1,
+    //    MeleeChargeAttack2,
 
-        MeleeDashAttack,
+    //    MeleeDashAttack,
 
-        MeleeSkillAttack1,
-        MeleeSkillAttack2,
-        MeleeSkillAttack3,
-        MeleeSkillAttack4,
+    //    MeleeSkillAttack1,
+    //    MeleeSkillAttack2,
+    //    MeleeSkillAttack3,
+    //    MeleeSkillAttack4,
 
 
-    }
+    //}
     public enum PlayerAttackKind
     {
         RangeNormalAttack,
-        RangeSkillAttack,
         MeleeNormalAttack,
+        RangeSkillAttack,
         MeleeSkillAttack,
         MeleeChargedAttack,
         RangeDashAttack,
         MeleeDashAttack,
     }
 
-    public static class EnumAttackHelper
-    {
-        public static PlayerAttackKind GetKindOfAttack(PlayerAttackType attackType) => attackType switch
-        {
-            PlayerAttackType.RangeNormalAttack1 => PlayerAttackKind.RangeNormalAttack,
-            PlayerAttackType.RangeNormalAttack2 => PlayerAttackKind.RangeNormalAttack,
-            PlayerAttackType.RangeNormalAttack3 => PlayerAttackKind.RangeNormalAttack,
-            PlayerAttackType.RangeNormalAttack4 => PlayerAttackKind.RangeNormalAttack,
+    //플레이어 공격 타입 대체에 따른 필요성 사라짐
+    //public static class EnumAttackHelper
+    //{
+    //    public static PlayerAttackKind GetKindOfAttack(PlayerAttackType attackType) => attackType switch
+    //    {
+    //        PlayerAttackType.RangeNormalAttack1 => PlayerAttackKind.RangeNormalAttack,
+    //        PlayerAttackType.RangeNormalAttack2 => PlayerAttackKind.RangeNormalAttack,
+    //        PlayerAttackType.RangeNormalAttack3 => PlayerAttackKind.RangeNormalAttack,
+    //        PlayerAttackType.RangeNormalAttack4 => PlayerAttackKind.RangeNormalAttack,
 
-            PlayerAttackType.RangeSkillAttack1 => PlayerAttackKind.RangeSkillAttack,
-            PlayerAttackType.RangeSkillAttack2 => PlayerAttackKind.RangeSkillAttack,
-            PlayerAttackType.RangeSkillAttack3 => PlayerAttackKind.RangeSkillAttack,
-            PlayerAttackType.RangeSkillAttack4 => PlayerAttackKind.RangeSkillAttack,
+    //        PlayerAttackType.RangeSkillAttack1 => PlayerAttackKind.RangeSkillAttack,
+    //        PlayerAttackType.RangeSkillAttack2 => PlayerAttackKind.RangeSkillAttack,
+    //        PlayerAttackType.RangeSkillAttack3 => PlayerAttackKind.RangeSkillAttack,
+    //        PlayerAttackType.RangeSkillAttack4 => PlayerAttackKind.RangeSkillAttack,
 
-            PlayerAttackType.MeleeNormalAttack1 => PlayerAttackKind.MeleeNormalAttack,
-            PlayerAttackType.MeleeChargeAttack2 => PlayerAttackKind.MeleeNormalAttack,
+    //        PlayerAttackType.MeleeNormalAttack1 => PlayerAttackKind.MeleeNormalAttack,
+    //        PlayerAttackType.MeleeChargeAttack2 => PlayerAttackKind.MeleeNormalAttack,
 
-            PlayerAttackType.MeleeSkillAttack1 => PlayerAttackKind.MeleeSkillAttack,
-            PlayerAttackType.MeleeSkillAttack2 => PlayerAttackKind.MeleeSkillAttack,
-            PlayerAttackType.MeleeSkillAttack3 => PlayerAttackKind.MeleeSkillAttack,
-            PlayerAttackType.MeleeSkillAttack4 => PlayerAttackKind.MeleeSkillAttack,
-            _ => (PlayerAttackKind)999,
-        };
-    }
+    //        PlayerAttackType.MeleeSkillAttack1 => PlayerAttackKind.MeleeSkillAttack,
+    //        PlayerAttackType.MeleeSkillAttack2 => PlayerAttackKind.MeleeSkillAttack,
+    //        PlayerAttackType.MeleeSkillAttack3 => PlayerAttackKind.MeleeSkillAttack,
+    //        PlayerAttackType.MeleeSkillAttack4 => PlayerAttackKind.MeleeSkillAttack,
+    //        _ => (PlayerAttackKind)999,
+    //    };
+    //}
 }

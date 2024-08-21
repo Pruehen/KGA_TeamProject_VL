@@ -10,9 +10,9 @@ public class Passive_Offensive3 : Passive
     {
         base._state.AttackPowerMulti += base._passiveData.VelueList[0] * 0.01f;
         base._state.SkillPowerMulti += base._passiveData.VelueList[1] * 0.01f;
-        _state.DashForce *= base._passiveData.VelueList[2] * 0.01f;
-        _state.DashTime *= base._passiveData.VelueList[3] * 0.01f;
-        _state.DashCost *= 1 + base._passiveData.VelueList[4] * 0.01f;
+        base._state.DashForceMulti += base._passiveData.VelueList[2] * 0.01f;
+        base._state.DashTimeMulti += base._passiveData.VelueList[3] * 0.01f;
+        base._state.DashCostMulti += base._passiveData.VelueList[4] * 0.01f;
     }
 
     public override void DeActive()

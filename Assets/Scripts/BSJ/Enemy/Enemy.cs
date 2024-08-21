@@ -374,10 +374,18 @@ public class Enemy : MonoBehaviour, ITargetable
         _behaviorTree.DisableBehavior();
         _navMeshAgent.isStopped = true;
 
-        PlayerMaster.Instance._PlayerInstanteState.AddExcutionCount_OnEnemyDestroy();
+        PlayerMaster.Instance._PlayerInstanteState.OnEnemyDestroy();
 
         StopAllCoroutines();
         StartCoroutine(DelayedDisable());
+
+        DropGold();
+    }
+
+    private void DropGold()
+    {
+        GameManager.Instance._PlayerMaster._PlayerInstanteState.AddGold(500);
+        //Instantiate(_goldPrefab, transform.position);
     }
 
     private void SetEnableAllCollision(bool condition)
@@ -507,8 +515,15 @@ public class Enemy : MonoBehaviour, ITargetable
         return transform.position;
     }
 
+    float _debuff_Passive_Offensive2_IncreasedDamageTakenMulti = 1;
+    public void ActiveDebuff_Passive_Offensive2(float value)
+    {
+        _debuff_Passive_Offensive2_IncreasedDamageTakenMulti = 1 + value;        
+    }    
     public void Hit(float dmg)
     {
+        dmg *= _debuff_Passive_Offensive2_IncreasedDamageTakenMulti;
+        _debuff_Passive_Offensive2_IncreasedDamageTakenMulti = 1;
         _combat.Damaged(dmg);
         DmgTextManager.Instance.OnDmged(dmg, this.transform.position);
     }
@@ -552,5 +567,10 @@ public class Enemy : MonoBehaviour, ITargetable
         {
             la.TriggerOnEnterCollider();
         }
+    }
+
+    public void RegisterOnDead(Action onDead)
+    {
+        _combat.OnDead += onDead;
     }
 }

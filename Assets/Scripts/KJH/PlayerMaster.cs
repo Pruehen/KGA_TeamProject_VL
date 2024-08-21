@@ -35,9 +35,12 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
         get { return _PlayerInstanteState.IsMeleeMode; }
         set
         {
-            _PlayerInstanteState.IsMeleeMode = value;
-            Execute_BlueChip1_OnModeChange(value);
-            Execute_BlueChip4_OnModeChange();
+            if (_PlayerInstanteState.IsMeleeMode != value)
+            {
+                _PlayerInstanteState.IsMeleeMode = value;
+                Execute_BlueChip1_OnModeChange(value);
+                Execute_BlueChip4_OnModeChange();
+            }
         }
     }
     public bool isDashing
@@ -119,13 +122,14 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
         _PlayerPassive = GetComponent<PlayerPassive>();
 
         _PlayerPassive.Init();
-        _PlayerInstanteState.Init(_PlayerPassive);
+        _PlayerInstanteState.Init();
 
         _PlayerMove = GetComponent<PlayerMove>();
         _PlayerAttack = GetComponent<PlayerAttack>();
         _PlayerModChangeManager = GetComponent<PlayerModChangeManager>();
 
         _ItemAbsorber.Init(_PlayerInstanteState._playerStatData);
+        _PlayerAttack.Init();
     }
 
     public void OnAttackState(Vector3 lookTarget)
@@ -149,8 +153,8 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
 
     public void Hit(float dmg)
     {
-        _PlayerInstanteState.Hit(dmg);
-        DmgTextManager.Instance.OnDmged(dmg, this.transform.position);
+        _PlayerInstanteState.Hit(dmg, out float finalDmg);
+        DmgTextManager.Instance.OnDmged(finalDmg, this.transform.position);
     }
 
     public bool IsDead()
