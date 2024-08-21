@@ -104,4 +104,15 @@ namespace EnumTypes
     //        _ => (PlayerAttackKind)999,
     //    };
     //}
+    public enum PlayerSkill
+    {
+        RangeSkillAttack1,
+        RangeSkillAttack2,
+        RangeSkillAttack3,
+        RangeSkillAttack4,
+        MeleeSkillAttack1,
+        MeleeSkillAttack2,
+        MeleeSkillAttack3,
+        MeleeSkillAttack4
+    }
 }

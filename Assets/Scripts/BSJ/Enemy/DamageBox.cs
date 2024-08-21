@@ -51,8 +51,6 @@ public class DamageBox : MonoBehaviour
     {
         Collider[] result = Physics.OverlapBox(Center, HalfSize, transform.rotation, _targetLayer);
         bool onHit = false;
-        transform.localPosition = Vector3.zero;
-        
         foreach (Collider hit in result)
         {
             if (hit.attachedRigidbody == null)
@@ -118,16 +116,17 @@ public class DamageBox : MonoBehaviour
         enabled = true;
         _enableTimer = time;
     }
-    public void EnableSkillDamageBox(Vector3 target,float damage, float range = 1f, Action onHitCallBack = null, float time = 0f)
+    public void EnableSkillDamageBox(float damage, float range = 1f, Action onHitCallBack = null, float time = 0f)
     {
         if (onHitCallBack != null)
         {
             OnHit += onHitCallBack;
         }
+        //transform.localPosition = target;
         SetRange(range);
 
         _damage = damage;
-        transform.localPosition = target;
+
         enabled = true;
         _enableTimer = time;
     }

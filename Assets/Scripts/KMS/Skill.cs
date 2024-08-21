@@ -195,12 +195,12 @@ public class Skill : MonoBehaviour
         {
             Vector3 hitPosition = hit.point;
             _damageBox.transform.position = hitPosition;
-            _damageBox.EnableSkillDamageBox(hitPosition,damage, range, null, 0f);
+            _damageBox.EnableSkillDamageBox(damage, range, null, 4f);
         }
         else
         {
             _damageBox.transform.localPosition = Vector3.zero;
-            _damageBox.EnableDamageBox(damage, range, null, 0f);
+            _damageBox.EnableDamageBox(damage, range, null,4f);
             Debug.Log("레이 맞춘 게 없음");
         }
     }
@@ -212,12 +212,12 @@ public class Skill : MonoBehaviour
         }
         moveCoroutine = StartCoroutine(MoveToTargetCoroutine());
     }
-    public void SkillDamege(string skillName)
+    public void SkillDamege(EnumTypes.PassiveID passiveID)
     {
        
         float damage = 0f;
         float range = 1f;
-        switch (skillName)
+        /*switch (skillName)
         {
             case "Skill1":
                 damage = so_Skill._rangedSkill1 * SkillPower;
@@ -238,7 +238,7 @@ public class Skill : MonoBehaviour
             default:
                 Debug.LogWarning($"Unrecognized skill: {skillName}");
                 return;
-        }
+        }*/
         _damageBox.EnableDamageBox(damage, range, null, 0f);
     }
     private IEnumerator MoveToTargetCoroutine()
@@ -248,7 +248,8 @@ public class Skill : MonoBehaviour
 
         while (elapsedTime < moveDuration)
         {
-            player.transform.position = Vector3.Lerp(startPosition, target, elapsedTime / moveDuration);
+            Vector3 newtarget = new Vector3(target.x, player.transform.position.y, target.z);
+            player.transform.position = Vector3.Lerp(startPosition, newtarget, elapsedTime / moveDuration);
             elapsedTime += Time.deltaTime;
             yield return null; // 다음 프레임까지 대기
         }
