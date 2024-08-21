@@ -144,7 +144,7 @@ public class PlayerInstanteState : MonoBehaviour
         float dmgGain = DmgMulti;
         if (type == PlayerAttackKind.MeleeChargedAttack)//차지 공격일 경우
         {
-            int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.w);
+            int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Melee1);
             if (level > 0)
             {
                 baseDmg += ((hp + Shield) * JsonDataManager.GetBlueChipData(BlueChipID.Melee1).Level_VelueList[level][0]) * 0.01f;
