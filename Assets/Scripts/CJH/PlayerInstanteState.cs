@@ -279,7 +279,6 @@ public class PlayerInstanteState : MonoBehaviour
         _PlayerMaster = GetComponent<PlayerMaster>();
 
         Restore();
-        UIManager.Instance.setPlayer(this);
     }
     private void Start()
     {

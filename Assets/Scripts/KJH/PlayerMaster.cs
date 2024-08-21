@@ -115,11 +115,13 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     }
 
     private void Awake()
-    {
+    {        
         _PlayerInstanteState = GetComponent<PlayerInstanteState>();
         _PlayerEquipBlueChip = GetComponent<PlayerEquipBlueChip>();
         _PlayerBuff = GetComponent<PlayerBuff>();
         _PlayerPassive = GetComponent<PlayerPassive>();
+
+        UIManager.Instance.SetPlayerMaster(this);
 
         _PlayerPassive.Init();
         _PlayerInstanteState.Init();

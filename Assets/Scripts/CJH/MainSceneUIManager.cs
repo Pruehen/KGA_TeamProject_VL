@@ -44,9 +44,13 @@ public class MainSceneUIManager : MonoBehaviour
             {
                 slotText[i].color = new Color(1f, 0.5f, 0f);
             }
-            else
+            else if (EventSystem.current.currentSelectedGameObject != selectSlot[i].gameObject)
             {
                 slotText[i].color = Color.white;
+            }
+            else
+            {
+                return;
             }
         }
 
