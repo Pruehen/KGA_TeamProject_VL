@@ -290,7 +290,7 @@ public class Skill : MonoBehaviour
                 break;
             case PlayerSkill.MeleeSkillAttack4:
                 damage = so_Skill._meleeSkill1 * SkillPower;
-                range = so_Skill._meleeSkill1Range;
+                range = so_Skill._meleeSkill4Range;
                 distance = so_Skill._meleeSkill4Distance;
                 break;
                    default:
@@ -315,6 +315,7 @@ public class Skill : MonoBehaviour
         player.transform.position = target;
     }
 
+    public float RayDistance = 20;
     private void OnDrawGizmos()
     {
         Camera mainCamera = Camera.main;
@@ -323,9 +324,11 @@ public class Skill : MonoBehaviour
             // Ray를 카메라의 위치에서 forward 방향으로 그립니다.
             Gizmos.color = Color.green;
             Vector3 start = mainCamera.transform.position;
-            Vector3 direction = mainCamera.transform.forward * _meleeSkill4Distance;
+            Vector3 direction = mainCamera.transform.forward * RayDistance;
             Gizmos.DrawLine(start, start + direction);
         }
     }
+
+
 
 }
