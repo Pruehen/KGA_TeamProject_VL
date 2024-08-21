@@ -8,6 +8,8 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     public PlayerEquipBlueChip _PlayerEquipBlueChip { get; private set; }
     public PlayerBuff _PlayerBuff { get; private set; }
     public PlayerPassive _PlayerPassive { get; private set; }
+    public Skill _PlayerSkill { get; private set; }
+
     PlayerMove _PlayerMove;
     PlayerAttack _PlayerAttack;
     PlayerModChangeManager _PlayerModChangeManager;    
@@ -120,6 +122,7 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
         _PlayerEquipBlueChip = GetComponent<PlayerEquipBlueChip>();
         _PlayerBuff = GetComponent<PlayerBuff>();
         _PlayerPassive = GetComponent<PlayerPassive>();
+        _PlayerSkill = GetComponent<Skill>();
 
         _PlayerPassive.Init();
         _PlayerInstanteState.Init();
