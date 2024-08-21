@@ -1,43 +1,91 @@
+using System;
 using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static Unity.Burst.Intrinsics.Arm;
+
 
 public class MainSceneUIManager : MonoBehaviour
 {
     public static MainSceneUIManager Instance;
 
-    [SerializeField] GameObject StartPanel;
+    [SerializeField] GameObject startPanel;
     [SerializeField] GameObject passiveUI;
+    [SerializeField] GameObject overwriteStartPanel;
     [SerializeField] Button startButton;
+    [SerializeField] GameObject[] selectSlot;
+    Text[] slotText;
+
+
+
 
     private void Awake()
     {
+        startPanel.SetActive(true);
+        passiveUI.SetActive(false);
+        overwriteStartPanel.SetActive(false);
+
+        slotText = new Text[selectSlot.Length];
+        for (int i = 0; i < selectSlot.Length; i++)
+        {
+            slotText[i] = selectSlot[i].GetComponentInChildren<Text>();
+        }
+
         Instance = this;
         EventSystem.current.SetSelectedGameObject(startButton.gameObject);
         InputManager.Instance.PropertyChanged += OnInputPropertyChanged;
     }
 
+    private void Update()
+    {
+        for (int i = 0; i < selectSlot.Length; i++)
+        {
+            if (EventSystem.current.currentSelectedGameObject == selectSlot[i].gameObject)
+            {
+                slotText[i].color = new Color(1f, 0.5f, 0f);
+            }
+            else
+            {
+                slotText[i].color = Color.white;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (passiveUI.activeSelf == true)
+            {
+                Debug.Log(123);
+                OnClick_NewGameButton();
+            }
+             
+        }
+          
+        
+
+
+    }
+
     public void OnClick_NewGameButton()
     {
-        if (StartPanel.activeSelf == true)
+        if (overwriteStartPanel.activeSelf == true)
         {
-            StartPanel.SetActive(false);
+            overwriteStartPanel.SetActive(false);
             passiveUI.SetActive(true);
             PassiveUIManager.Instance.Reton();
         }
         else
         {
-            StartPanel.SetActive(true);
-            passiveUI.SetActive(false);
+            Debug.Log("µÚ·Î");
             EventSystem.current.SetSelectedGameObject(startButton.gameObject);
+            startPanel.SetActive(true);
+            passiveUI.SetActive(false);
+            
         }
-      
+
 
     }
 
+    //ÀÎÇ² FÅ°
     void OnInputPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)
@@ -52,4 +100,20 @@ public class MainSceneUIManager : MonoBehaviour
         }
     }
 
+    public void OnExitButton()
+    {
+        Application.Quit();
+
+    }
+
+    public void SlotSelect()
+    {
+        if (startPanel.activeSelf == true)
+        {
+            startPanel.SetActive(false);
+            overwriteStartPanel.SetActive(true);
+            EventSystem.current.SetSelectedGameObject(selectSlot[0].gameObject);
+        }
+      
+    }
 }

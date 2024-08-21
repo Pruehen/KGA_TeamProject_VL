@@ -40,15 +40,7 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
         InfoText(PassiveID.Offensive1);
     }
 
-    private void Update()
-    {
-        if (Input.GetKey(KeyCode.Escape))
-        {
-            MainSceneUIManager.Instance.OnClick_NewGameButton();
-
-        }
-    }
-
+   
     public void InfoText(PassiveID passiveID)
     {
         if (passiveID == PassiveID.None)
