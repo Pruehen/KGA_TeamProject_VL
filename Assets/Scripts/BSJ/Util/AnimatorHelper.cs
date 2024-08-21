@@ -38,7 +38,7 @@ public class AnimatorHelper : MonoBehaviour
         CurrentAnimTagHash = _animator.GetCurrentAnimatorStateInfo(0).tagHash;
 
         int nameHash = _animator.GetAnimatorTransitionInfo(0).nameHash;
-        if(prevHash != nameHash)
+        if (prevHash != nameHash)
         {
             prevHash = nameHash;
         }
@@ -46,7 +46,7 @@ public class AnimatorHelper : MonoBehaviour
         var a = _animator.GetNextAnimatorStateInfo(0).nameHash;
         var b = _animator.GetCurrentAnimatorStateInfo(0).nameHash;
 
-        Debug.Log(a +"  "+ b);
+        Debug.Log(a + "  " + b);
 
     }
 
@@ -56,5 +56,25 @@ public class AnimatorHelper : MonoBehaviour
         if (r)
             Debug.Log("!!!!!!!!!!!!!!");
         return r;
+    }
+
+    public static bool IsAnimationIn(Animator animator, int layer, string fullPath)
+    {
+        return animator.GetCurrentAnimatorStateInfo(layer).fullPathHash == Animator.StringToHash(fullPath);
+    }
+    public static bool IsAnimationPlaying(Animator animator, int layer, string fullPath)
+    {
+        int target = Animator.StringToHash(fullPath);
+        int cur = animator.GetCurrentAnimatorStateInfo(layer).fullPathHash;
+        int next = animator.GetNextAnimatorStateInfo(layer).fullPathHash;
+        if (target == next)
+        {
+            return true;
+        }
+        if (target == cur && next == 0)
+        {
+            return true;
+        }
+        return false;
     }
 }

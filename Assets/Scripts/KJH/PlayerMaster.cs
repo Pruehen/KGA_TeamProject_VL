@@ -45,11 +45,7 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     }
     public bool isDashing
     {
-        get { return _PlayerMove._isDashing; }
-        set
-        {
-            _PlayerMove._isDashing = value;
-        }
+        get { return _PlayerMove.IsDashing; }
     }
     public bool isAttackTrigger
     {
@@ -133,6 +129,7 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
         _PlayerModChangeManager = GetComponent<PlayerModChangeManager>();
 
         _ItemAbsorber.Init(_PlayerInstanteState._playerStatData);
+        _PlayerAttack.Init();
     }
 
     public void OnAttackState(Vector3 lookTarget)

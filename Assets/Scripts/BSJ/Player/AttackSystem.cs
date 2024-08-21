@@ -48,7 +48,6 @@ public class AttackSystem : MonoBehaviour
     }
     public void StartAttack(PlayerAttackKind mod, PlayerAttackKind index, int comboIndex)
     {
-        _attackLcokMove = true;
         _animator.SetTrigger(hashAttack);
 
 
@@ -97,8 +96,8 @@ public class AttackSystem : MonoBehaviour
     }
     public void EnableDamageBox(float dmg, float range, Action OnHitCallback)
     {
-        _damageBox.EnableDamageBox(dmg, range, OnHitCallback);
         _playerAttack.IncreaseAttackCount();
+        _damageBox.EnableDamageBox(dmg, range, OnHitCallback);
     }
 
     public void ResetEndAttack()
