@@ -53,6 +53,7 @@ public class PassiveUI : MonoBehaviour, ISelectHandler
     {
         if (PassiveUIManager.Instance.Try_EquipPassive(this))
         {
+            JsonDataManager.GetUserData().TryAddPassive(passiveID);            
             passiveID = PassiveID.None;
             ImageChange();
         }
@@ -64,6 +65,7 @@ public class PassiveUI : MonoBehaviour, ISelectHandler
 
     public void OnClick_TryUnEquip()
     {
+        JsonDataManager.GetUserData().TryRemovePassive(passiveID);
         PassiveUIManager.Instance.Try_EquipUnPassive(this);
         passiveID = PassiveID.None;
         ImageChange();

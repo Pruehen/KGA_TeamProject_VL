@@ -29,17 +29,50 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
 
     private void Awake()
     {
-        EventSystem.current.SetSelectedGameObject(FalstButton.gameObject);
-        
         PassiveUI.AddRange(FindObjectsOfType<PassiveUI>());
+    }
+    public void Init(UserData userData)
+    {
+        EventSystem.current.SetSelectedGameObject(FalstButton.gameObject);
 
         foreach (var item in PassiveUI)
         {
             item.ImageChange();
         }
         InfoText(PassiveID.Offensive1);
+        GetSlotData_OnInit(userData);
     }
 
+    void GetSlotData_OnInit(UserData userData)
+    {
+        foreach (var item in ID_PassiveUI_Dic)
+        {
+            item.Value.SetPassiveId(item.Key);
+        }
+
+        useOffensivePassiveCount = 0;
+        useDeffensivePassiveCount = 0;
+        useUtilityPassiveCount = 0;
+
+        foreach (var item in PassiveUIGroup_Offensive)
+        {
+            item.SetPassiveId(PassiveID.None);
+        }
+        foreach (var item in PassiveUIGroup_Deffensive)
+        {
+            item.SetPassiveId(PassiveID.None);
+        }
+        foreach (var item in PassiveUIGroup_Utility)
+        {
+            item.SetPassiveId(PassiveID.None);
+        }
+
+        Debug.Log($"{userData.SaveDataIndex}번째 데이터 로드");
+        foreach (var item in userData.UsePassiveHashSet)
+        {            
+            ID_PassiveUI_Dic[item].OnClick_TryEquip();
+        }
+    }
    
     public void InfoText(PassiveID passiveID)
     {
@@ -155,11 +188,6 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
     public void OnClickStartButton()
     {
         SceneManager.LoadScene("Jihe");
-    }
-
-    public void Reton()
-    {
-        EventSystem.current.SetSelectedGameObject(FalstButton.gameObject);
     }
 
 }

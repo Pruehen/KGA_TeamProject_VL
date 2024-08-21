@@ -59,34 +59,28 @@ public class MainSceneUIManager : MonoBehaviour
             if (passiveUI.activeSelf == true)
             {
                 Debug.Log(123);
-                OnClick_NewGameButton();
-            }
-             
+                EnterMainScene_OnEscClick();
+            }             
         }
-          
-        
-
-
     }
 
-    public void OnClick_NewGameButton()
-    {
+    public void OnClick_NewGameButton(int slotIndex)//슬롯 선택 시 호출
+    {        
         if (overwriteStartPanel.activeSelf == true)
         {
+            Debug.Log(slotIndex);
+            JsonDataManager.SetUserDataIndex(slotIndex);
             overwriteStartPanel.SetActive(false);
             passiveUI.SetActive(true);
-            PassiveUIManager.Instance.Reton();
+            PassiveUIManager.Instance.Init(JsonDataManager.GetUserData());
         }
-        else
-        {
-            Debug.Log("뒤로");
-            EventSystem.current.SetSelectedGameObject(startButton.gameObject);
-            startPanel.SetActive(true);
-            passiveUI.SetActive(false);
-            
-        }
-
-
+    }
+    void EnterMainScene_OnEscClick()
+    {
+        Debug.Log("뒤로");
+        EventSystem.current.SetSelectedGameObject(startButton.gameObject);
+        startPanel.SetActive(true);
+        passiveUI.SetActive(false);
     }
 
     //인풋 F키
@@ -107,17 +101,15 @@ public class MainSceneUIManager : MonoBehaviour
     public void OnExitButton()
     {
         Application.Quit();
-
     }
 
-    public void SlotSelect()
+    public void SlotSelect()//게임 시작 버튼 클릭 시 호출
     {
         if (startPanel.activeSelf == true)
         {
             startPanel.SetActive(false);
             overwriteStartPanel.SetActive(true);
             EventSystem.current.SetSelectedGameObject(selectSlot[0].gameObject);
-        }
-      
+        }      
     }
 }
