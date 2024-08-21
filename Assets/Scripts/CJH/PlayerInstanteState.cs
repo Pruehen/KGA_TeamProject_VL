@@ -20,8 +20,12 @@ public class PlayerInstanteState : MonoBehaviour
         get { return _isMeleeMode; }
         set
         {
-            _isMeleeMode = value;
-            OnMeleeModeChanged?.Invoke(_isMeleeMode);
+            if (_isMeleeMode != value)
+            {
+                _isMeleeMode = value;
+                OnMeleeModeChanged?.Invoke(_isMeleeMode);
+                OnMeleeModeChange();
+            }
         }
     }
 
@@ -43,6 +47,7 @@ public class PlayerInstanteState : MonoBehaviour
     public float SkillGaugeRecoveryMulti { get; set; } = 1;
     [SerializeField] int maxBullets = 50;
     [SerializeField] int maxMeleeBullets = 50;
+    public void Passive_Utility5_Active(int value1, int value2) { maxBullets += value1; maxMeleeBullets += value2; }
 
     [SerializeField] float attackSpeed = 1f;
     [SerializeField] float attackPowerBase;
@@ -101,12 +106,34 @@ public class PlayerInstanteState : MonoBehaviour
     Passive_Utility4 passive_Utility4;
     Passive_Utility5 passive_Utility5;
 
+    [SerializeField] LayerMask LayerMask_EnemyCheck;
+    void Passive_Offensive2_Active_OnUpdate()
+    {
+        if(passive_Offensive2 != null)
+        {
+            Collider[] colliders = Physics.OverlapSphere(this.transform.position, passive_Offensive2.CheckDistance_ToEnemy, LayerMask_EnemyCheck);
+            foreach (var item in colliders)
+            {
+                if(item.transform.parent != null && item.transform.parent.TryGetComponent(out Enemy enemy))
+                {
+                    enemy.ActiveDebuff_Passive_Offensive2(passive_Offensive2.DmgGain);
+                }
+            }
+        }
+    }
+
     [SerializeField] int executionCount = 0;//체력2 패시브에서 사용
     public int ExecutionCount
     {
-        get { return executionCount; }
+        get { return executionCount; }        
+    }    
+    public void OnEnemyDestroy()
+    {
+        Passive_Defensive2_AddExcutionCount();
+        Passive_Defensive4_Active();
     }
-    public void AddExcutionCount_OnEnemyDestroy()
+    
+    void Passive_Defensive2_AddExcutionCount()
     {
         executionCount++;
         if (passive_Defensive2 != null && executionCount >= passive_Defensive2.CountCheck)
@@ -115,6 +142,22 @@ public class PlayerInstanteState : MonoBehaviour
             passive_Defensive2.Active();
         }
     }
+
+    void Passive_Defensive4_Active()
+    {
+        if(passive_Defensive4 != null)
+        {
+            passive_Defensive4.Active();
+        }
+    }
+    public void OnMeleeModeChange()
+    {
+        if(passive_Defensive5 != null && IsMeleeMode == false)
+        {
+            passive_Defensive5.Active();
+        }
+    }
+
     float _holdTime_Passive_Defensive3 = 0;//체력3 패시브에서 사용
 
     public float GetDmg(PlayerAttackKind type, bool isLastAttack = false)
@@ -129,20 +172,40 @@ public class PlayerInstanteState : MonoBehaviour
                 baseDmg += ((hp + Shield) * JsonDataManager.GetBlueChipData(BlueChipID.Melee1).Level_VelueList[level][0]) * 0.01f;
             }
         }
-        if (type == PlayerAttackKind.MeleeNormalAttack || type == PlayerAttackKind.RangeNormalAttack)//원거리 평타, 근거리 평타일 경우
+
+        if (type == PlayerAttackKind.MeleeNormalAttack || type == PlayerAttackKind.MeleeDashAttack || type == PlayerAttackKind.MeleeChargedAttack ||
+            type == PlayerAttackKind.RangeDashAttack || type == PlayerAttackKind.RangeNormalAttack)//평타, 대시공격, 차지공격일 경우
         {
             if (_PlayerMaster._PlayerBuff.blueChip4_Buff_NextHitAddDmg.TryDequeue(out float addDmgGain))
             {
                 dmgGain += addDmgGain;
                 Debug.Log("피해증가 버프 소모");
             }
-            int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Generic2);
-            if (blueChip7Level > 0)
+        }
+
+        //"원거리 공격 시 탄환을 {0}만큼 추가로 소모. 원거리 타격 피해량 {1}% 증가. 근거리 공격 시 근접 게이지를 {2}만큼 추가로 소모. 근거리 타격 피해량 {3}% 증가",
+        int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Generic2);
+        if (blueChip7Level > 0)
+        {
+            if (type == PlayerAttackKind.MeleeNormalAttack || type == PlayerAttackKind.MeleeDashAttack || type == PlayerAttackKind.MeleeChargedAttack)//근접 공격일 경우
             {
-                float addDmg = JsonDataManager.GetBlueChipData(BlueChipID.Generic2).Level_VelueList[blueChip7Level][1] * 0.01f;
-                dmgGain += addDmg;
+                if(meleeBullets > 0)
+                {
+                    float addDmg = JsonDataManager.GetBlueChipData(BlueChipID.Generic2).Level_VelueList[blueChip7Level][1] * 0.01f;
+                    dmgGain += addDmg;
+                }
+            }
+            else if(type == PlayerAttackKind.RangeDashAttack || type == PlayerAttackKind.RangeNormalAttack)//원거리 공격일 경우
+            {
+                if (bullets > 0)
+                {
+                    float addDmg = JsonDataManager.GetBlueChipData(BlueChipID.Generic2).Level_VelueList[blueChip7Level][1] * 0.01f;
+                    dmgGain += addDmg;
+                }
             }
         }
+        //=========================================================================================================================================================
+
         float finalDmg = baseDmg * dmgGain;
         if (passive_Offensive5 != null)
         {
@@ -226,6 +289,9 @@ public class PlayerInstanteState : MonoBehaviour
     private void Update()
     {
         TestSkill();
+
+        Passive_Offensive2_Active_OnUpdate();
+
         staminaRecoveryDelayValue += Time.deltaTime;
         if (staminaRecoveryDelayValue >= staminaRecoveryDelay)
         {
@@ -245,7 +311,7 @@ public class PlayerInstanteState : MonoBehaviour
         _holdTime_Passive_Defensive3 -= Time.deltaTime;
     }
 
-    public void Init(PlayerPassive playerPassive)
+    public void Init()
     {
         maxHpBase = _playerStatData.maxHp;
         MaxStamina = _playerStatData.MaxStamina;
@@ -293,7 +359,7 @@ public class PlayerInstanteState : MonoBehaviour
 
     public void StaminaRatioChange(float value)
     {
-        stamina += MaxStamina * value * 0.01f;
+        stamina += MaxStamina * value;
         if (stamina > MaxStamina)
         {
             stamina = MaxStamina;
@@ -317,13 +383,23 @@ public class PlayerInstanteState : MonoBehaviour
         UpdateStamina();
     }
 
-    public void Hit(float dmg)
+    public void Hit(float dmg, out float finalDmg)
     {
-        if (Shield > 0)
+        finalDmg = dmg;
+
+        if (passive_Defensive4 != null)
         {
+            dmg -= dmg * passive_Defensive4.Value_DamageReductionPercentage * 0.01f;
+            passive_Defensive4.DeActive();
+        }
+
+        if (Shield > 0)
+        {            
             Shield -= dmg;
+            finalDmg = dmg;
             if (Shield <= 0)
             {
+                finalDmg = dmg + Shield;
                 Shield = 0;
             }
             UpdateShild();
@@ -333,18 +409,20 @@ public class PlayerInstanteState : MonoBehaviour
         if (hp > 0)
         {
             hp -= dmg;
+            finalDmg = dmg;
             if (hp <= 0)
             {
                 if (passive_Defensive3 != null && passive_Defensive3.ActiveCount > 0)
                 {
-                    passive_Defensive3.Active(out _holdTime_Passive_Defensive3);
+                    passive_Defensive3.Active(out _holdTime_Passive_Defensive3);                    
                     Debug.Log("무적 발동!");
-                }
 
+                }
                 if (_holdTime_Passive_Defensive3 > 0)
                 {
                     hp = passive_Defensive3.HpHoldValue;
                     Debug.Log("핫하 무적이다!");
+                    finalDmg = 0;
                 }
                 else
                 {
@@ -609,6 +687,7 @@ public class PlayerInstanteState : MonoBehaviour
         {
             passive_Utility5 = new Passive_Utility5();
             passive_Utility5.Init(this);
+            passive_Utility5.Active();
         }
         //=======================================================================================
         //=======================================================================================
@@ -644,7 +723,7 @@ public class PlayerInstanteState : MonoBehaviour
     }
     public void UpdateShild()
     {
-        ShildRatioChanged?.Invoke(Shield / GetMaxHp());
+        ShildRatioChanged?.Invoke(Shield / GetMaxShield());
     }
     public void UpdateStamina()
     {
