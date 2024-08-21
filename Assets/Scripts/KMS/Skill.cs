@@ -195,7 +195,7 @@ public class Skill : MonoBehaviour
         {
             Vector3 hitPosition = hit.point;
             _damageBox.transform.position = hitPosition;
-            _damageBox.EnableDamageBox(damage, range, null, 0f);
+            _damageBox.EnableSkillDamageBox(hitPosition,damage, range, null, 0f);
         }
         else
         {
