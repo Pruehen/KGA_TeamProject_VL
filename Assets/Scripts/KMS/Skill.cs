@@ -24,8 +24,7 @@ public class Skill : MonoBehaviour
      [SerializeField] public float _meleeSkill2 = 10f;
      [SerializeField] public float _meleeSkill3_1 = 0.25f;
      [SerializeField] public float _meleeSkill3_2 = 0.25f;
-     [SerializeField] public float _meleeSkill3_3 = 0.5f;
-     [SerializeField] public float _meleeSkill3_4 = 10f;
+     [SerializeField] public float _meleeSkill3_3 = 10f;
      [SerializeField] public float _meleeSkill4 = 15f;
 
     [SerializeField] public float _rangedSkill1Range =1f;
@@ -82,7 +81,6 @@ public class Skill : MonoBehaviour
             _meleeSkill3_1 = so_Skill._meleeSkill3_1;
             _meleeSkill3_2 = so_Skill._meleeSkill3_2;
             _meleeSkill3_3 = so_Skill._meleeSkill3_3;
-            _meleeSkill3_4 = so_Skill._meleeSkill3_4;
             _meleeSkill4 = so_Skill._meleeSkill4;
 
             _rangedSkill1Range =so_Skill._rangedSkill1; 
@@ -191,16 +189,24 @@ public class Skill : MonoBehaviour
                 range = so_Skill._meleeSkill1Range;
                 break;
             case PlayerSkill.MeleeSkillAttack2:
-                damage = so_Skill._meleeSkill1 * SkillPower;
-                range = so_Skill._meleeSkill1Range;
+                damage = so_Skill._meleeSkill2 * SkillPower;
+                range = so_Skill._meleeSkill2Range;
                 break;
-            case PlayerSkill.MeleeSkillAttack3:
-                damage = so_Skill._meleeSkill1 * SkillPower;
-                range = so_Skill._meleeSkill1Range;
+            case PlayerSkill.MeleeSkillAttack3_1:
+                damage = so_Skill._meleeSkill3_1 * SkillPower;
+                range = so_Skill._meleeSkill3Range;
+                break;
+            case PlayerSkill.MeleeSkillAttack3_2:
+                damage = so_Skill._meleeSkill3_2 * SkillPower;
+                range = so_Skill._meleeSkill3Range;
+                break;
+            case PlayerSkill.MeleeSkillAttack3_3:
+                damage = so_Skill._meleeSkill3_3 * SkillPower;
+                range = so_Skill._meleeSkill3Range;
                 break;
             case PlayerSkill.MeleeSkillAttack4:
-                damage = so_Skill._meleeSkill1 * SkillPower;
-                range = so_Skill._meleeSkill1Range;
+                damage = so_Skill._meleeSkill4 * SkillPower;
+                range = so_Skill._meleeSkill4Range;
                 distance = so_Skill._meleeSkill4Distance;
                 break;
 
@@ -259,7 +265,7 @@ public class Skill : MonoBehaviour
             case PlayerSkill.RangeSkillAttack4:
                 damage = so_Skill._rangedSkill4 * SkillPower;
                 range = so_Skill._rangedSkill4Range;
-                distance = so_Skill._meleeSkill4Distance;
+                distance = so_Skill._rangedSkill4Distance;
                 break;
             case PlayerSkill.MeleeSkillAttack1:
                 damage = so_Skill._meleeSkill1 * SkillPower;
@@ -269,16 +275,24 @@ public class Skill : MonoBehaviour
                 damage = so_Skill._meleeSkill1 * SkillPower;
                 range = so_Skill._meleeSkill1Range;
                 break;
-            case PlayerSkill.MeleeSkillAttack3:
-                damage = so_Skill._meleeSkill1 * SkillPower;
-                range = so_Skill._meleeSkill1Range;
+            case PlayerSkill.MeleeSkillAttack3_1:
+                damage = so_Skill._meleeSkill3_1 * SkillPower;
+                range = so_Skill._meleeSkill3Range;
+                break;
+            case PlayerSkill.MeleeSkillAttack3_2:
+                damage = so_Skill._meleeSkill3_2 * SkillPower;
+                range = so_Skill._meleeSkill3Range;
+                break;
+            case PlayerSkill.MeleeSkillAttack3_3:
+                damage = so_Skill._meleeSkill3_3 * SkillPower;
+                range = so_Skill._meleeSkill3Range;
                 break;
             case PlayerSkill.MeleeSkillAttack4:
                 damage = so_Skill._meleeSkill1 * SkillPower;
                 range = so_Skill._meleeSkill1Range;
                 distance = so_Skill._meleeSkill4Distance;
                 break;
-            default:
+                   default:
                 Debug.LogWarning($"Unrecognized skill: {skillType}");
                 return;
         }
