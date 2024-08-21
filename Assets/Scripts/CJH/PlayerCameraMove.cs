@@ -15,7 +15,7 @@ public class PlayerCameraMove : SceneSingleton<PlayerCameraMove>
 
     private void Awake()
     {
-        startLocalPosition = transform.localPosition;
+        startLocalPosition = transform.localPosition; 
     }
 
     public void LateUpdate()
@@ -45,6 +45,7 @@ public class PlayerCameraMove : SceneSingleton<PlayerCameraMove>
        // {
        //     transform.localPosition = Vector3.Lerp(transform.localPosition, startLocalPosition, Time.deltaTime * 10);
        // }
+      
     }
       
     public Transform CamAxisTransform()
