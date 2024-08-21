@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
 
 public enum RewardType
@@ -10,13 +11,24 @@ public enum RewardType
 
 public class GameManager : SceneSingleton<GameManager>
 {
-    [SerializeField] private SO_StageList[] _stageBlocks;
+    [SerializeField] private SO_ChapterData _chapterData;
+
+    public NextStageObjects NextStageObjects;
+
     private bool _init = false;
-    private RewardType _rewordType;
+    private RewardType _rewardType;
 
     private int _currentLevel;
 
     private Action OnClear;
+
+    public PlayerMaster _PlayerMaster {  get; private set; }
+
+    public Enemy[] _enemies;
+
+    public Action OnGameClear;
+
+    public int _deadCount = 0;
 
     private void Awake()
     {
@@ -25,8 +37,26 @@ public class GameManager : SceneSingleton<GameManager>
             Destroy(gameObject);
         }
         DontDestroyOnLoad(this);
+
+        NextStageObjects = FindAnyObjectByType<NextStageObjects>();
+        Assert.IsNotNull(NextStageObjects);
+
         SceneManager.sceneLoaded += OnSceneLoaded;
-        OnClear += HandleClear;
+    }
+
+    private void Start()
+    {
+        _PlayerMaster = FindAnyObjectByType<PlayerMaster>();
+        Assert.IsNotNull(_PlayerMaster);
+
+        _enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+
+        foreach (Enemy enemy in _enemies)
+        {
+            enemy.RegisterOnDead(OnEnemyDead);
+        }
+
+        NextStageObjects.Init(_rewardType);
     }
 
     public void SpawnReword(RewardType rewordType)
@@ -34,6 +64,7 @@ public class GameManager : SceneSingleton<GameManager>
         switch (rewordType)
         {
             case RewardType.Currency:
+                
                 // °ñµå ½ºÆù
                 break;
             case RewardType.BlueChip:
@@ -44,12 +75,7 @@ public class GameManager : SceneSingleton<GameManager>
 
     public void SetRewordType(RewardType rewordType)
     {
-        _rewordType = rewordType;
-    }
-
-    private void HandleClear()
-    {
-        SpawnReword(_rewordType);
+        _rewardType = rewordType;
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -62,14 +88,13 @@ public class GameManager : SceneSingleton<GameManager>
             }
             else
             {
-
             }
         }
     }
 
     public void LoadNextStage()
     {
-        SO_Stage randomStage = GetRandomItem(_stageBlocks[_currentLevel++ % _stageBlocks.Length].StageData);
+        SO_Stage randomStage = GetRandomItem(_chapterData.ChapterData[_currentLevel++ % _chapterData.ChapterData.Length].StageData);
 
         AsyncOperation ao = SceneManager.LoadSceneAsync(randomStage.SceneName);
         ao.allowSceneActivation = true;
@@ -81,4 +106,12 @@ public class GameManager : SceneSingleton<GameManager>
         return array[r];
     }
 
+    private void OnEnemyDead()
+    {
+        _deadCount++;
+        if(_enemies.Length == _deadCount)
+        {
+            OnGameClear?.Invoke();
+        }
+    }
 }

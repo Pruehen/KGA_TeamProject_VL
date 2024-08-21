@@ -378,6 +378,14 @@ public class Enemy : MonoBehaviour, ITargetable
 
         StopAllCoroutines();
         StartCoroutine(DelayedDisable());
+
+        DropGold();
+    }
+
+    private void DropGold()
+    {
+        GameManager.Instance._PlayerMaster._PlayerInstanteState.AddGold(500);
+        //Instantiate(_goldPrefab, transform.position);
     }
 
     private void SetEnableAllCollision(bool condition)
@@ -552,5 +560,10 @@ public class Enemy : MonoBehaviour, ITargetable
         {
             la.TriggerOnEnterCollider();
         }
+    }
+
+    public void RegisterOnDead(Action onDead)
+    {
+        _combat.OnDead += onDead;
     }
 }

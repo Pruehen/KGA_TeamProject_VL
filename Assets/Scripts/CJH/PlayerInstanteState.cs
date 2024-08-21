@@ -56,6 +56,8 @@ public class PlayerInstanteState : MonoBehaviour
     public float GetSkillPower() { return skillPowerBase * SkillPowerMulti; }
     public float DmgMulti { get; set; } = 1f;
 
+    public int Gold { get; set; }
+
     [SerializeField] public float DashTime = .5f;
     [SerializeField] public float DashForce = 3f;
     [SerializeField] public float DashCost = 300f;
@@ -659,5 +661,11 @@ public class PlayerInstanteState : MonoBehaviour
         {
             SkillGaugeRecovery(400f);
         }
+    }
+
+    //골드 관련
+    public void AddGold(int amount)
+    {
+        Gold += amount;
     }
 }

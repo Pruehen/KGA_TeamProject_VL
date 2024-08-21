@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class NextStageDoor : MonoBehaviour
@@ -7,10 +8,13 @@ public class NextStageDoor : MonoBehaviour
     [SerializeField] private GameObject _currencyIcon;
     [SerializeField] private GameObject _blueChipIcon;
 
-    private void Start()
+    public void Init(RewardType rewardType)
     {
         _currencyIcon.SetActive(false);
         _blueChipIcon.SetActive(false);
+
+
+        _rewardType = rewardType;
 
         switch (_rewardType)
         {
@@ -21,7 +25,6 @@ public class NextStageDoor : MonoBehaviour
                 _blueChipIcon.SetActive(true);
                 break;
         }
-
     }
 
     private void OnTriggerEnter(Collider other)
@@ -31,5 +34,10 @@ public class NextStageDoor : MonoBehaviour
             GameManager.Instance.SetRewordType(_rewardType);
             GameManager.Instance.LoadNextStage();
         }
+    }
+
+    public void OnClear()
+    {
+        gameObject.SetActive(true);
     }
 }
