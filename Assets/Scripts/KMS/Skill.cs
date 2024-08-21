@@ -219,14 +219,16 @@ public class Skill : MonoBehaviour
         {
             Vector3 hitPosition = hit.point;
             _damageBox.transform.position = hitPosition;
-            _damageBox.EnableSkillDamageBox(damage, range, null, 4f);
+            _damageBox.EnableSkillDamageBox(damage, range, null,0);
         }
         else
         {
             _damageBox.transform.localPosition = Vector3.zero;
-            _damageBox.EnableDamageBox(damage, range, null,4f);
+            _damageBox.EnableDamageBox(damage, range, null,0f);
             Debug.Log("레이 맞춘 게 없음");
         }
+        Debug.Log("스킬실행");
+        Debug.Log(skillType);
     }
     public void TargettoRun()
     {
