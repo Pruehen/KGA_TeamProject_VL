@@ -40,11 +40,11 @@ public class PlayerInstanteState : MonoBehaviour
     [SerializeField] float MaxStamina;
     [SerializeField] float staminaRecoverySpeed;
     [SerializeField] float staminaRecoveryDelay;
-    float staminaRecoveryDelayValue = 99;
+    float staminaRecoveryDelayValue = 99f;
 
-    [SerializeField] float MaxskillGauge = 400;
-    float skillGaugeRecoveryRestTime = 0;
-    public float SkillGaugeRecoveryMulti { get; set; } = 1;
+    [SerializeField] float MaxskillGauge = 400f;
+    float skillGaugeRecoveryRestTime = 0f;
+    public float SkillGaugeRecoveryMulti { get; set; } = 1f;
     [SerializeField] int maxBullets = 50;
     [SerializeField] int maxMeleeBullets = 50;
     public void Passive_Utility5_Active(int value1, int value2) { maxBullets += value1; maxMeleeBullets += value2; }
@@ -54,8 +54,11 @@ public class PlayerInstanteState : MonoBehaviour
     public float AttackPowerMulti { get; set; } = 1f;
     public float GetAttackPower() { return attackPowerBase * AttackPowerMulti; }
     [SerializeField] float attackRangeBase = 1f;
-    public float attackRangeMulti { get; set; } = 1;
-    public float GetAttackRange() { return attackRangeMulti * attackRangeMulti; }
+    public float attackRangeMulti { get; set; } = 1f;
+    public float GetAttackRange() { return attackRangeBase * attackRangeMulti; }
+    [SerializeField] float skillRangeBase = 1f;
+    public float skillRangeMulti { get; set; } = 1f;
+    public float GetSkillRange() { return skillRangeBase * skillRangeMulti; }
     [SerializeField] float skillPowerBase;
     public float SkillPowerMulti { get; set; } = 1f;
     public float GetSkillPower() { return skillPowerBase * SkillPowerMulti; }
