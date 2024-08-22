@@ -41,7 +41,7 @@ public class PlayerEquipBlueChip : MonoBehaviour
         }
         else if(targetChipLevel > 0 && targetChipLevel < JsonDataManager.GetBlueChipData(targetBlueChip).Level_VelueList.Count)//칩이 있으며, 최대 레벨 미만일 경우
         {            
-            useBlueChipDic[targetBlueChip].LevelUp();
+            useBlueChipDic[targetBlueChip].LevelUp(1);
             Debug.Log($"칩 레벨을 강화합니다. : {useBlueChipDic[targetBlueChip].Level}레벨");
             return true;
         }
@@ -51,13 +51,43 @@ public class PlayerEquipBlueChip : MonoBehaviour
             return false;
         }
     }
-    public void SwapBlueChip(BlueChipID targetId, BlueChipID newId)
+    public bool TryAddBlueChip(BlueChipID targetBlueChip, int targetLevel)
+    {
+        int targetChipLevel = GetBlueChipLevel(targetBlueChip);
+
+        if (targetChipLevel == 0)//칩이 없는 경우
+        {
+            if (useBlueChipDic.Count >= 3)
+            {
+                Debug.LogWarning("이미 3종의 칩을 장착하고 있습니다");
+                return false;
+            }
+            else
+            {
+                Debug.Log("새로운 칩을 생성합니다.");
+                useBlueChipDic.Add(targetBlueChip, new BlueChipSlot(targetBlueChip, targetLevel));
+                return true;
+            }
+        }
+        else if (targetChipLevel > 0 && targetChipLevel < JsonDataManager.GetBlueChipData(targetBlueChip).Level_VelueList.Count)//칩이 있으며, 최대 레벨 미만일 경우
+        {
+            useBlueChipDic[targetBlueChip].SetLevel(targetLevel);
+            Debug.Log($"칩 레벨을 강화합니다. : {useBlueChipDic[targetBlueChip].Level}레벨");
+            return true;
+        }
+        else//칩이 최대 레벨일 경우
+        {
+            Debug.LogWarning("칩이 최대 레벨입니다");
+            return false;
+        }
+    }
+    public void SwapBlueChip(BlueChipID targetId, BlueChipID newId, int level)
     {
         if(useBlueChipDic.ContainsKey(targetId))
         {
             useBlueChipDic.Remove(targetId);
             Debug.Log("새로운 칩을 생성합니다.");
-            useBlueChipDic.Add(newId, new BlueChipSlot(newId, 1));
+            useBlueChipDic.Add(newId, new BlueChipSlot(newId, level));
         }
         else
         {
@@ -65,11 +95,11 @@ public class PlayerEquipBlueChip : MonoBehaviour
         }
     }
 
-    public Dictionary<BlueChipID, BlueChipSlot> GetRandomBlueChip()
+    public Dictionary<BlueChipID, BlueChipSlot> GetRandomBlueChip(int count, int addLevel)
     {
         Dictionary<BlueChipID, BlueChipSlot> selectSlotDic = new Dictionary<BlueChipID, BlueChipSlot>();
 
-        while (selectSlotDic.Count < 3)
+        while (selectSlotDic.Count < count)
         {
             BlueChipID id = (BlueChipID)Random.Range(0, 9);
 
@@ -77,10 +107,16 @@ public class PlayerEquipBlueChip : MonoBehaviour
                 continue;
 
             int targetChipLevel = GetBlueChipLevel(id);
+            int targetChipMaxLevel = JsonDataManager.GetBlueChipData(id).Level_VelueList.Count;
 
-            if (targetChipLevel < JsonDataManager.GetBlueChipData(id).Level_VelueList.Count)//칩이 최대 레벨 미만일 경우
+            if (targetChipLevel < targetChipMaxLevel)//칩이 최대 레벨 미만일 경우
             {
-                selectSlotDic.Add(id, new BlueChipSlot(id, targetChipLevel + 1));
+                targetChipLevel += addLevel;
+                if(targetChipLevel > targetChipMaxLevel)
+                {
+                    targetChipLevel = targetChipMaxLevel;
+                }
+                selectSlotDic.Add(id, new BlueChipSlot(id, targetChipLevel));
             }
         }
 
@@ -100,8 +136,13 @@ public class BlueChipSlot
         Level = level;
     }
 
-    public void LevelUp()
+    public void LevelUp(int addLevel)
     {
-        Level++;
+        Level += addLevel;        
     }
+    public void SetLevel(int level)
+    {
+        Level = level;
+    }
+
 }
