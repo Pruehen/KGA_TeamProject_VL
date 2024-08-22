@@ -178,6 +178,7 @@ public class PlayerMove : MonoBehaviour
 
         if (_PlayerMaster._PlayerInstanteState.TryStaminaConsumption(_PlayerMaster._PlayerInstanteState.DashCost))
         {
+            _PlayerMaster._PlayerInstanteState.SetInvincible(_PlayerMaster._PlayerInstanteState.DashTime);
             OnlyDash();
             _attackSystem.ReleaseLockMove();
             _attackSystem.ResetEndAttack();

@@ -818,4 +818,10 @@ public class PlayerInstanteState : MonoBehaviour
     {
         _PlayerMaster.OnKnockback();
     }
+
+    public void SetInvincible(float dashTime)
+    {
+        combat.SetInvincible(dashTime);
+        shield.SetInvincible(dashTime);
+    }
 }
