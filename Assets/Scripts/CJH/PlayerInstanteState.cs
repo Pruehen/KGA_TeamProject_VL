@@ -364,6 +364,7 @@ public class PlayerInstanteState : MonoBehaviour
         combat.OnDead += OnDead;
 
         shield.Init(gameObject, GetMaxShield());
+        shield.OnKnockback += OnKnockback;
 
         maxHpBase = _playerStatData.maxHp;
         MaxStamina = _playerStatData.MaxStamina;
