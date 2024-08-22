@@ -84,7 +84,7 @@ public class PlayerAttack : MonoBehaviour
     private void AbsorbingFall()
     {
         Debug.Log("AbsorbingFall");
-        ChangeAttackState(false);
+        //ChangeAttackState(false);
         _AttackSystem.AbsoberEnd();
     }
     private void ChangeAttackState(bool isMelee)
@@ -99,7 +99,7 @@ public class PlayerAttack : MonoBehaviour
         {
             CurrentAttackKind = PlayerAttackKind.RangeNormalAttack;
             _currentAttackMod = PlayerAttackKind.RangeNormalAttack;
-            _AttackSystem.ModTransform();
+            //_AttackSystem.ModTransform();
         }
     }
 

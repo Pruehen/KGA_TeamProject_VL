@@ -53,6 +53,7 @@ public class PlayerModChangeManager : MonoBehaviour
                 if (InputManager.Instance.IsLControlBtnClick == false && IsAbsorptState == true&& IsAttackState==false && isDashing == false)
                 {
                     IsAbsorptState = false;
+                    //EndAbsorptState();
                     EnterRangeMode();
                 }
                 break;
