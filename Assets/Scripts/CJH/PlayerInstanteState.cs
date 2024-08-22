@@ -820,4 +820,16 @@ public class PlayerInstanteState : MonoBehaviour
         combat.SetInvincible(dashTime);
         shield.SetInvincible(dashTime);
     }
+
+    public void SetSuperArmor(float time)
+    {
+        combat.SetSuperArmor(time);
+        shield.SetSuperArmor(time);
+    }
+
+    public void ResetSuperArmor()
+    {
+        combat.ResetSuperArmor();
+        shield.ResetSuperArmor();
+    }
 }

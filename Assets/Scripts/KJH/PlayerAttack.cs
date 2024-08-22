@@ -299,6 +299,15 @@ public class PlayerAttack : MonoBehaviour
         bool mel = AnimatorHelper.IsAnimationPlaying(_animator, 0, "Base Layer.Dash Range");
         return ran || mel;
     }
+
+    private void SetSuperArmor()
+    {
+        _PlayerMaster._PlayerInstanteState.SetSuperArmor(99999999f);
+    }
+    private void ResetSuperArmor()
+    {
+        _PlayerMaster._PlayerInstanteState.ResetSuperArmor();
+    }
     //IEnumerator Attack_Delayed(float delayTime)
     //{
     //    yield return new WaitForSeconds(delayTime);
