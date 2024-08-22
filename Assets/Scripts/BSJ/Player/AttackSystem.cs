@@ -18,13 +18,13 @@ public class AttackSystem : MonoBehaviour
     Skill _closeSkill; 
 
     [SerializeField] DamageBox _damageBox;
-    public void Init(Action onCharged = null, Action onChargeFail = null, Action onChargeEnd = null)
+    public void Init(Action onCharged = null, Action onChargeFail = null, Action onChargeEnd = null,Action onChargeStart = null)
     {
         TryGetComponent(out _animator);
         TryGetComponent(out _playerAttack);
         TryGetComponent(out _closeAttack);
         TryGetComponent(out _closeSkill);
-        _closeAttack.Init(_animator, onCharged, onChargeEnd, onChargeFail);
+        _closeAttack.Init(_animator, onCharged, onChargeEnd, onChargeFail,onChargeStart);
         _closeSkill.Init(_animator);
         _PlayerMaster = GetComponent<PlayerMaster>();
 
@@ -57,6 +57,7 @@ public class AttackSystem : MonoBehaviour
 
         _animator.SetInteger(hashAttackComboInitialIndex, comboIndex);
         _animator.SetFloat(hasAttackSpeed, _PlayerMaster._PlayerInstanteState.AttackSpeed);
+
     }
 
     public void StartSkill(int index, float skillGauge)
