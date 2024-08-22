@@ -453,43 +453,39 @@ public class PlayerInstanteState : MonoBehaviour
             float s = shield.GetHp();
             s -= dmg;
             shield.Damaged(dmg);
-            if (s <= 0)
+            if (s < 0)
             {
-                finalDmg = dmg + s;
+                dmg = -s;
             }
             UpdateShild();
             return;
         }
 
-        if (hp > 0)
+        combat.Damaged(dmg);
+        if (hp <= 0)
         {
-            combat.Damaged(dmg);
-            finalDmg = dmg;
-            if (hp <= 0)
+            if (passive_Defensive3 != null && passive_Defensive3.ActiveCount > 0)
             {
-                if (passive_Defensive3 != null && passive_Defensive3.ActiveCount > 0)
-                {
-                    passive_Defensive3.Active(out _holdTime_Passive_Defensive3);
+                passive_Defensive3.Active(out _holdTime_Passive_Defensive3);
 
-                    combat.SetInvincible(_holdTime_Passive_Defensive3);
-                    combat.ForceChangeHp(hp);
-                    finalDmg = 0;
+                combat.SetInvincible(_holdTime_Passive_Defensive3);
+                combat.ForceChangeHp(hp);
+                finalDmg = 0;
 
-                    Debug.Log("무적 발동!");
+                Debug.Log("무적 발동!");
 
-                }
-                if(combat.IsInvincible)
-                {
-                    hp = passive_Defensive3.HpHoldValue;
-                    finalDmg = 0;
-                }
-                //if (_holdTime_Passive_Defensive3 > 0)
-                //{
-                //    hp = passive_Defensive3.HpHoldValue;
-                //    Debug.Log("핫하 무적이다!");
-                //    finalDmg = 0;
-                //}
             }
+            if(combat.IsInvincible)
+            {
+                hp = passive_Defensive3.HpHoldValue;
+                finalDmg = 0;
+            }
+            //if (_holdTime_Passive_Defensive3 > 0)
+            //{
+            //    hp = passive_Defensive3.HpHoldValue;
+            //    Debug.Log("핫하 무적이다!");
+            //    finalDmg = 0;
+            //}
             UpdateHealth();
         }
     }
