@@ -68,8 +68,21 @@ public static class JsonDataManager
         return jsonCache.PassiveTableCache.dic[id];
     }
     public static UserData GetUserData()
-    {
+    {        
         return jsonCache.UserDataCache.GetUserData();
+    }
+    public static bool TryGetUserData(int index, out UserData userData)
+    {
+        userData = jsonCache.UserDataCache.GetUserData(index);
+        if (userData == null)
+            return false;
+        else
+            return true;
+    }
+    public static void SetUserDataIndex(int index)
+    {
+        jsonCache.UserDataCache.SetUserDataIndex(index);
+        JsonDataManager.DataSaveCommand(jsonCache.UserDataCache, UserDataList.FilePath());
     }
 }
 

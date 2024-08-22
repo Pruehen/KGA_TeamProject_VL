@@ -178,15 +178,21 @@ public class UserData
         PlayData = null;
     }
 
+    public static void Save()
+    {
+        JsonDataManager.DataSaveCommand(JsonDataManager.jsonCache.UserDataCache, UserDataList.FilePath());
+    }
+
     public void TryAddPassive(PassiveID id)
     {
         if(UsePassiveHashSet.Add(id))
         {
-            Debug.Log($"패시브 추가 : {id.DisplayName()}");
+            Save();
+            Debug.Log($"패시브 추가 : {id}");
         }
         else
         {
-            Debug.LogWarning($"이미 존재하는 패시브 : {id.DisplayName()}");
+            Debug.LogWarning($"이미 존재하는 패시브 : {id}");
         }
     }
 
@@ -194,11 +200,12 @@ public class UserData
     {
         if (UsePassiveHashSet.Remove(id))
         {
-            Debug.Log($"패시브 제거 : {id.DisplayName()}");
+            Save();
+            Debug.Log($"패시브 제거 : {id}");            
         }
         else
         {
-            Debug.LogWarning($"존재하지 않는 패시브 : {id.DisplayName()}");
+            Debug.LogWarning($"존재하지 않는 패시브 : {id}");
         }
     }
 }
@@ -228,7 +235,7 @@ public class PlayData
 public class UserDataList
 {
     public Dictionary<int, UserData> dic;
-    public int UseIndex { get; set; }
+    public int UseIndex { get; private set; }
     
     public UserDataList(Dictionary<int, UserData> dic)
     {
@@ -242,6 +249,7 @@ public class UserDataList
     {
         if(dic.ContainsKey(UseIndex))
         {
+            //Debug.Log($"{UseIndex} 세이브파일 로드");
             return dic[UseIndex];
         }
         else
@@ -249,6 +257,18 @@ public class UserDataList
             Debug.Log("해당하는 키가 없습니다. 세이브파일을 생성합니다.");
             dic.Add(UseIndex, new UserData(UseIndex));
             return dic[UseIndex];
+        }
+    }
+    public UserData GetUserData(int index)
+    {
+        if (dic.ContainsKey(index))
+        {
+            //Debug.Log($"{UseIndex} 세이브파일 로드");
+            return dic[index];
+        }
+        else
+        {
+            return null;
         }
     }
     public void SetUserDataIndex(int index)

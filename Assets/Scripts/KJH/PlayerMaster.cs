@@ -10,6 +10,7 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     public PlayerPassive _PlayerPassive { get; private set; }
     public Skill _PlayerSkill { get; private set; }
 
+    Animator _PlayerAnimator;
     PlayerMove _PlayerMove;
     PlayerAttack _PlayerAttack;
     PlayerModChangeManager _PlayerModChangeManager;    
@@ -117,12 +118,15 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     }
 
     private void Awake()
-    {
+    {        
         _PlayerInstanteState = GetComponent<PlayerInstanteState>();
         _PlayerEquipBlueChip = GetComponent<PlayerEquipBlueChip>();
         _PlayerBuff = GetComponent<PlayerBuff>();
         _PlayerPassive = GetComponent<PlayerPassive>();
         _PlayerSkill = GetComponent<Skill>();
+        _PlayerAnimator = GetComponent<Animator>();
+
+        UIManager.Instance.SetPlayerMaster(this);
 
         _PlayerPassive.Init();
         _PlayerInstanteState.Init();
@@ -163,5 +167,10 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     public bool IsDead()
     {
         return _PlayerInstanteState.IsDead;
+    }
+
+    public void OnKnockback()
+    {
+        _PlayerAnimator.SetTrigger("Hit");
     }
 }
