@@ -5,6 +5,11 @@ public class CheckUI : MonoBehaviour
 {
     Action excutionEvent;
 
+    private void Awake()
+    {
+        CheckUIDeActive();
+    }
+
     public void CheckUiActive_OnClick(Action callBack)
     {
         this.gameObject.SetActive(true);
