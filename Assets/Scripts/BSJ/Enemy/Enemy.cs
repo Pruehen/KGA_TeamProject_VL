@@ -108,7 +108,7 @@ public class Enemy : MonoBehaviour, ITargetable
     private void Init()
     {
         _combat = new Combat();
-        _combat.Init(_enemyData.Hp);
+        _combat.Init(gameObject, _enemyData.Hp);
         _combat.OnDead += OnDead;
 
 
