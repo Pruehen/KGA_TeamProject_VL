@@ -28,21 +28,24 @@ public class Combat
     public Action<Combat, float> OnAttack;
 
     private bool _isInvincible;
+    public bool IsInvincible { get => _isInvincible; private set => _isInvincible = value; }
     private float _invincibleTimer = .1f;
     public Action OnInvincible;
     public Action OnReleaseInvincible;
 
     private bool _isSuperArmor;
+    public bool IsSuperArmor {get => _isSuperArmor; private set => _isSuperArmor = value; }
     private float _superArmorTimer = .1f;
     public Action OnSuperArmor;
     public Action OnReleaseSuperArmor;
 
     private bool _isEvade;
+    public bool IsEvade {get => _isEvade; private set => _isEvade = value; }
     private float _evadeTimer = .1f;
     public Action OnEvade;
     public Action OnReleaseEvade;
 
-    public Action OnKnockBack;
+    public Action OnKnockback;
 
     public void Init(GameObject owner, float maxHp)
     {
@@ -50,7 +53,7 @@ public class Combat
         _defaultLayer = owner.layer;
         _maxHp = maxHp;
         _hp = maxHp;
-        ResetDead();
+        ResetCombat();
     }
 
     public void DoUpdate(float deltaTime)
@@ -61,11 +64,11 @@ public class Combat
         }
         else
         {
-            if (_isEvade)
+            if (IsEvade)
             {
                 _owner.layer = _defaultLayer;
                 OnReleaseEvade?.Invoke();
-                _isEvade = false;
+                IsEvade = false;
             }
         }
 
@@ -76,10 +79,10 @@ public class Combat
         }
         else
         {
-            if (_isInvincible)
+            if (IsInvincible)
             {
                 OnReleaseInvincible?.Invoke();
-                _isInvincible = false;
+                IsInvincible = false;
             }
         }
 
@@ -89,10 +92,10 @@ public class Combat
         }
         else
         {
-            if (_isSuperArmor)
+            if (IsSuperArmor)
             {
                 OnReleaseSuperArmor?.Invoke();
-                _isSuperArmor = false;
+                IsSuperArmor = false;
             }
         }
     }
@@ -106,7 +109,7 @@ public class Combat
 
     private bool IsDamageable()
     {
-        if (_isInvincible)
+        if (IsInvincible)
         {
             return false;
         }
@@ -130,9 +133,9 @@ public class Combat
         if (!IsDamageable())
             return false;
 
-        if (!_isSuperArmor)
+        if (!IsSuperArmor)
         {
-            OnKnockBack?.Invoke();
+            OnKnockback?.Invoke();
         }
 
         SetInvincible(_invincibleTimeOnHit);
@@ -172,7 +175,7 @@ public class Combat
     {
         Damaged(9999999999f);
     }
-    public void ResetDead()
+    public void ResetCombat()
     {
         ResetHp();
         _dead = false;
@@ -230,4 +233,27 @@ public class Combat
         OnReleaseInvincible?.Invoke();
     }
 
+    public void SetMaxHp(float v)
+    {
+        _maxHp = v;
+    }
+
+    public float GetHpRatio()
+    {
+        return _hp / GetMaxHp();
+    }
+
+    public void ForceChangeHp(float value)
+    {
+        _hp += value;
+        if (_hp > GetMaxHp())
+        {
+            _hp = GetMaxHp();
+        }
+        if (_hp < 0)
+        {
+            _hp = 1;
+        }
+        _dead = false;
+    }
 }

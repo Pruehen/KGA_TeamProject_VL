@@ -149,12 +149,12 @@ AnimatorStateMachine:
   - {fileID: 6772834467654121427}
   - {fileID: -9043577968306277642}
   m_StateMachineTransitions:
-  - first: {fileID: -5639691085275524859}
-    second:
-    - {fileID: -1672566911971974958}
   - first: {fileID: 788471135628865215}
     second:
     - {fileID: 5114151607503648621}
+  - first: {fileID: -5639691085275524859}
+    second:
+    - {fileID: -1672566911971974958}
   m_StateMachineBehaviours:
   - {fileID: -2504090561729257136}
   - {fileID: -3289069495955569445}
@@ -618,7 +618,10 @@ AnimatorStateTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions: []
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: Hit
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -7600051505360966236}
   m_Solo: 0
@@ -1833,6 +1836,12 @@ AnimatorController:
     m_Controller: {fileID: 9100000}
   - m_Name: AttackMod
     m_Type: 3
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
+  - m_Name: Hit
+    m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
