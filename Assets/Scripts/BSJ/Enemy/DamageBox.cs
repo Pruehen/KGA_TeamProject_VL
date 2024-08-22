@@ -70,7 +70,7 @@ public class DamageBox : MonoBehaviour
                     continue;
                 }
             }
-            combat.Hit(_damage, _owner.transform);
+            combat.Hit(_damage);
             onHit = true;
         }
         if (onHit)

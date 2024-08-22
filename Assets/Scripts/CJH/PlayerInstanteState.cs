@@ -292,6 +292,8 @@ public class PlayerInstanteState : MonoBehaviour
     {
         TestSkill();
 
+        Passive_Offensive2_Active_OnUpdate();
+
         staminaRecoveryDelayValue += Time.deltaTime;
         if (staminaRecoveryDelayValue >= staminaRecoveryDelay)
         {
@@ -383,7 +385,7 @@ public class PlayerInstanteState : MonoBehaviour
         UpdateStamina();
     }
 
-    public void Hit(float dmg, out float finalDmg, Transform attacker)
+    public void Hit(float dmg, out float finalDmg)
     {
         finalDmg = dmg;
 
