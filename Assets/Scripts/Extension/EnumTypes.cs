@@ -112,7 +112,9 @@ namespace EnumTypes
         RangeSkillAttack4,
         MeleeSkillAttack1,
         MeleeSkillAttack2,
-        MeleeSkillAttack3,
+        MeleeSkillAttack3_1,
+        MeleeSkillAttack3_2,
+        MeleeSkillAttack3_3,
         MeleeSkillAttack4
     }
 }

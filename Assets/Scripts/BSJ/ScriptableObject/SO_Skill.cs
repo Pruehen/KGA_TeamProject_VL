@@ -12,9 +12,8 @@ public class SO_Skill : ScriptableObject
     public float _meleeSkill1 = 10f;
     public float _meleeSkill2 = 10f;
     public float _meleeSkill3_1 = 0.25f;
-    public float _meleeSkill3_2 = 0.25f;
-    public float _meleeSkill3_3 = 0.5f;
-    public float _meleeSkill3_4 = 10f;
+    public float _meleeSkill3_2 = 0.5f;
+    public float _meleeSkill3_3 = 10f;
     public float _meleeSkill4 = 15f;
     
     [Header("스킬 범위")]
