@@ -81,6 +81,7 @@ public class AttackSystem : MonoBehaviour
     public void ReleaseLockMove()
     {
         _attackLcokMove = false;
+        Debug.Log("ReleaseLockMove");
     }
 
     public void OnRelease()
@@ -134,6 +135,8 @@ public class AttackSystem : MonoBehaviour
     {
         _attackLcokMove = false;
         _closeAttack.ChargeFail();
+        Debug.Log("대머리");
+        
     }
     public void OnUseSkillGauge()
     {
