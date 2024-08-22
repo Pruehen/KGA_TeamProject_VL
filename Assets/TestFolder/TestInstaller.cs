@@ -5,17 +5,24 @@ public class TestInstaller : MonoInstaller
 {
     public override void InstallBindings()
     {
-        Container.Bind<string>().FromInstance("Hello Zenject!");
-        Container.Bind<Greeter>().AsSingle().NonLazy();
-    }
-    
+        //Greeter을 바인딩
+        Container.Bind<Greeter>().AsSingle();
 
-    public class Greeter
+       
+      
+    }
+
+}
+
+public class Greeter
+{
+    public Greeter()
     {
-        public Greeter(string message)
-        {
-            Debug.Log(message);
-        }
+        Debug.Log("Greeter함수 이다.");
+    }
+    public void LogMsg(string masage)
+    { 
+      Debug.Log("LogMsg : " + masage);
     }
 
 }

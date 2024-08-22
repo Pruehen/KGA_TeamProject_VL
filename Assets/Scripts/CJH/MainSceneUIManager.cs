@@ -1,15 +1,11 @@
-using System;
 using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 
 
-public class MainSceneUIManager : MonoBehaviour
+public class MainSceneUIManager : SceneSingleton<MainSceneUIManager>
 {
-    public static MainSceneUIManager Instance;
-
     [SerializeField] GameObject startPanel;
     [SerializeField] GameObject passiveUI;
     [SerializeField] GameObject overwriteStartPanel;
@@ -17,8 +13,7 @@ public class MainSceneUIManager : MonoBehaviour
     [SerializeField] GameObject[] selectSlot;
     Text[] slotText;
 
-
-
+    SaveFillSlot _selectSlotTemp;
 
     private void Awake()
     {
@@ -32,7 +27,7 @@ public class MainSceneUIManager : MonoBehaviour
             slotText[i] = selectSlot[i].GetComponentInChildren<Text>();
         }
 
-        Instance = this;
+       
         EventSystem.current.SetSelectedGameObject(startButton.gameObject);
         InputManager.Instance.PropertyChanged += OnInputPropertyChanged;
     }
@@ -63,19 +58,30 @@ public class MainSceneUIManager : MonoBehaviour
                 EnterMainScene_OnEscClick();
             }             
         }
+
+
+
     }
 
+    int _slotIndexTemp = 0;
     public void OnClick_NewGameButton(int slotIndex)//슬롯 선택 시 호출
     {        
         if (overwriteStartPanel.activeSelf == true)
         {
-            Debug.Log(slotIndex);
-            JsonDataManager.SetUserDataIndex(slotIndex);
-            overwriteStartPanel.SetActive(false);
-            passiveUI.SetActive(true);
-            PassiveUIManager.Instance.Init(JsonDataManager.GetUserData());
+            _slotIndexTemp = slotIndex;
+            CheckUIManager.Instance.CheckUiActive_OnClick(SelectSlot, "현재 슬롯 데이터를 로드하시겠습니까?");
         }
     }
+
+    void SelectSlot()
+    {
+        Debug.Log(_slotIndexTemp);
+        JsonDataManager.SetUserDataIndex(_slotIndexTemp);
+        overwriteStartPanel.SetActive(false);
+        passiveUI.SetActive(true);
+        PassiveUIManager.Instance.Init(JsonDataManager.GetUserData());
+    }
+
     void EnterMainScene_OnEscClick()
     {
         Debug.Log("뒤로");
@@ -93,7 +99,7 @@ public class MainSceneUIManager : MonoBehaviour
                 if (InputManager.Instance.IsInteractiveBtnClick == true)
                 {
                     Button selectedButton = EventSystem.current.currentSelectedGameObject?.GetComponent<Button>();
-                    selectedButton.onClick.Invoke();
+                    selectedButton.onClick.Invoke();   
                 }
                 break;
         }
@@ -114,7 +120,7 @@ public class MainSceneUIManager : MonoBehaviour
 
             for (int i = 0; i < selectSlot.Length; i++)
             {
-                selectSlot[i].GetComponent<SaveFillSlot>().SetData(i);
+                selectSlot[i].GetComponent<SaveFillSlot>().SetData(i);              
             }
         }      
     }

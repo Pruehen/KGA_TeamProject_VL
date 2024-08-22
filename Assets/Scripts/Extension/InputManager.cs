@@ -148,7 +148,7 @@ public class InputManager : SceneSingleton<InputManager>
         IsLControlBtnClick = value.isPressed;
     }
 
-    void OnInventory(InputValue value)//T 버튼 클릭
+    void OnInventory(InputValue value)//Tab 버튼 클릭
     {
         IsChipUiToggleBtnClick = value.isPressed;
     }
