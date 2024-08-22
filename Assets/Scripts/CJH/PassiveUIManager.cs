@@ -1,16 +1,14 @@
 using EnumTypes;
 using System.Collections.Generic;
-using System.ComponentModel;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PassiveUIManager : SceneSingleton<PassiveUIManager>
 {
     [SerializeField] Button FalstButton;
 
-    [SerializeField] List<Sprite> Icon_Image = new List<Sprite>();
     [SerializeField] List<PassiveUI> PassiveUI = new List<PassiveUI>();
 
     public Dictionary<PassiveID, PassiveUI> ID_PassiveUI_Dic = new Dictionary<PassiveID, PassiveUI>();
@@ -19,121 +17,177 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
     public List<PassiveUI> PassiveUIGroup_Deffensive = new List<PassiveUI>();
     public List<PassiveUI> PassiveUIGroup_Utility = new List<PassiveUI>();
 
+    int useOffensivePassiveCount = 0;
+    int useDeffensivePassiveCount = 0;
+    int useUtilityPassiveCount = 0;
+
+    [SerializeField] Text functionText;
+    [SerializeField] Text costText;
+    [SerializeField] Text effectText;
+    
+    [SerializeField] int Max_Passive_Count = 2;
+
     private void Awake()
     {
-        EventSystem.current.SetSelectedGameObject(FalstButton.gameObject);
-        InputManager.Instance.PropertyChanged += OnInputPropertyChanged;
-
         PassiveUI.AddRange(FindObjectsOfType<PassiveUI>());
-        LoadIconImages();
     }
-
-    private void Start()
+    public void Init(UserData userData)
     {
-        IconImage();
-    }
+        EventSystem.current.SetSelectedGameObject(FalstButton.gameObject);
 
-
-
-    void OnInputPropertyChanged(object sender, PropertyChangedEventArgs e)
-    {
-        switch (e.PropertyName)
+        foreach (var item in PassiveUI)
         {
-            case nameof(InputManager.Instance.IsInteractiveBtnClick):
-                if (InputManager.Instance.IsInteractiveBtnClick == true)
-                {                  
-                    if (gameObject.activeSelf == true)
-                    {
-                        Button selectedButton = EventSystem.current.currentSelectedGameObject?.GetComponent<Button>();
-                        selectedButton.onClick.Invoke();                        
+            item.ImageChange();
+        }
+        InfoText(PassiveID.Offensive1);
+        GetSlotData_OnInit(userData);
+    }
 
-                    }
-                    else
-                    {
-                        return;
-                    }
-                }
-                break;
+    void GetSlotData_OnInit(UserData userData)
+    {
+        foreach (var item in ID_PassiveUI_Dic)
+        {
+            item.Value.SetPassiveId(item.Key);
+        }
+
+        useOffensivePassiveCount = 0;
+        useDeffensivePassiveCount = 0;
+        useUtilityPassiveCount = 0;
+
+        foreach (var item in PassiveUIGroup_Offensive)
+        {
+            item.SetPassiveId(PassiveID.None);
+        }
+        foreach (var item in PassiveUIGroup_Deffensive)
+        {
+            item.SetPassiveId(PassiveID.None);
+        }
+        foreach (var item in PassiveUIGroup_Utility)
+        {
+            item.SetPassiveId(PassiveID.None);
+        }
+
+        Debug.Log($"{userData.SaveDataIndex}번째 데이터 로드");
+        foreach (var item in userData.UsePassiveHashSet)
+        {            
+            ID_PassiveUI_Dic[item].OnClick_TryEquip();
+        }
+    }
+   
+    public void InfoText(PassiveID passiveID)
+    {
+        if (passiveID == PassiveID.None)
+        {
+            functionText.text = "";
+            costText.gameObject.SetActive(false);
+            costText.text = "";
+            effectText.text = "";
+        }
+        else
+        {
+            PassiveData data = JsonDataManager.GetPassive(passiveID);
+
+            functionText.text = data.PrintName();
+            costText.gameObject.SetActive(true);
+            costText.text = data.Cost.ToString();
+            effectText.text = data.PrintInfo();
         }
     }
 
-    public void IconImage()
-    {
-        for (int i = 0; i < PassiveUI.Count; i++)
-        {
-            if (i < Icon_Image.Count)
-            {
-                PassiveUI[i].ImageChange(Icon_Image);
-            }
-            else
-            {
-                Debug.LogWarning($"Icon_Image 리스트에 충분한 이미지가 없습니다. 인덱스 {i}에 대한 이미지를 찾을 수 없습니다.");
-                return;
-            }
-        }
-    }
-    public void Command_IconImage(PassiveUI targetUI)
-    {
-        targetUI.ImageChange(Icon_Image);
-    }    
-    public void Try_EquipPassive(PassiveUI targetUI)
+
+
+    public bool Try_EquipPassive(PassiveUI targetUI)
     {
         switch (targetUI.passiveID)
         {
             case PassiveID.Offensive1:
-                break;
             case PassiveID.Offensive2:
-                break;
             case PassiveID.Offensive3:
-                break;
             case PassiveID.Offensive4:
-                break;
             case PassiveID.Offensive5:
+                if (Max_Passive_Count > useOffensivePassiveCount)
+                {
+                    PassiveUIGroup_Offensive[useOffensivePassiveCount].passiveID = targetUI.passiveID;
+                    PassiveUIGroup_Offensive[useOffensivePassiveCount].ImageChange();
+                    useOffensivePassiveCount++;
+                    return true;
+                }
                 break;
             case PassiveID.Defensive1:
-                break;
             case PassiveID.Defensive2:
-                break;
             case PassiveID.Defensive3:
-                break;
             case PassiveID.Defensive4:
-                break;
             case PassiveID.Defensive5:
+                if (Max_Passive_Count > useDeffensivePassiveCount)
+                {
+                    PassiveUIGroup_Deffensive[useDeffensivePassiveCount].passiveID = targetUI.passiveID;
+                    PassiveUIGroup_Deffensive[useDeffensivePassiveCount].ImageChange();
+                    useDeffensivePassiveCount++;
+                    return true;
+                }
                 break;
             case PassiveID.Utility1:
-                break;
             case PassiveID.Utility2:
-                break;
             case PassiveID.Utility3:
-                break;
             case PassiveID.Utility4:
-                break;
             case PassiveID.Utility5:
+                if (Max_Passive_Count > useUtilityPassiveCount)
+                {
+                    PassiveUIGroup_Utility[useUtilityPassiveCount].passiveID = targetUI.passiveID;
+                    PassiveUIGroup_Utility[useUtilityPassiveCount].ImageChange();
+                    useUtilityPassiveCount++;
+                    return true;
+                }
                 break;
             case PassiveID.None:
+                Debug.LogWarning("패시브 ID가 None입니다. 아무 작업도 수행하지 않습니다.");
+                return false;                
+        }
+        return false;
+    }
+    public void Try_EquipUnPassive(PassiveUI targetUI)
+    {
+        PassiveID targetUiPassiveID = targetUI.passiveID;
+
+        switch (targetUiPassiveID)
+        {
+            case PassiveID.Offensive1:
+            case PassiveID.Offensive2:
+            case PassiveID.Offensive3:
+            case PassiveID.Offensive4:
+            case PassiveID.Offensive5:
+                useOffensivePassiveCount--;
+                ID_PassiveUI_Dic[targetUiPassiveID].passiveID = targetUiPassiveID;
+                ID_PassiveUI_Dic[targetUiPassiveID].ImageChange();
                 break;
-            default:
+            case PassiveID.Defensive1:
+            case PassiveID.Defensive2:
+            case PassiveID.Defensive3:
+            case PassiveID.Defensive4:
+            case PassiveID.Defensive5:
+                useDeffensivePassiveCount--;
+                ID_PassiveUI_Dic[targetUiPassiveID].passiveID = targetUiPassiveID;
+                ID_PassiveUI_Dic[targetUiPassiveID].ImageChange();
+                break;
+            case PassiveID.Utility1:
+            case PassiveID.Utility2:
+            case PassiveID.Utility3:
+            case PassiveID.Utility4:
+            case PassiveID.Utility5:
+                useUtilityPassiveCount--;
+                ID_PassiveUI_Dic[targetUiPassiveID].passiveID = targetUiPassiveID;
+                ID_PassiveUI_Dic[targetUiPassiveID].ImageChange();
+                break;
+            case PassiveID.None:
+                Debug.LogWarning("패시브 ID가 None입니다. 아무 작업도 수행하지 않습니다.");
                 break;
         }
     }
 
-    private void LoadIconImages()
+
+    public void OnClickStartButton()
     {
-        Icon_Image.Clear();
-        string path = "Assets/NewAssets/아웃게임";
-        string[] guids = AssetDatabase.FindAssets("t:Sprite", new[] { path });
-
-        foreach (string guid in guids)
-        {
-            string assetPath = AssetDatabase.GUIDToAssetPath(guid);
-            Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
-            if (sprite != null)
-            {
-                Icon_Image.Add(sprite);
-            }
-        }
-
-        Debug.Log($"{Icon_Image.Count}개의 이미지를 불러왔습니다.");
+        SceneManager.LoadScene("Jihe");
     }
 
 }

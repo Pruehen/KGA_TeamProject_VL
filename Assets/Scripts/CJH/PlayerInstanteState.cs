@@ -20,47 +20,152 @@ public class PlayerInstanteState : MonoBehaviour
         get { return _isMeleeMode; }
         set
         {
-            _isMeleeMode = value;
-            OnMeleeModeChanged?.Invoke(_isMeleeMode);
+            if (_isMeleeMode != value)
+            {
+                _isMeleeMode = value;
+                OnMeleeModeChanged?.Invoke(_isMeleeMode);
+                OnMeleeModeChange();
+            }
         }
     }
 
     public bool IsDead { get; private set; }
 
     [SerializeField] float maxHpBase;
-    public float MaxHpMulti { get; set; }
+    public float MaxHpMulti { get; set; } = 1f;
     public float GetMaxHp() { return maxHpBase * MaxHpMulti; }
     [SerializeField] float maxShieldBase;
-    public float MaxShieldMulti { get; set; }
-    float GetMaxShield() { return maxShieldBase * MaxShieldMulti; }
+    public float MaxShieldMulti { get; set; } = 1f;
+    public float GetMaxShield() { return maxShieldBase * MaxShieldMulti; }
     [SerializeField] float MaxStamina;
     [SerializeField] float staminaRecoverySpeed;
     [SerializeField] float staminaRecoveryDelay;
-    float staminaRecoveryDelayValue = 0;
+    float staminaRecoveryDelayValue = 99f;
 
-    [SerializeField] float MaxskillGauge = 400;
-    float skillGaugeRecoveryRestTime = 0;
+    [SerializeField] float MaxskillGauge = 400f;
+    float skillGaugeRecoveryRestTime = 0f;
+    public float SkillGaugeRecoveryMulti { get; set; } = 1f;
     [SerializeField] int maxBullets = 50;
     [SerializeField] int maxMeleeBullets = 50;
+    public void Passive_Utility5_Active(int value1, int value2) { maxBullets += value1; maxMeleeBullets += value2; }
 
     [SerializeField] float attackSpeed = 1f;
     [SerializeField] float attackPowerBase;
-    public float AttackPowerMulti { get; set; }
-    float GetAttackPower() { return attackPowerBase * AttackPowerMulti; }
-    [SerializeField] float attackRange = 1f;
-    [SerializeField] float skillPower;
-    public float SkillPowerMulti { get; set; }
-    float GetSkillPower() { return skillPower * SkillPowerMulti; }
+    public float AttackPowerMulti { get; set; } = 1f;
+    public float GetAttackPower() { return attackPowerBase * AttackPowerMulti; }
+    [SerializeField] float attackRangeBase = 1f;
+    public float attackRangeMulti { get; set; } = 1f;
+    public float GetAttackRange() { return attackRangeBase * attackRangeMulti; }
+    [SerializeField] float skillRangeBase = 1f;
+    public float skillRangeMulti { get; set; } = 1f;
+    public float GetSkillRange() { return skillRangeBase * skillRangeMulti; }
+    [SerializeField] float skillPowerBase;
+    public float SkillPowerMulti { get; set; } = 1f;
+    public float GetSkillPower() { return skillPowerBase * SkillPowerMulti; }
     public float DmgMulti { get; set; } = 1f;
 
-    [SerializeField] public float DashTime = .5f;
-    [SerializeField] public float DashForce = 3f;
-    [SerializeField] public float DashCost = 300f;
+    public int Gold { get; set; }
 
+    [SerializeField] public float _dashTime = .5f;
+    [SerializeField] public float _dashForce = 3f;
+    [SerializeField] public float _dashCost = 300f;
+
+    public float DashTime
+    {
+        get { return _dashTime * (1f + DashTimeMulti); }
+        set { _dashTime = value; }
+    }
+    public float DashForce
+    {
+        get { return _dashForce * (1f + DashForceMulti); }
+        set { _dashForce = value; }
+    }
+    public float DashCost
+    {
+        get { return _dashCost * (1f + DashCostMulti); }
+        set { _dashCost = value; }
+    }
+
+    public float DashTimeMulti = 0f;
+    public float DashForceMulti = 0f;
+    public float DashCostMulti = 0f;
+
+
+    Passive_Offensive1 passive_Offensive1;
+    Passive_Offensive2 passive_Offensive2;
+    Passive_Offensive3 passive_Offensive3;
+    Passive_Offensive4 passive_Offensive4;
+    Passive_Offensive5 passive_Offensive5;
+
+    Passive_Defensive1 passive_Defensive1;
+    Passive_Defensive2 passive_Defensive2;
+    Passive_Defensive3 passive_Defensive3;
+    Passive_Defensive4 passive_Defensive4;
+    Passive_Defensive5 passive_Defensive5;
+
+    Passive_Utility1 passive_Utility1;
+    Passive_Utility2 passive_Utility2;
+    Passive_Utility3 passive_Utility3;
+    Passive_Utility4 passive_Utility4;
+    Passive_Utility5 passive_Utility5;
+
+    [SerializeField] LayerMask LayerMask_EnemyCheck;
+    void Passive_Offensive2_Active_OnUpdate()
+    {
+        if(passive_Offensive2 != null)
+        {
+            Collider[] colliders = Physics.OverlapSphere(this.transform.position, passive_Offensive2.CheckDistance_ToEnemy, LayerMask_EnemyCheck);
+            foreach (var item in colliders)
+            {
+                if(item.transform.parent != null && item.transform.parent.TryGetComponent(out Enemy enemy))
+                {
+                    enemy.ActiveDebuff_Passive_Offensive2(passive_Offensive2.DmgGain);
+                }
+            }
+        }
+    }
+
+    [SerializeField] int executionCount = 0;//체력2 패시브에서 사용
+    public int ExecutionCount
+    {
+        get { return executionCount; }        
+    }    
+    public void OnEnemyDestroy()
+    {
+        Passive_Defensive2_AddExcutionCount();
+        Passive_Defensive4_Active();
+    }
+    
+    void Passive_Defensive2_AddExcutionCount()
+    {
+        executionCount++;
+        if (passive_Defensive2 != null && executionCount >= passive_Defensive2.CountCheck)
+        {
+            executionCount = 0;
+            passive_Defensive2.Active();
+        }
+    }
+
+    void Passive_Defensive4_Active()
+    {
+        if(passive_Defensive4 != null)
+        {
+            passive_Defensive4.Active();
+        }
+    }
+    public void OnMeleeModeChange()
+    {
+        if(passive_Defensive5 != null && IsMeleeMode == false)
+        {
+            passive_Defensive5.Active();
+        }
+    }
+
+    float _holdTime_Passive_Defensive3 = 0;//체력3 패시브에서 사용
 
     public float GetDmg(PlayerAttackKind type, bool isLastAttack = false)
     {
-        float baseDmg = GetAttackPower() * GetDamageMultiByAttakcType(type,isLastAttack);// * coefficient;
+        float baseDmg = GetAttackPower() * GetDamageMultiByAttakcType(type, isLastAttack);// * coefficient;
         float dmgGain = DmgMulti;
         if (type == PlayerAttackKind.MeleeChargedAttack)//차지 공격일 경우
         {
@@ -70,25 +175,50 @@ public class PlayerInstanteState : MonoBehaviour
                 baseDmg += ((hp + Shield) * JsonDataManager.GetBlueChipData(BlueChipID.Melee1).Level_VelueList[level][0]) * 0.01f;
             }
         }
-        if (type == PlayerAttackKind.MeleeNormalAttack || type == PlayerAttackKind.RangeNormalAttack)//원거리 평타, 근거리 평타일 경우
+
+        if (type == PlayerAttackKind.MeleeNormalAttack || type == PlayerAttackKind.MeleeDashAttack || type == PlayerAttackKind.MeleeChargedAttack ||
+            type == PlayerAttackKind.RangeDashAttack || type == PlayerAttackKind.RangeNormalAttack)//평타, 대시공격, 차지공격일 경우
         {
             if (_PlayerMaster._PlayerBuff.blueChip4_Buff_NextHitAddDmg.TryDequeue(out float addDmgGain))
             {
                 dmgGain += addDmgGain;
                 Debug.Log("피해증가 버프 소모");
             }
-            int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Generic2);
-            if (blueChip7Level > 0)
+        }
+
+        //"원거리 공격 시 탄환을 {0}만큼 추가로 소모. 원거리 타격 피해량 {1}% 증가. 근거리 공격 시 근접 게이지를 {2}만큼 추가로 소모. 근거리 타격 피해량 {3}% 증가",
+        int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Generic2);
+        if (blueChip7Level > 0)
+        {
+            if (type == PlayerAttackKind.MeleeNormalAttack || type == PlayerAttackKind.MeleeDashAttack || type == PlayerAttackKind.MeleeChargedAttack)//근접 공격일 경우
             {
-                float addDmg = JsonDataManager.GetBlueChipData(BlueChipID.Generic2).Level_VelueList[blueChip7Level][1] * 0.01f;
-                dmgGain += addDmg;
+                if(meleeBullets > 0)
+                {
+                    float addDmg = JsonDataManager.GetBlueChipData(BlueChipID.Generic2).Level_VelueList[blueChip7Level][1] * 0.01f;
+                    dmgGain += addDmg;
+                }
+            }
+            else if(type == PlayerAttackKind.RangeDashAttack || type == PlayerAttackKind.RangeNormalAttack)//원거리 공격일 경우
+            {
+                if (bullets > 0)
+                {
+                    float addDmg = JsonDataManager.GetBlueChipData(BlueChipID.Generic2).Level_VelueList[blueChip7Level][1] * 0.01f;
+                    dmgGain += addDmg;
+                }
             }
         }
-        return baseDmg * dmgGain;
+        //=========================================================================================================================================================
+
+        float finalDmg = baseDmg * dmgGain;
+        if (passive_Offensive5 != null)
+        {
+            finalDmg += passive_Offensive5.ValueChangeRatio * (GetSkillPower());
+        }
+        return finalDmg;
     }
     public float GetRange(PlayerAttackKind type, int combo)
     {
-        float baseRange = attackRange;// * coefficient;
+        float baseRange = GetAttackRange();// * coefficient;
         float rangeGain = 1;
         if (type == PlayerAttackKind.MeleeChargedAttack || type == PlayerAttackKind.RangeNormalAttack)//차지 공격일 경우
         {
@@ -105,29 +235,29 @@ public class PlayerInstanteState : MonoBehaviour
         return baseRange * rangeGain;
     }
 
-    public float GetSkillDmg(PlayerAttackKind type)
+    public float GetSkillDmg()
     {
-        float baseDmg = skillPower;// * coefficient;
+        float baseDmg = GetSkillPower();// * coefficient;
         float dmgGain = 1;
 
-            int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Melee1);
-            if (level > 0)
-            {
-                baseDmg += ((hp + Shield) * JsonDataManager.GetBlueChipData(BlueChipID.Melee1).Level_VelueList[level][0]) * 0.01f;
-            }
+        int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Melee1);
+        if (level > 0)
+        {
+            baseDmg += ((hp + Shield) * JsonDataManager.GetBlueChipData(BlueChipID.Melee1).Level_VelueList[level][0]) * 0.01f;
+        }
 
 
-            if (_PlayerMaster._PlayerBuff.blueChip4_Buff_NextHitAddDmg.TryDequeue(out float addDmgGain))
-            {
-                dmgGain += addDmgGain;
-                Debug.Log("피해증가 버프 소모");
-            }
-            int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Generic2);
-            if (blueChip7Level > 0)
-            {
-                float addDmg = JsonDataManager.GetBlueChipData(BlueChipID.Generic2).Level_VelueList[blueChip7Level][1] * 0.01f;
-                dmgGain += addDmg;
-            }
+        if (_PlayerMaster._PlayerBuff.blueChip4_Buff_NextHitAddDmg.TryDequeue(out float addDmgGain))
+        {
+            dmgGain += addDmgGain;
+            Debug.Log("피해증가 버프 소모");
+        }
+        int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Generic2);
+        if (blueChip7Level > 0)
+        {
+            float addDmg = JsonDataManager.GetBlueChipData(BlueChipID.Generic2).Level_VelueList[blueChip7Level][1] * 0.01f;
+            dmgGain += addDmg;
+        }
         return baseDmg * dmgGain;
     }
 
@@ -149,7 +279,6 @@ public class PlayerInstanteState : MonoBehaviour
         _PlayerMaster = GetComponent<PlayerMaster>();
 
         Restore();
-        UIManager.Instance.setPlayer(this);
     }
     private void Start()
     {
@@ -162,6 +291,9 @@ public class PlayerInstanteState : MonoBehaviour
     private void Update()
     {
         TestSkill();
+
+        Passive_Offensive2_Active_OnUpdate();
+
         staminaRecoveryDelayValue += Time.deltaTime;
         if (staminaRecoveryDelayValue >= staminaRecoveryDelay)
         {
@@ -177,9 +309,11 @@ public class PlayerInstanteState : MonoBehaviour
                 UseSkillGauge(9999);
             }
         }
+
+        _holdTime_Passive_Defensive3 -= Time.deltaTime;
     }
 
-    public void Init(PlayerPassive playerPassive)
+    public void Init()
     {
         maxHpBase = _playerStatData.maxHp;
         MaxStamina = _playerStatData.MaxStamina;
@@ -192,7 +326,7 @@ public class PlayerInstanteState : MonoBehaviour
 
         attackSpeed = _playerStatData.attackSpeed;
         attackPowerBase = _playerStatData.attackPower;
-        skillPower = _playerStatData.skillPower;
+        skillPowerBase = _playerStatData.skillPower;
 
         moveSpeed = _playerStatData.moveSpeed;
 
@@ -201,25 +335,33 @@ public class PlayerInstanteState : MonoBehaviour
         DashTime = _playerStatData.dashTime;
         DashForce = _playerStatData.dashForce;
         DashCost = _playerStatData.dashCost;
+        InitPassive();
+        Restore();
     }
 
     //스태미나 소모 
     public bool TryStaminaConsumption(float power)
     {
-        if (stamina > power)
+        if (stamina <= 0)
+        {
+            return false;
+        }
+        else
         {
             stamina -= power;
-            staminaRecoveryDelayValue = 0;
+            if (stamina <= 0)
+            {
+                stamina = 0;
+                staminaRecoveryDelayValue = 0;
+            }
             UpdateStamina();
             return true;
         }
-        else
-            return false;
     }
 
     public void StaminaRatioChange(float value)
     {
-        stamina += MaxStamina * value * 0.01f;
+        stamina += MaxStamina * value;
         if (stamina > MaxStamina)
         {
             stamina = MaxStamina;
@@ -243,13 +385,23 @@ public class PlayerInstanteState : MonoBehaviour
         UpdateStamina();
     }
 
-    public void Hit(float dmg)
+    public void Hit(float dmg, out float finalDmg)
     {
-        if (Shield > 0)
+        finalDmg = dmg;
+
+        if (passive_Defensive4 != null)
         {
+            dmg -= dmg * passive_Defensive4.Value_DamageReductionPercentage * 0.01f;
+            passive_Defensive4.DeActive();
+        }
+
+        if (Shield > 0)
+        {            
             Shield -= dmg;
+            finalDmg = dmg;
             if (Shield <= 0)
             {
+                finalDmg = dmg + Shield;
                 Shield = 0;
             }
             UpdateShild();
@@ -259,13 +411,35 @@ public class PlayerInstanteState : MonoBehaviour
         if (hp > 0)
         {
             hp -= dmg;
+            finalDmg = dmg;
             if (hp <= 0)
             {
-                hp = 0;
-                IsDead = true;
+                if (passive_Defensive3 != null && passive_Defensive3.ActiveCount > 0)
+                {
+                    passive_Defensive3.Active(out _holdTime_Passive_Defensive3);                    
+                    Debug.Log("무적 발동!");
+
+                }
+                if (_holdTime_Passive_Defensive3 > 0)
+                {
+                    hp = passive_Defensive3.HpHoldValue;
+                    Debug.Log("핫하 무적이다!");
+                    finalDmg = 0;
+                }
+                else
+                {
+                    hp = 0;
+                    IsDead = true;
+                    OnDead();
+                }
             }
             UpdateHealth();
         }
+    }
+    void OnDead()
+    {
+        Debug.Log("플레이어 사망");
+        Destroy(this.gameObject);
     }
 
     public void ChangeHp(float value)
@@ -377,7 +551,7 @@ public class PlayerInstanteState : MonoBehaviour
     }
     public void SkillGaugeRecovery(float value)
     {
-        skillGauge += value;
+        skillGauge += value * SkillGaugeRecoveryMulti;
 
         if (skillGauge > MaxskillGauge)
         {
@@ -386,10 +560,11 @@ public class PlayerInstanteState : MonoBehaviour
 
         skillGaugeRecoveryRestTime = 0;
         UpdateSkillGauge();
+        Debug.Log($"SkillGauge recover {value}");
     }
-    public void SkillGaugeRecovery(PlayerAttackKind attackKind, bool isLastAttack)
+    public void SkillGaugeRecovery(PlayerAttackKind attackMod, PlayerAttackKind attackKind, bool isLastAttack)
     {
-        if (attackKind == PlayerAttackKind.RangeNormalAttack)
+        if (attackMod == PlayerAttackKind.RangeNormalAttack)
         {
             bool hasBullet = bullets > 0;
             SkillGaugeRecovery(GetSkillGainOnHit(attackKind, hasBullet, isLastAttack));
@@ -425,6 +600,101 @@ public class PlayerInstanteState : MonoBehaviour
         bullets = maxBullets / 3;
         AttackSpeed = 1;
     }
+    void InitPassive()
+    {
+        PlayerPassive playerPassive = _PlayerMaster._PlayerPassive;
+        //=======================================================================================
+        //=======================================================================================
+        //=======================================================================================
+        if (playerPassive.ContainPassiveId(PassiveID.Offensive1))
+        {
+            passive_Offensive1 = new Passive_Offensive1();
+            passive_Offensive1.Init(this);
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Offensive2))
+        {
+            passive_Offensive2 = new Passive_Offensive2();
+            passive_Offensive2.Init(this);
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Offensive3))
+        {
+            passive_Offensive3 = new Passive_Offensive3();
+            passive_Offensive3.Init(this);
+            passive_Offensive3.Active();
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Offensive4))
+        {
+            passive_Offensive4 = new Passive_Offensive4();
+            passive_Offensive4.Init(this);
+            passive_Offensive4.Active();
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Offensive5))
+        {
+            passive_Offensive5 = new Passive_Offensive5();
+            passive_Offensive5.Init(this);
+        }
+        //=======================================================================================
+        //=======================================================================================
+        //=======================================================================================
+        if (playerPassive.ContainPassiveId(PassiveID.Defensive1))
+        {
+            passive_Defensive1 = new Passive_Defensive1();
+            passive_Defensive1.Init(this);
+            passive_Defensive1.Active();
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Defensive2))
+        {
+            passive_Defensive2 = new Passive_Defensive2();
+            passive_Defensive2.Init(this);
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Defensive3))
+        {
+            passive_Defensive3 = new Passive_Defensive3();
+            passive_Defensive3.Init(this);
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Defensive4))
+        {
+            passive_Defensive4 = new Passive_Defensive4();
+            passive_Defensive4.Init(this);
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Defensive5))
+        {
+            passive_Defensive5 = new Passive_Defensive5();
+            passive_Defensive5.Init(this);
+        }
+        //=======================================================================================
+        //=======================================================================================
+        //=======================================================================================
+        if (playerPassive.ContainPassiveId(PassiveID.Utility1))
+        {
+            passive_Utility1 = new Passive_Utility1();
+            passive_Utility1.Init(this);
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Utility2))
+        {
+            passive_Utility2 = new Passive_Utility2();
+            passive_Utility2.Init(this);
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Utility3))
+        {
+            passive_Utility3 = new Passive_Utility3();
+            passive_Utility3.Init(this);
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Utility4))
+        {
+            passive_Utility4 = new Passive_Utility4();
+            passive_Utility4.Init(this);
+        }
+        if (playerPassive.ContainPassiveId(PassiveID.Utility5))
+        {
+            passive_Utility5 = new Passive_Utility5();
+            passive_Utility5.Init(this);
+            passive_Utility5.Active();
+        }
+        //=======================================================================================
+        //=======================================================================================
+        //=======================================================================================
+    }
 
     public void Refresh_Model()
     {
@@ -438,11 +708,24 @@ public class PlayerInstanteState : MonoBehaviour
 
     public void UpdateHealth()
     {
-        HealthRatioChanged?.Invoke(hp / GetMaxHp());
+        float hpRatio = hp / GetMaxHp();
+        HealthRatioChanged?.Invoke(hpRatio);
+
+        if (passive_Offensive1 != null)
+        {
+            if (passive_Offensive1.HpCheckRetio <= hpRatio)
+            {
+                passive_Offensive1.Active();
+            }
+            else
+            {
+                passive_Offensive1.DeActive();
+            }
+        }
     }
     public void UpdateShild()
     {
-        ShildRatioChanged?.Invoke(Shield / GetMaxHp());
+        ShildRatioChanged?.Invoke(Shield / GetMaxShield());
     }
     public void UpdateStamina()
     {
@@ -478,5 +761,11 @@ public class PlayerInstanteState : MonoBehaviour
         {
             SkillGaugeRecovery(400f);
         }
+    }
+
+    //골드 관련
+    public void AddGold(int amount)
+    {
+        Gold += amount;
     }
 }

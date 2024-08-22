@@ -1,5 +1,6 @@
 using EnumTypes;
 using System.ComponentModel;
+using UnityEditor;
 using UnityEngine;
 
 
@@ -17,6 +18,7 @@ public class PlayerAttack : MonoBehaviour
     PlayerMaster _PlayerMaster;
     AttackSystem _AttackSystem;
     PlayerModChangeManager _PlayerMod;
+    Animator _animator;
 
     float delayTime = 0;
     public bool attackTrigger = false;
@@ -26,11 +28,27 @@ public class PlayerAttack : MonoBehaviour
     bool skillBool = false;
 
     [SerializeField] PlayerAttackKind _currentAttackMod = PlayerAttackKind.RangeNormalAttack;
+    [SerializeField]
+    PlayerAttackKind CurrentAttackKind
+    {
+        get
+        {
+            if (IsDashAttack() && !IsLastAttack())
+            {
+                return (_currentAttackMod == PlayerAttackKind.RangeNormalAttack) ? PlayerAttackKind.RangeDashAttack : PlayerAttackKind.MeleeDashAttack;
+            }
+            return _currentAttackKind;
+        }
+        set
+        {
+            _currentAttackKind = value;
+        }
+    }
     [SerializeField] PlayerAttackKind _currentAttackKind = PlayerAttackKind.RangeNormalAttack;
     [SerializeField] int _initialAttackComboIndex = 0;
     int _currentAttackCount;
 
-    private void Awake()
+    public void Init()
     {
         _InputManager = InputManager.Instance;
         _InputManager.PropertyChanged += OnInputPropertyChanged;
@@ -46,6 +64,10 @@ public class PlayerAttack : MonoBehaviour
         _PlayerMod.OnEndAbsorptState += AbsorbingFall;
 
         _AttackSystem.Init(Callback_IsCharged, Callback_IsChargedFail, Callback_IsChargedEnd);
+
+        _animator = GetComponent<Animator>();
+        _PlayerMaster._PlayerInstanteState.OnMeleeModeChanged += OnModChanged;
+        
     }
 
     private void OnDestroy()
@@ -69,15 +91,32 @@ public class PlayerAttack : MonoBehaviour
     {
         if (isMelee)
         {
-            _currentAttackKind = PlayerAttackKind.MeleeNormalAttack;
+            CurrentAttackKind = PlayerAttackKind.MeleeNormalAttack;
             _currentAttackMod = PlayerAttackKind.MeleeNormalAttack;
             _AttackSystem.ModTransform();
         }
         else
         {
-            _currentAttackKind = PlayerAttackKind.RangeNormalAttack;
+            CurrentAttackKind = PlayerAttackKind.RangeNormalAttack;
             _currentAttackMod = PlayerAttackKind.RangeNormalAttack;
             _AttackSystem.ModTransform();
+        }
+    }
+
+    private void OnModChanged(bool isMelee)
+    {
+        if((int)_currentAttackMod == (isMelee ? 1:0))
+        {
+            if(!isMelee)
+            {
+                CurrentAttackKind = PlayerAttackKind.RangeNormalAttack;
+                _currentAttackMod = PlayerAttackKind.RangeNormalAttack;
+            }
+            else
+            {
+                CurrentAttackKind = PlayerAttackKind.MeleeNormalAttack;
+                _currentAttackMod = PlayerAttackKind.MeleeNormalAttack;
+            }
         }
     }
 
@@ -85,7 +124,7 @@ public class PlayerAttack : MonoBehaviour
 
 
     int initialAttackComboIndex;
-    [Header ("total count of attack animation")]
+    [Header("total count of attack animation")]
     [SerializeField] int _totalAttackAnimCount = 4;
     private void Update()
     {
@@ -98,7 +137,7 @@ public class PlayerAttack : MonoBehaviour
 
             int blueChip2Level = _PlayerMaster.GetBlueChipLevel(EnumTypes.BlueChipID.Range1);
             initialAttackComboIndex = (blueChip2Level > 0) ? (int)JsonDataManager.GetBlueChipData(EnumTypes.BlueChipID.Range1).Level_VelueList[blueChip2Level][0] : 0;
-            _AttackSystem.StartAttack(_currentAttackKind, initialAttackComboIndex);
+            _AttackSystem.StartAttack(_currentAttackMod, _currentAttackKind, initialAttackComboIndex);
             //StartCoroutine(Attack_Delayed(attack_Delay));
         }
         if (!attackTrigger && prevAttackTrigger)
@@ -109,13 +148,12 @@ public class PlayerAttack : MonoBehaviour
             }
         }
         //if (skillTrigger && !prevAttackTrigger)
-        if (skillTrigger&& skillBool)
+        if (skillTrigger && skillBool)
         {
             skillBool = false;
             delayTime = 0;
             _PlayerMaster.OnAttackState(_PlayerCameraMove.CamRotation() * Vector3.forward);
-            _AttackSystem.StartSkill((int)_currentAttackKind, _PlayerMaster._PlayerInstanteState.skillGauge);
-
+            _AttackSystem.StartSkill((int)CurrentAttackKind, _PlayerMaster._PlayerInstanteState.skillGauge);
         }
         prevAttackTrigger = attackTrigger;
     }
@@ -138,7 +176,7 @@ public class PlayerAttack : MonoBehaviour
                 if (!_PlayerMaster._PlayerInstanteState.IsAbsorptState)
                 {
                     skillTrigger = _InputManager.IsRMouseBtnClick;
-                    skillBool= _InputManager.IsRMouseBtnClick;
+                    skillBool = _InputManager.IsRMouseBtnClick;
                 }
                 break;
         }
@@ -146,24 +184,54 @@ public class PlayerAttack : MonoBehaviour
 
     void ShootProjectile()
     {
+        IncreaseAttackCount();
         Projectile projectile = ObjectPoolManager.Instance.DequeueObject(Prefab_Projectile).GetComponent<Projectile>();
 
         Vector3 projectionVector = _PlayerCameraMove.CamRotation() * Vector3.forward * projectionSpeed_Forward + Vector3.up * projectionSpeed_Up;
-        //?´íƒ?œìŠ¤?œì—???„ìž¬ ê³µê²©???€?…ì„ ê°€?¸ì˜¨??
-        projectile.Init(_PlayerMaster._PlayerInstanteState.GetDmg(_currentAttackKind,
+        
+        projectile.Init(_PlayerMaster._PlayerInstanteState.GetDmg(CurrentAttackKind,
             IsLastAttack()),
-            projectile_InitPos.position,
-            projectionVector,
+            projectile_InitPos.position, projectionVector,
+            _currentAttackMod, CurrentAttackKind, _currentAttackCount,
             OnRangeHit);
 
         _PlayerMaster._PlayerInstanteState.BulletConsumption();
-        IncreaseAttackCount();
+
+        int level_blueChip_Range2 = _PlayerMaster.GetBlueChipLevel(BlueChipID.Range2);
+        if(IsLastAttack() && level_blueChip_Range2 > 0)//"¿ø°Å¸® ¸¶Áö¸· °ø°Ý ½Ã, {0}%ÀÇ È®·ü·Î {1}% À§·ÂÀÇ ¹«ÀÛÀ§ ½ºÅ³ ¹ßµ¿",
+        {
+            BlueChip chip_Range2 = JsonDataManager.GetBlueChipData(BlueChipID.Range2);
+
+            float skillActivationProbability = chip_Range2.Level_VelueList[level_blueChip_Range2][0] * 0.01f;
+            float skillActivationProbabilityValue = Random.Range(0f, 1f);
+
+            if(skillActivationProbabilityValue < skillActivationProbability)
+            {
+                PlayerSkill randomSkill1 = (PlayerSkill)chip_Range2.Level_VelueList[level_blueChip_Range2][2];
+                PlayerSkill randomSkill2 = (PlayerSkill)chip_Range2.Level_VelueList[level_blueChip_Range2][3];
+                float skillSelectionValue = Random.Range(0, 2);
+                if(skillSelectionValue == 0)
+                {
+                    _PlayerMaster._PlayerSkill.InvokeSkillDamage(randomSkill1);
+                }
+                else
+                {
+                    _PlayerMaster._PlayerSkill.InvokeSkillDamage(randomSkill2);
+                }
+            }            
+        }
+    }
+    private void EnableDamageBox_Player()
+    {
+        _AttackSystem.EnableDamageBox(
+            _PlayerMaster._PlayerInstanteState.GetDmg(CurrentAttackKind),
+            _PlayerMaster._PlayerInstanteState.GetRange(CurrentAttackKind, GetCurrentAttackCount()), OnMeleeHit);
     }
 
     public void ResetAttack()
     {
         _currentAttackCount = 0;
-        //_AttackSystem.ResetAttack();
+        _AttackSystem.ResetAttack();
     }
     public void IncreaseAttackCount()
     {
@@ -174,7 +242,7 @@ public class PlayerAttack : MonoBehaviour
     {
         if (_currentAttackMod == PlayerAttackKind.MeleeNormalAttack)
         {
-            _currentAttackKind = PlayerAttackKind.MeleeChargedAttack;
+            CurrentAttackKind = PlayerAttackKind.MeleeChargedAttack;
             Debug.Log("Â÷-Áö ¿Ï·á");
         }
     }
@@ -182,12 +250,12 @@ public class PlayerAttack : MonoBehaviour
     {
         Debug.Log("Â÷-Áö ³¡");
     }
-    
+
     private void Callback_IsChargedFail()
     {
         if (_currentAttackMod == PlayerAttackKind.MeleeNormalAttack)
         {
-            _currentAttackKind = PlayerAttackKind.MeleeNormalAttack;
+            CurrentAttackKind = PlayerAttackKind.MeleeNormalAttack;
             Debug.Log("Â÷-Áö ½ÇÆÐ");
         }
     }
@@ -197,35 +265,39 @@ public class PlayerAttack : MonoBehaviour
         skillBool = false;
     }
 
-    private void EnableDamageBox_Player()
-    {
-        _AttackSystem.EnableDamageBox(
-            _PlayerMaster._PlayerInstanteState.GetDmg(_currentAttackKind),
-            _PlayerMaster._PlayerInstanteState.GetRange(_currentAttackKind, GetCurrentAttackCount()),
-OnMeleeHit
-            );
-    }
     private void OnMeleeHit()
     {
         PlayerInstanteState stat = _PlayerMaster._PlayerInstanteState;
-        stat.SkillGaugeRecovery(_currentAttackKind, false);
+        stat.SkillGaugeRecovery(_currentAttackMod, CurrentAttackKind, false);
         _PlayerMaster.OnMeleeHit();
     }
-    private void OnRangeHit()
+    private void OnRangeHit(PlayerAttackKind mod, PlayerAttackKind kind,int currentAttackCount)
     {
         PlayerInstanteState stat = _PlayerMaster._PlayerInstanteState;
-        stat.SkillGaugeRecovery(_currentAttackKind, IsLastAttack());
+        stat.SkillGaugeRecovery(mod, kind, IsLastAttack(currentAttackCount));
     }
 
     private bool IsLastAttack()
     {
-        if((_currentAttackCount + 1) % (_totalAttackAnimCount - initialAttackComboIndex) == 0)
+        return IsLastAttack(_currentAttackCount);
+    }
+    private bool IsLastAttack(int currentAttackCount)
+    {
+        if(currentAttackCount == 0)
+            return false;
+        if ((currentAttackCount) % (_totalAttackAnimCount - initialAttackComboIndex) == 0)
         {
             Debug.Log("¸·Å¸");
             return true;
         }
         return false;
+    }
 
+    private bool IsDashAttack()
+    {
+        bool ran = AnimatorHelper.IsAnimationPlaying(_animator, 0, "Base Layer.Dash Attack");
+        bool mel = AnimatorHelper.IsAnimationPlaying(_animator, 0, "Base Layer.Dash Range");
+        return ran || mel;
     }
     //IEnumerator Attack_Delayed(float delayTime)
     //{

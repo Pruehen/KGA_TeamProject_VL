@@ -9,20 +9,23 @@ using Unity.VisualScripting;
 public class BlueChip
 {    
     [JsonProperty] public string Name { get; private set; }
-    [JsonProperty] public string Info { get; private set; }
+    [JsonProperty] public string Desc { get; private set; }
+    [JsonProperty] public string IconName { get; private set; }
     [JsonProperty] public Dictionary<int, List<float>> Level_VelueList { get; private set; }
 
     [JsonConstructor]
-    public BlueChip(string name, string info, Dictionary<int, List<float>> level_VelueList)
+    public BlueChip(string name, string desc, string iconName, Dictionary<int, List<float>> level_VelueList)
     {        
         Name = name;
-        Info = info;
+        Desc = desc;
+        IconName = iconName;
         Level_VelueList = level_VelueList;
     }
     public BlueChip(int id)
     {        
         Name = "블루칩 이름";
-        Info = "블루칩 설명";
+        Desc = "블루칩 설명";
+        IconName = "아이콘 이름";
         Level_VelueList = new Dictionary<int, List<float>>();
         Level_VelueList.Add(1, new List<float>());
         Level_VelueList.Add(2, new List<float>());
@@ -41,7 +44,7 @@ public class BlueChip
     }
     public string PrintInfo(int level)
     {        
-        return string.Format(Info, Level_VelueList[level].Cast<object>().ToArray());
+        return string.Format(Desc, Level_VelueList[level].Cast<object>().ToArray());
     }
 }
 public class BlueChipTable
@@ -65,22 +68,28 @@ public class BlueChipTable
 public class PassiveData
 {
     [JsonProperty] public string Name { get; private set; }
-    [JsonProperty] public string Info { get; private set; }
+    [JsonProperty] public string Desc { get; private set; }
+    [JsonProperty] public string IconPath { get; private set; }
+    [JsonProperty] public string IconPath_Dis { get; private set; }
     [JsonProperty] public int Cost { get; private set; }
     [JsonProperty] public List<float> VelueList { get; private set; }
 
     [JsonConstructor]
-    public PassiveData(string name, string info, int cost, List<float> velueList)
+    public PassiveData(string name, string desc, string iconPath, string iconPath_Dis, int cost, List<float> velueList)
     {
         Name = name;
-        Info = info;
+        Desc = desc;
+        IconPath = iconPath;
+        IconPath_Dis = iconPath_Dis;
         Cost = cost;
         VelueList = velueList;
     }
     public PassiveData(PassiveID iD)
     {
         Name = iD.ToString();
-        Info = "해당 패시브에 대한 설명. 값 {0}";
+        Desc = "해당 패시브에 대한 설명. 값 {0}";
+        IconPath = "아이콘 경로";
+        IconPath_Dis = "비활성 아이콘 경로";
         Cost = 100;
         VelueList = new List<float>();
         VelueList.Add(1);
@@ -92,7 +101,7 @@ public class PassiveData
     }
     public string PrintInfo()
     {
-        return string.Format(Info, VelueList.Cast<object>().ToArray());
+        return string.Format(Desc, VelueList.Cast<object>().ToArray());
     }
 }
 public class PassiveTable
@@ -169,15 +178,21 @@ public class UserData
         PlayData = null;
     }
 
+    public static void Save()
+    {
+        JsonDataManager.DataSaveCommand(JsonDataManager.jsonCache.UserDataCache, UserDataList.FilePath());
+    }
+
     public void TryAddPassive(PassiveID id)
     {
         if(UsePassiveHashSet.Add(id))
         {
-            Debug.Log($"패시브 추가 : {id.DisplayName()}");
+            Save();
+            Debug.Log($"패시브 추가 : {id}");
         }
         else
         {
-            Debug.LogWarning($"이미 존재하는 패시브 : {id.DisplayName()}");
+            Debug.LogWarning($"이미 존재하는 패시브 : {id}");
         }
     }
 
@@ -185,11 +200,12 @@ public class UserData
     {
         if (UsePassiveHashSet.Remove(id))
         {
-            Debug.Log($"패시브 제거 : {id.DisplayName()}");
+            Save();
+            Debug.Log($"패시브 제거 : {id}");            
         }
         else
         {
-            Debug.LogWarning($"존재하지 않는 패시브 : {id.DisplayName()}");
+            Debug.LogWarning($"존재하지 않는 패시브 : {id}");
         }
     }
 }
@@ -219,7 +235,7 @@ public class PlayData
 public class UserDataList
 {
     public Dictionary<int, UserData> dic;
-    public int UseIndex { get; set; }
+    public int UseIndex { get; private set; }
     
     public UserDataList(Dictionary<int, UserData> dic)
     {
@@ -233,6 +249,7 @@ public class UserDataList
     {
         if(dic.ContainsKey(UseIndex))
         {
+            //Debug.Log($"{UseIndex} 세이브파일 로드");
             return dic[UseIndex];
         }
         else
@@ -240,6 +257,18 @@ public class UserDataList
             Debug.Log("해당하는 키가 없습니다. 세이브파일을 생성합니다.");
             dic.Add(UseIndex, new UserData(UseIndex));
             return dic[UseIndex];
+        }
+    }
+    public UserData GetUserData(int index)
+    {
+        if (dic.ContainsKey(index))
+        {
+            //Debug.Log($"{UseIndex} 세이브파일 로드");
+            return dic[index];
+        }
+        else
+        {
+            return null;
         }
     }
     public void SetUserDataIndex(int index)

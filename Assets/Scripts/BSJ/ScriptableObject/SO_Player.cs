@@ -45,16 +45,18 @@ public class SO_Player : ScriptableObject
     public float atkMelee111 = 7.5f;
     public float atkMelee121 = 2.5f;
 
+    [Header("Èí¼ö °ü·Ã")]
+    public float AbsolsionSpeed = 30f;
+    public float Radious = 5f;
+    public float Height = 1f;
+
     [Header("È¸Àü °ü·Ã")]
-    public float RevolveRadious = 5f;
+    public float RevolveRadious = 2.5f;
     public float RevolveSpeed = 30f;
     public AnimationCurve RevolveSpeedCurve;
 
     [Header("È¹µæ °ü·Ã")]
-    public float Radious = 5f;
-    public float Height = 1f;
-    [Range(0f, 1f)]
-    public float AbsolsionSpeed = 30f;
+    public float AcquireSpeed = 30f;
     public AnimationCurve RadiusExpandCurve;
 
 }

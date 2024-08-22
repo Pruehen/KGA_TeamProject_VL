@@ -6,7 +6,7 @@ public class Passive_Offensive2 : Passive
     {
         base._passiveData = JsonDataManager.GetPassive(PassiveID.Offensive2);
         CheckDistance_ToEnemy = _passiveData.VelueList[0];
-        DmgGain = 1 + (_passiveData.VelueList[1] * 0.01f);
+        DmgGain = (_passiveData.VelueList[1] * 0.01f);
     }
     public float CheckDistance_ToEnemy { get; private set; }
     public float DmgGain { get; private set; }

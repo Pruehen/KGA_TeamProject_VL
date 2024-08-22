@@ -9,6 +9,7 @@ public class AttackSystem : MonoBehaviour
     Animator _animator;
     PlayerAttack _playerAttack;
     int hashAttackType = Animator.StringToHash("AttackType");
+    int hashAttackMod = Animator.StringToHash("AttackMod");
     int hashAttack = Animator.StringToHash("Attack");
     int hashAttackComboInitialIndex = Animator.StringToHash("AttackComboInitialIndex");
     int hasAttackSpeed = Animator.StringToHash("AttackSpeed");
@@ -45,13 +46,13 @@ public class AttackSystem : MonoBehaviour
             _PlayerMaster.isAttackTrigger = value;
         }
     }
-    public void StartAttack(PlayerAttackKind index, int comboIndex)
+    public void StartAttack(PlayerAttackKind mod, PlayerAttackKind index, int comboIndex)
     {
-        _attackLcokMove = true;
         _animator.SetTrigger(hashAttack);
 
 
         _animator.SetInteger(hashAttackType, (int)index);
+        _animator.SetInteger(hashAttackMod, (int)mod);
 
 
         _animator.SetInteger(hashAttackComboInitialIndex, comboIndex);
@@ -80,6 +81,7 @@ public class AttackSystem : MonoBehaviour
     public void ReleaseLockMove()
     {
         _attackLcokMove = false;
+        Debug.Log("ReleaseLockMove");
     }
 
     public void OnRelease()
@@ -95,8 +97,8 @@ public class AttackSystem : MonoBehaviour
     }
     public void EnableDamageBox(float dmg, float range, Action OnHitCallback)
     {
-        _damageBox.EnableDamageBox(dmg, range, OnHitCallback);
         _playerAttack.IncreaseAttackCount();
+        _damageBox.EnableDamageBox(dmg, range, OnHitCallback);
     }
 
     public void ResetEndAttack()
@@ -133,6 +135,8 @@ public class AttackSystem : MonoBehaviour
     {
         _attackLcokMove = false;
         _closeAttack.ChargeFail();
+        Debug.Log("대머리");
+        
     }
     public void OnUseSkillGauge()
     {

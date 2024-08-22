@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System.Collections.Generic;
 using EnumTypes;
 
 public class UIManager : SceneSingleton<UIManager>
@@ -23,26 +24,31 @@ public class UIManager : SceneSingleton<UIManager>
     [SerializeField] GameObject blueChipUI;
     [SerializeField] GameObject pickBlueChip;
     [SerializeField] GameObject holdBlueChip;
+    [SerializeField] GameObject outGamePassive;
 
-    [SerializeField] PlayerInstanteState PlayerState;
+    PlayerInstanteState _PlayerState;
+    PlayerMaster _PlayerMaster;
 
     [SerializeField] Button pickButton;
     [SerializeField] Button holdButton;
     [SerializeField] GameObject escImage;
 
+    [SerializeField] List<PassiveUI> PassiveUIList;
+
     private void Start()
     {
         blueChipUI.SetActive(false);
+        Init_PassiveUIList();
 
-        if (PlayerState != null)
+        if (_PlayerState != null)
         {
-            PlayerState.HealthRatioChanged += OnHealthRatioChanged;
-            PlayerState.ShildRatioChanged += OnShildRatioChanged;
-            PlayerState.StaminaRatioChanged += OnStaminaChanged;
-            PlayerState.BulletChanged += OnBulletChanged;
-            PlayerState.MeleeBulletChanged += OnMeleeBulletChanged;
-            PlayerState.OnMeleeModeChanged += OnMeleeModeChanged;
-            PlayerState.SkillGaugeRatioChanged += OnSkillRatioChanged;
+            _PlayerState.HealthRatioChanged += OnHealthRatioChanged;
+            _PlayerState.ShildRatioChanged += OnShildRatioChanged;
+            _PlayerState.StaminaRatioChanged += OnStaminaChanged;
+            _PlayerState.BulletChanged += OnBulletChanged;
+            _PlayerState.MeleeBulletChanged += OnMeleeBulletChanged;
+            _PlayerState.OnMeleeModeChanged += OnMeleeModeChanged;
+            _PlayerState.SkillGaugeRatioChanged += OnSkillRatioChanged;
         }
 
         Command_Refresh_View();
@@ -50,19 +56,19 @@ public class UIManager : SceneSingleton<UIManager>
 
     void Command_Refresh_View()
     {
-        PlayerState.Refresh_Model();
+        _PlayerState.Refresh_Model();
         OnMeleeModeChanged(false);
     }
 
     private void OnDestroy()
     {
-        if (PlayerState != null)
+        if (_PlayerState != null)
         {
-            PlayerState.HealthRatioChanged -= OnHealthRatioChanged;
-            PlayerState.BulletChanged -= OnBulletChanged;
-            PlayerState.StaminaRatioChanged -= OnStaminaChanged;
-            PlayerState.MeleeBulletChanged -= OnMeleeBulletChanged;
-            PlayerState.SkillGaugeRatioChanged -= OnSkillRatioChanged;
+            _PlayerState.HealthRatioChanged -= OnHealthRatioChanged;
+            _PlayerState.BulletChanged -= OnBulletChanged;
+            _PlayerState.StaminaRatioChanged -= OnStaminaChanged;
+            _PlayerState.MeleeBulletChanged -= OnMeleeBulletChanged;
+            _PlayerState.SkillGaugeRatioChanged -= OnSkillRatioChanged;
         }
     }
 
@@ -114,15 +120,27 @@ public class UIManager : SceneSingleton<UIManager>
         }
     }
 
-    public void setPlayer(PlayerInstanteState player)
+    public void SetPlayerMaster(PlayerMaster pm)
     {
-        PlayerState = player;
+        _PlayerMaster = pm;
+        _PlayerState = pm._PlayerInstanteState;
     }
-    public void Damage(float amount)
+    void Init_PassiveUIList()
     {
-        PlayerState?.Hit(amount);
-    }
+        if(_PlayerMaster != null)
+        {
+            List<PassiveID> usePasiveList = new List<PassiveID>();
 
+            foreach (var item in _PlayerMaster._PlayerPassive.PassiveHashSet)
+            {
+                usePasiveList.Add(item);
+            }
+            for (int i = 0; i < usePasiveList.Count; i++)
+            {
+                PassiveUIList[i].SetPassiveId(usePasiveList[i]);
+            }
+        }
+    }
 
     public void Interactable(bool chest)
     {
@@ -214,6 +232,7 @@ public class UIManager : SceneSingleton<UIManager>
 
             pickBlueChip.SetActive(false);
             blueChipUI.GetComponent<BlueChipUIManager>().Init();
+            
         }
         else if (holdBlueChip.activeSelf == true && pickBlueChip.activeSelf == false)
         {

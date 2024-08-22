@@ -1,3 +1,4 @@
+using EnumTypes;
 using System;
 using UnityEngine;
 
@@ -5,9 +6,14 @@ public class Projectile : MonoBehaviour
 {
     float _dmg;    
     Rigidbody _Rigidbody;
-    Action onHit;
+    Action<PlayerAttackKind, PlayerAttackKind, int> onHit;
+    PlayerAttackKind _attackMod;
+    PlayerAttackKind _attackKind;
+    int _attackCount;
 
-    public void Init(float dmg, Vector3 initPos, Vector3 projectionVector, Action onHitCallBack)
+    public void Init(float dmg, Vector3 initPos, Vector3 projectionVector,
+        PlayerAttackKind attackMod, PlayerAttackKind attackKind, int attackCount,
+        Action<PlayerAttackKind, PlayerAttackKind,int> onHitCallBack)
     {
         _dmg = dmg;
 
@@ -27,6 +33,10 @@ public class Projectile : MonoBehaviour
         Vector3 randomTorque = randomAxis * UnityEngine.Random.Range(0, 10f);
         _Rigidbody.AddTorque(randomTorque);
 
+        _attackMod = attackMod;
+        _attackKind = attackKind;
+        _attackCount = attackCount;
+
         onHit = onHitCallBack;
     }
 
@@ -39,8 +49,7 @@ public class Projectile : MonoBehaviour
         }
         if (collision.rigidbody.TryGetComponent(out ITargetable targetable))
         {
-            Debug.Log($"{collision.rigidbody.name}");
-            onHit?.Invoke();
+            onHit?.Invoke(_attackMod,_attackKind,_attackCount);
             targetable.Hit(_dmg);
         }
 

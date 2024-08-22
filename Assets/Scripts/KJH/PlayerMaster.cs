@@ -8,6 +8,8 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     public PlayerEquipBlueChip _PlayerEquipBlueChip { get; private set; }
     public PlayerBuff _PlayerBuff { get; private set; }
     public PlayerPassive _PlayerPassive { get; private set; }
+    public Skill _PlayerSkill { get; private set; }
+
     PlayerMove _PlayerMove;
     PlayerAttack _PlayerAttack;
     PlayerModChangeManager _PlayerModChangeManager;    
@@ -35,18 +37,17 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
         get { return _PlayerInstanteState.IsMeleeMode; }
         set
         {
-            _PlayerInstanteState.IsMeleeMode = value;
-            Execute_BlueChip1_OnModeChange(value);
-            Execute_BlueChip4_OnModeChange();
+            if (_PlayerInstanteState.IsMeleeMode != value)
+            {
+                _PlayerInstanteState.IsMeleeMode = value;
+                Execute_BlueChip1_OnModeChange(value);
+                Execute_BlueChip4_OnModeChange();
+            }
         }
     }
     public bool isDashing
     {
-        get { return _PlayerMove._isDashing; }
-        set
-        {
-            _PlayerMove._isDashing = value;
-        }
+        get { return _PlayerMove.IsDashing; }
     }
     public bool isAttackTrigger
     {
@@ -116,20 +117,24 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     }
 
     private void Awake()
-    {
+    {        
         _PlayerInstanteState = GetComponent<PlayerInstanteState>();
         _PlayerEquipBlueChip = GetComponent<PlayerEquipBlueChip>();
         _PlayerBuff = GetComponent<PlayerBuff>();
         _PlayerPassive = GetComponent<PlayerPassive>();
+        _PlayerSkill = GetComponent<Skill>();
+
+        UIManager.Instance.SetPlayerMaster(this);
 
         _PlayerPassive.Init();
-        _PlayerInstanteState.Init(_PlayerPassive);
+        _PlayerInstanteState.Init();
 
         _PlayerMove = GetComponent<PlayerMove>();
         _PlayerAttack = GetComponent<PlayerAttack>();
         _PlayerModChangeManager = GetComponent<PlayerModChangeManager>();
 
         _ItemAbsorber.Init(_PlayerInstanteState._playerStatData);
+        _PlayerAttack.Init();
     }
 
     public void OnAttackState(Vector3 lookTarget)
@@ -153,8 +158,8 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
 
     public void Hit(float dmg)
     {
-        _PlayerInstanteState.Hit(dmg);
-        DmgTextManager.Instance.OnDmged(dmg, this.transform.position);
+        _PlayerInstanteState.Hit(dmg, out float finalDmg);
+        DmgTextManager.Instance.OnDmged(finalDmg, this.transform.position);
     }
 
     public bool IsDead()

@@ -3,7 +3,7 @@ using System.ComponentModel;
 using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
-{    
+{
     [SerializeField] float rotSpeed = 0.2f;
 
     Vector3 _moveVector3_Origin;
@@ -14,7 +14,7 @@ public class PlayerMove : MonoBehaviour
 
     Animator _animator;
 
- 
+
 
     private void Start()
     {
@@ -30,8 +30,10 @@ public class PlayerMove : MonoBehaviour
     }
 
     bool _isMoving = true;
+    bool _isDashing = false;
     bool _isGrounded = true;
-    public bool _isDashing = false;
+    float _dashTimeStamp;
+    public bool IsDashing => IsInDashAnimation();
     public void SetMoveLock(float time)
     {
         //_Rigidbody.velocity = Vector3.zero;
@@ -47,14 +49,10 @@ public class PlayerMove : MonoBehaviour
     public void SetDashLock(float time)
     {
         //_Rigidbody.velocity = Vector3.zero;
-        StartCoroutine(SetDashLock_Coroutine(time));
-    }
-    IEnumerator SetDashLock_Coroutine(float time)
-    {
+        _isMoving = false;
         _isDashing = true;
-        yield return new WaitForSeconds(time);
 
-        _isDashing = false;
+        _dashTimeStamp = Time.time;
     }
 
     InputManager _InputManager;
@@ -88,7 +86,7 @@ public class PlayerMove : MonoBehaviour
                 _moveVector3_Origin = new Vector3(_InputManager.MoveVector2_Left_WASD.x * moveSpeed, 0, _InputManager.MoveVector2_Left_WASD.y * moveSpeed);
                 break;
             case nameof(_InputManager.IsDashBtnClick):
-                if(_InputManager.IsDashBtnClick)
+                if (_InputManager.IsDashBtnClick)
                 {
                     Dash();
                 }
@@ -101,7 +99,18 @@ public class PlayerMove : MonoBehaviour
     }
     void Move_OnFixedUpdate()
     {
-        if (_isMoving && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove && _isGrounded && !_isDashing)
+        if (_isDashing)
+        {
+            if (Time.time - _dashTimeStamp >= _PlayerMaster._PlayerInstanteState.DashTime)
+            {
+                if (IsInDashAnimation())
+                    _animator.SetTrigger("DashEnd");
+                _isMoving = true;
+                _isDashing = false;
+            }
+            return;
+        }
+        if (_isMoving && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove && _isGrounded )
         {
             _moveVector3 = new Vector3(_moveVector3_Origin.x, 0, _moveVector3_Origin.z);
 
@@ -116,10 +125,6 @@ public class PlayerMove : MonoBehaviour
 
             _animator.SetBool("IsMoving", _moveVector3.x != 0f || _moveVector3.z != 0f);
         }
-        else if (_isDashing)
-        {
-            //_animator.SetBool("IsDashing", true);
-        }
         else if (_isGrounded)
         {
             _animator.SetBool("IsMoving", false);
@@ -129,10 +134,6 @@ public class PlayerMove : MonoBehaviour
         {
             _animator.SetBool("IsMoving", false);
             _animator.SetBool("IsFalling", true);
-        }
-        if (!_isDashing)
-        {
-            //_animator.SetBool("IsDashing", false);
         }
         _animator.SetFloat("XSpeed", _moveVector3.x);
         _animator.SetFloat("ZSpeed", _moveVector3.z);
@@ -147,6 +148,15 @@ public class PlayerMove : MonoBehaviour
 
             Quaternion targetRotation = Quaternion.LookRotation(_lookTargetPos, Vector3.up);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed);
+        }
+
+        if (_isDashing)
+        {
+            _lookTargetPos = _Rigidbody.velocity;
+            _lookTargetPos.y = 0f;
+
+            Quaternion targetRotation = Quaternion.LookRotation(_lookTargetPos, Vector3.up);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed * 4f);
         }
     }
 
@@ -172,7 +182,7 @@ public class PlayerMove : MonoBehaviour
             _attackSystem.ReleaseLockMove();
             _attackSystem.ResetEndAttack();
             _animator.SetTrigger("Dash");
-            Debug.Log("DashPlayerMove");
+            Debug.Log("Dash");
             if (_moveVector3 == Vector3.zero)
             {
                 _PlayerMaster.OnAttackState(_PlayerCameraMove.CamRotation() * Vector3.forward);
@@ -197,7 +207,17 @@ public class PlayerMove : MonoBehaviour
         {
             newPoint = new Vector3(0, 0, 1f);
         }
-        _Rigidbody.AddForce(_PlayerCameraMove.CamRotation() * newPoint * _PlayerMaster._PlayerInstanteState.DashForce, ForceMode.Acceleration);
+        _Rigidbody.velocity = _PlayerCameraMove.CamRotation() * newPoint * _PlayerMaster._PlayerInstanteState.DashForce;
         SetDashLock(_PlayerMaster._PlayerInstanteState.DashTime);
+    }
+
+    public bool IsInDashAnimation()
+    {
+        int c = _animator.GetCurrentAnimatorStateInfo(0).fullPathHash;
+        int n = _animator.GetNextAnimatorStateInfo(0).fullPathHash;
+        if (n == 0) n = c;
+        bool isInExitTransition = n != c;
+        return AnimatorHelper.IsAnimationIn(_animator, 0, "Base Layer.Dash") &&
+        !isInExitTransition;
     }
 }

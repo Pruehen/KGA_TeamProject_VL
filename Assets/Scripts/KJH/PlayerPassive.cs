@@ -19,7 +19,7 @@ public class PlayerPassive : MonoBehaviour
     [Header("디버그 모드 사용 : 체크 시, 에디터상에서 선택한 패시브를 적용함.")]
     [SerializeField] bool IsDebugMode = false;
 
-    public HashSet<PassiveID> PassiveHashSet { get; private set; }
+    public HashSet<PassiveID> PassiveHashSet { get; private set; }    
 
     public void Init()
     {
