@@ -832,4 +832,16 @@ public class PlayerInstanteState : MonoBehaviour
         combat.ResetSuperArmor();
         shield.ResetSuperArmor();
     }
+
+    public void SetEvade(float v)
+    {
+        combat.SetEvade(v);
+        shield.SetEvade(v);
+    }
+
+    public void ResetEvade()
+    {
+        combat.ResetEvade();
+        shield.ResetEvade();
+    }
 }
