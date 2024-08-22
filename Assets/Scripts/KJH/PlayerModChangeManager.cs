@@ -94,6 +94,10 @@ public class PlayerModChangeManager : MonoBehaviour
         {
             EndAbsorptState();
         }
+        else
+        {
+                EndAbsorptState();
+        }
 
         if (HasBlueChip5_AutoChange() == false)
         {
@@ -138,7 +142,6 @@ public class PlayerModChangeManager : MonoBehaviour
         {
             IsMeleeMode = false;
         }
-        Debug.Log($"Èí¼ö ½ÇÆÐ");
         OnEndAbsorptState.Invoke();
     }
 
