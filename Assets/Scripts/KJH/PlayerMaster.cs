@@ -155,15 +155,14 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
         _PlayerModChangeManager.OnEndAbsorptState += callBack_DropAbsorbingItems;
     }
 
-
-    public void Hit(float dmg)
-    {
-        _PlayerInstanteState.Hit(dmg, out float finalDmg);
-        DmgTextManager.Instance.OnDmged(finalDmg, this.transform.position);
-    }
-
     public bool IsDead()
     {
         return _PlayerInstanteState.IsDead;
+    }
+
+    public void Hit(float dmg, Transform attacker)
+    {
+        _PlayerInstanteState.Hit(dmg, out float finalDmg, transform);
+        DmgTextManager.Instance.OnDmged(finalDmg, this.transform.position);
     }
 }

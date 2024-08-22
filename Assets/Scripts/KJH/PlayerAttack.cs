@@ -193,7 +193,8 @@ public class PlayerAttack : MonoBehaviour
             IsLastAttack()),
             projectile_InitPos.position, projectionVector,
             _currentAttackMod, CurrentAttackKind, _currentAttackCount,
-            OnRangeHit);
+            OnRangeHit,
+            gameObject);
 
         _PlayerMaster._PlayerInstanteState.BulletConsumption();
 

@@ -108,7 +108,7 @@ public class Enemy : MonoBehaviour, ITargetable
     private void Init()
     {
         _combat = new Combat();
-        _combat.Init(_enemyData.Hp);
+        _combat.Init(gameObject, _enemyData.Hp);
         _combat.OnDead += OnDead;
 
 
@@ -520,7 +520,7 @@ public class Enemy : MonoBehaviour, ITargetable
     {
         _debuff_Passive_Offensive2_IncreasedDamageTakenMulti = 1 + value;        
     }    
-    public void Hit(float dmg)
+    public void Hit(float dmg, Transform attacker = null)
     {
         dmg *= _debuff_Passive_Offensive2_IncreasedDamageTakenMulti;
         _debuff_Passive_Offensive2_IncreasedDamageTakenMulti = 1;
@@ -573,4 +573,5 @@ public class Enemy : MonoBehaviour, ITargetable
     {
         _combat.OnDead += onDead;
     }
+
 }

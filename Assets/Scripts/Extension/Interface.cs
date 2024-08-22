@@ -10,9 +10,12 @@ public interface IInteractable
 
 public interface ITargetable
 {
-    public Vector3 GetPosition();    
+    public Vector3 GetPosition();
 
-    public void Hit(float dmg);
+    public GameObject gameObject { get; }
+    public Transform transform { get; }
+
+    public void Hit(float dmg, Transform attacker);
     public bool IsDead();
 }
 
