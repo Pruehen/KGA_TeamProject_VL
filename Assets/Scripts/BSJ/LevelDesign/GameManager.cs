@@ -36,6 +36,7 @@ public class GameManager : SceneSingleton<GameManager>
         {
             Destroy(gameObject);
         }
+        transform.SetParent(null);
         DontDestroyOnLoad(this);
 
         NextStageObjects = FindAnyObjectByType<NextStageObjects>();
