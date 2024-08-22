@@ -225,9 +225,7 @@ public class PlayerAttack : MonoBehaviour
     {
         _AttackSystem.EnableDamageBox(
             _PlayerMaster._PlayerInstanteState.GetDmg(CurrentAttackKind),
-            _PlayerMaster._PlayerInstanteState.GetRange(CurrentAttackKind, GetCurrentAttackCount()), 
-            OnMeleeHit
-            );
+            _PlayerMaster._PlayerInstanteState.GetRange(CurrentAttackKind, GetCurrentAttackCount()), OnMeleeHit);
     }
 
     public void ResetAttack()

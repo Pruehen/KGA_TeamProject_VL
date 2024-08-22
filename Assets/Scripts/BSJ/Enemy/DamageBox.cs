@@ -109,6 +109,10 @@ public class DamageBox : MonoBehaviour
         {
             OnHit += onHitCallBack;
         }
+        else
+        {
+            OnHit = null;
+        }
         SetRange(range);
 
         _damage = damage;
@@ -121,6 +125,10 @@ public class DamageBox : MonoBehaviour
         if (onHitCallBack != null)
         {
             OnHit += onHitCallBack;
+        }
+        else
+        {
+            OnHit = null;
         }
         //transform.localPosition = target;
         SetRange(range);
