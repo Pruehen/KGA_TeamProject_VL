@@ -98,7 +98,7 @@ public class ItemAbsorber : MonoBehaviour
             item.PullToCenterAndDestroy(AcquireSpeed);
             absorbingItems.Remove(item);
         }
-
+        revorvingItems.Clear();
         DropAbsorbingItems();
 
 
