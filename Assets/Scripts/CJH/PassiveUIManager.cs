@@ -187,7 +187,7 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
 
     public void OnClickStartButton()
     {
-        SceneManager.LoadScene("Jihe");
+        SceneManager.LoadScene("TestScene");
     }
 
 }
