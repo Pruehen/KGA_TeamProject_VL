@@ -72,7 +72,7 @@ public class PassiveUI : MonoBehaviour, ISelectHandler
 
         if(locked)
         {
-            CheckUIManager.Instance.CheckUiActive_OnClick(UnLock, "해금하시겠습니까?");
+            CheckUIManager.Instance.CheckUiActive_OnClick(TryUnLock, "해금하시겠습니까?");
             return;
         }
 
@@ -89,10 +89,23 @@ public class PassiveUI : MonoBehaviour, ISelectHandler
         }
     }
 
-    void UnLock()
+    void TryUnLock()
     {
-        locked = false;
-        SetUI();
+        if (PassiveUIManager.Instance.TryUseEmerald())
+        {
+            locked = false;
+            SetUI();
+        }
+        else
+        {
+            CheckUIManager.Instance.CheckUiActive_OnClick(NotMony, "이 거지야");
+        }
+    }
+
+    void NotMony()
+    { 
+    
+    
     }
 
     public void OnClick_TryUnEquip()

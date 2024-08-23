@@ -114,14 +114,16 @@ public class MainSceneUIManager : SceneSingleton<MainSceneUIManager>
     {
         if (startPanel.activeSelf == true)
         {
-            startPanel.SetActive(false);
-            overwriteStartPanel.SetActive(true);
             EventSystem.current.SetSelectedGameObject(selectSlot[0].gameObject);
 
+            startPanel.SetActive(false);
+            overwriteStartPanel.SetActive(true);
+          
             for (int i = 0; i < selectSlot.Length; i++)
             {
                 selectSlot[i].GetComponent<SaveFillSlot>().SetData(i);              
             }
+          
         }      
     }
 }

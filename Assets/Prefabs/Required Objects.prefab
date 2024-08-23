@@ -1250,10 +1250,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6695646724601957845, guid: 46a2d3f310067064f84db1700631524b, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7438843688021955895, guid: 46a2d3f310067064f84db1700631524b, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1281,34 +1277,6 @@ PrefabInstance:
     - target: {fileID: 7583250831268966690, guid: 46a2d3f310067064f84db1700631524b, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7865320300940951186, guid: 46a2d3f310067064f84db1700631524b, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7865320300940951186, guid: 46a2d3f310067064f84db1700631524b, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7865320300940951186, guid: 46a2d3f310067064f84db1700631524b, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7865320300940951186, guid: 46a2d3f310067064f84db1700631524b, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7865320300940951186, guid: 46a2d3f310067064f84db1700631524b, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7865320300940951186, guid: 46a2d3f310067064f84db1700631524b, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8531749117623170200, guid: 46a2d3f310067064f84db1700631524b, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1523,14 +1491,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6358046432031639509, guid: bf65563d71b0c5e43bce5d8dad0aed86, type: 3}
-      propertyPath: skillData
-      value: 
-      objectReference: {fileID: 11400000, guid: 697fc365c538ef2438aa6f635eb536b1, type: 2}
-    - target: {fileID: 6358046432031639509, guid: bf65563d71b0c5e43bce5d8dad0aed86, type: 3}
-      propertyPath: playerSkill
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 6615908217414374475, guid: bf65563d71b0c5e43bce5d8dad0aed86, type: 3}
       propertyPath: _master
       value: 
@@ -1613,13 +1573,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22a6f433001c2c747904098b73aade69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PassiveID_Offensive1: 15
+  PassiveID_Offensive1: 0
   PassiveID_Offensive2: 15
   PassiveID_Defensive1: 15
   PassiveID_Defensive2: 15
   PassiveID_Utility1: 15
   PassiveID_Utility2: 15
-  IsDebugMode: 1
+  IsDebugMode: 0
 --- !u!114 &1104941909994579593
 MonoBehaviour:
   m_ObjectHideFlags: 0

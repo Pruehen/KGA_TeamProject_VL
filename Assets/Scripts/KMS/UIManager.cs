@@ -34,10 +34,13 @@ public class UIManager : SceneSingleton<UIManager>
     [SerializeField] Button holdButton;
     [SerializeField] GameObject escImage;
 
+    [SerializeField] Text emeraldText;
+        
     [SerializeField] List<PassiveUI> PassiveUIList;
 
     private void Start()
     {
+        emeraldText.text = JsonDataManager.GetUserData().Gold.ToString();
         blueChipUI.SetActive(false);
         Init_PassiveUIList();
 
@@ -234,7 +237,7 @@ public class UIManager : SceneSingleton<UIManager>
         if (blueChipUI.activeSelf == false)
         {
             blueChipUI.SetActive(true);
-
+            outGamePassive.SetActive(true);
             pickBlueChip.SetActive(false);
             blueChipUI.GetComponent<BlueChipUIManager>().Init();
             
@@ -242,7 +245,7 @@ public class UIManager : SceneSingleton<UIManager>
         else if (holdBlueChip.activeSelf == true && pickBlueChip.activeSelf == false)
         {
             blueChipUI.SetActive(false);
-
+            outGamePassive.SetActive(false);
             pickBlueChip.SetActive(true);
             TimeManager.instance.TimeStart();
         }
