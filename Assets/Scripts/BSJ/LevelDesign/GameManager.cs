@@ -146,7 +146,7 @@ public class GameManager : SceneSingleton<GameManager>
 
     public bool IsCurrentUnexpectedQuestCleared()
     {
-        if (unexpectedquests.Length >= _currentLevel)
+        if (_currentLevel >= unexpectedquests.Length )
         {
             Debug.LogError("OutOfLength");
             return false;
