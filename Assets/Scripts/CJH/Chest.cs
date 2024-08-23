@@ -2,7 +2,7 @@
 
 public class Chest : MonoBehaviour
 {
-    RewardType _rewardType;
+    [SerializeField] RewardType _rewardType;
     int _goldMin = 100;
     int _goldMax = 500;
 
