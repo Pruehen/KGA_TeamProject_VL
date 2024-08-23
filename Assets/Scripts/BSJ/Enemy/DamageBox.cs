@@ -9,8 +9,9 @@ public class DamageBox : MonoBehaviour
     [SerializeField] private ITargetable _owner;
     [SerializeField] private LayerMask _targetLayer;
     private Vector3 _offset;
-    private Vector3 Default;
+    private Vector3 Defaultoffset = new Vector3(0f,0.5f,0.5f);
     private Coroutine _DisableBoxCoroutine;
+
 
     private float _enableTimer = 0f;
 
@@ -96,7 +97,7 @@ public class DamageBox : MonoBehaviour
     {
         if (skillData == null)
         {
-            return Vector3.zero; // 기본값 반환
+            return Defaultoffset; // 기본 오프셋 반환
         }
         switch (skill)
         {
@@ -119,7 +120,7 @@ public class DamageBox : MonoBehaviour
             case PlayerSkill.MeleeSkillAttack4:
                 return skillData._meleeSkill4OffSet;
             default:
-                return Vector3.zero; // 기본 오프셋 반환
+                return Defaultoffset; // 기본 오프셋 반환
         }
     }
 
