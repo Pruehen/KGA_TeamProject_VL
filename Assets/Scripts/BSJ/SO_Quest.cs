@@ -29,9 +29,9 @@ public class Quest
         _questCondition.Init();
     }
 
-    public bool CheckConditionOnUpdate()
+    public void CheckConditionOnUpdate()
     {
-        return _questCondition.CheckConditionOnUpdate();
+        _cleared = _questCondition.CheckConditionOnUpdate();
     }
 
     public void StartQuest()
