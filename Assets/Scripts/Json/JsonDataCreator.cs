@@ -208,6 +208,21 @@ public class UserData
             Debug.LogWarning($"존재하지 않는 패시브 : {id}");
         }
     }
+
+    public void AddGold(int amount)
+    {
+        Gold += amount;
+    }
+
+    public bool TryUseGold(int amount)
+    {
+        if(Gold - amount < 0)
+        {
+            return false;
+        }
+        Gold -= amount;
+        return true;
+    }
 }
 
 public class PlayData
