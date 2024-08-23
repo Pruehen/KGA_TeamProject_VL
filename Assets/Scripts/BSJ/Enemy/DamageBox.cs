@@ -8,7 +8,7 @@ public class DamageBox : MonoBehaviour
 {
     [SerializeField] private ITargetable _owner;
     [SerializeField] private LayerMask _targetLayer;
-    [SerializeField] private Vector3 _offset;
+    private Vector3 _offset;
     private Vector3 Default;
     private Coroutine _DisableBoxCoroutine;
 
@@ -31,9 +31,21 @@ public class DamageBox : MonoBehaviour
             _halfSize = value;
         }
     }
+    private Vector3 Offset
+    {
+        get
+        {
+            return _offset != Vector3.zero ? _offset : GetSkillOffset(playerSkill);
+        }
+        set
+        {
+            _offset = value;
+        }
+    }
 
     public enum PlayerSkill
     {
+        MeleeAttack,
         RangeSkillAttack1,
         RangeSkillAttack2,
         RangeSkillAttack3,
@@ -48,8 +60,15 @@ public class DamageBox : MonoBehaviour
 
     private Vector3 GetSkillRange(PlayerSkill skill)
     {
+        if (skillData == null)
+        {
+            return Vector3.one; // 기본값 반환
+        }
+
         switch (skill)
         {
+            case PlayerSkill.MeleeAttack:
+                return new Vector3(1f, 1f, 1f);
             case PlayerSkill.RangeSkillAttack1:
                 return skillData._rangedSkill1Range;
             case PlayerSkill.RangeSkillAttack2:
@@ -73,6 +92,37 @@ public class DamageBox : MonoBehaviour
         }
     }
 
+    private Vector3 GetSkillOffset(PlayerSkill skill)
+    {
+        if (skillData == null)
+        {
+            return Vector3.zero; // 기본값 반환
+        }
+        switch (skill)
+        {
+            case PlayerSkill.RangeSkillAttack1:
+                return skillData._rangedSkill1OffSet;
+            case PlayerSkill.RangeSkillAttack2:
+                return skillData._rangedSkill2OffSet;
+            case PlayerSkill.RangeSkillAttack3:
+                return skillData._rangedSkill3OffSet;
+            case PlayerSkill.RangeSkillAttack4:
+                return skillData._rangedSkill4OffSet;
+            case PlayerSkill.MeleeSkillAttack1:
+                return skillData._meleeSkill1OffSet;
+            case PlayerSkill.MeleeSkillAttack2:
+                return skillData._meleeSkill2OffSet;
+            case PlayerSkill.MeleeSkillAttack3_1:
+            case PlayerSkill.MeleeSkillAttack3_2:
+            case PlayerSkill.MeleeSkillAttack3_3:
+                return skillData._meleeSkill3OffSet;
+            case PlayerSkill.MeleeSkillAttack4:
+                return skillData._meleeSkill4OffSet;
+            default:
+                return Vector3.one; // 기본 오프셋 반환
+        }
+    }
+
     private float _damage;
 
     private void Awake()
@@ -90,7 +140,7 @@ public class DamageBox : MonoBehaviour
     {
         get
         {
-            return transform.position + Vector3.Scale(_offset + target, transform.lossyScale);
+            return (transform.position + Vector3.Scale(transform.rotation * Offset, transform.lossyScale));
         }
     }
 
@@ -124,7 +174,7 @@ public class DamageBox : MonoBehaviour
         {
             OnHitCallback?.Invoke();
         }
-        Debug.Log(HalfSize);
+        Debug.Log("HalfSize: " + HalfSize);
     }
 
     private void Update()
@@ -146,7 +196,7 @@ public class DamageBox : MonoBehaviour
         Gizmos.DrawWireCube(Center, HalfSize);
     }
 
-    public void EnableDamageBox(float damage, Vector3? range = null, Action onHitCallBack = null, float time = 0f)
+    public void EnableDamageBox(float damage, Vector3? range = null, Action onHitCallBack = null, float time = 0f, Vector3? offset = null)
     {
         OnHitCallback = onHitCallBack;
         _damage = damage;
@@ -154,18 +204,23 @@ public class DamageBox : MonoBehaviour
         // range가 null이 아니면 설정하고, null이면 기본 크기 설정
         SetRange(range ?? GetSkillRange(playerSkill));
 
-        transform.localPosition = Default;
+        // offset이 null이 아니면 설정하고, null이면 기본값을 설정
+        SetOffset(offset ?? GetSkillOffset(playerSkill));
+
         enabled = true;
         _enableTimer = time;
     }
 
-    public void EnableSkillDamageBox(float damage, Vector3? range = null, Action onHitCallBack = null, float time = 0f)
+    public void EnableSkillDamageBox(float damage, Vector3? range = null, Action onHitCallBack = null, float time = 0f, Vector3? offset = null)
     {
         OnHitCallback = onHitCallBack;
         _damage = damage;
 
         // range가 null이 아니면 설정하고, null이면 기본 크기 설정
         SetRange(range ?? GetSkillRange(playerSkill));
+
+        // offset이 null이 아니면 설정하고, null이면 기본값을 설정
+        SetOffset(offset ?? GetSkillOffset(playerSkill));
 
         enabled = true;
         _enableTimer = time;
@@ -174,8 +229,13 @@ public class DamageBox : MonoBehaviour
     private void SetRange(Vector3 range)
     {
         HalfSize = range;
-        Debug.Log(HalfSize);
-        Debug.Log(range + " Range");
+        Debug.Log("Range set to: " + HalfSize);
+    }
+
+    private void SetOffset(Vector3 offset)
+    {
+        Offset = offset;
+        Debug.Log("Offset set to: " + Offset);
     }
 
     private void OnDestroy()

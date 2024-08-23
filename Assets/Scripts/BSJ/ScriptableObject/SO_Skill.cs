@@ -33,4 +33,15 @@ public class SO_Skill : ScriptableObject
     public float _rangedSkill3Distance = 1f;
     public float _rangedSkill4Distance = 1f;
     public float _meleeSkill4Distance = 20f;
+
+    [Header("스킬 시작위치")]
+    public Vector3 _rangedSkill1OffSet = new Vector3(0f,0f,0f);
+    public Vector3 _rangedSkill2OffSet = new Vector3(0f,0f,0f);
+    public Vector3 _rangedSkill3OffSet = new Vector3(0f,0f,0f);
+    public Vector3 _rangedSkill4OffSet = new Vector3(0f,0f,0f);
+    public Vector3 _meleeSkill1OffSet = new Vector3(0f,0f,0f);
+    public Vector3 _meleeSkill2OffSet = new Vector3(0f,0f,0f);
+    public Vector3 _meleeSkill3OffSet = new Vector3(0f,0f,0f);
+    public Vector3 _meleeSkill4OffSet = new Vector3(0f, 0f, 0f);
+
 }
