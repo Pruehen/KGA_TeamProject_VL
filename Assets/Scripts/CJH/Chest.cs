@@ -48,7 +48,9 @@ public class Chest : MonoBehaviour
 
     private void SpawnRandomGold(int v1, int v2)
     {
-        JsonDataManager.GetUserData().PlayData.AddGold(Random.Range(v1, v2+1));
+        int amount = Random.Range(v1, v2 + 1);
+        JsonDataManager.GetUserData().PlayData.AddGold(amount);
+        UIManager.Instance.GoldInfoUI(amount);
     }
 
     public void BlueChipSelectUI()
