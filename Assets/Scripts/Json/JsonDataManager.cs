@@ -79,6 +79,10 @@ public static class JsonDataManager
         else
             return true;
     }
+    public static void DeleteUserData(int index)
+    {
+        jsonCache.UserDataCache.DeleteUserData(index);
+    }
     public static void SetUserDataIndex(int index)
     {
         jsonCache.UserDataCache.SetUserDataIndex(index);

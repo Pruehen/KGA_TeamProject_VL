@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Zenject;
 
 public class PassiveUIManager : SceneSingleton<PassiveUIManager>
 {
@@ -24,11 +25,17 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
     [SerializeField] Text functionText;
     [SerializeField] Text costText;
     [SerializeField] Text effectText;
-    
+
     [SerializeField] int Max_Passive_Count = 2;
+
+    [SerializeField] Text emeraldText;
+  
+    int playerEmerald;
+
 
     private void Awake()
     {
+
         PassiveUI.AddRange(FindObjectsOfType<PassiveUI>());
     }
     public void Init(UserData userData)
@@ -37,10 +44,15 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
 
         foreach (var item in PassiveUI)
         {
-            item.ImageChange();
+            item.SetUI();
         }
         InfoText(PassiveID.Offensive1);
         GetSlotData_OnInit(userData);
+    }
+
+    private void Update()
+    {
+        SetEemeraldText();
     }
 
     void GetSlotData_OnInit(UserData userData)
@@ -69,11 +81,11 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
 
         Debug.Log($"{userData.SaveDataIndex}번째 데이터 로드");
         foreach (var item in userData.UsePassiveHashSet)
-        {            
+        {
             ID_PassiveUI_Dic[item].OnClick_TryEquip();
         }
     }
-   
+
     public void InfoText(PassiveID passiveID)
     {
         if (passiveID == PassiveID.None)
@@ -85,8 +97,8 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
         }
         else
         {
-            PassiveData data = JsonDataManager.GetPassive(passiveID);
-
+            PassiveData data = JsonDataManager.GetPassive(passiveID);//패시브의 정보를 받는 부분
+            
             functionText.text = data.PrintName();
             costText.gameObject.SetActive(true);
             costText.text = data.Cost.ToString();
@@ -108,7 +120,7 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
                 if (Max_Passive_Count > useOffensivePassiveCount)
                 {
                     PassiveUIGroup_Offensive[useOffensivePassiveCount].passiveID = targetUI.passiveID;
-                    PassiveUIGroup_Offensive[useOffensivePassiveCount].ImageChange();
+                    PassiveUIGroup_Offensive[useOffensivePassiveCount].SetUI();
                     useOffensivePassiveCount++;
                     return true;
                 }
@@ -121,7 +133,7 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
                 if (Max_Passive_Count > useDeffensivePassiveCount)
                 {
                     PassiveUIGroup_Deffensive[useDeffensivePassiveCount].passiveID = targetUI.passiveID;
-                    PassiveUIGroup_Deffensive[useDeffensivePassiveCount].ImageChange();
+                    PassiveUIGroup_Deffensive[useDeffensivePassiveCount].SetUI();
                     useDeffensivePassiveCount++;
                     return true;
                 }
@@ -134,14 +146,14 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
                 if (Max_Passive_Count > useUtilityPassiveCount)
                 {
                     PassiveUIGroup_Utility[useUtilityPassiveCount].passiveID = targetUI.passiveID;
-                    PassiveUIGroup_Utility[useUtilityPassiveCount].ImageChange();
+                    PassiveUIGroup_Utility[useUtilityPassiveCount].SetUI();
                     useUtilityPassiveCount++;
                     return true;
                 }
                 break;
             case PassiveID.None:
                 Debug.LogWarning("패시브 ID가 None입니다. 아무 작업도 수행하지 않습니다.");
-                return false;                
+                return false;
         }
         return false;
     }
@@ -158,7 +170,7 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
             case PassiveID.Offensive5:
                 useOffensivePassiveCount--;
                 ID_PassiveUI_Dic[targetUiPassiveID].passiveID = targetUiPassiveID;
-                ID_PassiveUI_Dic[targetUiPassiveID].ImageChange();
+                ID_PassiveUI_Dic[targetUiPassiveID].SetUI();
                 break;
             case PassiveID.Defensive1:
             case PassiveID.Defensive2:
@@ -167,7 +179,7 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
             case PassiveID.Defensive5:
                 useDeffensivePassiveCount--;
                 ID_PassiveUI_Dic[targetUiPassiveID].passiveID = targetUiPassiveID;
-                ID_PassiveUI_Dic[targetUiPassiveID].ImageChange();
+                ID_PassiveUI_Dic[targetUiPassiveID].SetUI();
                 break;
             case PassiveID.Utility1:
             case PassiveID.Utility2:
@@ -176,7 +188,7 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
             case PassiveID.Utility5:
                 useUtilityPassiveCount--;
                 ID_PassiveUI_Dic[targetUiPassiveID].passiveID = targetUiPassiveID;
-                ID_PassiveUI_Dic[targetUiPassiveID].ImageChange();
+                ID_PassiveUI_Dic[targetUiPassiveID].SetUI();
                 break;
             case PassiveID.None:
                 Debug.LogWarning("패시브 ID가 None입니다. 아무 작업도 수행하지 않습니다.");
@@ -190,4 +202,14 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
         SceneManager.LoadScene("Jihe");
     }
 
+    //에메랄드 UI를 갱신해주는 메서드
+    public void SetEemeraldText()
+    {
+        emeraldText.text = JsonDataManager.GetUserData().Gold.ToString();
+    }    
+
+    public bool TryUseEmerald(int emerald)
+    {
+        return true;
+    }
 }

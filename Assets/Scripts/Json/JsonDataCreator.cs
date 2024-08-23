@@ -271,6 +271,10 @@ public class UserDataList
             return null;
         }
     }
+    public void DeleteUserData(int index)
+    {
+        dic.Remove(index);        
+    }
     public void SetUserDataIndex(int index)
     {
         if (dic.ContainsKey(index))

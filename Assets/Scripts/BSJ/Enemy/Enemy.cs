@@ -37,6 +37,8 @@ public interface AiAttackAction
 [RequireComponent(typeof(Animator))]
 public class Enemy : MonoBehaviour, ITargetable
 {
+    [Header ("If this var is empty it will spawn _enemyDatas enemy (Not random)")]
+    [SerializeField] private SO_RandomEnemySet _randomEnemyData;
     [SerializeField] private SO_EnemyBase _enemyData;
     private EnemyType _enemyType;
     [SerializeField] private bool _isMovable = true;
@@ -107,6 +109,13 @@ public class Enemy : MonoBehaviour, ITargetable
     }
     private void Init()
     {
+        if(_randomEnemyData != null)
+        {
+            SO_EnemyBase[] randomEnemy = _randomEnemyData.RandomEnemySet;
+            _enemyData = randomEnemy[UnityEngine.Random.Range(0, randomEnemy.Length)];
+        }
+
+
         _combat = new Combat();
         _combat.Init(gameObject, _enemyData.Hp);
         _combat.OnDead += OnDead;

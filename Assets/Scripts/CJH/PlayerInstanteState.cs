@@ -364,6 +364,7 @@ public class PlayerInstanteState : MonoBehaviour
         combat.OnDead += OnDead;
 
         shield.Init(gameObject, GetMaxShield());
+        shield.OnKnockback += OnKnockback;
 
         maxHpBase = _playerStatData.maxHp;
         MaxStamina = _playerStatData.MaxStamina;
@@ -452,43 +453,39 @@ public class PlayerInstanteState : MonoBehaviour
             float s = shield.GetHp();
             s -= dmg;
             shield.Damaged(dmg);
-            if (s <= 0)
+            if (s < 0)
             {
-                finalDmg = dmg + s;
+                dmg = -s;
             }
             UpdateShild();
             return;
         }
 
-        if (hp > 0)
+        combat.Damaged(dmg);
+        if (hp <= 0)
         {
-            combat.Damaged(dmg);
-            finalDmg = dmg;
-            if (hp <= 0)
+            if (passive_Defensive3 != null && passive_Defensive3.ActiveCount > 0)
             {
-                if (passive_Defensive3 != null && passive_Defensive3.ActiveCount > 0)
-                {
-                    passive_Defensive3.Active(out _holdTime_Passive_Defensive3);
+                passive_Defensive3.Active(out _holdTime_Passive_Defensive3);
 
-                    combat.SetInvincible(_holdTime_Passive_Defensive3);
-                    combat.ForceChangeHp(hp);
-                    finalDmg = 0;
+                combat.SetInvincible(_holdTime_Passive_Defensive3);
+                combat.ForceChangeHp(hp);
+                finalDmg = 0;
 
-                    Debug.Log("무적 발동!");
+                Debug.Log("무적 발동!");
 
-                }
-                if(combat.IsInvincible)
-                {
-                    hp = passive_Defensive3.HpHoldValue;
-                    finalDmg = 0;
-                }
-                //if (_holdTime_Passive_Defensive3 > 0)
-                //{
-                //    hp = passive_Defensive3.HpHoldValue;
-                //    Debug.Log("핫하 무적이다!");
-                //    finalDmg = 0;
-                //}
             }
+            if(combat.IsInvincible)
+            {
+                hp = passive_Defensive3.HpHoldValue;
+                finalDmg = 0;
+            }
+            //if (_holdTime_Passive_Defensive3 > 0)
+            //{
+            //    hp = passive_Defensive3.HpHoldValue;
+            //    Debug.Log("핫하 무적이다!");
+            //    finalDmg = 0;
+            //}
             UpdateHealth();
         }
     }
@@ -816,5 +813,35 @@ public class PlayerInstanteState : MonoBehaviour
     private void OnKnockback()
     {
         _PlayerMaster.OnKnockback();
+    }
+
+    public void SetInvincible(float dashTime)
+    {
+        combat.SetInvincible(dashTime);
+        shield.SetInvincible(dashTime);
+    }
+
+    public void SetSuperArmor(float time)
+    {
+        combat.SetSuperArmor(time);
+        shield.SetSuperArmor(time);
+    }
+
+    public void ResetSuperArmor()
+    {
+        combat.ResetSuperArmor();
+        shield.ResetSuperArmor();
+    }
+
+    public void SetEvade(float v)
+    {
+        combat.SetEvade(v);
+        shield.SetEvade(v);
+    }
+
+    public void ResetEvade()
+    {
+        combat.ResetEvade();
+        shield.ResetEvade();
     }
 }

@@ -305,6 +305,25 @@ public class PlayerAttack : MonoBehaviour
         bool mel = AnimatorHelper.IsAnimationPlaying(_animator, 0, "Base Layer.Dash Range");
         return ran || mel;
     }
+
+    private void SetSuperArmor()
+    {
+        _PlayerMaster._PlayerInstanteState.SetSuperArmor(99999999f);
+    }
+    private void ResetSuperArmor()
+    {
+        _PlayerMaster._PlayerInstanteState.ResetSuperArmor();
+    }
+
+    //회피는 대시시 스크립트에서 켜주기도 함
+    private void SetEvade()
+    {
+        _PlayerMaster._PlayerInstanteState.SetEvade(99999999f);
+    }
+    private void ResetEvade()
+    {
+        _PlayerMaster._PlayerInstanteState.ResetEvade();
+    }
     //IEnumerator Attack_Delayed(float delayTime)
     //{
     //    yield return new WaitForSeconds(delayTime);

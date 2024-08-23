@@ -62,6 +62,8 @@ public class AnimatorHelper : MonoBehaviour
     {
         return animator.GetCurrentAnimatorStateInfo(layer).fullPathHash == Animator.StringToHash(fullPath);
     }
+
+    //알고싶은 애니메이션이 현재 트랜지션되어 입장하고있는시점부터 나가기 시작하는시점까지 True
     public static bool IsAnimationPlaying(Animator animator, int layer, string fullPath)
     {
         int target = Animator.StringToHash(fullPath);
