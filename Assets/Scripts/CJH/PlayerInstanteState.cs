@@ -488,6 +488,7 @@ public class PlayerInstanteState : MonoBehaviour
             //}
             UpdateHealth();
         }
+        UpdateHealth();
     }
     void OnDead()
     {

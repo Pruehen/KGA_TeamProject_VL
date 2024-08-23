@@ -22,7 +22,7 @@ public class GameManager : SceneSingleton<GameManager>
 
     private Action OnClear;
 
-    public PlayerMaster _PlayerMaster {  get; private set; }
+    public PlayerMaster _PlayerMaster { get; private set; }
 
     public Enemy[] _enemies;
 
@@ -30,9 +30,13 @@ public class GameManager : SceneSingleton<GameManager>
 
     public int _deadCount = 0;
 
+    public Quest[] unexpectedquests;
+
+
+
     private void Awake()
     {
-        if(FindObjectsOfType<GameManager>().Length >= 2)
+        if (FindObjectsOfType<GameManager>().Length >= 2)
         {
             Destroy(gameObject);
         }
@@ -96,9 +100,25 @@ public class GameManager : SceneSingleton<GameManager>
     private void OnEnemyDead()
     {
         _deadCount++;
-        if(_enemies.Length == _deadCount)
+        if (_enemies.Length == _deadCount)
         {
             OnGameClear?.Invoke();
         }
+    }
+
+    public bool IsCurrentUnexpectedQuestCleared()
+    {
+        if (unexpectedquests.Length >= _currentLevel)
+        {
+            Debug.LogError("OutOfLength");
+            return false;
+        }
+        if (unexpectedquests[_currentLevel] == null)
+        {
+
+            return false;
+        }
+
+        return unexpectedquests[_currentLevel].IsCleared();
     }
 }
