@@ -4933,7 +4933,19 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 697fc365c538ef2438aa6f635eb536b1, type: 2}
     - target: {fileID: 2364659515411706525, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
       propertyPath: playerSkill
-      value: 10
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2364659515411706525, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
+      propertyPath: DefaultRange.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2364659515411706525, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
+      propertyPath: DefaultRange.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2364659515411706525, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
+      propertyPath: DefaultRange.z
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3030909100458731246, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
       propertyPath: m_Name
@@ -5027,6 +5039,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5613953278929930394, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
+      propertyPath: SkillData
+      value: 
+      objectReference: {fileID: 11400000, guid: 697fc365c538ef2438aa6f635eb536b1, type: 2}
     - target: {fileID: 6638776597582202637, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0

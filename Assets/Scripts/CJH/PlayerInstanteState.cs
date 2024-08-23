@@ -94,8 +94,8 @@ public class PlayerInstanteState : MonoBehaviour
     public float AttackPowerMulti { get; set; } = 1f;
     public float GetAttackPower() { return attackPowerBase * AttackPowerMulti; }
     [SerializeField] Vector3 attackRangeBase = new Vector3(1f, 1f, 1f);
-    public float attackRangeMulti { get; set; } = 1f;
-    public Vector3 GetAttackRange() { return attackRangeBase * attackRangeMulti; }
+    public Vector3 attackRangeMulti { get; set; } = new Vector3(1f,1f,1f);
+    public Vector3 GetAttackRange() { return Vector3.Scale(attackRangeBase, attackRangeMulti); }
     [SerializeField] float skillRangeBase = 1f;
     public float skillRangeMulti { get; set; } = 1f;
     public float GetSkillRange() { return skillRangeBase * skillRangeMulti; }
@@ -258,10 +258,12 @@ public class PlayerInstanteState : MonoBehaviour
     }
     public Vector3 GetRange(PlayerAttackKind type, int combo)
     {
-        Vector3 baseRange = GetAttackRange();// * coefficient;
+        attackRangeBase = _PlayerMaster.SkillData.MeleedefaultAttackRange;
+
         float rangeGain = 1f;
         if (type == PlayerAttackKind.MeleeChargedAttack || type == PlayerAttackKind.RangeNormalAttack)//차지 공격일 경우
         {
+            attackRangeBase = _PlayerMaster.SkillData.MeleeChargedAttackRange;
             int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Melee1);
             if (level > 0)
             {
@@ -272,11 +274,14 @@ public class PlayerInstanteState : MonoBehaviour
                 rangeGain = 1f;
             }
         }
+        Vector3 baseRange = GetAttackRange();// * coefficient;
+        Debug.Log(baseRange+"베이스데미지");
         return baseRange * rangeGain;
     }
 
     public float GetSkillDmg()
     {
+        //attackRangeMulti = _PlayerMaster.SkillData.MeleedefaultAttackRange;
         float baseDmg = GetSkillPower();// * coefficient;
         float dmgGain = 1;
 
