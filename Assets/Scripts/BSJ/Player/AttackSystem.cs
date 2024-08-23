@@ -96,7 +96,7 @@ public class AttackSystem : MonoBehaviour
             _animator.SetTrigger("AttackEnd");
         }
     }
-    public void EnableDamageBox(float dmg, float range, Action OnHitCallback)
+    public void EnableDamageBox(float dmg, Vector3 range, Action OnHitCallback)
     {
         _playerAttack.IncreaseAttackCount();
         _damageBox.EnableDamageBox(dmg, range, OnHitCallback);

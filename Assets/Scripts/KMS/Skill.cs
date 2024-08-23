@@ -27,14 +27,14 @@ public class Skill : MonoBehaviour
      [SerializeField] public float _meleeSkill3_3 = 10f;
      [SerializeField] public float _meleeSkill4 = 15f;
 
-    [SerializeField] public float _rangedSkill1Range =1f;
-    [SerializeField] public float _rangedSkill2Range =1f;
-    [SerializeField] public float _rangedSkill3Range =1f;
-    [SerializeField] public float _rangedSkill4Range =1f;
-    [SerializeField] public float _meleeSkill1Range =1f;
-    [SerializeField] public float _meleeSkill2Range =1f;
-    [SerializeField] public float _meleeSkill3Range =1f;
-    [SerializeField] public float _meleeSkill4Range =1f;
+    [SerializeField] public Vector3 _rangedSkill1Range = new Vector3(1f,1f,1f);
+    [SerializeField] public Vector3 _rangedSkill2Range = new Vector3(1f,1f,1f);
+    [SerializeField] public Vector3 _rangedSkill3Range = new Vector3(1f,1f,1f);
+    [SerializeField] public Vector3 _rangedSkill4Range = new Vector3(1f,1f,1f);
+    [SerializeField] public Vector3 _meleeSkill1Range = new Vector3(1f,1f,1f);
+    [SerializeField] public Vector3 _meleeSkill2Range = new Vector3(1f,1f,1f);
+    [SerializeField] public Vector3 _meleeSkill3Range = new Vector3(1f,1f,1f);
+    [SerializeField] public Vector3 _meleeSkill4Range = new Vector3(1f, 1f, 1f);
 
     [SerializeField] public float _rangedSkill1Distance = 1f;
     [SerializeField] public float _rangedSkill2Distance = 1f;
@@ -56,6 +56,7 @@ public class Skill : MonoBehaviour
     private Coroutine moveCoroutine;
     private void Awake()
     {
+        player = this.gameObject;
         _master = GetComponent<PlayerMaster>();
         _animator = GetComponent<Animator>();
         Init(_animator);
@@ -83,10 +84,10 @@ public class Skill : MonoBehaviour
             _meleeSkill3_3 = so_Skill._meleeSkill3_3;
             _meleeSkill4 = so_Skill._meleeSkill4;
 
-            _rangedSkill1Range =so_Skill._rangedSkill1; 
-            _rangedSkill2Range =so_Skill._rangedSkill2; 
-            _rangedSkill3Range =so_Skill._rangedSkill3;
-            _rangedSkill4Range = so_Skill._rangedSkill4;
+            _rangedSkill1Range =so_Skill._rangedSkill1Range; 
+            _rangedSkill2Range =so_Skill._rangedSkill2Range; 
+            _rangedSkill3Range =so_Skill._rangedSkill3Range;
+            _rangedSkill4Range = so_Skill._rangedSkill4Range;
             _meleeSkill1Range = so_Skill._meleeSkill1Range;
             _meleeSkill2Range = so_Skill._meleeSkill2Range;
             _meleeSkill3Range = so_Skill._meleeSkill3Range;
@@ -122,7 +123,7 @@ public class Skill : MonoBehaviour
         RaycastHit hit;
 
         float damage = 0f;
-        float range = 1f;
+        Vector3 range = new Vector3 (1f,1f,1f);
         float distance = 1f;
 
 
@@ -156,7 +157,7 @@ public class Skill : MonoBehaviour
         RaycastHit hit;
 
         float damage = 0f;
-        float range = 1f;
+        Vector3 range = new Vector3(1f, 1f, 1f);
         float distance = 0.5f;
 
         switch (skillType)
@@ -241,7 +242,7 @@ public class Skill : MonoBehaviour
     {
        
         float damage = 0f;
-        float range = 1f;
+        Vector3 range = new Vector3 (1f,1f,1f);
         float distance = 1f;
         switch (skillType)
         {
