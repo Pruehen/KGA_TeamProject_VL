@@ -12,31 +12,50 @@ public class CheckUI : MonoBehaviour
     [SerializeField] GameObject Btn_Yes;
     [SerializeField] GameObject Btn_No;
 
+    int openCount = 1;
+
+
     //활성화
     public void CheckUiActive_OnClick(Action callBack, string msg)
     {
+        openCount++;
+
         this.gameObject.SetActive(true);
         excutionEvent = callBack;
 
         Text_Msg.text = msg;
 
         curserTemp = EventSystem.current.currentSelectedGameObject;
-        EventSystem.current.SetSelectedGameObject(Btn_Yes);        
+        EventSystem.current.SetSelectedGameObject(Btn_Yes);
     }
 
     //비활성화 
     void CheckUIDeActive()
     {
+        if (openCount > 2)
+        {
+            openCount = 1;
+        }
+     
+        openCount--;
+
+        if (openCount != 0)
+        {
+            return;
+        }
         this.gameObject.SetActive(false);
         excutionEvent = null;
     }
 
+
     public void Yes_OnClick()
     {
         EventSystem.current.SetSelectedGameObject(curserTemp);
-        
-        excutionEvent?.Invoke();        
+        excutionEvent?.Invoke();
         CheckUIDeActive();
+
+        Debug.Log("Yes");
+
     }
 
     public void No_OnClick()

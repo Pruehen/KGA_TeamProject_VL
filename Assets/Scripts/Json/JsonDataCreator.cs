@@ -269,7 +269,7 @@ public class UserDataList
     {
         if(dic.ContainsKey(UseIndex))
         {
-            //Debug.Log($"{UseIndex} 세이브파일 로드");
+            Debug.Log($"{UseIndex} 세이브파일 로드");
             return dic[UseIndex];
         }
         else
@@ -283,7 +283,7 @@ public class UserDataList
     {
         if (dic.ContainsKey(index))
         {
-            //Debug.Log($"{UseIndex} 세이브파일 로드");
+            Debug.Log($"{UseIndex} 세이브파일 로드");
             return dic[index];
         }
         else

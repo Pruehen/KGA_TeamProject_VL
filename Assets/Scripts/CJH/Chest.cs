@@ -53,6 +53,8 @@ public class Chest : MonoBehaviour
 
     private void SpawnRandomGold(int v1, int v2)
     {
+        animator.SetTrigger("Chest");
+        chestCollider.enabled = false;
         int amount = Random.Range(v1, v2 + 1);
         JsonDataManager.GetUserData().PlayData.AddGold(amount);
         UIManager.Instance.GoldInfoUI(amount);
