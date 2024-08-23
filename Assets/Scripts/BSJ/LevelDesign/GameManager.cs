@@ -59,21 +59,6 @@ public class GameManager : SceneSingleton<GameManager>
 
         NextStageObjects.Init(_rewardType);
     }
-
-    public void SpawnReword(RewardType rewordType)
-    {
-        switch (rewordType)
-        {
-            case RewardType.Currency:
-                
-                // 골드 스폰
-                break;
-            case RewardType.BlueChip:
-                // 블루칩 스폰
-                break;
-        }
-    }
-
     public void SetRewordType(RewardType rewordType)
     {
         _rewardType = rewordType;
@@ -86,6 +71,7 @@ public class GameManager : SceneSingleton<GameManager>
             if (_init == false)
             {
                 _init = true;
+                SetStageQuests();
             }
             else
             {

@@ -9,11 +9,16 @@ public class Chest : MonoBehaviour
     Animator animator;
     Collider chestCollider;
 
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+        chestCollider = GetComponent<Collider>();
+    }
+
+
     public void Init(RewardType rewardType)
     {
         _rewardType = rewardType;
-        animator = GetComponent<Animator>();
-        chestCollider = GetComponent<Collider>();
     }
 
 
