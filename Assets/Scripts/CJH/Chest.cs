@@ -2,18 +2,23 @@
 
 public class Chest : MonoBehaviour
 {
-    RewardType _rewardType;
+    [SerializeField] RewardType _rewardType;
     int _goldMin = 100;
     int _goldMax = 500;
 
     Animator animator;
     Collider chestCollider;
 
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+        chestCollider = GetComponent<Collider>();
+    }
+
+
     public void Init(RewardType rewardType)
     {
         _rewardType = rewardType;
-        animator = GetComponent<Animator>();
-        chestCollider = GetComponent<Collider>();
     }
 
 
@@ -48,7 +53,9 @@ public class Chest : MonoBehaviour
 
     private void SpawnRandomGold(int v1, int v2)
     {
-        JsonDataManager.GetUserData().PlayData.AddGold(Random.Range(v1, v2+1));
+        int amount = Random.Range(v1, v2 + 1);
+        JsonDataManager.GetUserData().PlayData.AddGold(amount);
+        UIManager.Instance.GoldInfoUI(amount);
     }
 
     public void BlueChipSelectUI()
