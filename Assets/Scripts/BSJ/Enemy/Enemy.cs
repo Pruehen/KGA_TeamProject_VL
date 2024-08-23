@@ -461,7 +461,7 @@ public class Enemy : MonoBehaviour, ITargetable
         Gizmos.DrawWireSphere(_detector.transform.position, _enemyData.EnemyAlramDistance);
 
         Gizmos.color = GetColorByState(_aiState);
-        Gizmos.DrawSphere(transform.position + Vector3.up, 1f);
+        Gizmos.DrawSphere(transform.position + Vector3.up * 2.5f, .5f);
     }
 
     private Color GetColorByState(AIState state)

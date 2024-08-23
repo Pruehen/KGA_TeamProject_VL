@@ -5,8 +5,8 @@ using UnityEngine.SceneManagement;
 
 public enum RewardType
 {
+    BlueChip,
     Currency,
-    BlueChip
 }
 
 public class GameManager : SceneSingleton<GameManager>
@@ -22,7 +22,7 @@ public class GameManager : SceneSingleton<GameManager>
 
     private Action OnClear;
 
-    public PlayerMaster _PlayerMaster {  get; private set; }
+    public PlayerMaster _PlayerMaster { get; private set; }
 
     public Enemy[] _enemies;
 
@@ -30,9 +30,13 @@ public class GameManager : SceneSingleton<GameManager>
 
     public int _deadCount = 0;
 
+    public Quest[] unexpectedquests;
+
+
+
     private void Awake()
     {
-        if(FindObjectsOfType<GameManager>().Length >= 2)
+        if (FindObjectsOfType<GameManager>().Length >= 2)
         {
             Destroy(gameObject);
         }
@@ -59,21 +63,6 @@ public class GameManager : SceneSingleton<GameManager>
 
         NextStageObjects.Init(_rewardType);
     }
-
-    public void SpawnReword(RewardType rewordType)
-    {
-        switch (rewordType)
-        {
-            case RewardType.Currency:
-                
-                // 골드 스폰
-                break;
-            case RewardType.BlueChip:
-                // 블루칩 스폰
-                break;
-        }
-    }
-
     public void SetRewordType(RewardType rewordType)
     {
         _rewardType = rewordType;
@@ -86,6 +75,7 @@ public class GameManager : SceneSingleton<GameManager>
             if (_init == false)
             {
                 _init = true;
+                //SetStageQuests();
             }
             else
             {
@@ -110,9 +100,25 @@ public class GameManager : SceneSingleton<GameManager>
     private void OnEnemyDead()
     {
         _deadCount++;
-        if(_enemies.Length == _deadCount)
+        if (_enemies.Length == _deadCount)
         {
             OnGameClear?.Invoke();
         }
+    }
+
+    public bool IsCurrentUnexpectedQuestCleared()
+    {
+        if (unexpectedquests.Length >= _currentLevel)
+        {
+            Debug.LogError("OutOfLength");
+            return false;
+        }
+        if (unexpectedquests[_currentLevel] == null)
+        {
+
+            return false;
+        }
+
+        return unexpectedquests[_currentLevel].IsCleared();
     }
 }

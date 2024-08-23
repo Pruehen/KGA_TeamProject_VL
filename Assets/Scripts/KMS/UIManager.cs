@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using EnumTypes;
+using System;
 
 public class UIManager : SceneSingleton<UIManager>
 {
@@ -198,6 +199,10 @@ public class UIManager : SceneSingleton<UIManager>
 
         HoldButtonMove();
 
+    }
+    public void GoldInfoUI(float amount)
+    {
+        //°ñµå È¹µæ Á¤º¸ Ãâ·Â
     }
 
     //FÅ°¸¦ ´­·¯ ºí·çÄ¨À» ¼±ÅÃÇÏ¸é È£­ŒµÇ´Â ÇÔ¼ö
