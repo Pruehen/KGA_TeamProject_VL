@@ -170,6 +170,9 @@ public class PlayerInstanteState : MonoBehaviour
     {
         get { return executionCount; }
     }
+
+    public Action OnDamaged;
+
     public void OnEnemyDestroy()
     {
         Passive_Defensive2_AddExcutionCount();
@@ -258,6 +261,8 @@ public class PlayerInstanteState : MonoBehaviour
     }
     public float GetRange(PlayerAttackKind type, int combo)
     {
+
+
         float baseRange = GetAttackRange();// * coefficient;
         float rangeGain = 1;
         if (type == PlayerAttackKind.MeleeChargedAttack || type == PlayerAttackKind.RangeNormalAttack)//차지 공격일 경우
@@ -440,6 +445,8 @@ public class PlayerInstanteState : MonoBehaviour
 
     public void Hit(float dmg, out float finalDmg)
     {
+        OnDamaged?.Invoke();
+
         finalDmg = dmg;
 
         if (passive_Defensive4 != null)
@@ -488,7 +495,10 @@ public class PlayerInstanteState : MonoBehaviour
             //}
             UpdateHealth();
         }
-        UpdateHealth();
+        else
+        {
+            UpdateHealth();
+        }
     }
     void OnDead()
     {

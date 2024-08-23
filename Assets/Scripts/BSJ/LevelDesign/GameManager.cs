@@ -30,7 +30,8 @@ public class GameManager : SceneSingleton<GameManager>
 
     public int _deadCount = 0;
 
-    public Quest[] unexpectedquests;
+    public SO_Quest[] unexpectedquests;
+    public SO_RandomQuestsData _randomQuestSet;
 
 
 
@@ -46,6 +47,7 @@ public class GameManager : SceneSingleton<GameManager>
         NextStageObjects = FindAnyObjectByType<NextStageObjects>();
         Assert.IsNotNull(NextStageObjects);
 
+        OnSceneLoaded(new Scene(), LoadSceneMode.Single);
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -63,6 +65,14 @@ public class GameManager : SceneSingleton<GameManager>
 
         NextStageObjects.Init(_rewardType);
     }
+
+    private void Update()
+    {
+        if (unexpectedquests[_currentLevel] != null)
+        {
+            unexpectedquests[_currentLevel].CheckConditionOnUpdate();
+        }
+    }
     public void SetRewordType(RewardType rewordType)
     {
         _rewardType = rewordType;
@@ -75,11 +85,31 @@ public class GameManager : SceneSingleton<GameManager>
             if (_init == false)
             {
                 _init = true;
-                //SetStageQuests();
+                SetStageQuests();
             }
             else
             {
             }
+        }
+    }
+
+    private void SetStageQuests()
+    {
+        int count = 0;
+        unexpectedquests = new SO_Quest[_chapterData.ChapterData.Length];
+        for (int i = 0; i < unexpectedquests.Length; i++) 
+        {
+            SO_Quest r = _randomQuestSet.TryGetRandomQuest();
+            if (r != null)
+            {
+                count++;
+            }
+            unexpectedquests[i] = r;
+        }
+
+        if(count == 0)
+        {
+            unexpectedquests[UnityEngine.Random.Range(0, unexpectedquests.Length)] = _randomQuestSet.GetRandomQuest();
         }
     }
 
