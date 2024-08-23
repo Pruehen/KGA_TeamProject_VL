@@ -5,8 +5,8 @@ using UnityEngine.SceneManagement;
 
 public enum RewardType
 {
+    BlueChip,
     Currency,
-    BlueChip
 }
 
 public class GameManager : SceneSingleton<GameManager>
