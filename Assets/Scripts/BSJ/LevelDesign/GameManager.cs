@@ -32,7 +32,7 @@ public class GameManager : SceneSingleton<GameManager>
 
     public SO_Quest[] unexpectedquests;
     private Quest _currentQuest = new Quest();
-    public SO_RandomQuestsData _randomQuestSet;
+    public SO_RandomQuestSetData _randomQuestSet;
 
 
 

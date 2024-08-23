@@ -3,8 +3,8 @@ using UnityEngine;
 
 
 [Serializable]
-[CreateAssetMenu(fileName = "RandomQuestsData", menuName = "Quests/RandomQuests", order = 1)]
-public class SO_RandomQuestsData : ScriptableObject
+[CreateAssetMenu(fileName = "RandomQuestsData", menuName = "Quests/RandomSets/RandomQuests", order = 1)]
+public class SO_RandomQuestSetData : ScriptableObject
 {
     public SO_Quest[] EasyQuests;
     public SO_Quest[] NormalQuests;
@@ -44,11 +44,11 @@ public class SO_RandomQuestsData : ScriptableObject
         float normalizedNormal = normalizedEasy + NormalPosiblity / sum;
         float normalizedHard = normalizedNormal + HardPosiblity / sum;
 
-        if (r <= EasyPosiblity)
+        if (r <= normalizedEasy)
         {
             return EasyQuests[UnityEngine.Random.Range(0, EasyQuests.Length)];
         }
-        else if (r <= NormalPosiblity)
+        else if (r <= normalizedNormal)
         {
             return NormalQuests[UnityEngine.Random.Range(0, NormalQuests.Length)];
         }
