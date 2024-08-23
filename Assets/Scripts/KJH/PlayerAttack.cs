@@ -63,7 +63,7 @@ public class PlayerAttack : MonoBehaviour
         _PlayerMod.OnEnterAbsorptState += ChangeAbsorbing;
         _PlayerMod.OnEndAbsorptState += AbsorbingFall;
 
-        _AttackSystem.Init(Callback_IsCharged, Callback_IsChargedFail, Callback_IsChargedEnd);
+        _AttackSystem.Init(Callback_IsCharged, Callback_IsChargedFail, Callback_IsChargedEnd, Callback_IsChargedStart);
 
         _animator = GetComponent<Animator>();
         _PlayerMaster._PlayerInstanteState.OnMeleeModeChanged += OnModChanged;
@@ -84,7 +84,7 @@ public class PlayerAttack : MonoBehaviour
     private void AbsorbingFall()
     {
         Debug.Log("AbsorbingFall");
-        ChangeAttackState(false);
+        //ChangeAttackState(false);
         _AttackSystem.AbsoberEnd();
     }
     private void ChangeAttackState(bool isMelee)
@@ -99,7 +99,7 @@ public class PlayerAttack : MonoBehaviour
         {
             CurrentAttackKind = PlayerAttackKind.RangeNormalAttack;
             _currentAttackMod = PlayerAttackKind.RangeNormalAttack;
-            _AttackSystem.ModTransform();
+            //_AttackSystem.ModTransform();
         }
     }
 
@@ -258,6 +258,12 @@ public class PlayerAttack : MonoBehaviour
             CurrentAttackKind = PlayerAttackKind.MeleeNormalAttack;
             Debug.Log("차-지 실패");
         }
+    }
+    private void Callback_IsChargedStart()
+    {
+        CurrentAttackKind = PlayerAttackKind.MeleeNormalAttack;
+        _currentAttackMod = PlayerAttackKind.MeleeNormalAttack;
+        Debug.Log("차-지 시작");
     }
     public void OnUseSkillGauge()
     {

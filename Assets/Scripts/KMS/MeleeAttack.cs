@@ -24,11 +24,13 @@ public class MeleeAttack: MonoBehaviour
     Action OnCharged;
     Action OnChargeEnd;
     Action OnChargeFail;
+    Action OnChargeStart;
 
     private void Update()
     {
         if (_isCharging)
         {
+            _isCharged = false;
             _chargingTime += Time.deltaTime;
             if(_chargingTime >= ChargeTime && !_isCharged)
             {
@@ -43,7 +45,7 @@ public class MeleeAttack: MonoBehaviour
         }
     }
 
-    public void Init(Animator animator, Action onCharged = null, Action onChargeEnd = null, Action onChargeFail = null)
+    public void Init(Animator animator, Action onCharged = null, Action onChargeEnd = null, Action onChargeFail = null,Action onChargeStart = null)
     {
         _animator = animator;
         _animTriggerAttack = Animator.StringToHash("Attack");
@@ -55,6 +57,7 @@ public class MeleeAttack: MonoBehaviour
         OnCharged = onCharged;
         OnChargeEnd = onChargeEnd;
         OnChargeFail = onChargeFail;
+        OnChargeStart = onChargeStart;
     }
 
     private void OnDestroy()
@@ -62,6 +65,7 @@ public class MeleeAttack: MonoBehaviour
         OnChargeFail = null;
         OnChargeEnd = null;
         OnCharged = null;
+        OnChargeStart =null;
     }
     public void EndAttack()
     {
@@ -91,9 +95,13 @@ public class MeleeAttack: MonoBehaviour
 
     }
 
-    public void ChargeStart()
+    public void ChargeStart()//애니메이션 이벤트 MeleeAttack
     {
+        OnChargeStart?.Invoke();
+        _chargingTime = 0f;
+        _isCharged = false;
         _isCharging = true;
+        Debug.Log("차-지 시작");
     }
     
     public void ChargeEnd()

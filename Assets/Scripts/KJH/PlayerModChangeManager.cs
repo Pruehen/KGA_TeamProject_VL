@@ -53,6 +53,7 @@ public class PlayerModChangeManager : MonoBehaviour
                 if (InputManager.Instance.IsLControlBtnClick == false && IsAbsorptState == true&& IsAttackState==false && isDashing == false)
                 {
                     IsAbsorptState = false;
+                    //EndAbsorptState();
                     EnterRangeMode();
                 }
                 break;
@@ -92,6 +93,10 @@ public class PlayerModChangeManager : MonoBehaviour
         if (value <= 0)
         {
             EndAbsorptState();
+        }
+        else
+        {
+                EndAbsorptState();
         }
 
         if (HasBlueChip5_AutoChange() == false)
@@ -137,7 +142,6 @@ public class PlayerModChangeManager : MonoBehaviour
         {
             IsMeleeMode = false;
         }
-        Debug.Log($"Èí¼ö ½ÇÆÐ");
         OnEndAbsorptState.Invoke();
     }
 
