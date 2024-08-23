@@ -22,8 +22,8 @@ MonoBehaviour:
   attackSpeed: 1
   shieldMax: 50
   dashTime: 0.5
-  dashForce: 15
-  dashCost: 99
+  dashForce: 10
+  dashCost: 300
   MaxskillGauge: 400
   statGaugeGainRanged1: 30
   statGaugeGainRanged2: 40
@@ -42,8 +42,8 @@ MonoBehaviour:
   atkMelee101: 5
   atkMelee111: 7.5
   atkMelee121: 2.5
-  AbsolsionSpeed: 3
-  Radious: 5
+  AbsolsionSpeed: 10
+  Radious: 10
   Height: 1
   RevolveRadious: 2.5
   RevolveSpeed: 90
@@ -71,7 +71,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  AcquireSpeed: 3
+  AcquireSpeed: 10
   RadiusExpandCurve:
     serializedVersion: 2
     m_Curve:
