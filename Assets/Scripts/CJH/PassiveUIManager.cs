@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Zenject;
 
 public class PassiveUIManager : SceneSingleton<PassiveUIManager>
 {
@@ -29,15 +28,15 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
     [SerializeField] int Max_Passive_Count = 2;
 
     [SerializeField] Text emeraldText;
- 
-    int playerEmerald;
+
+    [SerializeField] int TestEmerald = 10000;
 
 
     private void Awake()
     {
         PassiveUI.AddRange(FindObjectsOfType<PassiveUI>());
         SetEemeraldText();
-      
+
     }
     public void Init(UserData userData)
     {
@@ -95,7 +94,7 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
         else
         {
             PassiveData data = JsonDataManager.GetPassive(passiveID);//패시브의 정보를 받는 부분
-            
+
             functionText.text = data.PrintName();
             costText.gameObject.SetActive(true);
             costText.text = data.Cost.ToString();
@@ -202,17 +201,40 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
     //에메랄드 UI를 갱신해주는 메서드
     public void SetEemeraldText()
     {
-        if(JsonDataManager.GetUserData().Gold == 0)
+        if (JsonDataManager.GetUserData().Gold == 0)
         {
+            //테스트용 재화 
+            JsonDataManager.GetUserData().AddGold(TestEmerald);
         }
-        emeraldText.text = JsonDataManager.GetUserData().Gold.ToString();
-     
-        
-    }    
 
-    public bool TryUseEmerald(int emerald)
+        emeraldText.text = JsonDataManager.GetUserData().Gold.ToString();
+      
+    }
+
+
+    //에메랄드 사용 가능(보유량이 충분)할 경우 true 반환, 불가능할 경우 false 반환 목적
+    public bool TryUseEmerald()
     {
-    
-        return true;
+
+        int costint;
+        int.TryParse(costText.text.ToString(), out costint);
+
+        bool suceeded = JsonDataManager.GetUserData().TryUseGold(costint);
+
+        if (suceeded)
+        {
+            //// 에메랄드 차감
+            //playerEmerald -= costint;
+            //Debug.Log("playerEmerald :" + playerEmerald + " costint: " + costint);
+
+            // UI 갱신
+            emeraldText.text = JsonDataManager.GetUserData().Gold.ToString();
+            return true;
+        }
+        else
+        {
+            Debug.Log("에메랄드 부족.");
+            return false;
+        }
     }
 }

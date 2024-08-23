@@ -33,10 +33,13 @@ public class UIManager : SceneSingleton<UIManager>
     [SerializeField] Button holdButton;
     [SerializeField] GameObject escImage;
 
+    [SerializeField] Text emeraldText;
+        
     [SerializeField] List<PassiveUI> PassiveUIList;
 
     private void Start()
     {
+        emeraldText.text = JsonDataManager.GetUserData().Gold.ToString();
         blueChipUI.SetActive(false);
         Init_PassiveUIList();
 
