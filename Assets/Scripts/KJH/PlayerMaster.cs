@@ -13,7 +13,8 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     Animator _PlayerAnimator;
     PlayerMove _PlayerMove;
     PlayerAttack _PlayerAttack;
-    PlayerModChangeManager _PlayerModChangeManager;    
+    PlayerModChangeManager _PlayerModChangeManager;
+    public SO_Skill SkillData;
     [SerializeField] ItemAbsorber _ItemAbsorber;
     [SerializeField] AttackSystem _AttackSystem;
 

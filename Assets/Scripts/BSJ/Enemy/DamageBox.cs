@@ -10,6 +10,7 @@ public class DamageBox : MonoBehaviour
     [SerializeField] private LayerMask _targetLayer;
     private Vector3 _offset;
     public Vector3 Defaultoffset = new Vector3(0f,0.5f,0.5f);
+    [SerializeField]public Vector3 DefaultRange= new Vector3(1f, 1f, 1f);
     private Coroutine _DisableBoxCoroutine;
 
 
@@ -20,6 +21,7 @@ public class DamageBox : MonoBehaviour
     [SerializeField] PlayerSkill playerSkill;
     [SerializeField] private SO_Skill skillData;
     private Vector3 _halfSize;
+
     [SerializeField]
     private Vector3 HalfSize
     {
@@ -47,6 +49,7 @@ public class DamageBox : MonoBehaviour
     public enum PlayerSkill
     {
         MeleeAttack,
+        MeleeAttackCharged,
         RangeSkillAttack1,
         RangeSkillAttack2,
         RangeSkillAttack3,
@@ -63,13 +66,15 @@ public class DamageBox : MonoBehaviour
     {
         if (skillData == null)
         {
-            return Vector3.one; // 기본값 반환
+            return DefaultRange; // 기본값 반환
         }
 
         switch (skill)
         {
             case PlayerSkill.MeleeAttack:
-                return new Vector3(1f, 1f, 1f);
+                return skillData.MeleedefaultAttackRange;
+            case PlayerSkill.MeleeAttackCharged:
+                return skillData.MeleeChargedAttackRange;
             case PlayerSkill.RangeSkillAttack1:
                 return skillData._rangedSkill1Range;
             case PlayerSkill.RangeSkillAttack2:
@@ -89,7 +94,7 @@ public class DamageBox : MonoBehaviour
             case PlayerSkill.MeleeSkillAttack4:
                 return skillData._meleeSkill4Range;
             default:
-                return Vector3.one; // 기본 크기 반환
+                return DefaultRange; // 기본 크기 반환
         }
     }
 
@@ -101,6 +106,10 @@ public class DamageBox : MonoBehaviour
         }
         switch (skill)
         {
+            case PlayerSkill.MeleeAttack:
+                return skillData.MeleedefaultAttackOffset;
+            case PlayerSkill.MeleeAttackCharged:
+                return skillData.MeleeChargedAttackOffset;
             case PlayerSkill.RangeSkillAttack1:
                 return skillData._rangedSkill1OffSet;
             case PlayerSkill.RangeSkillAttack2:

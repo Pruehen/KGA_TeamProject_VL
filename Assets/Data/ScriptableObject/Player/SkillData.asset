@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 856d7a1f7ec98cb44b2489c9945fd9f7, type: 3}
   m_Name: SkillData
   m_EditorClassIdentifier: 
+  MeleedefaultAttak: 0
+  MeleeChargeAttak: 0
   _rangedSkill1: 5
   _rangedSkill2: 7
   _rangedSkill3: 1
@@ -30,6 +32,8 @@ MonoBehaviour:
   _meleeSkill2Range: {x: 2, y: 2, z: 2}
   _meleeSkill3Range: {x: 5, y: 5, z: 5}
   _meleeSkill4Range: {x: 10, y: 10, z: 10}
+  MeleedefaultAttackRange: {x: 1, y: 1, z: 1}
+  MeleeChargedAttackRange: {x: 100, y: 100, z: 100}
   _rangedSkill1Distance: 20
   _rangedSkill2Distance: 20
   _rangedSkill3Distance: 20
@@ -43,3 +47,5 @@ MonoBehaviour:
   _meleeSkill2OffSet: {x: 0, y: 0, z: 1}
   _meleeSkill3OffSet: {x: 0, y: 0, z: 13.1}
   _meleeSkill4OffSet: {x: 0, y: 0, z: 0}
+  MeleedefaultAttackOffset: {x: 1, y: 1, z: 1}
+  MeleeChargedAttackOffset: {x: 0, y: 0, z: 0}

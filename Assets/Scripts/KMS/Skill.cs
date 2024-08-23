@@ -56,6 +56,7 @@ public class Skill : MonoBehaviour
     private Coroutine moveCoroutine;
     private void Awake()
     {
+        so_Skill = _master.SkillData;
         player = this.gameObject;
         _master = GetComponent<PlayerMaster>();
         _animator = GetComponent<Animator>();
