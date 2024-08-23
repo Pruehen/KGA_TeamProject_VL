@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using EnumTypes;
 using System;
+using Unity.VisualScripting;
 
 public class UIManager : SceneSingleton<UIManager>
 {
@@ -26,6 +27,7 @@ public class UIManager : SceneSingleton<UIManager>
     [SerializeField] GameObject pickBlueChip;
     [SerializeField] GameObject holdBlueChip;
     [SerializeField] GameObject outGamePassive;
+  
 
     PlayerInstanteState _PlayerState;
     PlayerMaster _PlayerMaster;
@@ -205,9 +207,15 @@ public class UIManager : SceneSingleton<UIManager>
     }
     public void GoldInfoUI(float amount)
     {
-        //°ñµå È¹µæ Á¤º¸ Ãâ·Â
+        Debug.Log("amount" + amount);
+        float playerEmerald = float.Parse(emeraldText.text);
+        playerEmerald += amount;
+
+        emeraldText.text = playerEmerald.ToString();
+
     }
 
+  
     //FÅ°¸¦ ´­·¯ ºí·çÄ¨À» ¼±ÅÃÇÏ¸é È£­ŒµÇ´Â ÇÔ¼ö
     public void PickBUtton()
     {

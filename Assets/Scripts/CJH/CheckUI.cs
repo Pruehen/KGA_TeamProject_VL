@@ -14,6 +14,7 @@ public class CheckUI : MonoBehaviour
 
     int openCount = 1;
 
+
     //활성화
     public void CheckUiActive_OnClick(Action callBack, string msg)
     {
@@ -31,6 +32,11 @@ public class CheckUI : MonoBehaviour
     //비활성화 
     void CheckUIDeActive()
     {
+        if (openCount > 2)
+        {
+            openCount = 1;
+        }
+     
         openCount--;
 
         if (openCount != 0)
