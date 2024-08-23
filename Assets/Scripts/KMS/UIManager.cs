@@ -237,7 +237,7 @@ public class UIManager : SceneSingleton<UIManager>
         if (blueChipUI.activeSelf == false)
         {
             blueChipUI.SetActive(true);
-
+            outGamePassive.SetActive(true);
             pickBlueChip.SetActive(false);
             blueChipUI.GetComponent<BlueChipUIManager>().Init();
             
@@ -245,7 +245,7 @@ public class UIManager : SceneSingleton<UIManager>
         else if (holdBlueChip.activeSelf == true && pickBlueChip.activeSelf == false)
         {
             blueChipUI.SetActive(false);
-
+            outGamePassive.SetActive(false);
             pickBlueChip.SetActive(true);
             TimeManager.instance.TimeStart();
         }
