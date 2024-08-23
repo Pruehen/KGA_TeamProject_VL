@@ -3,26 +3,23 @@
 public class Chest : MonoBehaviour
 {
     RewardType _rewardType;
-    int _goldMin;
-    int _goldMax;
+    int _goldMin = 100;
+    int _goldMax = 500;
 
+    Animator animator;
+    Collider chestCollider;
 
     public void Init(RewardType rewardType)
     {
         _rewardType = rewardType;
+        animator = GetComponent<Animator>();
+        chestCollider = GetComponent<Collider>();
     }
 
 
     public void UseItemGet()
     {
         Debug.Log("상자깡");
-
-        Animator animator = GetComponent<Animator>();
-        animator.SetTrigger("Chest");
-        Collider collider = GetComponent<Collider>();
-        collider.enabled = false;
-
-        Invoke("UI", 0.5f);
 
         SpawnItem(_rewardType);
     }
@@ -32,7 +29,7 @@ public class Chest : MonoBehaviour
         switch (rewardType)
         {
             case RewardType.Currency:
-                SpawnRandomGold(500, 700);
+                SpawnRandomGold(_goldMin, _goldMax);
                 break;
             case RewardType.BlueChip:
                 SpawnRandomBlueChip();
@@ -44,17 +41,17 @@ public class Chest : MonoBehaviour
 
     private void SpawnRandomBlueChip()
     {
-        //GameObject blueChipGO = Instantiate(_blueChipPrefab, transform.position, transform.rotation);
-        //blueChipGO.GetComponent<BlueChipItem>().RandomInit());
+        animator.SetTrigger("Chest");
+        chestCollider.enabled = false;
+        Invoke("BlueChipSelectUI", 0.5f);
     }
 
     private void SpawnRandomGold(int v1, int v2)
     {
-        //GameObject goldGO = Instantiate(_goldPrefab, transform.position, transform.rotation);
-        //goldGO.GetComponent<Gold>().Init(Random.Range(_goldMin, _goldMax + 1));
+        JsonDataManager.GetUserData().PlayData.AddGold(Random.Range(v1, v2+1));
     }
 
-    public void UI()
+    public void BlueChipSelectUI()
     {
         UIManager.Instance.BlueChipUI();
     }

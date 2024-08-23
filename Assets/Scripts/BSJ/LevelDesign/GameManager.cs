@@ -5,8 +5,8 @@ using UnityEngine.SceneManagement;
 
 public enum RewardType
 {
+    BlueChip,
     Currency,
-    BlueChip
 }
 
 public class GameManager : SceneSingleton<GameManager>
@@ -36,6 +36,7 @@ public class GameManager : SceneSingleton<GameManager>
         {
             Destroy(gameObject);
         }
+        transform.SetParent(null);
         DontDestroyOnLoad(this);
 
         NextStageObjects = FindAnyObjectByType<NextStageObjects>();

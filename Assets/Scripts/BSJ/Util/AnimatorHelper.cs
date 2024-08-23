@@ -6,62 +6,64 @@ using UnityEngine;
 
 public class AnimatorHelper : MonoBehaviour
 {
-    private int attackHash;
+    //private int attackHash;
 
-    private Animator _animator;
+    //private Animator _animator;
 
-    private int prevHash;
+    //private int prevHash;
 
-    public int CurrentAnimTagHash;
+    //public int CurrentAnimTagHash;
 
-    private void Awake()
-    {
-        _animator = GetComponent<Animator>();
-        attackHash = Animator.StringToHash("Attack");
-    }
+    //private void Awake()
+    //{
+    //    _animator = GetComponent<Animator>();
+    //    attackHash = Animator.StringToHash("Attack");
+    //}
 
-    private void Update()
-    {
-        //Debug.Log("시작시작시작시작시작");
-        //var a = _animator.GetCurrentAnimatorClipInfo(0);
-        //{
-        //    foreach (var b in a)
-        //    {
-        //        Debug.LogFormat(b.clip.name);
-        //    }
-        //}
-        //Debug.Log("끝끝끝끝끝끝끝끝끝끝");
-        //Debug.Log("클립 인포 카운트" + _animator.GetCurrentAnimatorClipInfoCount(0));
-        //Debug.Log("클립 인포" + _animator.GetCurrentAnimatorClipInfo(0)[0]);
-        //Debug.Log(_animator.GetCurrentAnimatorStateInfo(0).nameHash);
+    //private void Update()
+    //{
+    //    //Debug.Log("시작시작시작시작시작");
+    //    //var a = _animator.GetCurrentAnimatorClipInfo(0);
+    //    //{
+    //    //    foreach (var b in a)
+    //    //    {
+    //    //        Debug.LogFormat(b.clip.name);
+    //    //    }
+    //    //}
+    //    //Debug.Log("끝끝끝끝끝끝끝끝끝끝");
+    //    //Debug.Log("클립 인포 카운트" + _animator.GetCurrentAnimatorClipInfoCount(0));
+    //    //Debug.Log("클립 인포" + _animator.GetCurrentAnimatorClipInfo(0)[0]);
+    //    //Debug.Log(_animator.GetCurrentAnimatorStateInfo(0).nameHash);
 
-        CurrentAnimTagHash = _animator.GetCurrentAnimatorStateInfo(0).tagHash;
+    //    CurrentAnimTagHash = _animator.GetCurrentAnimatorStateInfo(0).tagHash;
 
-        int nameHash = _animator.GetAnimatorTransitionInfo(0).nameHash;
-        if (prevHash != nameHash)
-        {
-            prevHash = nameHash;
-        }
+    //    int nameHash = _animator.GetAnimatorTransitionInfo(0).nameHash;
+    //    if (prevHash != nameHash)
+    //    {
+    //        prevHash = nameHash;
+    //    }
 
-        var a = _animator.GetNextAnimatorStateInfo(0).nameHash;
-        var b = _animator.GetCurrentAnimatorStateInfo(0).nameHash;
+    //    var a = _animator.GetNextAnimatorStateInfo(0).nameHash;
+    //    var b = _animator.GetCurrentAnimatorStateInfo(0).nameHash;
 
-        Debug.Log(a + "  " + b);
+    //    Debug.Log(a + "  " + b);
 
-    }
+    //}
 
-    public bool IsAttackAnimTag()
-    {
-        bool r = _animator.GetCurrentAnimatorStateInfo(0).tagHash == attackHash;
-        if (r)
-            Debug.Log("!!!!!!!!!!!!!!");
-        return r;
-    }
+    //public bool IsAttackAnimTag()
+    //{
+    //    bool r = _animator.GetCurrentAnimatorStateInfo(0).tagHash == attackHash;
+    //    if (r)
+    //        Debug.Log("!!!!!!!!!!!!!!");
+    //    return r;
+    //}
 
     public static bool IsAnimationIn(Animator animator, int layer, string fullPath)
     {
         return animator.GetCurrentAnimatorStateInfo(layer).fullPathHash == Animator.StringToHash(fullPath);
     }
+
+    //알고싶은 애니메이션이 현재 트랜지션되어 입장하고있는시점부터 나가기 시작하는시점까지 True
     public static bool IsAnimationPlaying(Animator animator, int layer, string fullPath)
     {
         int target = Animator.StringToHash(fullPath);

@@ -14,7 +14,7 @@ public class DamageBox : MonoBehaviour
 
     private float _enableTimer = 0f;
 
-    public Action OnHit;
+    public Action OnHitCallback;
     public Vector3 target;
     private Vector3 HalfSize
     {
@@ -75,7 +75,7 @@ public class DamageBox : MonoBehaviour
         }
         if (onHit)
         {
-            OnHit?.Invoke();
+            OnHitCallback?.Invoke();
         }
     }
 
@@ -105,14 +105,7 @@ public class DamageBox : MonoBehaviour
     /// <param name="time"></param>
     public void EnableDamageBox(float damage, float range = 1f, Action onHitCallBack = null, float time = 0f)
     {
-        if(onHitCallBack != null)
-        {
-            OnHit += onHitCallBack;
-        }
-        else
-        {
-            OnHit = null;
-        }
+        OnHitCallback = onHitCallBack;
         SetRange(range);
 
         _damage = damage;
@@ -122,14 +115,7 @@ public class DamageBox : MonoBehaviour
     }
     public void EnableSkillDamageBox(float damage, float range = 1f, Action onHitCallBack = null, float time = 0f)
     {
-        if (onHitCallBack != null)
-        {
-            OnHit += onHitCallBack;
-        }
-        else
-        {
-            OnHit = null;
-        }
+        OnHitCallback = onHitCallBack;
         //transform.localPosition = target;
         SetRange(range);
 
@@ -146,6 +132,6 @@ public class DamageBox : MonoBehaviour
 
     private void OnDestroy()
     {
-        OnHit = null;
+        OnHitCallback = null;
     }
 }

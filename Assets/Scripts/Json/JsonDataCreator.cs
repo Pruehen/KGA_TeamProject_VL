@@ -161,7 +161,7 @@ public class UserData
         UnlockPassiveHashSet = unlockPassiveHashSet ?? new HashSet<PassiveID>();
         UsePassiveHashSet = usePassiveHashSet ?? new HashSet<PassiveID>();
         IsClearAchievementsKey = isClearAchievementsKey ?? new HashSet<string>();
-        PlayData = playData ?? null;
+        PlayData = playData ?? new PlayData();
     }
 
     public UserData(int saveDataIndex)
@@ -175,7 +175,7 @@ public class UserData
         UnlockPassiveHashSet = new HashSet<PassiveID>();
         UsePassiveHashSet = new HashSet<PassiveID>();
         IsClearAchievementsKey = new HashSet<string>();
-        PlayData = null;
+        PlayData = new PlayData();
     }
 
     public static void Save()
@@ -229,6 +229,11 @@ public class PlayData
         this.InGame_Gold = 0;
         this.InGame_BlueChip_Level = new Dictionary<BlueChipID, int>();
         this.InGame_Stage = 0;
+    }
+
+    internal void AddGold(int amount)
+    {
+        InGame_Gold += amount;
     }
 }
 

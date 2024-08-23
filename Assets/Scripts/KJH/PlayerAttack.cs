@@ -63,7 +63,7 @@ public class PlayerAttack : MonoBehaviour
         _PlayerMod.OnEnterAbsorptState += ChangeAbsorbing;
         _PlayerMod.OnEndAbsorptState += AbsorbingFall;
 
-        _AttackSystem.Init(Callback_IsCharged, Callback_IsChargedFail, Callback_IsChargedEnd);
+        _AttackSystem.Init(Callback_IsCharged, Callback_IsChargedFail, Callback_IsChargedEnd, Callback_IsChargedStart);
 
         _animator = GetComponent<Animator>();
         _PlayerMaster._PlayerInstanteState.OnMeleeModeChanged += OnModChanged;
@@ -84,7 +84,7 @@ public class PlayerAttack : MonoBehaviour
     private void AbsorbingFall()
     {
         Debug.Log("AbsorbingFall");
-        ChangeAttackState(false);
+        //ChangeAttackState(false);
         _AttackSystem.AbsoberEnd();
     }
     private void ChangeAttackState(bool isMelee)
@@ -99,7 +99,7 @@ public class PlayerAttack : MonoBehaviour
         {
             CurrentAttackKind = PlayerAttackKind.RangeNormalAttack;
             _currentAttackMod = PlayerAttackKind.RangeNormalAttack;
-            _AttackSystem.ModTransform();
+            //_AttackSystem.ModTransform();
         }
     }
 
@@ -259,6 +259,12 @@ public class PlayerAttack : MonoBehaviour
             Debug.Log("차-지 실패");
         }
     }
+    private void Callback_IsChargedStart()
+    {
+        CurrentAttackKind = PlayerAttackKind.MeleeNormalAttack;
+        _currentAttackMod = PlayerAttackKind.MeleeNormalAttack;
+        Debug.Log("차-지 시작");
+    }
     public void OnUseSkillGauge()
     {
         _PlayerMaster._PlayerInstanteState.TryUseSkillGauge2();
@@ -298,6 +304,25 @@ public class PlayerAttack : MonoBehaviour
         bool ran = AnimatorHelper.IsAnimationPlaying(_animator, 0, "Base Layer.Dash Attack");
         bool mel = AnimatorHelper.IsAnimationPlaying(_animator, 0, "Base Layer.Dash Range");
         return ran || mel;
+    }
+
+    private void SetSuperArmor()
+    {
+        _PlayerMaster._PlayerInstanteState.SetSuperArmor(99999999f);
+    }
+    private void ResetSuperArmor()
+    {
+        _PlayerMaster._PlayerInstanteState.ResetSuperArmor();
+    }
+
+    //회피는 대시시 스크립트에서 켜주기도 함
+    private void SetEvade()
+    {
+        _PlayerMaster._PlayerInstanteState.SetEvade(99999999f);
+    }
+    private void ResetEvade()
+    {
+        _PlayerMaster._PlayerInstanteState.ResetEvade();
     }
     //IEnumerator Attack_Delayed(float delayTime)
     //{
