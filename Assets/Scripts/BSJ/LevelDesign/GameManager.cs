@@ -48,7 +48,6 @@ public class GameManager : SceneSingleton<GameManager>
         NextStageObjects = FindAnyObjectByType<NextStageObjects>();
         Assert.IsNotNull(NextStageObjects);
 
-        OnSceneLoaded(new Scene(), LoadSceneMode.Single);
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -65,6 +64,7 @@ public class GameManager : SceneSingleton<GameManager>
         }
 
         NextStageObjects.Init(_rewardType);
+        OnSceneLoaded(new Scene(), LoadSceneMode.Single);
     }
 
     private void Update()
