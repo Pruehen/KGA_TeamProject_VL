@@ -119,7 +119,7 @@ public class DamageBox : MonoBehaviour
             case PlayerSkill.MeleeSkillAttack4:
                 return skillData._meleeSkill4OffSet;
             default:
-                return Vector3.one; // 기본 오프셋 반환
+                return Vector3.zero; // 기본 오프셋 반환
         }
     }
 
