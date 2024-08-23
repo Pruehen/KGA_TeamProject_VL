@@ -29,14 +29,15 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
     [SerializeField] int Max_Passive_Count = 2;
 
     [SerializeField] Text emeraldText;
-  
+ 
     int playerEmerald;
 
 
     private void Awake()
     {
-
         PassiveUI.AddRange(FindObjectsOfType<PassiveUI>());
+        SetEemeraldText();
+      
     }
     public void Init(UserData userData)
     {
@@ -50,10 +51,6 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
         GetSlotData_OnInit(userData);
     }
 
-    private void Update()
-    {
-        SetEemeraldText();
-    }
 
     void GetSlotData_OnInit(UserData userData)
     {
@@ -205,11 +202,17 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
     //에메랄드 UI를 갱신해주는 메서드
     public void SetEemeraldText()
     {
+        if(JsonDataManager.GetUserData().Gold == 0)
+        {
+        }
         emeraldText.text = JsonDataManager.GetUserData().Gold.ToString();
+     
+        
     }    
 
     public bool TryUseEmerald(int emerald)
     {
+    
         return true;
     }
 }
