@@ -31,6 +31,7 @@ public class GameManager : SceneSingleton<GameManager>
     public int _deadCount = 0;
 
     public SO_Quest[] unexpectedquests;
+    private Quest _currentQuest = new Quest();
     public SO_RandomQuestsData _randomQuestSet;
 
 
@@ -70,7 +71,7 @@ public class GameManager : SceneSingleton<GameManager>
     {
         if (unexpectedquests[_currentLevel] != null)
         {
-            unexpectedquests[_currentLevel].CheckConditionOnUpdate();
+            _currentQuest.CheckConditionOnUpdate();
         }
     }
     public void SetRewordType(RewardType rewordType)
@@ -89,6 +90,13 @@ public class GameManager : SceneSingleton<GameManager>
             }
             else
             {
+            }
+
+
+            if (unexpectedquests[_currentLevel] != null)
+            {
+                _currentQuest.Init(unexpectedquests[_currentLevel]);
+                unexpectedquests[_currentLevel].Init();
             }
         }
     }
@@ -149,6 +157,6 @@ public class GameManager : SceneSingleton<GameManager>
             return false;
         }
 
-        return unexpectedquests[_currentLevel].IsCleared();
+        return _currentQuest.IsCleared();
     }
 }
