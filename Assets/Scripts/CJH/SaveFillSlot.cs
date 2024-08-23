@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class SaveFillSlot : MonoBehaviour
@@ -8,10 +9,16 @@ public class SaveFillSlot : MonoBehaviour
     [SerializeField] Text Text_ClearCount;
     [SerializeField] Text Text_PlayTime;
     [SerializeField] Text Text_Emerald;
-    
+
+    [SerializeField] Button Btn_Back;
+    [SerializeField] Button Btn_Lode;
+    [SerializeField] Button Btn_Delete;
+
+    int _slotIndex;
     public void SetData(int index)
-    {        
-        if (JsonDataManager.TryGetUserData(index, out UserData data))
+    {
+        _slotIndex = index;
+        if (JsonDataManager.TryGetUserData(_slotIndex, out UserData data))
         {
             Text_TryCount.gameObject.SetActive(true);
             Text_ClearCount.gameObject.SetActive(true);
@@ -32,5 +39,39 @@ public class SaveFillSlot : MonoBehaviour
             Text_PlayTime.gameObject.SetActive(false);
             Text_Emerald.gameObject.SetActive(false);
         }
+
+        Btn_Back.gameObject.SetActive(false);
+        Btn_Lode.gameObject.SetActive(false);
+        Btn_Delete.gameObject.SetActive(false);
+    }
+
+    public void SlotSelect_OnClick()
+    {
+        Btn_Back.gameObject.SetActive(true);
+        Btn_Lode.gameObject.SetActive(true);
+        Btn_Delete.gameObject.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(Btn_Lode.gameObject);
+    }
+    public void SlotDeSelect_OnClick()
+    {
+        Btn_Back.gameObject.SetActive(false);
+        Btn_Lode.gameObject.SetActive(false);
+        Btn_Delete.gameObject.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(this.gameObject);
+    }
+    public void LodeData()
+    {
+        MainSceneUIManager.Instance.OnClick_NewGameButton(_slotIndex);
+    }
+
+    public void DeleteDate_OnClick()
+    {
+        CheckUIManager.Instance.CheckUiActive_OnClick(DeleteData, "세이브파일을 삭제하시겠습니까?");
+    }
+    void DeleteData()
+    {
+        JsonDataManager.DeleteUserData(_slotIndex);
+        SetData(_slotIndex);
+        EventSystem.current.SetSelectedGameObject(this.gameObject);
     }
 }
