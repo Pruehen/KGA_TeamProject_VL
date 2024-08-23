@@ -9,7 +9,7 @@ public class DamageBox : MonoBehaviour
     [SerializeField] private ITargetable _owner;
     [SerializeField] private LayerMask _targetLayer;
     private Vector3 _offset;
-    private Vector3 Defaultoffset = new Vector3(0f,0.5f,0.5f);
+    public Vector3 Defaultoffset = new Vector3(0f,0.5f,0.5f);
     private Coroutine _DisableBoxCoroutine;
 
 
@@ -128,7 +128,6 @@ public class DamageBox : MonoBehaviour
 
     private void Awake()
     {
-        Default = transform.localPosition;
         _owner = transform.parent.GetComponent<ITargetable>();
     }
 
