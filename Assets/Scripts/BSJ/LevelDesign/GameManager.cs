@@ -71,7 +71,7 @@ public class GameManager : SceneSingleton<GameManager>
             if (_init == false)
             {
                 _init = true;
-                SetStageQuests();
+                //SetStageQuests();
             }
             else
             {
