@@ -208,6 +208,18 @@ public class UserData
             Debug.LogWarning($"존재하지 않는 패시브 : {id}");
         }
     }
+    public void TryUnLockPassive(PassiveID id)
+    {
+        if (UnlockPassiveHashSet.Add(id))
+        {
+            Save();
+            Debug.Log($"패시브 해금 : {id}");
+        }
+        else
+        {
+            Debug.LogWarning($"이미 해금된 패시브 : {id}");
+        }
+    }
 
     public void AddGold(int amount)
     {
@@ -272,12 +284,7 @@ public class UserDataList
             Debug.Log($"{UseIndex} 세이브파일 로드");
             return dic[UseIndex];
         }
-        else
-        {
-            Debug.Log("해당하는 키가 없습니다. 세이브파일을 생성합니다.");
-            dic.Add(UseIndex, new UserData(UseIndex));
-            return dic[UseIndex];
-        }
+        return null;
     }
     public UserData GetUserData(int index)
     {
