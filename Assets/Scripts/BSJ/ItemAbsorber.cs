@@ -168,6 +168,8 @@ public class ItemAbsorber : MonoBehaviour
 
     private void DropAbsorbingItems()
     {
+        ClearAcquireRadius();
+
         foreach (TrashItem item in absorbingItems)
         {
             item.DropItem();
