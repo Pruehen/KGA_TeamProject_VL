@@ -73,7 +73,19 @@ public class PlayerMove : MonoBehaviour
 
     public void FixedUpdate()
     {
+
         CheckGounded_OnFixedUpdate();
+        bool isKnockbackstate = AnimatorHelper.IsAnimationPlaying(_animator, 0, "Base Layer.Hit");
+        if (isKnockbackstate)
+        {
+            Vector3 vel = _Rigidbody.velocity;
+            vel.x = 0f;
+            vel.z = 0f;
+            _Rigidbody.velocity = vel;
+            return;
+
+        }
+
         Move_OnFixedUpdate();
 
         bool isRangeDashAttack = _isDashing && _PlayerMaster.IsAttackState && !_PlayerMaster.IsMeleeMode;
@@ -220,11 +232,6 @@ public class PlayerMove : MonoBehaviour
 
     public bool IsInDashAnimation()
     {
-        int c = _animator.GetCurrentAnimatorStateInfo(0).fullPathHash;
-        int n = _animator.GetNextAnimatorStateInfo(0).fullPathHash;
-        if (n == 0) n = c;
-        bool isInExitTransition = n != c;
-        return AnimatorHelper.IsAnimationIn(_animator, 0, "Base Layer.Dash") &&
-        !isInExitTransition;
+        return AnimatorHelper.IsAnimationPlaying(_animator, 0, "Base Layer.Dash");
     }
 }
