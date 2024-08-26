@@ -48,6 +48,7 @@ public class AttackSystem : MonoBehaviour
     }
     public void StartAttack(PlayerAttackKind mod, PlayerAttackKind index, int comboIndex)
     {
+        _attackLcokMove = true;
         _animator.SetTrigger(hashAttack);
 
 

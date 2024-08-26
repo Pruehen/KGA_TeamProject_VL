@@ -84,6 +84,11 @@ public class PlayerModChangeManager : MonoBehaviour
     }
     public void EnterRangeMode()
     {
+        PlayerInstanteState state = _PlayerMaster._PlayerInstanteState;
+        state.AcquireBullets(state.meleeBullets * state.MeleeToRangeRatio);
+
+        _PlayerMaster._PlayerInstanteState.BulletClear_Melee();
+
         IsAbsorptState = false;
 
         int value = OnSucceseAbsorptState.Invoke();
@@ -142,6 +147,7 @@ public class PlayerModChangeManager : MonoBehaviour
         {
             IsMeleeMode = false;
         }
+
         OnEndAbsorptState.Invoke();
     }
 
