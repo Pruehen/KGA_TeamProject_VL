@@ -17,6 +17,10 @@ public class PlayerInstanteState : MonoBehaviour
     public bool IsAbsorptState { get; set; }
     public float AttackSpeed { get => attackSpeed; private set => attackSpeed = value; }
     public int MeleeToRangeRatio { get => _meleeToRangeRatio; private set => _meleeToRangeRatio = value; }
+    public float AbsorbingStaminaConsumRate { get => _absorbingStaminaConsumRate; private set => _absorbingStaminaConsumRate = value; }
+    [SerializeField] private float _absorbingStaminaConsumRate = 300f;
+
+
 
     [SerializeField] private int _meleeToRangeRatio = 2;
 
@@ -344,6 +348,11 @@ public class PlayerInstanteState : MonoBehaviour
         TestSkill();
 
         Passive_Offensive2_Active_OnUpdate();
+
+        if(_PlayerMaster.IsAbsorptState)
+        {
+            TryStaminaConsumption(_absorbingStaminaConsumRate * Time.deltaTime);
+        }
 
         staminaRecoveryDelayValue += Time.deltaTime;
         if (staminaRecoveryDelayValue >= staminaRecoveryDelay)
