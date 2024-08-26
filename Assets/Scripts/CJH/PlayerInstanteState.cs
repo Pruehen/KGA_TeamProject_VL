@@ -561,7 +561,7 @@ public class PlayerInstanteState : MonoBehaviour
     //근접탄 획득
     public void AcquireBullets_Melee(int _bullets)
     {
-        meleeBullets += _bullets * 2;
+        meleeBullets += _bullets / MeleeToRangeRatio;
         if (meleeBullets > maxBullets)
         {
             meleeBullets = maxBullets;
