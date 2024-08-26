@@ -75,7 +75,12 @@ public class PlayerMove : MonoBehaviour
     {
         CheckGounded_OnFixedUpdate();
         Move_OnFixedUpdate();
-        Rotate_OnFixedUpdate();
+
+        bool isRangeDashAttack = _isDashing && _PlayerMaster.IsAttackState && !_PlayerMaster.IsMeleeMode;
+        if (!isRangeDashAttack)
+        {
+            Rotate_OnFixedUpdate();
+        }
     }
     void OnInputPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
