@@ -26,7 +26,7 @@ public class PlayerMove : MonoBehaviour
     {
         SetMoveLock(0.4f);
         _lookTargetPos = new Vector3(attaciDir.x, 0, attaciDir.z);
-        StartCoroutine(Rotate_Coroutine(0.3f));
+        StartCoroutine(Rotate_Coroutine(0.1f));
     }
 
     bool _isMoving = true;
@@ -167,7 +167,7 @@ public class PlayerMove : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed);
         }
 
-        if (_isDashing)
+        if (_isDashing&& _attackSystem.AttackLockMove)
         {
             _lookTargetPos = _Rigidbody.velocity;
             _lookTargetPos.y = 0f;
@@ -175,6 +175,7 @@ public class PlayerMove : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(_lookTargetPos, Vector3.up);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed * 4f);
         }
+
     }
 
     IEnumerator Rotate_Coroutine(float time)
