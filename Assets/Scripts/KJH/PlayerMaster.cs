@@ -10,9 +10,11 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     public PlayerPassive _PlayerPassive { get; private set; }
     public Skill _PlayerSkill { get; private set; }
 
+    Animator _PlayerAnimator;
     PlayerMove _PlayerMove;
     PlayerAttack _PlayerAttack;
-    PlayerModChangeManager _PlayerModChangeManager;    
+    PlayerModChangeManager _PlayerModChangeManager;
+    public SO_Skill SkillData;
     [SerializeField] ItemAbsorber _ItemAbsorber;
     [SerializeField] AttackSystem _AttackSystem;
 
@@ -123,6 +125,7 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
         _PlayerBuff = GetComponent<PlayerBuff>();
         _PlayerPassive = GetComponent<PlayerPassive>();
         _PlayerSkill = GetComponent<Skill>();
+        _PlayerAnimator = GetComponent<Animator>();
 
         UIManager.Instance.SetPlayerMaster(this);
 
@@ -165,5 +168,10 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     public bool IsDead()
     {
         return _PlayerInstanteState.IsDead;
+    }
+
+    public void OnKnockback()
+    {
+        _PlayerAnimator.SetTrigger("Hit");
     }
 }

@@ -161,7 +161,7 @@ public class UserData
         UnlockPassiveHashSet = unlockPassiveHashSet ?? new HashSet<PassiveID>();
         UsePassiveHashSet = usePassiveHashSet ?? new HashSet<PassiveID>();
         IsClearAchievementsKey = isClearAchievementsKey ?? new HashSet<string>();
-        PlayData = playData ?? null;
+        PlayData = playData ?? new PlayData();
     }
 
     public UserData(int saveDataIndex)
@@ -175,7 +175,7 @@ public class UserData
         UnlockPassiveHashSet = new HashSet<PassiveID>();
         UsePassiveHashSet = new HashSet<PassiveID>();
         IsClearAchievementsKey = new HashSet<string>();
-        PlayData = null;
+        PlayData = new PlayData();
     }
 
     public static void Save()
@@ -208,6 +208,21 @@ public class UserData
             Debug.LogWarning($"존재하지 않는 패시브 : {id}");
         }
     }
+
+    public void AddGold(int amount)
+    {
+        Gold += amount;
+    }
+
+    public bool TryUseGold(int amount)
+    {
+        if(Gold - amount < 0)
+        {
+            return false;
+        }
+        Gold -= amount;
+        return true;
+    }
 }
 
 public class PlayData
@@ -230,6 +245,11 @@ public class PlayData
         this.InGame_BlueChip_Level = new Dictionary<BlueChipID, int>();
         this.InGame_Stage = 0;
     }
+
+    internal void AddGold(int amount)
+    {
+        InGame_Gold += amount;
+    }
 }
 
 public class UserDataList
@@ -249,7 +269,7 @@ public class UserDataList
     {
         if(dic.ContainsKey(UseIndex))
         {
-            //Debug.Log($"{UseIndex} 세이브파일 로드");
+            Debug.Log($"{UseIndex} 세이브파일 로드");
             return dic[UseIndex];
         }
         else
@@ -263,13 +283,17 @@ public class UserDataList
     {
         if (dic.ContainsKey(index))
         {
-            //Debug.Log($"{UseIndex} 세이브파일 로드");
+            Debug.Log($"{UseIndex} 세이브파일 로드");
             return dic[index];
         }
         else
         {
             return null;
         }
+    }
+    public void DeleteUserData(int index)
+    {
+        dic.Remove(index);        
     }
     public void SetUserDataIndex(int index)
     {

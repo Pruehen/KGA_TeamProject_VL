@@ -178,10 +178,13 @@ public class PlayerMove : MonoBehaviour
 
         if (_PlayerMaster._PlayerInstanteState.TryStaminaConsumption(_PlayerMaster._PlayerInstanteState.DashCost))
         {
+            _PlayerMaster._PlayerInstanteState.SetInvincible(_PlayerMaster._PlayerInstanteState.DashTime);
             OnlyDash();
+            _PlayerMaster._PlayerInstanteState.SetEvade(_PlayerMaster._PlayerInstanteState.DashTime);// 애니메이터에서 대시 애니메이션에서 탈출시 해제
             _attackSystem.ReleaseLockMove();
             _attackSystem.ResetEndAttack();
             _animator.SetTrigger("Dash");
+            Debug.Log("Dash");
             if (_moveVector3 == Vector3.zero)
             {
                 _PlayerMaster.OnAttackState(_PlayerCameraMove.CamRotation() * Vector3.forward);

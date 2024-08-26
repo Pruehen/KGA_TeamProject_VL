@@ -37,6 +37,8 @@ public interface AiAttackAction
 [RequireComponent(typeof(Animator))]
 public class Enemy : MonoBehaviour, ITargetable
 {
+    [Header ("If this var is empty it will spawn _enemyDatas enemy (Not random)")]
+    [SerializeField] private SO_RandomEnemySet _randomEnemyData;
     [SerializeField] private SO_EnemyBase _enemyData;
     private EnemyType _enemyType;
     [SerializeField] private bool _isMovable = true;
@@ -107,8 +109,15 @@ public class Enemy : MonoBehaviour, ITargetable
     }
     private void Init()
     {
+        if(_randomEnemyData != null)
+        {
+            SO_EnemyBase[] randomEnemy = _randomEnemyData.RandomEnemySet;
+            _enemyData = randomEnemy[UnityEngine.Random.Range(0, randomEnemy.Length)];
+        }
+
+
         _combat = new Combat();
-        _combat.Init(_enemyData.Hp);
+        _combat.Init(gameObject, _enemyData.Hp);
         _combat.OnDead += OnDead;
 
 
@@ -452,7 +461,7 @@ public class Enemy : MonoBehaviour, ITargetable
         Gizmos.DrawWireSphere(_detector.transform.position, _enemyData.EnemyAlramDistance);
 
         Gizmos.color = GetColorByState(_aiState);
-        Gizmos.DrawSphere(transform.position + Vector3.up, 1f);
+        Gizmos.DrawSphere(transform.position + Vector3.up * 2.5f, .5f);
     }
 
     private Color GetColorByState(AIState state)

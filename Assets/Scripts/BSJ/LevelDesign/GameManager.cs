@@ -5,8 +5,8 @@ using UnityEngine.SceneManagement;
 
 public enum RewardType
 {
+    BlueChip,
     Currency,
-    BlueChip
 }
 
 public class GameManager : SceneSingleton<GameManager>
@@ -22,7 +22,7 @@ public class GameManager : SceneSingleton<GameManager>
 
     private Action OnClear;
 
-    public PlayerMaster _PlayerMaster {  get; private set; }
+    public PlayerMaster _PlayerMaster { get; private set; }
 
     public Enemy[] _enemies;
 
@@ -30,9 +30,15 @@ public class GameManager : SceneSingleton<GameManager>
 
     public int _deadCount = 0;
 
+    public SO_Quest[] unexpectedquests;
+    private Quest _currentQuest = new Quest();
+    public SO_RandomQuestSetData _randomQuestSet;
+
+
+
     private void Awake()
     {
-        if(FindObjectsOfType<GameManager>().Length >= 2)
+        if (FindObjectsOfType<GameManager>().Length >= 2)
         {
             Destroy(gameObject);
         }
@@ -58,22 +64,16 @@ public class GameManager : SceneSingleton<GameManager>
         }
 
         NextStageObjects.Init(_rewardType);
+        OnSceneLoaded(new Scene(), LoadSceneMode.Single);
     }
 
-    public void SpawnReword(RewardType rewordType)
+    private void Update()
     {
-        switch (rewordType)
+        if (unexpectedquests[_currentLevel] != null)
         {
-            case RewardType.Currency:
-                
-                // 골드 스폰
-                break;
-            case RewardType.BlueChip:
-                // 블루칩 스폰
-                break;
+            _currentQuest.CheckConditionOnUpdate();
         }
     }
-
     public void SetRewordType(RewardType rewordType)
     {
         _rewardType = rewordType;
@@ -86,10 +86,38 @@ public class GameManager : SceneSingleton<GameManager>
             if (_init == false)
             {
                 _init = true;
+                SetStageQuests();
             }
             else
             {
             }
+
+
+            if (unexpectedquests[_currentLevel] != null)
+            {
+                _currentQuest.Init(unexpectedquests[_currentLevel]);
+                unexpectedquests[_currentLevel].Init();
+            }
+        }
+    }
+
+    private void SetStageQuests()
+    {
+        int count = 0;
+        unexpectedquests = new SO_Quest[_chapterData.ChapterData.Length];
+        for (int i = 0; i < unexpectedquests.Length; i++) 
+        {
+            SO_Quest r = _randomQuestSet.TryGetRandomQuest();
+            if (r != null)
+            {
+                count++;
+            }
+            unexpectedquests[i] = r;
+        }
+
+        if(count == 0)
+        {
+            unexpectedquests[UnityEngine.Random.Range(0, unexpectedquests.Length)] = _randomQuestSet.GetRandomQuest();
         }
     }
 
@@ -110,9 +138,25 @@ public class GameManager : SceneSingleton<GameManager>
     private void OnEnemyDead()
     {
         _deadCount++;
-        if(_enemies.Length == _deadCount)
+        if (_enemies.Length == _deadCount)
         {
             OnGameClear?.Invoke();
         }
+    }
+
+    public bool IsCurrentUnexpectedQuestCleared()
+    {
+        if (_currentLevel >= unexpectedquests.Length )
+        {
+            Debug.LogError("OutOfLength");
+            return false;
+        }
+        if (unexpectedquests[_currentLevel] == null)
+        {
+
+            return false;
+        }
+
+        return _currentQuest.IsCleared();
     }
 }

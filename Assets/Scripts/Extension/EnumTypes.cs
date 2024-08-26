@@ -80,30 +80,16 @@ namespace EnumTypes
         MeleeDashAttack,
     }
 
-    //플레이어 공격 타입 대체에 따른 필요성 사라짐
+    ////플레이어 공격 타입 대체에 따른 필요성 사라짐
     //public static class EnumAttackHelper
     //{
-    //    public static PlayerAttackKind GetKindOfAttack(PlayerAttackType attackType) => attackType switch
+    //    public static PlayerAttackKind GetKindOfAttack(PlayerAttackKind kind, int combo)
     //    {
-    //        PlayerAttackType.RangeNormalAttack1 => PlayerAttackKind.RangeNormalAttack,
-    //        PlayerAttackType.RangeNormalAttack2 => PlayerAttackKind.RangeNormalAttack,
-    //        PlayerAttackType.RangeNormalAttack3 => PlayerAttackKind.RangeNormalAttack,
-    //        PlayerAttackType.RangeNormalAttack4 => PlayerAttackKind.RangeNormalAttack,
-
-    //        PlayerAttackType.RangeSkillAttack1 => PlayerAttackKind.RangeSkillAttack,
-    //        PlayerAttackType.RangeSkillAttack2 => PlayerAttackKind.RangeSkillAttack,
-    //        PlayerAttackType.RangeSkillAttack3 => PlayerAttackKind.RangeSkillAttack,
-    //        PlayerAttackType.RangeSkillAttack4 => PlayerAttackKind.RangeSkillAttack,
-
-    //        PlayerAttackType.MeleeNormalAttack1 => PlayerAttackKind.MeleeNormalAttack,
-    //        PlayerAttackType.MeleeChargeAttack2 => PlayerAttackKind.MeleeNormalAttack,
-
-    //        PlayerAttackType.MeleeSkillAttack1 => PlayerAttackKind.MeleeSkillAttack,
-    //        PlayerAttackType.MeleeSkillAttack2 => PlayerAttackKind.MeleeSkillAttack,
-    //        PlayerAttackType.MeleeSkillAttack3 => PlayerAttackKind.MeleeSkillAttack,
-    //        PlayerAttackType.MeleeSkillAttack4 => PlayerAttackKind.MeleeSkillAttack,
-    //        _ => (PlayerAttackKind)999,
-    //    };
+    //        if(kind == PlayerAttackKind.RangeNormalAttack)
+    //        {
+    //            switch (combo % PlayerMaster.Instance.Attack)
+    //        }
+    //    }
     //}
     public enum PlayerSkill
     {
@@ -118,4 +104,5 @@ namespace EnumTypes
         MeleeSkillAttack3_3,
         MeleeSkillAttack4
     }
+
 }

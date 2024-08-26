@@ -6,4 +6,5 @@ using UnityEngine;
 public class SO_ChapterData : ScriptableObject
 {
     public SO_RandomStageList[] ChapterData;
+    public SO_RandomQuestSetData RandomQuestsData;
 }

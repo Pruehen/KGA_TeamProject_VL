@@ -6,9 +6,16 @@ using UnityEngine.UI;
 public class PassiveUI : MonoBehaviour, ISelectHandler
 {
     public PassiveID passiveID;
-
+ 
+    
     [SerializeField] bool OnlyViewMode = false;
+    [SerializeField] bool locked = false;
+    [SerializeField] bool lockedSlot = false;
+
+    [SerializeField] GameObject Icon_Lock;
+
     [SerializeField] Image Image_Icon;//PassiveId 가 변경되면 해당 이미지를 변경함.
+
 
     private void Awake()
     {
@@ -23,23 +30,14 @@ public class PassiveUI : MonoBehaviour, ISelectHandler
                 return;
             }
         }
-        ImageChange();
-
-        if (JsonDataManager.TryGetUserData(0, out UserData data))
-        {
-            Debug.Log(data.SaveTime);
-        }
-        else
-        {
-
-        }
+        SetUI();
     }
     public void OnSelect(BaseEventData eventData)
     {
         PassiveUIManager.Instance.InfoText(passiveID);
     }
 
-    public void ImageChange()
+    public void SetUI()
     {
         if (passiveID == PassiveID.None)
         {
@@ -47,24 +45,43 @@ public class PassiveUI : MonoBehaviour, ISelectHandler
         }
         else
         {
-            Image_Icon.gameObject.SetActive(true);
-            Image_Icon.sprite = Resources.Load<Sprite>(JsonDataManager.GetPassive(passiveID).IconPath);
+            Image_Icon.gameObject.SetActive(true);            
+            if(locked || lockedSlot)
+            {
+                Icon_Lock.SetActive(true);
+                Image_Icon.sprite = Resources.Load<Sprite>(JsonDataManager.GetPassive(passiveID).IconPath_Dis);
+            }
+            else
+            {
+                Icon_Lock.SetActive(false);
+                Image_Icon.sprite = Resources.Load<Sprite>(JsonDataManager.GetPassive(passiveID).IconPath);
+            }
         }
     }
 
     public void SetPassiveId(PassiveID newPassiveID)
     {
         passiveID = newPassiveID;
-        ImageChange();
+        SetUI();
     }
 
     public void OnClick_TryEquip()
     {
+        if (passiveID == PassiveID.None)
+            return;
+
+        if(locked)
+        {
+            CheckUIManager.Instance.CheckUiActive_OnClick(TryUnLock, "해금하시겠습니까?");
+            return;
+        }
+
+
         if (PassiveUIManager.Instance.Try_EquipPassive(this))
         {
             JsonDataManager.GetUserData().TryAddPassive(passiveID);            
             passiveID = PassiveID.None;
-            ImageChange();
+            SetUI();
         }
         else
         {
@@ -72,14 +89,35 @@ public class PassiveUI : MonoBehaviour, ISelectHandler
         }
     }
 
+    void TryUnLock()
+    {
+        if (PassiveUIManager.Instance.TryUseEmerald())
+        {
+            locked = false;
+            SetUI();
+        }
+        else
+        {
+            CheckUIManager.Instance.CheckUiActive_OnClick(NotMony, "이 거지야");
+        }
+    }
+
+    void NotMony()
+    { 
+    
+    
+    }
+
     public void OnClick_TryUnEquip()
     {
         JsonDataManager.GetUserData().TryRemovePassive(passiveID);
         PassiveUIManager.Instance.Try_EquipUnPassive(this);
         passiveID = PassiveID.None;
-        ImageChange();
+        SetUI();
     }
 
-  
+
+
+
 
 }
