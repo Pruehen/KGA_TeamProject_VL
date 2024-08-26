@@ -232,11 +232,6 @@ public class PlayerMove : MonoBehaviour
 
     public bool IsInDashAnimation()
     {
-        int c = _animator.GetCurrentAnimatorStateInfo(0).fullPathHash;
-        int n = _animator.GetNextAnimatorStateInfo(0).fullPathHash;
-        if (n == 0) n = c;
-        bool isInExitTransition = n != c;
-        return AnimatorHelper.IsAnimationIn(_animator, 0, "Base Layer.Dash") &&
-        !isInExitTransition;
+        return AnimatorHelper.IsAnimationPlaying(_animator, 0, "Base Layer.Dash");
     }
 }

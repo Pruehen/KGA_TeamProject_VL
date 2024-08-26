@@ -48,7 +48,11 @@ public class AttackSystem : MonoBehaviour
     }
     public void StartAttack(PlayerAttackKind mod, PlayerAttackKind index, int comboIndex)
     {
-        _attackLcokMove = true;
+        if (_PlayerMaster.isDashing)
+        {
+            LockMove();
+        }
+
         _animator.SetTrigger(hashAttack);
 
 
@@ -68,7 +72,7 @@ public class AttackSystem : MonoBehaviour
             _animator.SetTrigger(hashSkill);
             _animator.SetInteger(hashAttackType, index);
             _animator.SetFloat("SkillGauge", skillGauge);
-            _attackLcokMove = true;
+            LockMove();
             Debug.Log(skillGauge);
         }
         else
@@ -135,7 +139,7 @@ public class AttackSystem : MonoBehaviour
 
     public void ResetAttack()
     {
-        _attackLcokMove = false;
+        ReleaseLockMove();
         _closeAttack.ChargeFail();
     }
     public void OnUseSkillGauge()
