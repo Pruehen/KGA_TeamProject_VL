@@ -131,8 +131,7 @@ public class Skill : MonoBehaviour
         damage = so_Skill._rangedSkill4 * SkillPower;
         range = so_Skill._rangedSkill4Range;
         distance = so_Skill._meleeSkill4Distance;
-
-
+        transform.rotation = mainCamera.transform.rotation;
         if (Physics.Raycast(ray, out hit, distance, enemyLayerMask))
         {
             Vector3 hitPosition = hit.point;
