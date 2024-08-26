@@ -1,6 +1,5 @@
 using EnumTypes;
 using System.ComponentModel;
-using UnityEditor;
 using UnityEngine;
 
 
@@ -67,7 +66,7 @@ public class PlayerAttack : MonoBehaviour
 
         _animator = GetComponent<Animator>();
         _PlayerMaster._PlayerInstanteState.OnMeleeModeChanged += OnModChanged;
-        
+
     }
 
     private void OnDestroy()
@@ -105,9 +104,9 @@ public class PlayerAttack : MonoBehaviour
 
     private void OnModChanged(bool isMelee)
     {
-        if((int)_currentAttackMod == (isMelee ? 1:0))
+        if ((int)_currentAttackMod == (isMelee ? 1 : 0))
         {
-            if(!isMelee)
+            if (!isMelee)
             {
                 CurrentAttackKind = PlayerAttackKind.RangeNormalAttack;
                 _currentAttackMod = PlayerAttackKind.RangeNormalAttack;
@@ -184,11 +183,16 @@ public class PlayerAttack : MonoBehaviour
 
     void ShootProjectile()
     {
+        if (_animator.IsInTransition(0))
+        {
+            return;
+        }
+
         IncreaseAttackCount();
         Projectile projectile = ObjectPoolManager.Instance.DequeueObject(Prefab_Projectile).GetComponent<Projectile>();
 
         Vector3 projectionVector = _PlayerCameraMove.CamRotation() * Vector3.forward * projectionSpeed_Forward + Vector3.up * projectionSpeed_Up;
-        
+
         projectile.Init(_PlayerMaster._PlayerInstanteState.GetDmg(CurrentAttackKind,
             IsLastAttack()),
             projectile_InitPos.position, projectionVector,
@@ -198,19 +202,19 @@ public class PlayerAttack : MonoBehaviour
         _PlayerMaster._PlayerInstanteState.BulletConsumption();
 
         int level_blueChip_Range2 = _PlayerMaster.GetBlueChipLevel(BlueChipID.Range2);
-        if(IsLastAttack() && level_blueChip_Range2 > 0)//"원거리 마지막 공격 시, {0}%의 확률로 {1}% 위력의 무작위 스킬 발동",
+        if (IsLastAttack() && level_blueChip_Range2 > 0)//"원거리 마지막 공격 시, {0}%의 확률로 {1}% 위력의 무작위 스킬 발동",
         {
             BlueChip chip_Range2 = JsonDataManager.GetBlueChipData(BlueChipID.Range2);
 
             float skillActivationProbability = chip_Range2.Level_VelueList[level_blueChip_Range2][0] * 0.01f;
             float skillActivationProbabilityValue = Random.Range(0f, 1f);
 
-            if(skillActivationProbabilityValue < skillActivationProbability)
+            if (skillActivationProbabilityValue < skillActivationProbability)
             {
                 PlayerSkill randomSkill1 = (PlayerSkill)chip_Range2.Level_VelueList[level_blueChip_Range2][2];
                 PlayerSkill randomSkill2 = (PlayerSkill)chip_Range2.Level_VelueList[level_blueChip_Range2][3];
                 float skillSelectionValue = Random.Range(0, 2);
-                if(skillSelectionValue == 0)
+                if (skillSelectionValue == 0)
                 {
                     _PlayerMaster._PlayerSkill.InvokeSkillDamage(randomSkill1);
                 }
@@ -218,7 +222,7 @@ public class PlayerAttack : MonoBehaviour
                 {
                     _PlayerMaster._PlayerSkill.InvokeSkillDamage(randomSkill2);
                 }
-            }            
+            }
         }
     }
     private void EnableDamageBox_Player()
@@ -277,7 +281,7 @@ public class PlayerAttack : MonoBehaviour
         stat.SkillGaugeRecovery(_currentAttackMod, CurrentAttackKind, false);
         _PlayerMaster.OnMeleeHit();
     }
-    private void OnRangeHit(PlayerAttackKind mod, PlayerAttackKind kind,int currentAttackCount)
+    private void OnRangeHit(PlayerAttackKind mod, PlayerAttackKind kind, int currentAttackCount)
     {
         PlayerInstanteState stat = _PlayerMaster._PlayerInstanteState;
         stat.SkillGaugeRecovery(mod, kind, IsLastAttack(currentAttackCount));
@@ -289,7 +293,7 @@ public class PlayerAttack : MonoBehaviour
     }
     private bool IsLastAttack(int currentAttackCount)
     {
-        if(currentAttackCount == 0)
+        if (currentAttackCount == 0)
             return false;
         if ((currentAttackCount) % (_totalAttackAnimCount - initialAttackComboIndex) == 0)
         {
