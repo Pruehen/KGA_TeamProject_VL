@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -140,7 +141,7 @@ public class ItemAbsorber : MonoBehaviour
         {
             return;
         }
-        if (IsItem(rb.gameObject))
+        if (IsAbourbableItem(rb.gameObject))
         {
             TrashItem trashItem = rb.gameObject.GetComponent<TrashItem>();
             if (absorbingItems.Contains(trashItem))
@@ -154,6 +155,21 @@ public class ItemAbsorber : MonoBehaviour
             }
         }
     }
+
+    private bool IsAbourbableItem(GameObject gameObject)
+    {
+        TrashItem item;
+        if(gameObject.TryGetComponent(out item))
+        {
+            if(item.IsAborbable())
+            {
+                return true;
+            }
+        }
+        return false;
+        
+    }
+
     private void AddRevolve(TrashItem item)
     {
         revorvingItems.Add(item);
@@ -203,13 +219,5 @@ public class ItemAbsorber : MonoBehaviour
     private void SetHeight(float height)
     {
         _collider.height = height;
-    }
-    private bool IsItem(GameObject gameObject)
-    {
-        if (gameObject.CompareTag("Item"))
-        {
-            return true;
-        }
-        return false;
     }
 }
