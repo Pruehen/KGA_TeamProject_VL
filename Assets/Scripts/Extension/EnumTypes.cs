@@ -12,7 +12,8 @@ namespace EnumTypes
         Hybrid2,
         Generic1,
         Generic2,
-        Generic3
+        Generic3,
+        None
     }
 
     public enum PassiveID
