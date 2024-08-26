@@ -175,7 +175,10 @@ public class PlayerMove : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(_lookTargetPos, Vector3.up);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed * 4f);
         }
-
+        else if(_isDashing && _attackSystem.AttackLockMove)
+        {
+            _moveVector3 = _PlayerCameraMove.CamRotation() * _moveVector3_Origin;
+        }
     }
 
     IEnumerator Rotate_Coroutine(float time)

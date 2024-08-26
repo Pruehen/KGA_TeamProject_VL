@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: PlayerData
   m_EditorClassIdentifier: 
   maxHp: 100
-  MaxStamina: 800
-  staminaRecoverySpeed: 100
-  staminaRecoveryDelay: 3
+  MaxStamina: 1e+13
+  staminaRecoverySpeed: 100000000
+  staminaRecoveryDelay: 0
   attackPower: 20
   skillPower: 20
   moveSpeed: 6

@@ -74,6 +74,7 @@ public class AttackSystem : MonoBehaviour
             _animator.SetFloat("SkillGauge", skillGauge);
             LockMove();
             Debug.Log(skillGauge);
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
         else
         {
