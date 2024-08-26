@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 516789563033613623}
   - component: {fileID: 6370585067071046547}
   - component: {fileID: 3848298984020166617}
+  - component: {fileID: 8897946215484108235}
   - component: {fileID: 323388105381359817}
   - component: {fileID: 6736053533579567610}
   - component: {fileID: 767856972143940028}
@@ -57,6 +58,7 @@ GameObject:
   - component: {fileID: 7753793625892610601}
   - component: {fileID: 6615908217414374475}
   - component: {fileID: 7278532214112620415}
+  - component: {fileID: 9085722582591063131}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -118,6 +120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 348df6729af512441a7eeed69870c82b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SkillData: {fileID: 11400000, guid: 697fc365c538ef2438aa6f635eb536b1, type: 2}
   _ItemAbsorber: {fileID: 6544024869024547094}
   _AttackSystem: {fileID: 8909988477445564789}
 --- !u!114 &2680144560742994316
@@ -144,8 +147,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d62f7a5d144457440abeebf48d3d7b32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHpBase: 0
-  maxShieldBase: 0
+  _absorbingStaminaConsumRate: 300
+  _meleeToRangeRatio: 2
   MaxStamina: 800
   staminaRecoverySpeed: 100
   staminaRecoveryDelay: 3
@@ -154,11 +157,18 @@ MonoBehaviour:
   maxMeleeBullets: 50
   attackSpeed: 1
   attackPowerBase: 0
-  attackRangeBase: 1
+  attackRangeBase: {x: 1, y: 1, z: 1}
+  skillRangeBase: 1
   skillPowerBase: 0
-  DashTime: 0.5
-  DashForce: 3
-  DashCost: 300
+  _dashTime: 0.5
+  _dashForce: 3
+  _dashCost: 300
+  DashTimeMulti: 0
+  DashForceMulti: 0
+  DashCostMulti: 0
+  LayerMask_EnemyCheck:
+    serializedVersion: 2
+    m_Bits: 512
   executionCount: 0
   moveSpeed: 6
   _playerStatData: {fileID: 11400000, guid: ebc369b68647668448baaa8562d27f32, type: 2}
@@ -186,6 +196,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 558ca11a99c5c8f49afef42e7cde3021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8897946215484108235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3370145770967923552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22a6f433001c2c747904098b73aade69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PassiveID_Offensive1: 0
+  PassiveID_Offensive2: 15
+  PassiveID_Defensive1: 15
+  PassiveID_Defensive2: 15
+  PassiveID_Utility1: 15
+  PassiveID_Utility2: 15
+  IsDebugMode: 0
 --- !u!114 &323388105381359817
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -335,23 +364,51 @@ MonoBehaviour:
   _meleeSkill3_1: 0.25
   _meleeSkill3_2: 0.25
   _meleeSkill3_3: 0.5
-  _meleeSkill3_4: 10
   _meleeSkill4: 15
-  _rangedSkill1Range: 1
-  _rangedSkill2Range: 1
-  _rangedSkill3Range: 1
-  _rangedSkill4Range: 1
-  _meleeSkill1Range: 1
-  _meleeSkill2Range: 1
-  _meleeSkill3Range: 1
-  _meleeSkill4Range: 1
+  _rangedSkill1Range: {x: 1, y: 1, z: 1}
+  _rangedSkill2Range: {x: 1, y: 1, z: 1}
+  _rangedSkill3Range: {x: 1, y: 1, z: 1}
+  _rangedSkill4Range: {x: 1, y: 1, z: 1}
+  _meleeSkill1Range: {x: 1, y: 1, z: 1}
+  _meleeSkill2Range: {x: 1, y: 1, z: 1}
+  _meleeSkill3Range: {x: 1, y: 1, z: 1}
+  _meleeSkill4Range: {x: 1, y: 1, z: 1}
   _rangedSkill1Distance: 1
   _rangedSkill2Distance: 1
   _rangedSkill3Distance: 1
   _rangedSkill4Distance: 1
   _meleeSkill4Distance: 20
+  enemyLayerMask:
+    serializedVersion: 2
+    m_Bits: 512
   so_Skill: {fileID: 11400000, guid: 697fc365c538ef2438aa6f635eb536b1, type: 2}
+  player: {fileID: 3370145770967923552}
+  moveDuration: 0.3
+  target: {x: 0, y: 0, z: 0}
+  RayDistance: 20
 --- !u!114 &7278532214112620415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3370145770967923552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5391c14e76fc1444e8b8238f17059315, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  VFX1: {fileID: 8269927165116809473, guid: 9bf5f28d91199f94bb5547276e4d3831, type: 3}
+  TargetTransfom1: {fileID: 4743214376694680169}
+  VFX2: {fileID: 0}
+  TargetTransfom2: {fileID: 0}
+  VFX3: {fileID: 0}
+  TargetTransfom3: {fileID: 0}
+  VFX4: {fileID: 0}
+  TargetTransfom4: {fileID: 0}
+  VFX5: {fileID: 0}
+  TargetTransfom5: {fileID: 0}
+--- !u!114 &9085722582591063131
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -399,7 +456,7 @@ Transform:
   m_GameObject: {fileID: 5381824260810107129}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.99, z: 1.28}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -417,11 +474,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aed76c03b65482a46832c97c85bfcbec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _halfSize: {x: 1, y: 1, z: 1}
   _targetLayer:
     serializedVersion: 2
     m_Bits: 512
-  _offset: {x: 0, y: 0, z: 0.51}
+  Defaultoffset: {x: 0, y: 0.5, z: 0.5}
+  DefaultRange: {x: 1, y: 1, z: 1}
+  target: {x: 0, y: 0, z: 0}
+  playerSkill: 1
+  skillData: {fileID: 11400000, guid: 697fc365c538ef2438aa6f635eb536b1, type: 2}
 --- !u!1 &5420167877736599697
 GameObject:
   m_ObjectHideFlags: 0
