@@ -175,7 +175,7 @@ public class PlayerMove : MonoBehaviour
 
     public void Dash()
     {
-
+        PlayerMaster.Instance.TryAbsorptFail();
         if (_PlayerMaster._PlayerInstanteState.TryStaminaConsumption(_PlayerMaster._PlayerInstanteState.DashCost))
         {
             _PlayerMaster._PlayerInstanteState.SetInvincible(_PlayerMaster._PlayerInstanteState.DashTime);
