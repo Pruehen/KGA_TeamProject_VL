@@ -26,10 +26,6 @@ public class PlayerModChangeManager : MonoBehaviour
     public bool IsAttackState
     {
         get { return _PlayerMaster.IsAttackState; }
-        set
-        {
-            _PlayerMaster.IsAttackState = value;
-        }
     }
      public bool isDashing
     {

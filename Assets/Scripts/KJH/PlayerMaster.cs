@@ -21,10 +21,6 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     public bool IsAttackState
     {
         get { return _AttackSystem._attackLcokMove; }
-        set
-        {
-            _AttackSystem._attackLcokMove = value;
-        }
     }
     public bool IsAbsorptState
     {
