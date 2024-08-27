@@ -18,12 +18,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 563631863664724849, guid: 9bbb9f1945250c34391ccfd023e30cbb, type: 3}
       propertyPath: gizmoViewMode
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 563631863664724849, guid: 9bbb9f1945250c34391ccfd023e30cbb, type: 3}
       propertyPath: showBehaviorDesignerGizmo
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1473640224463771594, guid: 9bbb9f1945250c34391ccfd023e30cbb, type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: 58e56abc97156b04c832533838698336, type: 3}
+    - target: {fileID: 1473640224463771594, guid: 9bbb9f1945250c34391ccfd023e30cbb, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 30f1ebec8dd56814cadf29e98d363402, type: 2}
     - target: {fileID: 2245763242816189015, guid: 9bbb9f1945250c34391ccfd023e30cbb, type: 3}
       propertyPath: _enemyData
       value: 
@@ -76,8 +84,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedComponents:
+    - {fileID: 1063519113636141516, guid: 9bbb9f1945250c34391ccfd023e30cbb, type: 3}
+    - {fileID: 8083970730729971615, guid: 9bbb9f1945250c34391ccfd023e30cbb, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 2745981602706717939, guid: 9bbb9f1945250c34391ccfd023e30cbb, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbb9f1945250c34391ccfd023e30cbb, type: 3}
