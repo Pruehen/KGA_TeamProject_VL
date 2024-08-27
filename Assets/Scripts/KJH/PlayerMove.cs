@@ -1,4 +1,3 @@
-using System.Collections;
 using System.ComponentModel;
 using UnityEngine;
 
@@ -27,21 +26,8 @@ public class PlayerMove : MonoBehaviour
     bool _isGrounded = true;
     float _dashTimeStamp;
     public bool IsDashing => IsInDashAnimation();
-    public void SetMoveLock(float time)
-    {
-        //_Rigidbody.velocity = Vector3.zero;
-        StartCoroutine(SetMoveLock_Coroutine(time));
-    }
-    IEnumerator SetMoveLock_Coroutine(float time)
-    {
-        _isMoving = false;
-        yield return new WaitForSeconds(time);
-
-        _isMoving = true;
-    }
     public void SetDashLock(float time)
     {
-        //_Rigidbody.velocity = Vector3.zero;
         _isMoving = false;
         _isDashing = true;
 
@@ -116,7 +102,7 @@ public class PlayerMove : MonoBehaviour
             }
             return;
         }
-        if (_isMoving && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove && _isGrounded )
+        if (_isMoving && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove && _isGrounded)
         {
             _moveVector3 = new Vector3(_moveVector3_Origin.x, 0, _moveVector3_Origin.z);
 
@@ -147,35 +133,35 @@ public class PlayerMove : MonoBehaviour
 
     void Rotate_OnFixedUpdate()
     {
-        if(_PlayerMaster.IsMeleeMode && _isDashing && _PlayerMaster.IsAttackState)
+        if (_PlayerMaster.IsMeleeMode && _isDashing && _PlayerMaster.IsAttackState)
         {
             // 캐릭터를 이동 방향으로 회전
-            if (_moveVector3 != Vector3.zero && _isMoving && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove)
-            {
-                _lookTargetPos = _Rigidbody.velocity;
-                _lookTargetPos.y = 0f;
-                Quaternion targetRotation = Quaternion.LookRotation(_lookTargetPos, Vector3.up);
-                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed);
-            }
+            //if (_moveVector3 != Vector3.zero && _isMoving && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove)
+            RotateToVelocity();
         }
         else if (_PlayerMaster.IsAttackState)
         {
             _lookTargetPos.y = 0f;
 
-            Quaternion targetRotation = Quaternion.LookRotation(GetCamForward(),Vector3.up);
+            Quaternion targetRotation = Quaternion.LookRotation(GetCamForward(), Vector3.up);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed);
         }
-        else if (_isMoving)
+        else //if (_isMoving)
         {
             // 캐릭터를 이동 방향으로 회전
-            if (_moveVector3 != Vector3.zero && _isMoving && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove)
+            if (_moveVector3 != Vector3.zero && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove)
             {
-                _lookTargetPos = _Rigidbody.velocity;
-                _lookTargetPos.y = 0f;
-                Quaternion targetRotation = Quaternion.LookRotation(_lookTargetPos, Vector3.up);
-                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed);
+                RotateToVelocity();
             }
         }
+    }
+
+    private void RotateToVelocity()
+    {
+        _lookTargetPos = _Rigidbody.velocity;
+        _lookTargetPos.y = 0f;
+        Quaternion targetRotation = Quaternion.LookRotation(_lookTargetPos, Vector3.up);
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed);
     }
 
     private Vector3 GetCamForward()
@@ -185,19 +171,6 @@ public class PlayerMove : MonoBehaviour
     private Quaternion GetCamForwardRot()
     {
         return Quaternion.LookRotation(GetCamForward(), Vector3.up);
-    }
-
-    IEnumerator Rotate_Coroutine(float time)
-    {
-        float onTime = 0;
-        while (onTime < time)
-        {
-            yield return null;
-            onTime += Time.deltaTime;
-
-            Quaternion targetRotation = Quaternion.LookRotation(_lookTargetPos, Vector3.up);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed);
-        }
     }
 
     public void Dash()
