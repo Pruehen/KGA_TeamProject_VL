@@ -136,11 +136,6 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
         _PlayerAttack.Init();
     }
 
-    public void OnAttackState(Vector3 lookTarget)
-    {
-        _PlayerMove.OnAttackState(lookTarget);
-    }
-
     public Vector3 GetPosition()
     {
         return this.transform.position;
