@@ -16,6 +16,13 @@ public class PlayerInstanteState : MonoBehaviour
     public float skillGauge { get; private set; }
     public bool IsAbsorptState { get; set; }
     public float AttackSpeed { get => attackSpeed; private set => attackSpeed = value; }
+    public int MeleeToRangeRatio { get => _meleeToRangeRatio; private set => _meleeToRangeRatio = value; }
+    public float AbsorbingStaminaConsumRate { get => _absorbingStaminaConsumRate; private set => _absorbingStaminaConsumRate = value; }
+    [SerializeField] private float _absorbingStaminaConsumRate = 300f;
+
+
+
+    [SerializeField] private int _meleeToRangeRatio = 2;
 
     bool _isMeleeMode;
     public bool IsMeleeMode
@@ -342,6 +349,11 @@ public class PlayerInstanteState : MonoBehaviour
 
         Passive_Offensive2_Active_OnUpdate();
 
+        if(_PlayerMaster.IsAbsorptState)
+        {
+            TryStaminaConsumption(_absorbingStaminaConsumRate * Time.deltaTime);
+        }
+
         staminaRecoveryDelayValue += Time.deltaTime;
         if (staminaRecoveryDelayValue >= staminaRecoveryDelay)
         {
@@ -566,6 +578,12 @@ public class PlayerInstanteState : MonoBehaviour
         meleeBullets -= cost;
         if (meleeBullets < 0)
             meleeBullets = 0;
+        UpdateBullet_Melee();
+    }
+
+    public void BulletClear_Melee()
+    {
+        meleeBullets = 0;
         UpdateBullet_Melee();
     }
 
