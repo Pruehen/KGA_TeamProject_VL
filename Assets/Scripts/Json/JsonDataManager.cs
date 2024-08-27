@@ -86,7 +86,7 @@ public static class JsonDataManager
     public static void SetUserDataIndex(int index)
     {
         jsonCache.UserDataCache.SetUserDataIndex(index);
-        JsonDataManager.DataSaveCommand(jsonCache.UserDataCache, UserDataList.FilePath());
+        UserData.Save();
     }
 }
 

@@ -4,7 +4,6 @@ using UnityEngine;
 using System.Linq;
 using EnumTypes;
 using System;
-using Unity.VisualScripting;
 
 public class BlueChip
 {    
@@ -183,6 +182,11 @@ public class UserData
         JsonDataManager.DataSaveCommand(JsonDataManager.jsonCache.UserDataCache, UserDataList.FilePath());
     }
 
+    public void InitPlayData()
+    {
+        PlayData = new PlayData();
+    }
+
     public void TryAddPassive(PassiveID id)
     {
         if(UsePassiveHashSet.Add(id))
@@ -206,6 +210,18 @@ public class UserData
         else
         {
             Debug.LogWarning($"존재하지 않는 패시브 : {id}");
+        }
+    }
+    public void TryUnLockPassive(PassiveID id)
+    {
+        if (UnlockPassiveHashSet.Add(id))
+        {
+            Save();
+            Debug.Log($"패시브 해금 : {id}");
+        }
+        else
+        {
+            Debug.LogWarning($"이미 해금된 패시브 : {id}");
         }
     }
 
@@ -272,12 +288,7 @@ public class UserDataList
             Debug.Log($"{UseIndex} 세이브파일 로드");
             return dic[UseIndex];
         }
-        else
-        {
-            Debug.Log("해당하는 키가 없습니다. 세이브파일을 생성합니다.");
-            dic.Add(UseIndex, new UserData(UseIndex));
-            return dic[UseIndex];
-        }
+        return null;
     }
     public UserData GetUserData(int index)
     {
