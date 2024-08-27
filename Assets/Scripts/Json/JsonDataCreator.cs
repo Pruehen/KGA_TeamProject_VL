@@ -282,6 +282,11 @@ public class UserData
     }
     public bool AvailableSlot(int slotIndex)
     {
+        if (SlotIndex_SlotUnlock_Dic.ContainsKey(slotIndex) == false)
+        {
+            Debug.LogError("½½·Ô ÀÎµ¦½ºÀÇ ¹üÀ§¸¦ ¹þ¾î³µ½À´Ï´Ù.");
+            return false;
+        }
         return SlotIndex_SlotUnlock_Dic[slotIndex];
     }
 
