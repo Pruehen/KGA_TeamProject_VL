@@ -210,10 +210,12 @@ public class UserData
     public void SavePlayData_OnSceneExit(PlayerInstanteState state, PlayerEquipBlueChip equipBlueChip)//씬 변환 시 호출
     {
         PlayData.SavePlayData_OnSceneExit(state, equipBlueChip);
+        Save();
     }
     public void SavePlayData_OnSceneEnter(string newStage)//씬 입장 시 호출
     {
         PlayData.SavePlayData_OnSceneEnter(newStage);
+        Save();
     }
 
     public bool TryGetPlayData(out PlayData playData)
