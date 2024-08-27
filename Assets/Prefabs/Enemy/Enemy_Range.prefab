@@ -12,21 +12,29 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy_Range
       objectReference: {fileID: 0}
+    - target: {fileID: 313917874493976114, guid: 9bbb9f1945250c34391ccfd023e30cbb, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2245763242816189015, guid: 9bbb9f1945250c34391ccfd023e30cbb, type: 3}
       propertyPath: _enemyData
       value: 
       objectReference: {fileID: 11400000, guid: f8a7a24ba89dcc24ba82a0f5ee02dbc5, type: 2}
+    - target: {fileID: 7547091312613118414, guid: 9bbb9f1945250c34391ccfd023e30cbb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7667074886944340159, guid: 9bbb9f1945250c34391ccfd023e30cbb, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 21.15157
       objectReference: {fileID: 0}
     - target: {fileID: 7667074886944340159, guid: 9bbb9f1945250c34391ccfd023e30cbb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.88
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7667074886944340159, guid: 9bbb9f1945250c34391ccfd023e30cbb, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -8.3906765
       objectReference: {fileID: 0}
     - target: {fileID: 7667074886944340159, guid: 9bbb9f1945250c34391ccfd023e30cbb, type: 3}
       propertyPath: m_LocalRotation.w
