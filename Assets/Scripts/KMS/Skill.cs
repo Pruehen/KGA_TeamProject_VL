@@ -358,27 +358,28 @@ public class Skill : MonoBehaviour
     public void Effect2(SO_SKillEvent skill)
     {
 
+        GameObject VFX = ObjectPoolManager.Instance.DequeueObject(skill.preFab);
 
-        //GameObject VFX = ObjectPoolManager.Instance.DequeueObject(skill.preFab);
-        GameObject VFX = Instantiate(skill.preFab, transform.position, Quaternion.identity);
+        Vector3 position = Vector3.zero;
+
+        // 플레이어의 특정 위치를 가져옴
         switch (skill.playerPos)
         {
             case SO_SKillEvent.PlayerPos.Hand_L:
-                VFX.transform.position = hand_L.position;
+                position = hand_L.position;
                 break;
             case SO_SKillEvent.PlayerPos.Hand_R:
-                VFX.transform.position = hand_R.position;
+                position = hand_R.position;
                 break;
             case SO_SKillEvent.PlayerPos.Foot:
-                VFX.transform.position = Foot.position;
-                break;
-            default:
-                ObjectPoolManager.Instance.EnqueueObject(VFX);
+                position = Foot.position;
                 break;
         }
 
+        position += skill.offSet;
+        VFX.transform.position = position;
+        VFX.transform.localRotation = Quaternion.Euler(skill.rotation);
         VFX.transform.localScale *= skill.size;
-
     }
     [SerializeField] Transform hand_L;
     [SerializeField] Transform hand_R;

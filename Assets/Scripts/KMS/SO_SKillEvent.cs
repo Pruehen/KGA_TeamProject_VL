@@ -14,4 +14,6 @@ public class SO_SKillEvent : ScriptableObject
         Foot
     }
     public PlayerPos playerPos;
+    public Vector3 offSet= new Vector3(0f,0f,0f);
+    public Vector3 rotation;
 }
