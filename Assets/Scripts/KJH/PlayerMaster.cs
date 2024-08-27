@@ -21,10 +21,6 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     public bool IsAttackState
     {
         get { return _AttackSystem._attackLcokMove; }
-        set
-        {
-            _AttackSystem._attackLcokMove = value;
-        }
     }
     public bool IsAbsorptState
     {
@@ -140,11 +136,6 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
         _PlayerAttack.Init();
     }
 
-    public void OnAttackState(Vector3 lookTarget)
-    {
-        _PlayerMove.OnAttackState(lookTarget);
-    }
-
     public Vector3 GetPosition()
     {
         return this.transform.position;
@@ -163,6 +154,13 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     {
         _PlayerInstanteState.Hit(dmg, out float finalDmg);
         DmgTextManager.Instance.OnDmged(finalDmg, this.transform.position);
+        TryAbsorptFail();
+    }
+
+    public void TryAbsorptFail()
+    {
+        if( _PlayerInstanteState.IsAbsorptState)
+            _PlayerModChangeManager?.EndAbsorptState();
     }
 
     public bool IsDead()

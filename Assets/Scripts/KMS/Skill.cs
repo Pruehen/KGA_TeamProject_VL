@@ -131,13 +131,12 @@ public class Skill : MonoBehaviour
         damage = so_Skill._rangedSkill4 * SkillPower;
         range = so_Skill._rangedSkill4Range;
         distance = so_Skill._meleeSkill4Distance;
-
-
+        transform.rotation = mainCamera.transform.rotation;
         if (Physics.Raycast(ray, out hit, distance, enemyLayerMask))
         {
             Vector3 hitPosition = hit.point;
             target = hit.point;
-            _damageBox.transform.position = target;
+            //_damageBox.transform.position = target;
             TargettoRun();
             //데미지 박스의 위치를 미리 이전
         }
@@ -156,7 +155,7 @@ public class Skill : MonoBehaviour
         // 카메라의 위치에서 forward 방향으로 레이를 쏩니다.
         Ray ray = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
         RaycastHit hit;
-
+        transform.rotation = mainCamera.transform.rotation;
         float damage = 0f;
         Vector3 range = new Vector3(1f, 1f, 1f);
         float distance = 0f;
@@ -321,7 +320,9 @@ public class Skill : MonoBehaviour
                 return;
 
         }
+        _damageBox.transform.localPosition = Vector3.zero;
         _damageBox.EnableDamageBox(damage, range, null, 0f, offset);
+        Debug.Log($"Unrecognized skill:{offset} {skillType}");
     }
     private IEnumerator MoveToTargetCoroutine()
     {

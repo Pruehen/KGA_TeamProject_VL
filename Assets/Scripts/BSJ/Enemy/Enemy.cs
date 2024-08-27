@@ -347,7 +347,7 @@ public class Enemy : MonoBehaviour, ITargetable
         {
             return false;
         }
-        float dist = Vector3.Distance(_detector.GetPosition(), transform.position);
+        float dist = Vector3.Distance(_detector.GetLatestTarget().position, transform.position);
         if (dist >= range)
         {
             return true;
