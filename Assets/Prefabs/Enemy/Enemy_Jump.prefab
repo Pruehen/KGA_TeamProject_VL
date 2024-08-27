@@ -46,7 +46,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1782543848122132977, guid: 1f653ff91d0b36747a9d76975d91a295, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1782543848122132979, guid: 1f653ff91d0b36747a9d76975d91a295, type: 3}
       propertyPath: m_LocalScale.x
@@ -135,11 +135,11 @@ PrefabInstance:
     - target: {fileID: 4806900583433488296, guid: 1f653ff91d0b36747a9d76975d91a295, type: 3}
       propertyPath: m_Avatar
       value: 
-      objectReference: {fileID: 9000000, guid: af69d37b180cc2f49b87e760dfaa46bb, type: 3}
+      objectReference: {fileID: 9000000, guid: 5bee5287b064ef64fb732dddb584c168, type: 3}
     - target: {fileID: 4806900583433488296, guid: 1f653ff91d0b36747a9d76975d91a295, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 36b95897713620b4da009a3f80f50338, type: 2}
+      objectReference: {fileID: 9100000, guid: 57f61a8f84065cd438449727d18e69f0, type: 2}
     - target: {fileID: 5273575639600498598, guid: 1f653ff91d0b36747a9d76975d91a295, type: 3}
       propertyPath: m_ConnectedAnchor.x
       value: -0.40920505
@@ -156,6 +156,14 @@ PrefabInstance:
       propertyPath: _enemyData
       value: 
       objectReference: {fileID: 11400000, guid: 3819c561ceb869242b2a703ceda44878, type: 2}
+    - target: {fileID: 5842450011511315219, guid: 1f653ff91d0b36747a9d76975d91a295, type: 3}
+      propertyPath: gizmoViewMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5842450011511315219, guid: 1f653ff91d0b36747a9d76975d91a295, type: 3}
+      propertyPath: showBehaviorDesignerGizmo
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6162902244653245927, guid: 1f653ff91d0b36747a9d76975d91a295, type: 3}
       propertyPath: m_Name
       value: Enemy_Jump
