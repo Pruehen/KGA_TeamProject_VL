@@ -105,11 +105,13 @@ public class LaunchAttack : AiAttackAction
             animator.SetTrigger("Attack");
         }
     }
+    private bool isJumping;
 
     public void OnExcuteLaunch()
     {
         _jumpTimeStamp = Time.time;
         _isCrashed = false;
+        isJumping = true;
 
         agent.nextPosition = transform.position;
         agent.updatePosition = false;
@@ -153,7 +155,7 @@ public class LaunchAttack : AiAttackAction
 
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiredDir), Time.deltaTime * _aimRotateSpeed);
 
-        bool isGrounded = Physics.CheckSphere(transform.position + (Vector3.up * .35f) , .4f, LayerMask.GetMask("Environment"));
+        bool isGrounded = Physics.CheckSphere(transform.position + (Vector3.up * .35f), .4f, LayerMask.GetMask("Environment"));
 
         if (!isGrounded)
         {
@@ -168,7 +170,11 @@ public class LaunchAttack : AiAttackAction
                 isAlmostGrouonded = isAlmostGrouonded && rb.velocity.y < 0f;
                 if (distH < nearDistance || isAlmostGrouonded)
                 {
-                    animator.SetTrigger(hashEndLaunch);
+                    if (isJumping)
+                    {
+                        isJumping = false;
+                        animator.SetTrigger(hashEndLaunch);
+                    }
                     float distV = PhysicsHelper.Dist2D(pos, target);
                 }
                 else
@@ -185,7 +191,12 @@ public class LaunchAttack : AiAttackAction
             }
             DisablePhysics();
             ResetLaunching();
-            animator.SetTrigger(hashEndLaunch);
+            if (isJumping)
+            {
+                isJumping = false;
+                animator.SetTrigger(hashEndLaunch);
+            }
+            isJumping = false;
         }
     }
     public bool IsAttacking()
