@@ -151,9 +151,6 @@ MonoBehaviour:
   _pooledHitVfxPrefab: {fileID: 0}
   _projectilePrefab: {fileID: 0}
   _firePos: {fileID: 300571122579109741}
-  _meshEnemyJumping: {fileID: 1782543848122132979}
-  _meshEnemyRange: {fileID: 5953094335771967087}
-  _meshEnemyNormal: {fileID: 4499447233181413726}
 --- !u!54 &6761217911787281492
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -212,7 +209,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6162902244653245927}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 5e6f511379ddc384cb88828d3cda0bac, type: 3}
+  m_Avatar: {fileID: 9000000, guid: ce65fa103f0e84b4289374b2a4bf93f8, type: 3}
   m_Controller: {fileID: 9100000, guid: 57f61a8f84065cd438449727d18e69f0, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
@@ -520,10 +517,6 @@ PrefabInstance:
     - target: {fileID: 4467757482891228, guid: 227ee07e9e5b7914ba8fbb8f430be9a5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4467757482891228, guid: 227ee07e9e5b7914ba8fbb8f430be9a5, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4467757482891228, guid: 227ee07e9e5b7914ba8fbb8f430be9a5, type: 3}
       propertyPath: m_LocalPosition.z
