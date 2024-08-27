@@ -1501,9 +1501,25 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 7539b71eaca258048a2020d99698f451, type: 2}
     - target: {fileID: 3176383348458485747, guid: bf65563d71b0c5e43bce5d8dad0aed86, type: 3}
+      propertyPath: ChargedL
+      value: 
+      objectReference: {fileID: 11400000, guid: 0c7d7f947dce735488dd1caa3fdcdaf1, type: 2}
+    - target: {fileID: 3176383348458485747, guid: bf65563d71b0c5e43bce5d8dad0aed86, type: 3}
+      propertyPath: ChargedR
+      value: 
+      objectReference: {fileID: 11400000, guid: b945d94a9ff1ad74c99698618c2b5908, type: 2}
+    - target: {fileID: 3176383348458485747, guid: bf65563d71b0c5e43bce5d8dad0aed86, type: 3}
       propertyPath: ChargeTime
-      value: 0.5
+      value: 0.8
       objectReference: {fileID: 0}
+    - target: {fileID: 3176383348458485747, guid: bf65563d71b0c5e43bce5d8dad0aed86, type: 3}
+      propertyPath: StartChargeL
+      value: 
+      objectReference: {fileID: 11400000, guid: c575a3e413d4a88469589aacd2bf60f0, type: 2}
+    - target: {fileID: 3176383348458485747, guid: bf65563d71b0c5e43bce5d8dad0aed86, type: 3}
+      propertyPath: StartChargeR
+      value: 
+      objectReference: {fileID: 11400000, guid: 7539b71eaca258048a2020d99698f451, type: 2}
     - target: {fileID: 3370145770967923552, guid: bf65563d71b0c5e43bce5d8dad0aed86, type: 3}
       propertyPath: m_Name
       value: Player
