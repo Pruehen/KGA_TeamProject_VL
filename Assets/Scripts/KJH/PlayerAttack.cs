@@ -132,7 +132,6 @@ public class PlayerAttack : MonoBehaviour
         if (attackTrigger && !prevAttackTrigger)
         {
             delayTime = 0;
-            _PlayerMaster.OnAttackState(_PlayerCameraMove.CamRotation() * Vector3.forward);
 
             int blueChip2Level = _PlayerMaster.GetBlueChipLevel(EnumTypes.BlueChipID.Range1);
             initialAttackComboIndex = (blueChip2Level > 0) ? (int)JsonDataManager.GetBlueChipData(EnumTypes.BlueChipID.Range1).Level_VelueList[blueChip2Level][0] : 0;
@@ -151,7 +150,6 @@ public class PlayerAttack : MonoBehaviour
         {
             skillBool = false;
             delayTime = 0;
-            _PlayerMaster.OnAttackState(_PlayerCameraMove.CamRotation() * Vector3.forward);
             _AttackSystem.StartSkill((int)CurrentAttackKind, _PlayerMaster._PlayerInstanteState.skillGauge);
         }
         prevAttackTrigger = attackTrigger;
@@ -191,7 +189,7 @@ public class PlayerAttack : MonoBehaviour
         IncreaseAttackCount();
         Projectile projectile = ObjectPoolManager.Instance.DequeueObject(Prefab_Projectile).GetComponent<Projectile>();
 
-        Vector3 projectionVector = _PlayerCameraMove.CamRotation() * Vector3.forward * projectionSpeed_Forward + Vector3.up * projectionSpeed_Up;
+        Vector3 projectionVector = transform.forward * projectionSpeed_Forward + Vector3.up * projectionSpeed_Up;
 
         projectile.Init(_PlayerMaster._PlayerInstanteState.GetDmg(CurrentAttackKind,
             IsLastAttack()),
