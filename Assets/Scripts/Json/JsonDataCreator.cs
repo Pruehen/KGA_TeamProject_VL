@@ -172,6 +172,10 @@ public class UserData
             SlotIndex_SlotUnlock_Dic.Add(0, true);
             SlotIndex_SlotUnlock_Dic.Add(2, true);
             SlotIndex_SlotUnlock_Dic.Add(4, true);
+
+            SlotIndex_SlotUnlock_Dic.Add(1, false);
+            SlotIndex_SlotUnlock_Dic.Add(3, false);
+            SlotIndex_SlotUnlock_Dic.Add(5, false);
         }
     }
 
@@ -192,6 +196,10 @@ public class UserData
         SlotIndex_SlotUnlock_Dic.Add(0, true);
         SlotIndex_SlotUnlock_Dic.Add(2, true);
         SlotIndex_SlotUnlock_Dic.Add(4, true);
+
+        SlotIndex_SlotUnlock_Dic.Add(1, false);
+        SlotIndex_SlotUnlock_Dic.Add(3, false);
+        SlotIndex_SlotUnlock_Dic.Add(5, false);
     }
 
     public static void Save()
@@ -253,6 +261,21 @@ public class UserData
         {
             Debug.LogWarning($"이미 해금된 패시브 : {id}");
         }
+    }
+    public void TryUnLockPassiveSlot(int slotIndex)
+    {
+        if(SlotIndex_SlotUnlock_Dic.ContainsKey(slotIndex))
+        {
+            SlotIndex_SlotUnlock_Dic[slotIndex] = true;
+        }
+        else
+        {
+            Debug.LogError("슬롯 인덱스의 범위를 벗어났습니다.");
+        }
+    }
+    public bool AvailableSlot(int slotIndex)
+    {
+        return SlotIndex_SlotUnlock_Dic[slotIndex];
     }
 
     public void AddGold(int amount)
