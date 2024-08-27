@@ -30,7 +30,7 @@ public class PassiveUI : MonoBehaviour, ISelectHandler
                 return;
             }
         }
-        SetUI();
+        //SetUI();
     }
     public void OnSelect(BaseEventData eventData)
     {
@@ -39,6 +39,7 @@ public class PassiveUI : MonoBehaviour, ISelectHandler
 
     public void SetUI()
     {
+        locked = !JsonDataManager.GetUserData().UnlockPassiveHashSet.Contains(passiveID);
         if (passiveID == PassiveID.None)
         {
             Image_Icon.gameObject.SetActive(false);
@@ -91,21 +92,19 @@ public class PassiveUI : MonoBehaviour, ISelectHandler
 
     void TryUnLock()
     {
-        if (PassiveUIManager.Instance.TryUseEmerald())
-        {
-            locked = false;
+        if (PassiveUIManager.Instance.TryUseEmerald(JsonDataManager.GetPassive(passiveID).Cost))
+        {            
+            JsonDataManager.GetUserData().TryUnLockPassive(passiveID);
             SetUI();
         }
         else
         {
-            CheckUIManager.Instance.CheckUiActive_OnClick(NotMony, "이 거지야");
+            CheckUIManager.Instance.CheckUiActive_OnClick(NotMony, "돈이 부족합니다.");
         }
     }
 
     void NotMony()
     { 
-    
-    
     }
 
     public void OnClick_TryUnEquip()
@@ -115,9 +114,4 @@ public class PassiveUI : MonoBehaviour, ISelectHandler
         passiveID = PassiveID.None;
         SetUI();
     }
-
-
-
-
-
 }

@@ -131,8 +131,7 @@ public class Skill : MonoBehaviour
         damage = so_Skill._rangedSkill4 * SkillPower;
         range = so_Skill._rangedSkill4Range;
         distance = so_Skill._meleeSkill4Distance;
-
-
+        transform.rotation = mainCamera.transform.rotation;
         if (Physics.Raycast(ray, out hit, distance, enemyLayerMask))
         {
             Vector3 hitPosition = hit.point;
@@ -156,7 +155,7 @@ public class Skill : MonoBehaviour
         // 카메라의 위치에서 forward 방향으로 레이를 쏩니다.
         Ray ray = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
         RaycastHit hit;
-
+        transform.rotation = mainCamera.transform.rotation;
         float damage = 0f;
         Vector3 range = new Vector3(1f, 1f, 1f);
         float distance = 0f;

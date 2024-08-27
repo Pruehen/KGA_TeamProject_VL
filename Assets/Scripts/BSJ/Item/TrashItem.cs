@@ -131,4 +131,11 @@ public class TrashItem : MonoBehaviour
         transform.SetParent(parent, true);
         DisablePhysics();
     }
+
+    public bool IsAborbable()
+    {
+        if (State == ItemState.Normal)
+            return true;
+        return false;
+    }
 }

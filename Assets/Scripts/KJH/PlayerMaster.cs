@@ -21,10 +21,6 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     public bool IsAttackState
     {
         get { return _AttackSystem._attackLcokMove; }
-        set
-        {
-            _AttackSystem._attackLcokMove = value;
-        }
     }
     public bool IsAbsorptState
     {
@@ -138,11 +134,6 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
 
         _ItemAbsorber.Init(_PlayerInstanteState._playerStatData);
         _PlayerAttack.Init();
-    }
-
-    public void OnAttackState(Vector3 lookTarget)
-    {
-        _PlayerMove.OnAttackState(lookTarget);
     }
 
     public Vector3 GetPosition()

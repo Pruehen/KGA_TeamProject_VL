@@ -26,10 +26,6 @@ public class PlayerModChangeManager : MonoBehaviour
     public bool IsAttackState
     {
         get { return _PlayerMaster.IsAttackState; }
-        set
-        {
-            _PlayerMaster.IsAttackState = value;
-        }
     }
      public bool isDashing
     {
@@ -111,12 +107,14 @@ public class PlayerModChangeManager : MonoBehaviour
     }
     public void EnterMeleeMode()
     {
+        PlayerInstanteState state = _PlayerMaster._PlayerInstanteState;
+
         IsAbsorptState = false;
         if (HasBlueChip5_AutoChange() == true)
         {
             int value = OnSucceseAbsorptState.Invoke();
 
-            _PlayerMaster._PlayerInstanteState.AcquireBullets(value);
+            state.AcquireBullets(value);
             Debug.Log($"{value}개 흡수");
             if (value <= 0)
             {
@@ -127,14 +125,15 @@ public class PlayerModChangeManager : MonoBehaviour
         {
             int value = OnSucceseAbsorptState_EntryMelee.Invoke();
 
-            if (value > 0)
+            if (value > 1)
             {
                 Debug.Log($"{value}개 흡수, 근접 모드 변환");
-                _PlayerMaster._PlayerInstanteState.AcquireBullets_Melee(value);
+                state.AcquireBullets_Melee(value);
                 IsMeleeMode = true;                
             }
             else
             {
+                state.AcquireBullets(value);
                 EndAbsorptState();
             }
         }

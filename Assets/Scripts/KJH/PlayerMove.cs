@@ -22,13 +22,6 @@ public class PlayerMove : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
-    public void OnAttackState(Vector3 attaciDir)
-    {
-        SetMoveLock(0.4f);
-        _lookTargetPos = new Vector3(attaciDir.x, 0, attaciDir.z);
-        StartCoroutine(Rotate_Coroutine(0.3f));
-    }
-
     bool _isMoving = true;
     bool _isDashing = false;
     bool _isGrounded = true;
@@ -73,8 +66,21 @@ public class PlayerMove : MonoBehaviour
 
     public void FixedUpdate()
     {
+
         CheckGounded_OnFixedUpdate();
+        bool isKnockbackstate = AnimatorHelper.IsAnimationPlaying(_animator, 0, "Base Layer.Hit");
+        if (isKnockbackstate)
+        {
+            Vector3 vel = _Rigidbody.velocity;
+            vel.x = 0f;
+            vel.z = 0f;
+            _Rigidbody.velocity = vel;
+            return;
+
+        }
+
         Move_OnFixedUpdate();
+
         Rotate_OnFixedUpdate();
     }
     void OnInputPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -141,23 +147,44 @@ public class PlayerMove : MonoBehaviour
 
     void Rotate_OnFixedUpdate()
     {
-        // 캐릭터를 이동 방향으로 회전
-        if (_moveVector3 != Vector3.zero && _isMoving && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove)
+        if(_PlayerMaster.IsMeleeMode && _isDashing && _PlayerMaster.IsAttackState)
         {
-            _lookTargetPos = _moveVector3;
-
-            Quaternion targetRotation = Quaternion.LookRotation(_lookTargetPos, Vector3.up);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed);
+            // 캐릭터를 이동 방향으로 회전
+            if (_moveVector3 != Vector3.zero && _isMoving && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove)
+            {
+                _lookTargetPos = _Rigidbody.velocity;
+                _lookTargetPos.y = 0f;
+                Quaternion targetRotation = Quaternion.LookRotation(_lookTargetPos, Vector3.up);
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed);
+            }
         }
-
-        if (_isDashing)
+        else if (_PlayerMaster.IsAttackState)
         {
-            _lookTargetPos = _Rigidbody.velocity;
             _lookTargetPos.y = 0f;
 
-            Quaternion targetRotation = Quaternion.LookRotation(_lookTargetPos, Vector3.up);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed * 4f);
+            Quaternion targetRotation = Quaternion.LookRotation(GetCamForward(),Vector3.up);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed);
         }
+        else if (_isMoving)
+        {
+            // 캐릭터를 이동 방향으로 회전
+            if (_moveVector3 != Vector3.zero && _isMoving && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove)
+            {
+                _lookTargetPos = _Rigidbody.velocity;
+                _lookTargetPos.y = 0f;
+                Quaternion targetRotation = Quaternion.LookRotation(_lookTargetPos, Vector3.up);
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed);
+            }
+        }
+    }
+
+    private Vector3 GetCamForward()
+    {
+        return _PlayerCameraMove.CamRotation() * Vector3.forward;
+    }
+    private Quaternion GetCamForwardRot()
+    {
+        return Quaternion.LookRotation(GetCamForward(), Vector3.up);
     }
 
     IEnumerator Rotate_Coroutine(float time)
@@ -185,15 +212,6 @@ public class PlayerMove : MonoBehaviour
             _attackSystem.ResetEndAttack();
             _animator.SetTrigger("Dash");
             Debug.Log("Dash");
-            if (_moveVector3 == Vector3.zero)
-            {
-                _PlayerMaster.OnAttackState(_PlayerCameraMove.CamRotation() * Vector3.forward);
-            }
-            else
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(_lookTargetPos, Vector3.up);
-                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed);
-            }
         }
         else
         {
@@ -215,11 +233,6 @@ public class PlayerMove : MonoBehaviour
 
     public bool IsInDashAnimation()
     {
-        int c = _animator.GetCurrentAnimatorStateInfo(0).fullPathHash;
-        int n = _animator.GetNextAnimatorStateInfo(0).fullPathHash;
-        if (n == 0) n = c;
-        bool isInExitTransition = n != c;
-        return AnimatorHelper.IsAnimationIn(_animator, 0, "Base Layer.Dash") &&
-        !isInExitTransition;
+        return AnimatorHelper.IsAnimationPlaying(_animator, 0, "Base Layer.Dash");
     }
 }

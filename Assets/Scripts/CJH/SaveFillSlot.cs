@@ -72,6 +72,7 @@ public class SaveFillSlot : MonoBehaviour
     {
         JsonDataManager.DeleteUserData(_slotIndex);
         SetData(_slotIndex);
+        JsonDataManager.DataSaveCommand(JsonDataManager.jsonCache.UserDataCache, UserDataList.FilePath());
         EventSystem.current.SetSelectedGameObject(this.gameObject);
     }
 }

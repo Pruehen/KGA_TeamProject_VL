@@ -18,6 +18,10 @@ public class CheckUI : MonoBehaviour
     //활성화
     public void CheckUiActive_OnClick(Action callBack, string msg)
     {
+        if (openCount > 2)
+        {
+            openCount = 0;
+        }
         openCount++;
 
         this.gameObject.SetActive(true);
@@ -32,11 +36,7 @@ public class CheckUI : MonoBehaviour
     //비활성화 
     void CheckUIDeActive()
     {
-        if (openCount > 2)
-        {
-            openCount = 1;
-        }
-     
+        
         openCount--;
 
         if (openCount != 0)
@@ -54,8 +54,7 @@ public class CheckUI : MonoBehaviour
         excutionEvent?.Invoke();
         CheckUIDeActive();
 
-        Debug.Log("Yes");
-
+        Debug.Log("Yes");        
     }
 
     public void No_OnClick()

@@ -1,5 +1,6 @@
 using EnumTypes;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -31,12 +32,11 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
 
     [SerializeField] int TestEmerald = 10000;
 
+   
 
     private void Awake()
     {
         PassiveUI.AddRange(FindObjectsOfType<PassiveUI>());
-        SetEemeraldText();
-
     }
     public void Init(UserData userData)
     {
@@ -48,6 +48,7 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
         }
         InfoText(PassiveID.Offensive1);
         GetSlotData_OnInit(userData);
+        SetEemeraldText_OnInit();
     }
 
 
@@ -199,7 +200,7 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
     }
 
     //에메랄드 UI를 갱신해주는 메서드
-    public void SetEemeraldText()
+    public void SetEemeraldText_OnInit()
     {
         if (JsonDataManager.GetUserData().Gold == 0)
         {
@@ -213,20 +214,16 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
 
 
     //에메랄드 사용 가능(보유량이 충분)할 경우 true 반환, 불가능할 경우 false 반환 목적
-    public bool TryUseEmerald()
+    public bool TryUseEmerald(int costInt)
     {
 
-        int costint;
-        int.TryParse(costText.text.ToString(), out costint);
+        //int costint;
+        //int.TryParse(costText.text.ToString(), out costint);
 
-        bool suceeded = JsonDataManager.GetUserData().TryUseGold(costint);
+        bool suceeded = JsonDataManager.GetUserData().TryUseGold(costInt);
 
         if (suceeded)
         {
-            //// 에메랄드 차감
-            //playerEmerald -= costint;
-            //Debug.Log("playerEmerald :" + playerEmerald + " costint: " + costint);
-
             // UI 갱신
             emeraldText.text = JsonDataManager.GetUserData().Gold.ToString();
             return true;
