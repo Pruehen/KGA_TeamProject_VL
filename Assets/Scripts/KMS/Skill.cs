@@ -136,7 +136,7 @@ public class Skill : MonoBehaviour
         {
             Vector3 hitPosition = hit.point;
             target = hit.point;
-            _damageBox.transform.position = target;
+            //_damageBox.transform.position = target;
             TargettoRun();
             //데미지 박스의 위치를 미리 이전
         }
@@ -320,7 +320,9 @@ public class Skill : MonoBehaviour
                 return;
 
         }
+        _damageBox.transform.localPosition = Vector3.zero;
         _damageBox.EnableDamageBox(damage, range, null, 0f, offset);
+        Debug.Log($"Unrecognized skill:{offset} {skillType}");
     }
     private IEnumerator MoveToTargetCoroutine()
     {
