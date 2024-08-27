@@ -62,4 +62,5 @@ public class EffectManager : SceneSingleton<EffectManager>
         yield return new WaitForSeconds(delayTime);
         ObjectPoolManager.Instance.EnqueueObject(item);
     }
+ 
 }
