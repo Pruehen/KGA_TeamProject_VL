@@ -254,24 +254,25 @@ public class PlayerAttack : MonoBehaviour
     private void Callback_IsChargedEnd()
     {
         Debug.Log("차-지 끝");
-        if (_currentAttackMod == PlayerAttackKind.MeleeNormalAttack)
-        {
-            CurrentAttackKind = PlayerAttackKind.MeleeNormalAttack;
-        }
+        //if (_currentAttackMod == PlayerAttackKind.MeleeNormalAttack)
+        //{
+        //    CurrentAttackKind = PlayerAttackKind.MeleeNormalAttack;
+        //}
     }
 
     private void Callback_IsChargedFail()
     {
-        if (_currentAttackMod == PlayerAttackKind.MeleeNormalAttack)
-        {
-            CurrentAttackKind = PlayerAttackKind.MeleeNormalAttack;
+        //if (_currentAttackMod == PlayerAttackKind.MeleeNormalAttack)
+        //{
+        //    CurrentAttackKind = PlayerAttackKind.MeleeNormalAttack;
             Debug.Log("차-지 실패");
-        }
+        //}
     }
     private void Callback_IsChargedStart()
     {
         CurrentAttackKind = PlayerAttackKind.MeleeNormalAttack;
         _currentAttackMod = PlayerAttackKind.MeleeNormalAttack;
+        _animator.SetInteger("AttackType", (int)CurrentAttackKind);
         Debug.Log("차-지 시작");
     }
     public void OnUseSkillGauge()
