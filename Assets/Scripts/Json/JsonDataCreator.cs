@@ -4,7 +4,6 @@ using UnityEngine;
 using System.Linq;
 using EnumTypes;
 using System;
-using Unity.VisualScripting;
 
 public class BlueChip
 {    
@@ -181,6 +180,11 @@ public class UserData
     public static void Save()
     {
         JsonDataManager.DataSaveCommand(JsonDataManager.jsonCache.UserDataCache, UserDataList.FilePath());
+    }
+
+    public void InitPlayData()
+    {
+        PlayData = new PlayData();
     }
 
     public void TryAddPassive(PassiveID id)
