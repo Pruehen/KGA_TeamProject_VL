@@ -378,7 +378,8 @@ public class Skill : MonoBehaviour
 
         position += skill.offSet;
         VFX.transform.position = position;
-        VFX.transform.localRotation = Quaternion.Euler(skill.rotation);
+        VFX.transform.localRotation = Quaternion.identity;
+        VFX.transform.localRotation *= Quaternion.Euler(skill.rotation);
         VFX.transform.localScale *= skill.size;
     }
     [SerializeField] Transform hand_L;
