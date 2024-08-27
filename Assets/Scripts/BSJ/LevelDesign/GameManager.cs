@@ -123,6 +123,7 @@ public class GameManager : SceneSingleton<GameManager>
 
     public void LoadNextStage()
     {
+        JsonDataManager.GetUserData().SavePlayData_OnSceneExit(_PlayerMaster._PlayerInstanteState, _PlayerMaster._PlayerEquipBlueChip);
         SO_Stage randomStage = GetRandomItem(_chapterData.ChapterData[_currentLevel++ % _chapterData.ChapterData.Length].StageData);
 
         AsyncOperation ao = SceneManager.LoadSceneAsync(randomStage.SceneName);

@@ -209,13 +209,20 @@ public class UserData
 
     public void SavePlayData_OnSceneExit(PlayerInstanteState state, PlayerEquipBlueChip equipBlueChip)//씬 변환 시 호출
     {
+        if (PlayData == null)
+        {
+            PlayData = new PlayData();
+        }
         PlayData.SavePlayData_OnSceneExit(state, equipBlueChip);
         Save();
     }
     public void SavePlayData_OnSceneEnter(string newStage)//씬 입장 시 호출
     {
-        PlayData.SavePlayData_OnSceneEnter(newStage);
-        Save();
+        if(PlayData != null)
+        {
+            PlayData.SavePlayData_OnSceneEnter(newStage);
+            Save();
+        }
     }
 
     public bool TryGetPlayData(out PlayData playData)
@@ -313,11 +320,11 @@ public class PlayData
     [JsonProperty] public string InGame_Stage { get; private set; }
     [JsonProperty] public float InGame_Hp { get; private set; }
     [JsonProperty] public float InGame_SkillGauge { get; private set; }
-    [JsonProperty] public float InGame_Bullet { get; private set; }
-    [JsonProperty] public float InGame_MeleeBullet { get; private set; }
+    [JsonProperty] public int InGame_Bullet { get; private set; }
+    [JsonProperty] public int InGame_MeleeBullet { get; private set; }
 
     [JsonConstructor]
-    public PlayData(int InGame_Gold, Dictionary<BlueChipID, int> InGame_BlueChip_Level, string InGame_Stage, float inGame_Hp, float inGame_SkillGauge, float inGame_Bullet, float inGame_MeleeBullet)
+    public PlayData(int InGame_Gold, Dictionary<BlueChipID, int> InGame_BlueChip_Level, string InGame_Stage, float inGame_Hp, float inGame_SkillGauge, int inGame_Bullet, int inGame_MeleeBullet)
     {
         this.InGame_Gold = InGame_Gold;
         this.InGame_BlueChip_Level = InGame_BlueChip_Level;
@@ -328,15 +335,11 @@ public class PlayData
         InGame_MeleeBullet = inGame_MeleeBullet;
     }
 
-    public PlayData(PlayerInstanteState state)
+    public PlayData() 
     {
-        InGame_Gold = 0;
-        InGame_BlueChip_Level = new Dictionary<BlueChipID, int>();        
-        InGame_Hp = state.hp;
-        InGame_SkillGauge = state.skillGauge;
-        InGame_Bullet = state.bullets;
-        InGame_MeleeBullet = state.meleeBullets;
+        InGame_BlueChip_Level = new Dictionary<BlueChipID, int>();
     }
+    
     public void SavePlayData_OnSceneExit(PlayerInstanteState state, PlayerEquipBlueChip equipBlueChip)//씬 변환 시 호출
     {        
         InGame_BlueChip_Level.Clear();

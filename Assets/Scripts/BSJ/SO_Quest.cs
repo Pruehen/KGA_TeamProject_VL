@@ -31,6 +31,11 @@ public class Quest
 
     public void CheckConditionOnUpdate()
     {
+        if(_questCondition == null)
+        {
+            Debug.LogWarning("씬 로드시 초기화가 업데이트보다 느림");
+            return ;
+        }
         _cleared = _questCondition.CheckConditionOnUpdate();
     }
 

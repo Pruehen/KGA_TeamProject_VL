@@ -21,7 +21,7 @@ public class PlayerEquipBlueChip : MonoBehaviour
     {
         return useBlueChipDic;
     }
-    public void Init_OnSceneLode()//씬 로드 시 (Playermaster의 Init 메서드 또는 awake 호출 시)
+    public void Init_OnSceneLoad()//씬 로드 시 (Playermaster의 Init 메서드 또는 awake 호출 시)
     {
         useBlueChipDic = new Dictionary<BlueChipID, BlueChipSlot>();
 
