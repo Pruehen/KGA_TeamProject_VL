@@ -25,17 +25,19 @@ public class MeleeAttack: MonoBehaviour
     Action OnChargeEnd;
     Action OnChargeFail;
     Action OnChargeStart;
-
+    [SerializeField] Skill skill;
     private void Update()
     {
         if (_isCharging)
         {
-            _isCharged = false;
             _chargingTime += Time.deltaTime;
-            if(_chargingTime >= ChargeTime && !_isCharged)
+
+            if (!_isCharged && _chargingTime >= ChargeTime)
             {
                 _isCharged = true;
                 OnCharged?.Invoke();
+                ChargeVFX();
+                _chargingTime = 0f;
             }
         }
         else
@@ -116,4 +118,20 @@ public class MeleeAttack: MonoBehaviour
         _chargingTime = 0f;
         OnChargeFail?.Invoke();
     }
+    public void ChargeVFX()
+    {
+        AnimatorStateInfo stateInfo = _animator.GetCurrentAnimatorStateInfo(0); // 0은 레이어 인덱스
+
+        if (stateInfo.IsName("Charge loop R"))
+        {
+            skill.Effect2(ChargeR);
+        }
+        else if (stateInfo.IsName("Charge loop L"))
+        {
+            skill.Effect2(ChargeL);
+        }
+
+    }
+    [SerializeField] SO_SKillEvent ChargeR;
+    [SerializeField] SO_SKillEvent ChargeL;
 }

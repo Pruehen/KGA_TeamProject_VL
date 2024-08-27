@@ -5068,6 +5068,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6122752632489919163, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
+      propertyPath: ChargeL
+      value: 
+      objectReference: {fileID: 11400000, guid: 0c7d7f947dce735488dd1caa3fdcdaf1, type: 2}
+    - target: {fileID: 6122752632489919163, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
+      propertyPath: ChargeR
+      value: 
+      objectReference: {fileID: 11400000, guid: b945d94a9ff1ad74c99698618c2b5908, type: 2}
     - target: {fileID: 6813270909696184528, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -6592,6 +6600,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ChargeTime: 1.5
+  skill: {fileID: 0}
+  ChargeR: {fileID: 0}
+  ChargeL: {fileID: 0}
 --- !u!114 &1878520908
 MonoBehaviour:
   m_ObjectHideFlags: 0
