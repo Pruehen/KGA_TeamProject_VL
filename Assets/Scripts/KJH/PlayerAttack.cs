@@ -245,12 +245,19 @@ public class PlayerAttack : MonoBehaviour
         if (_currentAttackMod == PlayerAttackKind.MeleeNormalAttack)
         {
             CurrentAttackKind = PlayerAttackKind.MeleeChargedAttack;
+
             Debug.Log("차-지 완료");
+            Debug.Log(CurrentAttackKind);
+              _animator.SetInteger("AttackType", (int)CurrentAttackKind);
         }
     }
     private void Callback_IsChargedEnd()
     {
         Debug.Log("차-지 끝");
+        if (_currentAttackMod == PlayerAttackKind.MeleeNormalAttack)
+        {
+            CurrentAttackKind = PlayerAttackKind.MeleeNormalAttack;
+        }
     }
 
     private void Callback_IsChargedFail()
