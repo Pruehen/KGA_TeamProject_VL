@@ -356,7 +356,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Charge loop R
-  m_Speed: 1
+  m_Speed: 0.5
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -3210647750962165303}
@@ -724,6 +724,7 @@ AnimatorStateMachine:
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours:
   - {fileID: -190716455043770355}
+  - {fileID: 5238192132631145242}
   m_AnyStatePosition: {x: -150, y: 210, z: 0}
   m_EntryPosition: {x: -240, y: 410, z: 0}
   m_ExitPosition: {x: 870, y: 480, z: 0}
@@ -3275,6 +3276,19 @@ AnimatorStateTransition:
   m_InterruptionSource: 2
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &5238192132631145242
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a8dc7da7a120b4448e3c9afb0488955, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerName: AttackEnd
 --- !u!114 &5267020103535631980
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3456,7 +3470,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Charge loop L
-  m_Speed: 1
+  m_Speed: 0.5
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 7822616617219910445}

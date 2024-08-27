@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 
 public class MeleeAttack: MonoBehaviour
@@ -94,7 +95,6 @@ public class MeleeAttack: MonoBehaviour
         _animator.ResetTrigger(_animTriggerAttackEnd);
         _animator.ResetTrigger(_animTriggerDashEnd);
         _animator.ResetTrigger(_animTriggerDash);
-
     }
 
     public void ChargeStart()//애니메이션 이벤트 MeleeAttack
@@ -104,12 +104,14 @@ public class MeleeAttack: MonoBehaviour
         _isCharged = false;
         _isCharging = true;
         Debug.Log("차-지 시작");
+        ChargeStartVFX();
     }
     
     public void ChargeEnd()
     {
         _isCharging = false;
         OnChargeEnd?.Invoke();
+        ChargeEndVFX();
     }
 
     public void ChargeFail()
@@ -121,17 +123,27 @@ public class MeleeAttack: MonoBehaviour
     public void ChargeVFX()
     {
         AnimatorStateInfo stateInfo = _animator.GetCurrentAnimatorStateInfo(0); // 0은 레이어 인덱스
-
         if (stateInfo.IsName("Charge loop R"))
         {
-            skill.Effect2(ChargeR);
+            skill.Effect2(ChargedR);
         }
         else if (stateInfo.IsName("Charge loop L"))
         {
-            skill.Effect2(ChargeL);
+            skill.Effect2(ChargedL);
         }
-
     }
-    [SerializeField] SO_SKillEvent ChargeR;
-    [SerializeField] SO_SKillEvent ChargeL;
+    [SerializeField] SO_SKillEvent ChargedR;
+    [SerializeField] SO_SKillEvent ChargedL;
+    [SerializeField] SO_SKillEvent StartChargeR;
+    [SerializeField] SO_SKillEvent StartChargeL;
+    public GameObject CurrentChargedVFX;
+    public void ChargeStartVFX()
+    {
+        skill.Effect2(StartChargeR);
+    }
+    public void ChargeEndVFX()
+    {
+        ObjectPoolManager.Instance.AllDestroyObject(StartChargeR.preFab);
+    }
+
 }
