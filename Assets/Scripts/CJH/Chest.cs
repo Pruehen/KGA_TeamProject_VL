@@ -57,7 +57,7 @@ public class Chest : MonoBehaviour
         chestCollider.enabled = false;
         int amount = Random.Range(v1, v2 + 1);
         JsonDataManager.GetUserData().PlayData.AddGold_InGame(amount);
-        UIManager.Instance.GoldInfoUI(amount);
+        UIManager.Instance.UpdateGoldInfoUI();
     }
 
     public void BlueChipSelectUI()

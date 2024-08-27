@@ -139,6 +139,8 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
 
         _PlayerEquipBlueChip.Init_OnSceneLoad();
         _PlayerInstanteState.Init_OnSceneLoad();
+
+        UIManager.Instance.UpdateGoldInfoUI();
     }
 
     public Vector3 GetPosition()
