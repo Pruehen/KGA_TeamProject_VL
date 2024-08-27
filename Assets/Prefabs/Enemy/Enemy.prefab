@@ -115,8 +115,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.88, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4140021474839631276}
   - {fileID: 8579424311555589558}
@@ -151,9 +151,6 @@ MonoBehaviour:
   _pooledHitVfxPrefab: {fileID: 0}
   _projectilePrefab: {fileID: 0}
   _firePos: {fileID: 300571122579109741}
-  _meshEnemyJumping: {fileID: 1782543848122132979}
-  _meshEnemyRange: {fileID: 5953094335771967087}
-  _meshEnemyNormal: {fileID: 4499447233181413726}
 --- !u!54 &6761217911787281492
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -262,8 +259,8 @@ MonoBehaviour:
         byteData: 
         byteDataArray: 
       Version: 1.7.10
-  gizmoViewMode: 2
-  showBehaviorDesignerGizmo: 1
+  gizmoViewMode: 0
+  showBehaviorDesignerGizmo: 0
 --- !u!1 &6684202006273760822
 GameObject:
   m_ObjectHideFlags: 0
