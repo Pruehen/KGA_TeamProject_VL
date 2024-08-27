@@ -5,12 +5,25 @@ using UnityEngine.UI;
 
 public class PassiveUI : MonoBehaviour, ISelectHandler
 {
-    public PassiveID passiveID;
- 
-    
+    [SerializeField] private PassiveID _passiveID;
+    public PassiveID PassiveID
+    {
+        get { return _passiveID; }
+        set
+        {
+            _passiveID = value;
+            SetUI();
+        }
+    }
+    public bool AvailableSlot()
+    {
+        return JsonDataManager.GetUserData().AvailableSlot(equipSlotIndex) && PassiveID == PassiveID.None;
+    }
+
     [SerializeField] bool OnlyViewMode = false;
     [SerializeField] bool locked = false;
     [SerializeField] bool lockedSlot = false;
+    [SerializeField] int equipSlotIndex = -1;
 
     [SerializeField] GameObject Icon_Lock;
 
@@ -19,11 +32,11 @@ public class PassiveUI : MonoBehaviour, ISelectHandler
 
     private void Awake()
     {
-        if (passiveID != PassiveID.None && OnlyViewMode == false)
+        if (PassiveID != PassiveID.None && OnlyViewMode == false)
         {
-            if (!PassiveUIManager.Instance.ID_PassiveUI_Dic.ContainsKey(passiveID))
+            if (!PassiveUIManager.Instance.ID_PassiveUI_Dic.ContainsKey(PassiveID))
             {
-                PassiveUIManager.Instance.ID_PassiveUI_Dic.Add(passiveID, this);
+                PassiveUIManager.Instance.ID_PassiveUI_Dic.Add(PassiveID, this);
             }
             else
             {
@@ -34,13 +47,23 @@ public class PassiveUI : MonoBehaviour, ISelectHandler
     }
     public void OnSelect(BaseEventData eventData)
     {
-        PassiveUIManager.Instance.InfoText(passiveID);
+        PassiveUIManager.Instance.InfoText(PassiveID);
     }
 
     public void SetUI()
-    {
-        locked = !JsonDataManager.GetUserData().UnlockPassiveHashSet.Contains(passiveID);
-        if (passiveID == PassiveID.None)
+    {        
+        if(equipSlotIndex >= 0)
+        {
+            lockedSlot = !JsonDataManager.GetUserData().AvailableSlot(equipSlotIndex);
+            Icon_Lock.SetActive(lockedSlot);
+        }
+        else
+        {
+            locked = !JsonDataManager.GetUserData().UnlockPassiveHashSet.Contains(PassiveID);
+            Icon_Lock.SetActive(locked && PassiveID != PassiveID.None);
+        }
+
+        if (PassiveID == PassiveID.None)
         {
             Image_Icon.gameObject.SetActive(false);
         }
@@ -49,26 +72,23 @@ public class PassiveUI : MonoBehaviour, ISelectHandler
             Image_Icon.gameObject.SetActive(true);            
             if(locked || lockedSlot)
             {
-                Icon_Lock.SetActive(true);
-                Image_Icon.sprite = Resources.Load<Sprite>(JsonDataManager.GetPassive(passiveID).IconPath_Dis);
+                Image_Icon.sprite = Resources.Load<Sprite>(JsonDataManager.GetPassive(PassiveID).IconPath_Dis);
             }
             else
             {
-                Icon_Lock.SetActive(false);
-                Image_Icon.sprite = Resources.Load<Sprite>(JsonDataManager.GetPassive(passiveID).IconPath);
+                Image_Icon.sprite = Resources.Load<Sprite>(JsonDataManager.GetPassive(PassiveID).IconPath);
             }
         }
     }
 
     public void SetPassiveId(PassiveID newPassiveID)
     {
-        passiveID = newPassiveID;
-        SetUI();
+        PassiveID = newPassiveID;        
     }
 
     public void OnClick_TryEquip()
     {
-        if (passiveID == PassiveID.None)
+        if (PassiveID == PassiveID.None)
             return;
 
         if(locked)
@@ -80,9 +100,8 @@ public class PassiveUI : MonoBehaviour, ISelectHandler
 
         if (PassiveUIManager.Instance.Try_EquipPassive(this))
         {
-            JsonDataManager.GetUserData().TryAddPassive(passiveID);            
-            passiveID = PassiveID.None;
-            SetUI();
+            JsonDataManager.GetUserData().TryAddPassive(PassiveID);            
+            PassiveID = PassiveID.None;            
         }
         else
         {
@@ -92,9 +111,21 @@ public class PassiveUI : MonoBehaviour, ISelectHandler
 
     void TryUnLock()
     {
-        if (PassiveUIManager.Instance.TryUseEmerald(JsonDataManager.GetPassive(passiveID).Cost))
+        if (PassiveUIManager.Instance.TryUseEmerald(JsonDataManager.GetPassive(PassiveID).Cost))
         {            
-            JsonDataManager.GetUserData().TryUnLockPassive(passiveID);
+            JsonDataManager.GetUserData().TryUnLockPassive(PassiveID);
+            SetUI();
+        }
+        else
+        {
+            CheckUIManager.Instance.CheckUiActive_OnClick(NotMony, "돈이 부족합니다.");
+        }
+    }
+    void TryUnLockSlot()
+    {
+        if (PassiveUIManager.Instance.TryUseEmerald(2000))//추후에 가격 수정할 것
+        {
+            JsonDataManager.GetUserData().TryUnLockPassiveSlot(equipSlotIndex);
             SetUI();
         }
         else
@@ -109,9 +140,14 @@ public class PassiveUI : MonoBehaviour, ISelectHandler
 
     public void OnClick_TryUnEquip()
     {
-        JsonDataManager.GetUserData().TryRemovePassive(passiveID);
+        if (lockedSlot)
+        {
+            CheckUIManager.Instance.CheckUiActive_OnClick(TryUnLockSlot, "해금하시겠습니까?");
+            return;
+        }
+
+        JsonDataManager.GetUserData().TryRemovePassive(PassiveID);
         PassiveUIManager.Instance.Try_EquipUnPassive(this);
-        passiveID = PassiveID.None;
-        SetUI();
+        PassiveID = PassiveID.None;        
     }
 }
