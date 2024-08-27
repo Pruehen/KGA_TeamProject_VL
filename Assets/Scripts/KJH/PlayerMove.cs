@@ -26,7 +26,7 @@ public class PlayerMove : MonoBehaviour
     {
         SetMoveLock(0.4f);
         _lookTargetPos = new Vector3(attaciDir.x, 0, attaciDir.z);
-        StartCoroutine(Rotate_Coroutine(0.3f));
+        StartCoroutine(Rotate_Coroutine(0.1f));
     }
 
     bool _isMoving = true;
@@ -73,9 +73,26 @@ public class PlayerMove : MonoBehaviour
 
     public void FixedUpdate()
     {
+
         CheckGounded_OnFixedUpdate();
+        bool isKnockbackstate = AnimatorHelper.IsAnimationPlaying(_animator, 0, "Base Layer.Hit");
+        if (isKnockbackstate)
+        {
+            Vector3 vel = _Rigidbody.velocity;
+            vel.x = 0f;
+            vel.z = 0f;
+            _Rigidbody.velocity = vel;
+            return;
+
+        }
+
         Move_OnFixedUpdate();
-        Rotate_OnFixedUpdate();
+
+        bool isRangeDashAttack = _isDashing && _PlayerMaster.IsAttackState && !_PlayerMaster.IsMeleeMode;
+        if (!isRangeDashAttack)
+        {
+            Rotate_OnFixedUpdate();
+        }
     }
     void OnInputPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
@@ -150,13 +167,17 @@ public class PlayerMove : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed);
         }
 
-        if (_isDashing)
+        if (_isDashing&& _attackSystem.AttackLockMove)
         {
             _lookTargetPos = _Rigidbody.velocity;
             _lookTargetPos.y = 0f;
 
             Quaternion targetRotation = Quaternion.LookRotation(_lookTargetPos, Vector3.up);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed * 4f);
+        }
+        else if(_isDashing && _attackSystem.AttackLockMove)
+        {
+            _moveVector3 = _PlayerCameraMove.CamRotation() * _moveVector3_Origin;
         }
     }
 
@@ -175,7 +196,7 @@ public class PlayerMove : MonoBehaviour
 
     public void Dash()
     {
-
+        PlayerMaster.Instance.TryAbsorptFail();
         if (_PlayerMaster._PlayerInstanteState.TryStaminaConsumption(_PlayerMaster._PlayerInstanteState.DashCost))
         {
             _PlayerMaster._PlayerInstanteState.SetInvincible(_PlayerMaster._PlayerInstanteState.DashTime);
@@ -185,7 +206,7 @@ public class PlayerMove : MonoBehaviour
             _attackSystem.ResetEndAttack();
             _animator.SetTrigger("Dash");
             Debug.Log("Dash");
-            if (_moveVector3 == Vector3.zero)
+            if (_moveVector3 == Vector3.zero && !PlayerMaster.Instance.IsAttackState)
             {
                 _PlayerMaster.OnAttackState(_PlayerCameraMove.CamRotation() * Vector3.forward);
             }
@@ -215,11 +236,6 @@ public class PlayerMove : MonoBehaviour
 
     public bool IsInDashAnimation()
     {
-        int c = _animator.GetCurrentAnimatorStateInfo(0).fullPathHash;
-        int n = _animator.GetNextAnimatorStateInfo(0).fullPathHash;
-        if (n == 0) n = c;
-        bool isInExitTransition = n != c;
-        return AnimatorHelper.IsAnimationIn(_animator, 0, "Base Layer.Dash") &&
-        !isInExitTransition;
+        return AnimatorHelper.IsAnimationPlaying(_animator, 0, "Base Layer.Dash");
     }
 }
