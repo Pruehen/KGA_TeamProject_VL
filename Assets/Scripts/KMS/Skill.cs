@@ -375,14 +375,11 @@ public class Skill : MonoBehaviour
                 position = Foot.position;   
                 break;
         }
-
-        //position += skill.offSet;
-
         Vector3 finalPosition = position + transform.TransformDirection(skill.offSet);
-
-        // VFX 오브젝트의 위치와 회전을 설정
         VFX.transform.position = finalPosition;
-        VFX.transform.localRotation = Quaternion.Euler(skill.rotation);
+        Quaternion playerRotation = transform.rotation;
+        Quaternion finalRotation = playerRotation * Quaternion.Euler(skill.rotation);
+        VFX.transform.rotation = finalRotation;
         VFX.transform.localScale *= skill.size;
     }
     [SerializeField] Transform hand_L;
