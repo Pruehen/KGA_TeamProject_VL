@@ -135,7 +135,8 @@ public class UserData
     [JsonProperty] public int Count_Clear { get; private set; }
     [JsonProperty] public HashSet<PassiveID> UnlockPassiveHashSet { get; private set; }
     [JsonProperty] public HashSet<PassiveID> UsePassiveHashSet { get; private set; }
-    [JsonProperty] public HashSet<string> IsClearAchievementsKey { get; private set; }
+    [JsonProperty] public HashSet<string> IsClearAchievementsKey { get; private set; }//클리어한 업적 목록
+    [JsonProperty] public Dictionary<int, bool> SlotIndex_SlotUnlock_Dic { get; private set; }
     [JsonProperty] public PlayData PlayData { get; private set; }
 
     [JsonConstructor]   
@@ -149,7 +150,9 @@ public class UserData
         HashSet<PassiveID> unlockPassiveHashSet,
         HashSet<PassiveID> usePassiveHashSet,
         HashSet<string> isClearAchievementsKey,
-        PlayData playData)
+        Dictionary<int, bool> slotIndex_SlotUnlock_Dic,
+        PlayData playData
+        )
     {
         SaveDataIndex = saveDataIndex;
         SaveTime = saveTime;
@@ -160,7 +163,16 @@ public class UserData
         UnlockPassiveHashSet = unlockPassiveHashSet ?? new HashSet<PassiveID>();
         UsePassiveHashSet = usePassiveHashSet ?? new HashSet<PassiveID>();
         IsClearAchievementsKey = isClearAchievementsKey ?? new HashSet<string>();
+        SlotIndex_SlotUnlock_Dic = slotIndex_SlotUnlock_Dic;
         PlayData = playData ?? new PlayData();
+
+        if (SlotIndex_SlotUnlock_Dic == null)
+        {
+            SlotIndex_SlotUnlock_Dic = new Dictionary<int, bool>();
+            SlotIndex_SlotUnlock_Dic.Add(0, true);
+            SlotIndex_SlotUnlock_Dic.Add(2, true);
+            SlotIndex_SlotUnlock_Dic.Add(4, true);
+        }
     }
 
     public UserData(int saveDataIndex)
@@ -173,8 +185,13 @@ public class UserData
         Count_Clear = 0;
         UnlockPassiveHashSet = new HashSet<PassiveID>();
         UsePassiveHashSet = new HashSet<PassiveID>();
-        IsClearAchievementsKey = new HashSet<string>();
+        IsClearAchievementsKey = new HashSet<string>();        
         PlayData = new PlayData();
+
+        SlotIndex_SlotUnlock_Dic = new Dictionary<int, bool>();
+        SlotIndex_SlotUnlock_Dic.Add(0, true);
+        SlotIndex_SlotUnlock_Dic.Add(2, true);
+        SlotIndex_SlotUnlock_Dic.Add(4, true);
     }
 
     public static void Save()
@@ -185,6 +202,19 @@ public class UserData
     public void InitPlayData()
     {
         PlayData = new PlayData();
+    }
+    public bool TryGetPlayData(out PlayData playData)
+    {
+        if(PlayData == null)
+        {
+            playData = null;
+            return false;
+        }
+        else
+        {
+            playData = PlayData;
+            return true;
+        }
     }
 
     public void TryAddPassive(PassiveID id)
@@ -262,9 +292,24 @@ public class PlayData
         this.InGame_Stage = 0;
     }
 
-    internal void AddGold(int amount)
+    public void AddGold_InGame(int amount)
     {
         InGame_Gold += amount;
+    }
+    public void SetBlueChip_InGame(BlueChipID id, int level)
+    {
+        if(InGame_BlueChip_Level.ContainsKey(id))
+        {
+            InGame_BlueChip_Level[id] = level;
+        }
+        else
+        {
+            InGame_BlueChip_Level.Add(id, level);
+        }
+    }
+    public void RemoveBlueChip_InGame(BlueChipID id)
+    {
+        InGame_BlueChip_Level.Remove(id);
     }
 }
 
