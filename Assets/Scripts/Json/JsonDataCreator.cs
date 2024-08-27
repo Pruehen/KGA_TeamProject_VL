@@ -164,7 +164,7 @@ public class UserData
         UsePassiveHashSet = usePassiveHashSet ?? new HashSet<PassiveID>();
         IsClearAchievementsKey = isClearAchievementsKey ?? new HashSet<string>();
         SlotIndex_SlotUnlock_Dic = slotIndex_SlotUnlock_Dic;
-        PlayData = playData ?? new PlayData();
+        PlayData = playData;
 
         if (SlotIndex_SlotUnlock_Dic == null)
         {
@@ -189,8 +189,8 @@ public class UserData
         Count_Clear = 0;
         UnlockPassiveHashSet = new HashSet<PassiveID>();
         UsePassiveHashSet = new HashSet<PassiveID>();
-        IsClearAchievementsKey = new HashSet<string>();        
-        PlayData = new PlayData();
+        IsClearAchievementsKey = new HashSet<string>();
+        PlayData = null;
 
         SlotIndex_SlotUnlock_Dic = new Dictionary<int, bool>();
         SlotIndex_SlotUnlock_Dic.Add(0, true);
@@ -207,10 +207,15 @@ public class UserData
         JsonDataManager.DataSaveCommand(JsonDataManager.jsonCache.UserDataCache, UserDataList.FilePath());
     }
 
-    public void InitPlayData()
+    public void SavePlayData_OnSceneExit(PlayerInstanteState state, PlayerEquipBlueChip equipBlueChip)//씬 변환 시 호출
     {
-        PlayData = new PlayData();
+        PlayData.SavePlayData_OnSceneExit(state, equipBlueChip);
     }
+    public void SavePlayData_OnSceneEnter(string newStage)//씬 입장 시 호출
+    {
+        PlayData.SavePlayData_OnSceneEnter(newStage);
+    }
+
     public bool TryGetPlayData(out PlayData playData)
     {
         if(PlayData == null)
@@ -298,41 +303,52 @@ public class PlayData
 {
     [JsonProperty] public int InGame_Gold { get; private set; }
     [JsonProperty] public Dictionary<BlueChipID, int> InGame_BlueChip_Level { get; private set; }
-    [JsonProperty] public int InGame_Stage { get; private set; }
+    [JsonProperty] public string InGame_Stage { get; private set; }
+    [JsonProperty] public float InGame_Hp { get; private set; }
+    [JsonProperty] public float InGame_SkillGauge { get; private set; }
+    [JsonProperty] public float InGame_Bullet { get; private set; }
+    [JsonProperty] public float InGame_MeleeBullet { get; private set; }
 
     [JsonConstructor]
-    public PlayData(int InGame_Gold, Dictionary<BlueChipID, int> InGame_BlueChip_Level, int InGame_Stage)
+    public PlayData(int InGame_Gold, Dictionary<BlueChipID, int> InGame_BlueChip_Level, string InGame_Stage, float inGame_Hp, float inGame_SkillGauge, float inGame_Bullet, float inGame_MeleeBullet)
     {
         this.InGame_Gold = InGame_Gold;
         this.InGame_BlueChip_Level = InGame_BlueChip_Level;
         this.InGame_Stage = InGame_Stage;
+        InGame_Hp = inGame_Hp;
+        InGame_SkillGauge = inGame_SkillGauge;
+        InGame_Bullet = inGame_Bullet;
+        InGame_MeleeBullet = inGame_MeleeBullet;
     }
 
-    public PlayData()
+    public PlayData(PlayerInstanteState state)
     {
-        this.InGame_Gold = 0;
-        this.InGame_BlueChip_Level = new Dictionary<BlueChipID, int>();
-        this.InGame_Stage = 0;
+        InGame_Gold = 0;
+        InGame_BlueChip_Level = new Dictionary<BlueChipID, int>();        
+        InGame_Hp = state.hp;
+        InGame_SkillGauge = state.skillGauge;
+        InGame_Bullet = state.bullets;
+        InGame_MeleeBullet = state.meleeBullets;
     }
-
+    public void SavePlayData_OnSceneExit(PlayerInstanteState state, PlayerEquipBlueChip equipBlueChip)//씬 변환 시 호출
+    {        
+        InGame_BlueChip_Level.Clear();
+        foreach (var item in equipBlueChip.GetBlueChipDic())
+        {
+            InGame_BlueChip_Level.Add(item.Key, item.Value.Level);
+        }
+        InGame_Hp = state.hp;
+        InGame_SkillGauge = state.skillGauge;
+        InGame_Bullet = state.bullets;
+        InGame_MeleeBullet = state.meleeBullets;
+    }    
+    public void SavePlayData_OnSceneEnter(string newStage)//씬 입장 시 호출
+    {
+        InGame_Stage = newStage;
+    }
     public void AddGold_InGame(int amount)
     {
         InGame_Gold += amount;
-    }
-    public void SetBlueChip_InGame(BlueChipID id, int level)
-    {
-        if(InGame_BlueChip_Level.ContainsKey(id))
-        {
-            InGame_BlueChip_Level[id] = level;
-        }
-        else
-        {
-            InGame_BlueChip_Level.Add(id, level);
-        }
-    }
-    public void RemoveBlueChip_InGame(BlueChipID id)
-    {
-        InGame_BlueChip_Level.Remove(id);
     }
 }
 
