@@ -64,7 +64,6 @@ public class AttackSystem : MonoBehaviour
         _animator.SetFloat(hasAttackSpeed, _PlayerMaster._PlayerInstanteState.AttackSpeed);
 
     }
-
     public void StartSkill(int index, float skillGauge)
     {
         if (skillGauge >= 100)
