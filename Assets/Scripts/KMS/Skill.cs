@@ -380,7 +380,7 @@ public class Skill : MonoBehaviour
         Quaternion playerRotation = transform.rotation;
         Quaternion finalRotation = playerRotation * Quaternion.Euler(skill.rotation);
         VFX.transform.rotation = finalRotation;
-        VFX.transform.localScale *= skill.size;
+        VFX.transform.localScale = Vector3.one*skill.size;
     }
     [SerializeField] Transform hand_L;
     [SerializeField] Transform hand_R;
