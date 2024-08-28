@@ -93,6 +93,7 @@ public class PlayerMove : MonoBehaviour
     {
         if (_isDashing)
         {
+            DashMove();
             if (Time.time - _dashTimeStamp >= _PlayerMaster._PlayerInstanteState.DashTime)
             {
                 if (IsInDashAnimation())
@@ -196,6 +197,11 @@ public class PlayerMove : MonoBehaviour
     //원거리4타시 호출
     public void OnlyDash()
     {
+        SetDashLock(_PlayerMaster._PlayerInstanteState.DashTime);
+    }
+
+    private void DashMove()
+    {
         Vector3 newPoint = _moveVector3_Origin.normalized;
 
         if (newPoint == Vector3.zero)
@@ -203,7 +209,6 @@ public class PlayerMove : MonoBehaviour
             newPoint = new Vector3(0, 0, 1f);
         }
         _Rigidbody.velocity = _PlayerCameraMove.CamRotation() * newPoint * _PlayerMaster._PlayerInstanteState.DashForce;
-        SetDashLock(_PlayerMaster._PlayerInstanteState.DashTime);
     }
 
     public bool IsInDashAnimation()
