@@ -67,9 +67,7 @@ public class Combat
         {
             if (IsEvade)
             {
-                _owner.layer = _defaultLayer;
-                OnReleaseEvade?.Invoke();
-                IsEvade = false;
+                ResetEvade();
             }
         }
 
@@ -82,8 +80,7 @@ public class Combat
         {
             if (IsInvincible)
             {
-                OnReleaseInvincible?.Invoke();
-                IsInvincible = false;
+                ResetInvincible();
             }
         }
 
@@ -95,8 +92,7 @@ public class Combat
         {
             if (IsSuperArmor)
             {
-                OnReleaseSuperArmor?.Invoke();
-                IsSuperArmor = false;
+                ResetSuperArmor();
             }
         }
     }

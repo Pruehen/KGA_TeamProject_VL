@@ -332,8 +332,6 @@ public class PlayerInstanteState : MonoBehaviour
     private void Start()
     {
         //UIManager.Instance.UpdateStamina(stamina, MaxStamina);
-        combat.DoUpdate();
-        shield.DoUpdate();
 
         UpdateHealth();
         UpdateStamina();
@@ -342,6 +340,8 @@ public class PlayerInstanteState : MonoBehaviour
 
     private void Update()
     {
+        combat.DoUpdate();
+        shield.DoUpdate();
         TestSkill();
 
         Passive_Offensive2_Active_OnUpdate();
