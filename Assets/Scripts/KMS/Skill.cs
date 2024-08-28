@@ -1,6 +1,8 @@
 using EnumTypes;
 using System.Collections;
 using UnityEngine;
+using static SO_SKillEvent;
+using static UnityEditor.PlayerSettings;
 
 
 public class Skill : MonoBehaviour
@@ -17,23 +19,23 @@ public class Skill : MonoBehaviour
     [SerializeField] PlayerMaster _master;
 
     [SerializeField] public float _rangedSkill1 = 5f;
-     [SerializeField] public float _rangedSkill2 = 7f;
-     [SerializeField] public float _rangedSkill3 = 1f;
-     [SerializeField] public float _rangedSkill4 = 10f;
-     [SerializeField] public float _meleeSkill1 = 10f;
-     [SerializeField] public float _meleeSkill2 = 10f;
-     [SerializeField] public float _meleeSkill3_1 = 0.25f;
-     [SerializeField] public float _meleeSkill3_2 = 0.25f;
-     [SerializeField] public float _meleeSkill3_3 = 10f;
-     [SerializeField] public float _meleeSkill4 = 15f;
+    [SerializeField] public float _rangedSkill2 = 7f;
+    [SerializeField] public float _rangedSkill3 = 1f;
+    [SerializeField] public float _rangedSkill4 = 10f;
+    [SerializeField] public float _meleeSkill1 = 10f;
+    [SerializeField] public float _meleeSkill2 = 10f;
+    [SerializeField] public float _meleeSkill3_1 = 0.25f;
+    [SerializeField] public float _meleeSkill3_2 = 0.25f;
+    [SerializeField] public float _meleeSkill3_3 = 10f;
+    [SerializeField] public float _meleeSkill4 = 15f;
 
-    [SerializeField] public Vector3 _rangedSkill1Range = new Vector3(1f,1f,1f);
-    [SerializeField] public Vector3 _rangedSkill2Range = new Vector3(1f,1f,1f);
-    [SerializeField] public Vector3 _rangedSkill3Range = new Vector3(1f,1f,1f);
-    [SerializeField] public Vector3 _rangedSkill4Range = new Vector3(1f,1f,1f);
-    [SerializeField] public Vector3 _meleeSkill1Range = new Vector3(1f,1f,1f);
-    [SerializeField] public Vector3 _meleeSkill2Range = new Vector3(1f,1f,1f);
-    [SerializeField] public Vector3 _meleeSkill3Range = new Vector3(1f,1f,1f);
+    [SerializeField] public Vector3 _rangedSkill1Range = new Vector3(1f, 1f, 1f);
+    [SerializeField] public Vector3 _rangedSkill2Range = new Vector3(1f, 1f, 1f);
+    [SerializeField] public Vector3 _rangedSkill3Range = new Vector3(1f, 1f, 1f);
+    [SerializeField] public Vector3 _rangedSkill4Range = new Vector3(1f, 1f, 1f);
+    [SerializeField] public Vector3 _meleeSkill1Range = new Vector3(1f, 1f, 1f);
+    [SerializeField] public Vector3 _meleeSkill2Range = new Vector3(1f, 1f, 1f);
+    [SerializeField] public Vector3 _meleeSkill3Range = new Vector3(1f, 1f, 1f);
     [SerializeField] public Vector3 _meleeSkill4Range = new Vector3(1f, 1f, 1f);
 
     [SerializeField] public float _rangedSkill1Distance = 1f;
@@ -72,7 +74,7 @@ public class Skill : MonoBehaviour
     }
     public void InitSkillData(SO_Skill sO_Skill)
     {
-        if(so_Skill!=null)
+        if (so_Skill != null)
         {
             _rangedSkill1 = so_Skill._rangedSkill1;
             _rangedSkill2 = so_Skill._rangedSkill2;
@@ -85,9 +87,9 @@ public class Skill : MonoBehaviour
             _meleeSkill3_3 = so_Skill._meleeSkill3_3;
             _meleeSkill4 = so_Skill._meleeSkill4;
 
-            _rangedSkill1Range =so_Skill._rangedSkill1Range; 
-            _rangedSkill2Range =so_Skill._rangedSkill2Range; 
-            _rangedSkill3Range =so_Skill._rangedSkill3Range;
+            _rangedSkill1Range = so_Skill._rangedSkill1Range;
+            _rangedSkill2Range = so_Skill._rangedSkill2Range;
+            _rangedSkill3Range = so_Skill._rangedSkill3Range;
             _rangedSkill4Range = so_Skill._rangedSkill4Range;
             _meleeSkill1Range = so_Skill._meleeSkill1Range;
             _meleeSkill2Range = so_Skill._meleeSkill2Range;
@@ -98,7 +100,7 @@ public class Skill : MonoBehaviour
             _rangedSkill2Distance = so_Skill._rangedSkill2Distance;
             _rangedSkill3Distance = so_Skill._rangedSkill3Distance;
             _rangedSkill4Distance = so_Skill._rangedSkill4Distance;
-            _meleeSkill4Distance =  so_Skill._meleeSkill4Distance;
+            _meleeSkill4Distance = so_Skill._meleeSkill4Distance;
         }
     }
     public void EndSkill()
@@ -124,7 +126,7 @@ public class Skill : MonoBehaviour
         RaycastHit hit;
 
         float damage = 0f;
-        Vector3 range = new Vector3 (1f,1f,1f);
+        Vector3 range = new Vector3(1f, 1f, 1f);
         float distance = 1f;
 
 
@@ -159,7 +161,7 @@ public class Skill : MonoBehaviour
         float damage = 0f;
         Vector3 range = new Vector3(1f, 1f, 1f);
         float distance = 0f;
-        Vector3 offset = new Vector3 (0f,0f,0f);  
+        Vector3 offset = new Vector3(0f, 0f, 0f);
 
         switch (skillType)
         {
@@ -230,12 +232,12 @@ public class Skill : MonoBehaviour
         {
             Vector3 hitPosition = hit.point;
             _damageBox.transform.position = hitPosition;
-            _damageBox.EnableSkillDamageBox(damage, range, null,0,offset);
+            _damageBox.EnableSkillDamageBox(damage, range, null, 0, offset);
         }
         else
         {
             _damageBox.transform.localPosition = Vector3.zero;
-            _damageBox.EnableDamageBox(damage, range, null,0f,offset);
+            _damageBox.EnableDamageBox(damage, range, null, 0f, offset);
             Debug.Log("레이 맞춘 게 없음");
         }
         Debug.Log("스킬실행");
@@ -251,9 +253,9 @@ public class Skill : MonoBehaviour
     }
     public void SkillDamege(PlayerSkill skillType)
     {
-       
+
         float damage = 0f;
-        Vector3 range = new Vector3 (1f,1f,1f);
+        Vector3 range = new Vector3(1f, 1f, 1f);
         float distance = 1f;
         Vector3 offset = new Vector3(1f, 1f, 1f);
         switch (skillType)
@@ -353,7 +355,34 @@ public class Skill : MonoBehaviour
             Gizmos.DrawLine(start, start + direction);
         }
     }
+    public void Effect2(SO_SKillEvent skill)
+    {
 
+        GameObject VFX = ObjectPoolManager.Instance.DequeueObject(skill.preFab);
 
+        Vector3 position = Vector3.zero;
 
+        // 플레이어의 특정 위치를 가져옴
+        switch (skill.playerPos)
+        {
+            case SO_SKillEvent.PlayerPos.Hand_L:
+                position = hand_L.position;
+                break;
+            case SO_SKillEvent.PlayerPos.Hand_R:
+                position = hand_R.position;  
+                break;
+            case SO_SKillEvent.PlayerPos.Foot:
+                position = Foot.position;   
+                break;
+        }
+        Vector3 finalPosition = position + transform.TransformDirection(skill.offSet);
+        VFX.transform.position = finalPosition;
+        Quaternion playerRotation = transform.rotation;
+        Quaternion finalRotation = playerRotation * Quaternion.Euler(skill.rotation);
+        VFX.transform.rotation = finalRotation;
+        VFX.transform.localScale = Vector3.one*skill.size;
+    }
+    [SerializeField] Transform hand_L;
+    [SerializeField] Transform hand_R;
+    [SerializeField] Transform Foot;
 }

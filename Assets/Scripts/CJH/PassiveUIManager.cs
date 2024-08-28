@@ -14,19 +14,12 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
 
     public Dictionary<PassiveID, PassiveUI> ID_PassiveUI_Dic = new Dictionary<PassiveID, PassiveUI>();
 
-    public List<PassiveUI> PassiveUIGroup_Offensive = new List<PassiveUI>();
-    public List<PassiveUI> PassiveUIGroup_Deffensive = new List<PassiveUI>();
-    public List<PassiveUI> PassiveUIGroup_Utility = new List<PassiveUI>();
+    public List<PassiveUI> PassiveUIGroup_EquipList = new List<PassiveUI>();
 
-    int useOffensivePassiveCount = 0;
-    int useDeffensivePassiveCount = 0;
-    int useUtilityPassiveCount = 0;
 
     [SerializeField] Text functionText;
     [SerializeField] Text costText;
     [SerializeField] Text effectText;
-
-    [SerializeField] int Max_Passive_Count = 2;
 
     [SerializeField] Text emeraldText;
 
@@ -59,19 +52,7 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
             item.Value.SetPassiveId(item.Key);
         }
 
-        useOffensivePassiveCount = 0;
-        useDeffensivePassiveCount = 0;
-        useUtilityPassiveCount = 0;
-
-        foreach (var item in PassiveUIGroup_Offensive)
-        {
-            item.SetPassiveId(PassiveID.None);
-        }
-        foreach (var item in PassiveUIGroup_Deffensive)
-        {
-            item.SetPassiveId(PassiveID.None);
-        }
-        foreach (var item in PassiveUIGroup_Utility)
+        foreach (var item in PassiveUIGroup_EquipList)
         {
             item.SetPassiveId(PassiveID.None);
         }
@@ -107,18 +88,21 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
 
     public bool Try_EquipPassive(PassiveUI targetUI)
     {
-        switch (targetUI.passiveID)
+        switch (targetUI.PassiveID)
         {
             case PassiveID.Offensive1:
             case PassiveID.Offensive2:
             case PassiveID.Offensive3:
             case PassiveID.Offensive4:
             case PassiveID.Offensive5:
-                if (Max_Passive_Count > useOffensivePassiveCount)
+                if (PassiveUIGroup_EquipList[0].AvailableSlot())
                 {
-                    PassiveUIGroup_Offensive[useOffensivePassiveCount].passiveID = targetUI.passiveID;
-                    PassiveUIGroup_Offensive[useOffensivePassiveCount].SetUI();
-                    useOffensivePassiveCount++;
+                    PassiveUIGroup_EquipList[0].PassiveID = targetUI.PassiveID;
+                    return true;
+                }
+                else if (PassiveUIGroup_EquipList[1].AvailableSlot())
+                {
+                    PassiveUIGroup_EquipList[1].PassiveID = targetUI.PassiveID;
                     return true;
                 }
                 break;
@@ -127,11 +111,14 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
             case PassiveID.Defensive3:
             case PassiveID.Defensive4:
             case PassiveID.Defensive5:
-                if (Max_Passive_Count > useDeffensivePassiveCount)
+                if (PassiveUIGroup_EquipList[2].AvailableSlot())
                 {
-                    PassiveUIGroup_Deffensive[useDeffensivePassiveCount].passiveID = targetUI.passiveID;
-                    PassiveUIGroup_Deffensive[useDeffensivePassiveCount].SetUI();
-                    useDeffensivePassiveCount++;
+                    PassiveUIGroup_EquipList[2].PassiveID = targetUI.PassiveID;
+                    return true;
+                }
+                else if (PassiveUIGroup_EquipList[3].AvailableSlot())
+                {
+                    PassiveUIGroup_EquipList[3].PassiveID = targetUI.PassiveID;
                     return true;
                 }
                 break;
@@ -140,11 +127,14 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
             case PassiveID.Utility3:
             case PassiveID.Utility4:
             case PassiveID.Utility5:
-                if (Max_Passive_Count > useUtilityPassiveCount)
+                if (PassiveUIGroup_EquipList[4].AvailableSlot())
                 {
-                    PassiveUIGroup_Utility[useUtilityPassiveCount].passiveID = targetUI.passiveID;
-                    PassiveUIGroup_Utility[useUtilityPassiveCount].SetUI();
-                    useUtilityPassiveCount++;
+                    PassiveUIGroup_EquipList[4].PassiveID = targetUI.PassiveID;
+                    return true;
+                }
+                else if (PassiveUIGroup_EquipList[5].AvailableSlot())
+                {
+                    PassiveUIGroup_EquipList[5].PassiveID = targetUI.PassiveID;
                     return true;
                 }
                 break;
@@ -156,7 +146,7 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
     }
     public void Try_EquipUnPassive(PassiveUI targetUI)
     {
-        PassiveID targetUiPassiveID = targetUI.passiveID;
+        PassiveID targetUiPassiveID = targetUI.PassiveID;
 
         switch (targetUiPassiveID)
         {
@@ -164,27 +154,24 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
             case PassiveID.Offensive2:
             case PassiveID.Offensive3:
             case PassiveID.Offensive4:
-            case PassiveID.Offensive5:
-                useOffensivePassiveCount--;
-                ID_PassiveUI_Dic[targetUiPassiveID].passiveID = targetUiPassiveID;
+            case PassiveID.Offensive5:                
+                ID_PassiveUI_Dic[targetUiPassiveID].PassiveID = targetUiPassiveID;
                 ID_PassiveUI_Dic[targetUiPassiveID].SetUI();
                 break;
             case PassiveID.Defensive1:
             case PassiveID.Defensive2:
             case PassiveID.Defensive3:
             case PassiveID.Defensive4:
-            case PassiveID.Defensive5:
-                useDeffensivePassiveCount--;
-                ID_PassiveUI_Dic[targetUiPassiveID].passiveID = targetUiPassiveID;
+            case PassiveID.Defensive5:                
+                ID_PassiveUI_Dic[targetUiPassiveID].PassiveID = targetUiPassiveID;
                 ID_PassiveUI_Dic[targetUiPassiveID].SetUI();
                 break;
             case PassiveID.Utility1:
             case PassiveID.Utility2:
             case PassiveID.Utility3:
             case PassiveID.Utility4:
-            case PassiveID.Utility5:
-                useUtilityPassiveCount--;
-                ID_PassiveUI_Dic[targetUiPassiveID].passiveID = targetUiPassiveID;
+            case PassiveID.Utility5:                
+                ID_PassiveUI_Dic[targetUiPassiveID].PassiveID = targetUiPassiveID;
                 ID_PassiveUI_Dic[targetUiPassiveID].SetUI();
                 break;
             case PassiveID.None:

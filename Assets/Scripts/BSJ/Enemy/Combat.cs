@@ -245,7 +245,7 @@ public class Combat
 
     public void ForceChangeHp(float value)
     {
-        _hp += value;
+        _hp = value;
         if (_hp > GetMaxHp())
         {
             _hp = GetMaxHp();

@@ -16,7 +16,7 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     PlayerModChangeManager _PlayerModChangeManager;
     public SO_Skill SkillData;
     [SerializeField] ItemAbsorber _ItemAbsorber;
-    [SerializeField] AttackSystem _AttackSystem;
+    [SerializeField]public AttackSystem _AttackSystem;
 
     public bool IsAttackState
     {
@@ -54,6 +54,10 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
         {
             _PlayerAttack.attackTrigger = value;
         }
+    }
+    public bool _isAbsorbable
+    {
+        get { return _ItemAbsorber._isAbsorbing; }
     }
     public int GetBlueChipLevel(BlueChipID iD)
     {
@@ -115,7 +119,9 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     }
 
     private void Awake()
-    {        
+    {
+        JsonDataManager.GetUserData().SavePlayData_OnSceneEnter("SceneName");
+
         _PlayerInstanteState = GetComponent<PlayerInstanteState>();
         _PlayerEquipBlueChip = GetComponent<PlayerEquipBlueChip>();
         _PlayerBuff = GetComponent<PlayerBuff>();
@@ -134,6 +140,11 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
 
         _ItemAbsorber.Init(_PlayerInstanteState._playerStatData);
         _PlayerAttack.Init();
+
+        _PlayerEquipBlueChip.Init_OnSceneLoad();
+        _PlayerInstanteState.Init_OnSceneLoad();
+
+        UIManager.Instance.UpdateGoldInfoUI();
     }
 
     public Vector3 GetPosition()

@@ -15,8 +15,9 @@ public class AttackSystem : MonoBehaviour
     int hasAttackSpeed = Animator.StringToHash("AttackSpeed");
     int hashSkill = Animator.StringToHash("Skill");
     MeleeAttack _closeAttack;
-    Skill _closeSkill; 
-
+    Skill _closeSkill;
+    [SerializeField] public SO_SKillEvent startAbsorbing;
+    [SerializeField] public SO_SKillEvent endAbsorbing;
     [SerializeField] DamageBox _damageBox;
     public void Init(Action onCharged = null, Action onChargeFail = null, Action onChargeEnd = null,Action onChargeStart = null)
     {
@@ -64,7 +65,6 @@ public class AttackSystem : MonoBehaviour
         _animator.SetFloat(hasAttackSpeed, _PlayerMaster._PlayerInstanteState.AttackSpeed);
 
     }
-
     public void StartSkill(int index, float skillGauge)
     {
         if (skillGauge >= 100)
@@ -121,17 +121,22 @@ public class AttackSystem : MonoBehaviour
     {
         Debug.Log("흡수");
         _animator.SetTrigger("Absorbeing");
+        _closeSkill.Effect2(startAbsorbing);
     }
     public void AbsoberEnd()
     {
         _animator.SetTrigger("AbsorbeingEnd");
         //_animator.ResetTrigger("Attack");
         //_animator.ResetTrigger("AttackEnd");
+
         Debug.Log("absoberEnd");
+        ObjectPoolManager.Instance.AllDestroyObject(startAbsorbing.preFab);
+        //_PlayerMaster._PlayerSkill.Effect2(endAbsorbing);
     }
     public void ModTransform()
     {
         _animator.SetTrigger("Transform");
+        _playerAttack.EnterMeleeVFX();
         //_animator.SetTrigger("AbsorbeingEnd");
         //_animator.ResetTrigger("Attack");
         //_animator.ResetTrigger("AttackEnd");
