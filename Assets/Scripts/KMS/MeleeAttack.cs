@@ -119,6 +119,7 @@ public class MeleeAttack: MonoBehaviour
         _isCharging = false;
         _chargingTime = 0f;
         OnChargeFail?.Invoke();
+        ChargeEndVFX();
     }
     public void ChargeVFX()
     {
