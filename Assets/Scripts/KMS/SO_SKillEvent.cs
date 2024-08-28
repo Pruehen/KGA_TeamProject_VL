@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class SO_SKillEvent : ScriptableObject
 {
     public GameObject preFab;
-    public float size;
+    public float size = 1f;
     public enum PlayerPos
     {
         Hand_L,

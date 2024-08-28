@@ -5,7 +5,13 @@ using EnumTypes;
 public class PlayerEquipBlueChip : MonoBehaviour
 {
     Dictionary<BlueChipID, BlueChipSlot> useBlueChipDic = new Dictionary<BlueChipID, BlueChipSlot>();
+    PlayerMaster _playerMaster;
+    [SerializeField] SO_SKillEvent BlueChipVFX;
 
+    public void Awake()
+    {
+        _playerMaster = GetComponent<PlayerMaster>();
+    }
     public int GetBlueChipLevel(BlueChipID targetBlueChip)
     {
         int level = 0;
@@ -79,6 +85,7 @@ public class PlayerEquipBlueChip : MonoBehaviour
             {
                 Debug.Log("새로운 칩을 생성합니다.");
                 useBlueChipDic.Add(targetBlueChip, new BlueChipSlot(targetBlueChip, targetLevel));
+                _playerMaster._PlayerSkill.Effect2(BlueChipVFX);
                 return true;
             }
         }
@@ -86,6 +93,7 @@ public class PlayerEquipBlueChip : MonoBehaviour
         {
             useBlueChipDic[targetBlueChip].SetLevel(targetLevel);
             Debug.Log($"칩 레벨을 강화합니다. : {useBlueChipDic[targetBlueChip].Level}레벨");
+            _playerMaster._PlayerSkill.Effect2(BlueChipVFX);
             return true;
         }
         else//칩이 최대 레벨일 경우

@@ -65,7 +65,7 @@ public class ItemAbsorber : MonoBehaviour
         }
     }
 
-    private bool _isAbsorbing = false;
+    public bool _isAbsorbing = false;
     /// <summary>
     /// 아이템 습득 시작
     /// 범위가 옴션에 따라 점점 늘어남

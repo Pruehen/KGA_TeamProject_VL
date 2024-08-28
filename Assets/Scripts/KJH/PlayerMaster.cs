@@ -16,7 +16,7 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     PlayerModChangeManager _PlayerModChangeManager;
     public SO_Skill SkillData;
     [SerializeField] ItemAbsorber _ItemAbsorber;
-    [SerializeField] AttackSystem _AttackSystem;
+    [SerializeField]public AttackSystem _AttackSystem;
 
     public bool IsAttackState
     {
@@ -54,6 +54,10 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
         {
             _PlayerAttack.attackTrigger = value;
         }
+    }
+    public bool _isAbsorbable
+    {
+        get { return _ItemAbsorber._isAbsorbing; }
     }
     public int GetBlueChipLevel(BlueChipID iD)
     {

@@ -11,7 +11,9 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] float projectionSpeed_Forward = 15;
     [SerializeField] float projectionSpeed_Up = 3;
     [SerializeField] float attack_CoolTime = 0.7f;
-
+    [SerializeField] SO_SKillEvent EnterMelee;
+    [SerializeField] SO_SKillEvent EnterRangeR;
+    [SerializeField] SO_SKillEvent EnterRangeL;
     InputManager _InputManager;
     PlayerCameraMove _PlayerCameraMove;
     PlayerMaster _PlayerMaster;
@@ -85,6 +87,7 @@ public class PlayerAttack : MonoBehaviour
         Debug.Log("AbsorbingFall");
         //ChangeAttackState(false);
         _AttackSystem.AbsoberEnd();
+        ObjectPoolManager.Instance.AllDestroyObject(_AttackSystem.startAbsorbing.preFab);
     }
     private void ChangeAttackState(bool isMelee)
     {
@@ -93,15 +96,29 @@ public class PlayerAttack : MonoBehaviour
             CurrentAttackKind = PlayerAttackKind.MeleeNormalAttack;
             _currentAttackMod = PlayerAttackKind.MeleeNormalAttack;
             _AttackSystem.ModTransform();
+            EnterMeleeVFX();
         }
         else
         {
+            if(_currentAttackMod!= PlayerAttackKind.RangeNormalAttack)
+            {
+                EnterRangeVFX();
+            }
             CurrentAttackKind = PlayerAttackKind.RangeNormalAttack;
             _currentAttackMod = PlayerAttackKind.RangeNormalAttack;
             //_AttackSystem.ModTransform();
         }
     }
 
+    public void EnterRangeVFX()
+    {
+        _PlayerMaster._PlayerSkill.Effect2(EnterRangeL);
+        _PlayerMaster._PlayerSkill.Effect2(EnterRangeR);
+    }
+    public void EnterMeleeVFX()
+    {
+        _PlayerMaster._PlayerSkill.Effect2(EnterMelee);
+    }
     private void OnModChanged(bool isMelee)
     {
         if ((int)_currentAttackMod == (isMelee ? 1 : 0))

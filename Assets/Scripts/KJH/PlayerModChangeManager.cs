@@ -48,6 +48,7 @@ public class PlayerModChangeManager : MonoBehaviour
                 }
                 if (InputManager.Instance.IsLControlBtnClick == false && IsAbsorptState == true&& IsAttackState==false && isDashing == false)
                 {
+
                     IsAbsorptState = false;
                     //EndAbsorptState();
                     EnterRangeMode();
@@ -57,6 +58,10 @@ public class PlayerModChangeManager : MonoBehaviour
             case nameof(InputManager.Instance.IsLMouseBtnClick):                
                 if (InputManager.Instance.IsLControlBtnClick == true && IsAbsorptState == true && IsAttackState == false && isDashing == false)
                 {
+                    if (IsAbsorptState)
+                    {
+                        _PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._AttackSystem.endAbsorbing);
+                    }
                     EnterMeleeMode();
                 }
                 break;
@@ -82,7 +87,7 @@ public class PlayerModChangeManager : MonoBehaviour
     {
         PlayerInstanteState state = _PlayerMaster._PlayerInstanteState;
         state.AcquireBullets(state.meleeBullets * state.MeleeToRangeRatio);
-
+        //_PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._AttackSystem.endAbsorbing);
         _PlayerMaster._PlayerInstanteState.BulletClear_Melee();
 
         IsAbsorptState = false;
@@ -91,6 +96,7 @@ public class PlayerModChangeManager : MonoBehaviour
 
         _PlayerMaster._PlayerInstanteState.AcquireBullets(value);
         Debug.Log($"{value}°³ Èí¼ö");
+        ObjectPoolManager.Instance.AllDestroyObject(_PlayerMaster._AttackSystem.startAbsorbing.preFab);
         if (value <= 0)
         {
             EndAbsorptState();
@@ -107,6 +113,8 @@ public class PlayerModChangeManager : MonoBehaviour
     }
     public void EnterMeleeMode()
     {
+        ObjectPoolManager.Instance.AllDestroyObject(_PlayerMaster._AttackSystem.startAbsorbing.preFab);
+        //_PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._AttackSystem.endAbsorbing);
         PlayerInstanteState state = _PlayerMaster._PlayerInstanteState;
 
         IsAbsorptState = false;
@@ -118,6 +126,7 @@ public class PlayerModChangeManager : MonoBehaviour
             Debug.Log($"{value}°³ Èí¼ö");
             if (value <= 0)
             {
+                _PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._AttackSystem.endAbsorbing);
                 EndAbsorptState();
             }
         }
@@ -127,6 +136,7 @@ public class PlayerModChangeManager : MonoBehaviour
 
             if (value > 1)
             {
+                _PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._AttackSystem.endAbsorbing);
                 Debug.Log($"{value}°³ Èí¼ö, ±ÙÁ¢ ¸ðµå º¯È¯");
                 state.AcquireBullets_Melee(value);
                 IsMeleeMode = true;                
@@ -141,6 +151,7 @@ public class PlayerModChangeManager : MonoBehaviour
 
     public void EndAbsorptState()
     {
+
         IsAbsorptState = false;
         if (HasBlueChip5_AutoChange() == false)
         {
