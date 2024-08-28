@@ -3,7 +3,18 @@ guid: 5fcab4553a9134449bc73c5806e5817e
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - _damageBox: {instanceID: 0}
+  - _master: {instanceID: 0}
+  - so_Skill: {fileID: 11400000, guid: 697fc365c538ef2438aa6f635eb536b1, type: 2}
+  - player: {instanceID: 0}
+  - RangeSkill3: {fileID: 11400000, guid: 3ea99eb6cc24d604388849caa60b5aed, type: 2}
+  - RangeSkill2: {fileID: 11400000, guid: 9a4118d2dc3c5bc449efb65d20de220d, type: 2}
+  - RangeSkill1: {fileID: 11400000, guid: 94fc91ba3cae56943b9bde9f18b6d0ec, type: 2}
+  - hand_L: {instanceID: 0}
+  - hand_R: {instanceID: 0}
+  - Foot: {instanceID: 0}
+  - targetpos: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

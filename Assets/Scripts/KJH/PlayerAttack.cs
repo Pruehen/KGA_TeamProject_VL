@@ -232,10 +232,12 @@ public class PlayerAttack : MonoBehaviour
                 if (skillSelectionValue == 0)
                 {
                     _PlayerMaster._PlayerSkill.InvokeSkillDamage(randomSkill1);
+                    _PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._PlayerSkill.RangeSkill1);
                 }
                 else
                 {
                     _PlayerMaster._PlayerSkill.InvokeSkillDamage(randomSkill2);
+                    _PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._PlayerSkill.RangeSkill2);
                 }
             }
         }
