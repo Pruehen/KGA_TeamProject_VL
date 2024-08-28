@@ -175,6 +175,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7d564d3bd3e7584690b336edb85b648, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _randomEnemyData: {fileID: 0}
+  _enemyData: {fileID: 11400000, guid: bfae3793918bfe24fa6773be18fa2a84, type: 2}
   _isMovable: 1
   _combat:
     _maxHp: 100
@@ -182,8 +184,8 @@ MonoBehaviour:
     _dead: 0
     _invincibleTimeOnHit: 0.1
     _prevHitTime: 0
+  hitVFX: {fileID: 11400000, guid: 39b0076763d698e4fa1e149791706c51, type: 2}
   _detector: {fileID: 1206920868976007927}
-  _enemyData: {fileID: 11400000, guid: bfae3793918bfe24fa6773be18fa2a84, type: 2}
   _rotateTarget: {fileID: 0}
   _pooledHitVfxPrefab: {fileID: 0}
   _projectilePrefab: {fileID: 0}
@@ -391,10 +393,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aed76c03b65482a46832c97c85bfcbec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _halfSize: {x: 1, y: 1, z: 1}
   _targetLayer:
     serializedVersion: 2
     m_Bits: 64
+  Defaultoffset: {x: 0, y: 0.5, z: 0.5}
+  DefaultRange: {x: 1, y: 1, z: 1}
+  target: {x: 0, y: 0, z: 0}
+  playerSkill: 0
+  skillData: {fileID: 0}
 --- !u!1001 &8846695151452529608
 PrefabInstance:
   m_ObjectHideFlags: 0

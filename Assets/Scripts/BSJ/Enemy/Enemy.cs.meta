@@ -3,7 +3,15 @@ guid: e7d564d3bd3e7584690b336edb85b648
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - _randomEnemyData: {instanceID: 0}
+  - _enemyData: {instanceID: 0}
+  - hitVFX: {fileID: 11400000, guid: 39b0076763d698e4fa1e149791706c51, type: 2}
+  - _detector: {instanceID: 0}
+  - _rotateTarget: {instanceID: 0}
+  - _pooledHitVfxPrefab: {instanceID: 0}
+  - _projectilePrefab: {instanceID: 0}
+  - _firePos: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

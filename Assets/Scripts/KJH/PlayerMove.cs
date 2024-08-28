@@ -97,6 +97,8 @@ public class PlayerMove : MonoBehaviour
             {
                 if (IsInDashAnimation())
                     _animator.SetTrigger("DashEnd");
+                _PlayerMaster._PlayerInstanteState.ResetInvincible();
+                _PlayerMaster._PlayerInstanteState.ResetEvade();// 애니메이터에서 대시 애니메이션에서 탈출시 해제
                 _isMoving = true;
                 _isDashing = false;
             }

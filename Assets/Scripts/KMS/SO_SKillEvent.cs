@@ -11,7 +11,8 @@ public class SO_SKillEvent : ScriptableObject
     {
         Hand_L,
         Hand_R,
-        Foot
+        Foot,
+        Target
     }
     public PlayerPos playerPos;
     public Vector3 offSet= new Vector3(0f,0f,0f);
