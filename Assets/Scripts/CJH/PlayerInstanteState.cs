@@ -332,6 +332,9 @@ public class PlayerInstanteState : MonoBehaviour
     private void Start()
     {
         //UIManager.Instance.UpdateStamina(stamina, MaxStamina);
+        combat.DoUpdate();
+        shield.DoUpdate();
+
         UpdateHealth();
         UpdateStamina();
         UpdateSkillGauge();
@@ -470,6 +473,12 @@ public class PlayerInstanteState : MonoBehaviour
 
     public void Hit(float dmg, out float finalDmg)
     {
+        if(combat.IsInvincible || shield.IsInvincible)
+        {
+            finalDmg = 0;
+            return;
+        }
+
         OnDamaged?.Invoke();
 
         finalDmg = dmg;
@@ -885,5 +894,11 @@ public class PlayerInstanteState : MonoBehaviour
     {
         combat.ResetEvade();
         shield.ResetEvade();
+    }
+
+    internal void ResetInvincible()
+    {
+        combat.ResetInvincible();
+        shield.ResetInvincible();
     }
 }

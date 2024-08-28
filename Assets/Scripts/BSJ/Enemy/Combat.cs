@@ -56,8 +56,9 @@ public class Combat
         ResetCombat();
     }
 
-    public void DoUpdate(float deltaTime)
+    public void DoUpdate()
     {
+        float deltaTime = Time.deltaTime;
         if (_evadeTimer > 0f)
         {
             _evadeTimer -= deltaTime;
@@ -188,16 +189,18 @@ public class Combat
     int _defaultLayer;
     public void SetEvade(float time)
     {
+        IsEvade = true;
         OnEvade?.Invoke();
 
-        if (_invincibleTimer < time)
+        if (_evadeTimer < time)
         {
             _evadeTimer = time;
-            _owner.layer = LayerMask.GetMask("Evade");
+            _owner.layer = LayerMask.NameToLayer("Evade");
         }
     }
     public void ResetEvade()
     {
+        IsEvade = false;
         _evadeTimer = 0f;
         _owner.layer = _defaultLayer;
         OnReleaseEvade?.Invoke();
@@ -205,6 +208,7 @@ public class Combat
 
     public void SetSuperArmor(float time)
     {
+        IsSuperArmor = true;
         OnInvincible?.Invoke();
 
         if (_superArmorTimer < time)
@@ -214,12 +218,14 @@ public class Combat
     }
     public void ResetSuperArmor()
     {
+        IsSuperArmor = false;
         _superArmorTimer = 0f;
         OnReleaseSuperArmor?.Invoke();
     }
 
     public void SetInvincible(float time)
     {
+        IsInvincible = true;
         OnSuperArmor?.Invoke();
 
         if (_invincibleTimer < time)
@@ -229,6 +235,7 @@ public class Combat
     }
     public void ResetInvincible()
     {
+        IsInvincible = false;
         _invincibleTimer = 0f;
         OnReleaseInvincible?.Invoke();
     }

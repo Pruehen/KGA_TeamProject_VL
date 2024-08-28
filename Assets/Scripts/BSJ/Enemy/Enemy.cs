@@ -192,6 +192,7 @@ public class Enemy : MonoBehaviour, ITargetable
     float rotateSpeed = 10f;
     private void Update()
     {
+        _combat.DoUpdate();
         if(AnimatorHelper.IsAnimationPlaying(_animator,0,"Base Layer.Hit"))
         {
             IsMovable = false;

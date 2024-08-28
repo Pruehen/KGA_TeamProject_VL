@@ -164,8 +164,9 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     public void Hit(float dmg)
     {
         _PlayerInstanteState.Hit(dmg, out float finalDmg);
-        DmgTextManager.Instance.OnDmged(finalDmg, this.transform.position);
         TryAbsorptFail();
+        if (finalDmg <= 0) return;
+        DmgTextManager.Instance.OnDmged(finalDmg, this.transform.position);
     }
 
     public void TryAbsorptFail()
