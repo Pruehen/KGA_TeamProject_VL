@@ -135,7 +135,8 @@ public class UserData
     [JsonProperty] public int Count_Clear { get; private set; }
     [JsonProperty] public HashSet<PassiveID> UnlockPassiveHashSet { get; private set; }
     [JsonProperty] public HashSet<PassiveID> UsePassiveHashSet { get; private set; }
-    [JsonProperty] public HashSet<string> IsClearAchievementsKey { get; private set; }
+    [JsonProperty] public HashSet<string> IsClearAchievementsKey { get; private set; }//클리어한 업적 목록
+    [JsonProperty] public Dictionary<int, bool> SlotIndex_SlotUnlock_Dic { get; private set; }
     [JsonProperty] public PlayData PlayData { get; private set; }
 
     [JsonConstructor]   
@@ -149,7 +150,9 @@ public class UserData
         HashSet<PassiveID> unlockPassiveHashSet,
         HashSet<PassiveID> usePassiveHashSet,
         HashSet<string> isClearAchievementsKey,
-        PlayData playData)
+        Dictionary<int, bool> slotIndex_SlotUnlock_Dic,
+        PlayData playData
+        )
     {
         SaveDataIndex = saveDataIndex;
         SaveTime = saveTime;
@@ -160,7 +163,20 @@ public class UserData
         UnlockPassiveHashSet = unlockPassiveHashSet ?? new HashSet<PassiveID>();
         UsePassiveHashSet = usePassiveHashSet ?? new HashSet<PassiveID>();
         IsClearAchievementsKey = isClearAchievementsKey ?? new HashSet<string>();
-        PlayData = playData ?? new PlayData();
+        SlotIndex_SlotUnlock_Dic = slotIndex_SlotUnlock_Dic;
+        PlayData = playData;
+
+        if (SlotIndex_SlotUnlock_Dic == null)
+        {
+            SlotIndex_SlotUnlock_Dic = new Dictionary<int, bool>();
+            SlotIndex_SlotUnlock_Dic.Add(0, true);
+            SlotIndex_SlotUnlock_Dic.Add(2, true);
+            SlotIndex_SlotUnlock_Dic.Add(4, true);
+
+            SlotIndex_SlotUnlock_Dic.Add(1, false);
+            SlotIndex_SlotUnlock_Dic.Add(3, false);
+            SlotIndex_SlotUnlock_Dic.Add(5, false);
+        }
     }
 
     public UserData(int saveDataIndex)
@@ -174,7 +190,16 @@ public class UserData
         UnlockPassiveHashSet = new HashSet<PassiveID>();
         UsePassiveHashSet = new HashSet<PassiveID>();
         IsClearAchievementsKey = new HashSet<string>();
-        PlayData = new PlayData();
+        PlayData = null;
+
+        SlotIndex_SlotUnlock_Dic = new Dictionary<int, bool>();
+        SlotIndex_SlotUnlock_Dic.Add(0, true);
+        SlotIndex_SlotUnlock_Dic.Add(2, true);
+        SlotIndex_SlotUnlock_Dic.Add(4, true);
+
+        SlotIndex_SlotUnlock_Dic.Add(1, false);
+        SlotIndex_SlotUnlock_Dic.Add(3, false);
+        SlotIndex_SlotUnlock_Dic.Add(5, false);
     }
 
     public static void Save()
@@ -182,9 +207,36 @@ public class UserData
         JsonDataManager.DataSaveCommand(JsonDataManager.jsonCache.UserDataCache, UserDataList.FilePath());
     }
 
-    public void InitPlayData()
+    public void SavePlayData_OnSceneExit(PlayerInstanteState state, PlayerEquipBlueChip equipBlueChip)//씬 변환 시 호출
     {
-        PlayData = new PlayData();
+        if (PlayData == null)
+        {
+            PlayData = new PlayData();
+        }
+        PlayData.SavePlayData_OnSceneExit(state, equipBlueChip);
+        Save();
+    }
+    public void SavePlayData_OnSceneEnter(string newStage)//씬 입장 시 호출
+    {
+        if(PlayData != null)
+        {
+            PlayData.SavePlayData_OnSceneEnter(newStage);
+            Save();
+        }
+    }
+
+    public bool TryGetPlayData(out PlayData playData)
+    {
+        if(PlayData == null)
+        {
+            playData = null;
+            return false;
+        }
+        else
+        {
+            playData = PlayData;
+            return true;
+        }
     }
 
     public void TryAddPassive(PassiveID id)
@@ -224,6 +276,26 @@ public class UserData
             Debug.LogWarning($"이미 해금된 패시브 : {id}");
         }
     }
+    public void TryUnLockPassiveSlot(int slotIndex)
+    {
+        if(SlotIndex_SlotUnlock_Dic.ContainsKey(slotIndex))
+        {
+            SlotIndex_SlotUnlock_Dic[slotIndex] = true;
+        }
+        else
+        {
+            Debug.LogError("슬롯 인덱스의 범위를 벗어났습니다.");
+        }
+    }
+    public bool AvailableSlot(int slotIndex)
+    {
+        if (SlotIndex_SlotUnlock_Dic.ContainsKey(slotIndex) == false)
+        {
+            Debug.LogError("슬롯 인덱스의 범위를 벗어났습니다.");
+            return false;
+        }
+        return SlotIndex_SlotUnlock_Dic[slotIndex];
+    }
 
     public void AddGold(int amount)
     {
@@ -245,24 +317,46 @@ public class PlayData
 {
     [JsonProperty] public int InGame_Gold { get; private set; }
     [JsonProperty] public Dictionary<BlueChipID, int> InGame_BlueChip_Level { get; private set; }
-    [JsonProperty] public int InGame_Stage { get; private set; }
+    [JsonProperty] public string InGame_Stage { get; private set; }
+    [JsonProperty] public float InGame_Hp { get; private set; }
+    [JsonProperty] public float InGame_SkillGauge { get; private set; }
+    [JsonProperty] public int InGame_Bullet { get; private set; }
+    [JsonProperty] public int InGame_MeleeBullet { get; private set; }
 
     [JsonConstructor]
-    public PlayData(int InGame_Gold, Dictionary<BlueChipID, int> InGame_BlueChip_Level, int InGame_Stage)
+    public PlayData(int InGame_Gold, Dictionary<BlueChipID, int> InGame_BlueChip_Level, string InGame_Stage, float inGame_Hp, float inGame_SkillGauge, int inGame_Bullet, int inGame_MeleeBullet)
     {
         this.InGame_Gold = InGame_Gold;
         this.InGame_BlueChip_Level = InGame_BlueChip_Level;
         this.InGame_Stage = InGame_Stage;
+        InGame_Hp = inGame_Hp;
+        InGame_SkillGauge = inGame_SkillGauge;
+        InGame_Bullet = inGame_Bullet;
+        InGame_MeleeBullet = inGame_MeleeBullet;
     }
 
-    public PlayData()
+    public PlayData() 
     {
-        this.InGame_Gold = 0;
-        this.InGame_BlueChip_Level = new Dictionary<BlueChipID, int>();
-        this.InGame_Stage = 0;
+        InGame_BlueChip_Level = new Dictionary<BlueChipID, int>();
     }
-
-    internal void AddGold(int amount)
+    
+    public void SavePlayData_OnSceneExit(PlayerInstanteState state, PlayerEquipBlueChip equipBlueChip)//씬 변환 시 호출
+    {        
+        InGame_BlueChip_Level.Clear();
+        foreach (var item in equipBlueChip.GetBlueChipDic())
+        {
+            InGame_BlueChip_Level.Add(item.Key, item.Value.Level);
+        }
+        InGame_Hp = state.hp;
+        InGame_SkillGauge = state.skillGauge;
+        InGame_Bullet = state.bullets;
+        InGame_MeleeBullet = state.meleeBullets;
+    }    
+    public void SavePlayData_OnSceneEnter(string newStage)//씬 입장 시 호출
+    {
+        InGame_Stage = newStage;
+    }
+    public void AddGold_InGame(int amount)
     {
         InGame_Gold += amount;
     }

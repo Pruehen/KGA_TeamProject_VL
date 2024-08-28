@@ -21,6 +21,19 @@ public class PlayerEquipBlueChip : MonoBehaviour
     {
         return useBlueChipDic;
     }
+    public void Init_OnSceneLoad()//씬 로드 시 (Playermaster의 Init 메서드 또는 awake 호출 시)
+    {
+        useBlueChipDic = new Dictionary<BlueChipID, BlueChipSlot>();
+
+        if (JsonDataManager.GetUserData().TryGetPlayData(out PlayData playData))
+        {
+            foreach (var item in playData.InGame_BlueChip_Level)
+            {
+                useBlueChipDic.Add(item.Key, new BlueChipSlot(item.Key, item.Value));
+            }
+        }
+    }    
+
     public bool TryAddBlueChip(BlueChipID targetBlueChip)
     {
         int targetChipLevel = GetBlueChipLevel(targetBlueChip);

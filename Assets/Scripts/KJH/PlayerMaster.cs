@@ -115,7 +115,9 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     }
 
     private void Awake()
-    {        
+    {
+        JsonDataManager.GetUserData().SavePlayData_OnSceneEnter("SceneName");
+
         _PlayerInstanteState = GetComponent<PlayerInstanteState>();
         _PlayerEquipBlueChip = GetComponent<PlayerEquipBlueChip>();
         _PlayerBuff = GetComponent<PlayerBuff>();
@@ -134,6 +136,11 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
 
         _ItemAbsorber.Init(_PlayerInstanteState._playerStatData);
         _PlayerAttack.Init();
+
+        _PlayerEquipBlueChip.Init_OnSceneLoad();
+        _PlayerInstanteState.Init_OnSceneLoad();
+
+        UIManager.Instance.UpdateGoldInfoUI();
     }
 
     public Vector3 GetPosition()
