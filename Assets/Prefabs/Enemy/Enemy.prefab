@@ -146,6 +146,7 @@ MonoBehaviour:
     _dead: 0
     _invincibleTimeOnHit: 0.1
     _prevHitTime: 0
+  hitVFX: {fileID: 11400000, guid: 39b0076763d698e4fa1e149791706c51, type: 2}
   _detector: {fileID: 456772779722488808}
   _rotateTarget: {fileID: 0}
   _pooledHitVfxPrefab: {fileID: 0}
@@ -259,8 +260,8 @@ MonoBehaviour:
         byteData: 
         byteDataArray: 
       Version: 1.7.10
-  gizmoViewMode: 2
-  showBehaviorDesignerGizmo: 1
+  gizmoViewMode: 0
+  showBehaviorDesignerGizmo: 0
 --- !u!1 &6684202006273760822
 GameObject:
   m_ObjectHideFlags: 0
@@ -631,6 +632,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4467757482891228, guid: 227ee07e9e5b7914ba8fbb8f430be9a5, type: 3}
   m_PrefabInstance: {fileID: 4503283026990573186}
   m_PrefabAsset: {fileID: 0}
+  Defaultoffset: {x: 0, y: 0.5, z: 0.5}
+  DefaultRange: {x: 1, y: 1, z: 1}
+  target: {x: 0, y: 0, z: 0}
+  playerSkill: 0
+  skillData: {fileID: 0}
 --- !u!1001 &7794840423024853719
 PrefabInstance:
   m_ObjectHideFlags: 0
