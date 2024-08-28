@@ -43,7 +43,7 @@ public class Enemy : MonoBehaviour, ITargetable
     private EnemyType _enemyType;
     [SerializeField] private bool _isMovable = true;
     [SerializeField] private Combat _combat;
-
+    [SerializeField] SO_SKillEvent hitVFX;
 
     private DamageBox _attackCollider;
 
@@ -534,6 +534,9 @@ public class Enemy : MonoBehaviour, ITargetable
         dmg *= _debuff_Passive_Offensive2_IncreasedDamageTakenMulti;
         _debuff_Passive_Offensive2_IncreasedDamageTakenMulti = 1;
         _combat.Damaged(dmg);
+        GameObject hitEF = ObjectPoolManager.Instance.DequeueObject(hitVFX.preFab);
+        Vector3 finalPosition = this.transform.position + transform.TransformDirection(hitVFX.offSet);
+        hitEF.transform.position = finalPosition;
         DmgTextManager.Instance.OnDmged(dmg, this.transform.position);
     }
 

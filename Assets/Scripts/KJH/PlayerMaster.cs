@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using EnumTypes;
 using UnityEditor.Experimental.GraphView;
+using UnityEngine.UIElements;
 
 public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
 {
@@ -160,6 +161,8 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
         _PlayerInstanteState.Hit(dmg, out float finalDmg);
         DmgTextManager.Instance.OnDmged(finalDmg, this.transform.position);
         GameObject VFX = ObjectPoolManager.Instance.DequeueObject(hit.preFab);
+        Vector3 finalPosition = this.transform.position + transform.TransformDirection(hit.offSet);
+        VFX.transform.position = finalPosition;
         TryAbsorptFail();
     }
 
