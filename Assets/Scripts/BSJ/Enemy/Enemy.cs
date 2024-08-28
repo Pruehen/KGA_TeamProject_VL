@@ -107,6 +107,7 @@ public class Enemy : MonoBehaviour, ITargetable
 
         _pooledHitVfx = new ObjectPool<GameObject>(CreatePool, OnGetPool, OnReleasePool, OnDestroyPool, true, 100, 200);
     }
+
     private void Init()
     {
         if(_randomEnemyData != null)
@@ -118,6 +119,7 @@ public class Enemy : MonoBehaviour, ITargetable
 
         _combat = new Combat();
         _combat.Init(gameObject, _enemyData.Hp);
+        _combat.OnDamaged += OnDamaged;
         _combat.OnDead += OnDead;
 
 
@@ -164,6 +166,11 @@ public class Enemy : MonoBehaviour, ITargetable
         _behaviorTree.SetVariable("EnemyAlramLimitTime", enemyAlramLimitTime);
     }
 
+    private void OnDestroy()
+    {
+        _combat.OnDead -= OnDead;
+        _combat.OnDamaged -= OnDamaged;
+    }
     public GameObject CreatePool()
     {
         return Instantiate(_pooledHitVfxPrefab);
@@ -185,6 +192,16 @@ public class Enemy : MonoBehaviour, ITargetable
     float rotateSpeed = 10f;
     private void Update()
     {
+        if(AnimatorHelper.IsAnimationPlaying(_animator,0,"Base Layer.Hit"))
+        {
+            IsMovable = false;
+            return;
+        }
+        else
+        {
+            IsMovable=true;
+        }
+
         if (_aiState == AIState.Dead)
         { return; }
 
@@ -362,9 +379,10 @@ public class Enemy : MonoBehaviour, ITargetable
 
     private void OnDamaged()
     {
-        GameObject pooled = _pooledHitVfx.Get();
-        pooled.transform.position = transform.position;
-        pooled.GetComponent<ParticleSystem>().Play();
+        //GameObject pooled = _pooledHitVfx.Get();
+        //pooled.transform.position = transform.position;
+        //pooled.GetComponent<ParticleSystem>().Play();
+        _animator.SetTrigger("Hit");
     }
 
     private IEnumerator DelayedRealease(GameObject vfx)
