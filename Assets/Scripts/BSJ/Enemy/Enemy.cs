@@ -391,9 +391,11 @@ public class Enemy : MonoBehaviour, ITargetable
         yield return new WaitForSeconds(2f);
         _pooledHitVfx.Release(vfx);
     }
-
+    Action<GameObject> OnDeadWithSelf;
     private void OnDead()
     {
+        OnDeadWithSelf.Invoke(gameObject);
+
         SetEnableAllCollision(false);
         _aiState = AIState.Dead;
         _animator.SetTrigger("Dead");
@@ -408,6 +410,10 @@ public class Enemy : MonoBehaviour, ITargetable
         StartCoroutine(DelayedDisable());
 
         DropGold();
+    }
+    public void RegisterOnDead(Action<GameObject> ondead)
+    {
+        OnDeadWithSelf += ondead;
     }
 
     private void DropGold()
@@ -598,10 +604,5 @@ public class Enemy : MonoBehaviour, ITargetable
         {
             la.TriggerOnEnterCollider();
         }
-    }
-
-    public void RegisterOnDead(Action onDead)
-    {
-        _combat.OnDead += onDead;
     }
 }
