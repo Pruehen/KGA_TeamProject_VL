@@ -83,7 +83,6 @@ public class SO_RandomQuestSetData : ScriptableObject
             {
                 return NormalQuests[UnityEngine.Random.Range(0, NormalQuests.Count)];
             }
-            return NormalQuests[UnityEngine.Random.Range(0, NormalQuests.Count)];
         }
         else
         {
