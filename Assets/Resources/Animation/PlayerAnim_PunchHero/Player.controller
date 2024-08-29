@@ -356,7 +356,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Charge loop R
-  m_Speed: 0.5
+  m_Speed: 1.2
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -3210647750962165303}
@@ -684,10 +684,10 @@ AnimatorStateMachine:
     m_Position: {x: 200, y: 810, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 6307198230413912622}
-    m_Position: {x: 210, y: 620, z: 0}
+    m_Position: {x: 300, y: 610, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -1886438218690711584}
-    m_Position: {x: 210, y: 550, z: 0}
+    m_Position: {x: 250, y: 550, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3072005019357601290}
     m_Position: {x: -30, y: 400, z: 0}
@@ -696,7 +696,7 @@ AnimatorStateMachine:
     m_Position: {x: 210, y: 400, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -6833958361209465469}
-    m_Position: {x: 210, y: 480, z: 0}
+    m_Position: {x: 240, y: 480, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -2858828704722202457}
     m_Position: {x: 200, y: 970, z: 0}
@@ -1142,10 +1142,10 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
+  m_TransitionDuration: 0.01
   m_TransitionOffset: 0
-  m_ExitTime: 0.08
-  m_HasExitTime: 0
+  m_ExitTime: 0.001
+  m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
@@ -2483,7 +2483,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0.09101528
   m_TransitionOffset: 0
-  m_ExitTime: 0.87775916
+  m_ExitTime: 0.1
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -3471,7 +3471,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Charge loop L
-  m_Speed: 0.5
+  m_Speed: 1.2
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 7822616617219910445}
@@ -3698,10 +3698,10 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
+  m_TransitionDuration: 0.01
   m_TransitionOffset: 0
-  m_ExitTime: 0.08
-  m_HasExitTime: 0
+  m_ExitTime: 0.001
+  m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
