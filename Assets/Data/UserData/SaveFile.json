@@ -2,34 +2,47 @@
   "dic": {
     "0": {
       "SaveDataIndex": 0,
-      "SaveTime": "2024-08-27T10:54:56.290058+09:00",
+      "SaveTime": "2024-08-29T09:36:29.2174907+09:00",
       "PlayTime": 0,
-      "Gold": 1000,
+      "Gold": 2000,
       "Count_Try": 0,
       "Count_Clear": 0,
       "UnlockPassiveHashSet": [
         0,
         1,
-        6,
-        11,
-        10
+        5,
+        10,
+        7,
+        12
       ],
       "UsePassiveHashSet": [
-        6,
-        1,
         0,
-        11
+        10,
+        5,
+        7
       ],
       "IsClearAchievementsKey": [],
       "SlotIndex_SlotUnlock_Dic": {
         "0": true,
         "2": true,
         "4": true,
-        "1": true,
+        "1": false,
         "3": true,
         "5": false
       },
-      "PlayData": null
+      "PlayData": {
+        "InGame_Gold": 0,
+        "InGame_BlueChip_Level": {
+          "Hybrid1": 1,
+          "Range1": 2,
+          "Generic1": 1
+        },
+        "InGame_Stage": "SceneName",
+        "InGame_Hp": 70.0,
+        "InGame_SkillGauge": 0.0,
+        "InGame_Bullet": 15,
+        "InGame_MeleeBullet": 0
+      }
     },
     "1": {
       "SaveDataIndex": 1,

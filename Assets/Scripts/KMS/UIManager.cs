@@ -100,7 +100,6 @@ public class UIManager : SceneSingleton<UIManager>
 
     private void ReturnMainGame()
     {
-        Debug.Log("뒤로각;");
         CheckUIManager.Instance.CheckUiActive_OnClick(OutGame, "게임을 나가시겠습니까?");
     }
 
@@ -175,7 +174,6 @@ public class UIManager : SceneSingleton<UIManager>
     public void OutGame()
     {
         SceneManager.LoadScene("mainGame");
-    
     }
 
     public void OnHealthRatioChanged(float value)
