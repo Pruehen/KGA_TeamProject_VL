@@ -10,18 +10,12 @@ public class QuestNonHitTime : SO_Quest
 
     public override void Init()
     {
-        timeCounter = 0f;
         isHited = false;
 
         PlayerMaster.Instance._PlayerInstanteState.OnDamaged += OnDamaged;
     }
     public override bool CheckConditionOnUpdate()
     {
-        timeCounter += Time.deltaTime;
-        if (timeCounter > LimitTime)
-        {
-            return false;
-        }
         if(isHited)
         {
             return false;
