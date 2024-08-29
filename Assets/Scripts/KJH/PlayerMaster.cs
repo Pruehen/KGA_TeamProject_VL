@@ -61,6 +61,9 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     {
         get { return _ItemAbsorber._isAbsorbing; }
     }
+
+    public float ChargeTime { get => _PlayerAttack.attack_ChargeTime; set => _PlayerAttack.attack_ChargeTime = value; }
+
     public int GetBlueChipLevel(BlueChipID iD)
     {
         return _PlayerEquipBlueChip.GetBlueChipLevel(iD);
@@ -133,15 +136,17 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
 
         UIManager.Instance.SetPlayerMaster(this);
 
+        _PlayerAttack = GetComponent<PlayerAttack>();
+        _PlayerAttack.Init();
+
+        _PlayerMove = GetComponent<PlayerMove>();
+        _PlayerModChangeManager = GetComponent<PlayerModChangeManager>();
+
         _PlayerPassive.Init();
         _PlayerInstanteState.Init();
 
-        _PlayerMove = GetComponent<PlayerMove>();
-        _PlayerAttack = GetComponent<PlayerAttack>();
-        _PlayerModChangeManager = GetComponent<PlayerModChangeManager>();
 
         _ItemAbsorber.Init(_PlayerInstanteState._playerStatData);
-        _PlayerAttack.Init();
 
         _PlayerEquipBlueChip.Init_OnSceneLoad();
         _PlayerInstanteState.Init_OnSceneLoad();

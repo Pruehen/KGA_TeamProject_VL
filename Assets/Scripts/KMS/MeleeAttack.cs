@@ -17,10 +17,10 @@ public class MeleeAttack: MonoBehaviour
     bool _isCharging;
     bool _isCharged;
 
-    public float ChargeTime = 1.5f;
+    private float _chargeTime = 1.5f;
+    private float _currentChargeTime = 0f;
     public bool IsCharging { get => IsCharging; set => IsCharging = value; }
-    float _chargingTime;
-    public float ChargingTime { get => _chargingTime; set => _chargingTime = value; }
+    public float ChargeTime { get => _chargeTime; set => _chargeTime = value; }
 
     Action OnCharged;
     Action OnChargeEnd;
@@ -31,19 +31,19 @@ public class MeleeAttack: MonoBehaviour
     {
         if (_isCharging)
         {
-            _chargingTime += Time.deltaTime;
+            _currentChargeTime += Time.deltaTime;
 
-            if (!_isCharged && _chargingTime >= ChargeTime)
+            if (!_isCharged && _currentChargeTime >= _chargeTime)
             {
                 _isCharged = true;
                 OnCharged?.Invoke();
                 ChargeVFX();
-                _chargingTime = 0f;
+                _currentChargeTime = 0f;
             }
         }
         else
         {
-            _chargingTime = 0f;
+            _currentChargeTime = 0f;
             _isCharged = false;
         }
     }
@@ -100,7 +100,7 @@ public class MeleeAttack: MonoBehaviour
     public void ChargeStart()//애니메이션 이벤트 MeleeAttack
     {
         OnChargeStart?.Invoke();
-        _chargingTime = 0f;
+        _currentChargeTime = 0f;
         _isCharged = false;
         _isCharging = true;
         Debug.Log("차-지 시작");
@@ -117,7 +117,7 @@ public class MeleeAttack: MonoBehaviour
     public void ChargeFail()
     {
         _isCharging = false;
-        _chargingTime = 0f;
+        _currentChargeTime = 0f;
         OnChargeFail?.Invoke();
         ChargeEndVFX();
     }

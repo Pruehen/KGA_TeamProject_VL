@@ -31,15 +31,13 @@ public class GameManager : SceneSingleton<GameManager>
 
     public SO_Quest[] unexpectedquests;
     private Quest _currentQuest = new Quest();
-    public SO_RandomQuestSetData _randomQuestSet;
-
-
 
     private void Awake()
     {
         if (FindObjectsOfType<GameManager>().Length >= 2)
         {
             Destroy(gameObject);
+            return;
         }
         transform.SetParent(null);
         DontDestroyOnLoad(this);
@@ -124,11 +122,12 @@ public class GameManager : SceneSingleton<GameManager>
 
     private void SetStageQuests()
     {
+        SO_RandomQuestSetData randomQuestSet = _chapterData.RandomQuestsData;
         int count = 0;
         unexpectedquests = new SO_Quest[_chapterData.ChapterData.Length];
         for (int i = 0; i < unexpectedquests.Length; i++)
         {
-            SO_Quest r = _randomQuestSet.TryGetRandomQuest();
+            SO_Quest r = randomQuestSet.TryGetRandomQuest();
             if (r != null)
             {
                 count++;
@@ -138,12 +137,13 @@ public class GameManager : SceneSingleton<GameManager>
 
         if (count == 0)
         {
-            unexpectedquests[UnityEngine.Random.Range(0, unexpectedquests.Length)] = _randomQuestSet.GetRandomQuest();
+            unexpectedquests[UnityEngine.Random.Range(0, unexpectedquests.Length)] = randomQuestSet.GetRandomQuest();
         }
     }
 
     public void LoadNextStage()
     {
+        _enemies.Clear();
         JsonDataManager.GetUserData().SavePlayData_OnSceneExit(_PlayerMaster._PlayerInstanteState, _PlayerMaster._PlayerEquipBlueChip);
         SO_Stage randomStage = GetRandomItem(_chapterData.ChapterData[_currentLevel++ % _chapterData.ChapterData.Length].StageData);
 
