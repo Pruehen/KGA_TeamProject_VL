@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 using EnumTypes;
+using UnityEditor.Experimental.GraphView;
+using UnityEngine.UIElements;
 
 public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
 {
@@ -17,7 +19,7 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     public SO_Skill SkillData;
     [SerializeField] ItemAbsorber _ItemAbsorber;
     [SerializeField]public AttackSystem _AttackSystem;
-
+    [SerializeField] SO_SKillEvent hit;
     public bool IsAttackState
     {
         get { return _AttackSystem._attackLcokMove; }
@@ -164,7 +166,12 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     public void Hit(float dmg)
     {
         _PlayerInstanteState.Hit(dmg, out float finalDmg);
+        TryAbsorptFail();
+        if (finalDmg <= 0) return;
         DmgTextManager.Instance.OnDmged(finalDmg, this.transform.position);
+        GameObject VFX = ObjectPoolManager.Instance.DequeueObject(hit.preFab);
+        Vector3 finalPosition = this.transform.position + transform.TransformDirection(hit.offSet);
+        VFX.transform.position = finalPosition;
         TryAbsorptFail();
     }
 
