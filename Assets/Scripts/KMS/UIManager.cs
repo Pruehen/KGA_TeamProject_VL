@@ -44,7 +44,6 @@ public class UIManager : SceneSingleton<UIManager>
 
     private void Start()
     {
-        emeraldText.text = JsonDataManager.GetUserData().Gold.ToString();
         blueChipUI.SetActive(false);
         Init_PassiveUIList();
 
@@ -163,7 +162,7 @@ public class UIManager : SceneSingleton<UIManager>
 
     public void Interactable(bool chest)
     {
-        if (chest)
+        if (chest) 
         {
             interactive.gameObject.SetActive(true);
         }
@@ -223,14 +222,11 @@ public class UIManager : SceneSingleton<UIManager>
         HoldButtonMove();
 
     }
-    public void GoldInfoUI(float amount)
+    public void UpdateGoldInfoUI()
     {
-        Debug.Log("amount" + amount);
-        float playerEmerald = float.Parse(emeraldText.text);
-        playerEmerald += amount;
+        float playerEmerald = JsonDataManager.GetUserData().TryGetPlayData(out PlayData playData) ? playData.InGame_Gold : -999999999f;
 
         emeraldText.text = playerEmerald.ToString();
-
     }
 
   

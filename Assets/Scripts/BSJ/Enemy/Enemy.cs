@@ -43,7 +43,7 @@ public class Enemy : MonoBehaviour, ITargetable
     private EnemyType _enemyType;
     [SerializeField] private bool _isMovable = true;
     [SerializeField] private Combat _combat;
-
+    [SerializeField] SO_SKillEvent hitVFX;
 
     private DamageBox _attackCollider;
 
@@ -107,6 +107,7 @@ public class Enemy : MonoBehaviour, ITargetable
 
         _pooledHitVfx = new ObjectPool<GameObject>(CreatePool, OnGetPool, OnReleasePool, OnDestroyPool, true, 100, 200);
     }
+
     private void Init()
     {
         if(_randomEnemyData != null)
@@ -118,6 +119,7 @@ public class Enemy : MonoBehaviour, ITargetable
 
         _combat = new Combat();
         _combat.Init(gameObject, _enemyData.Hp);
+        _combat.OnDamaged += OnDamaged;
         _combat.OnDead += OnDead;
 
 
@@ -164,6 +166,11 @@ public class Enemy : MonoBehaviour, ITargetable
         _behaviorTree.SetVariable("EnemyAlramLimitTime", enemyAlramLimitTime);
     }
 
+    private void OnDestroy()
+    {
+        _combat.OnDead -= OnDead;
+        _combat.OnDamaged -= OnDamaged;
+    }
     public GameObject CreatePool()
     {
         return Instantiate(_pooledHitVfxPrefab);
@@ -185,6 +192,17 @@ public class Enemy : MonoBehaviour, ITargetable
     float rotateSpeed = 10f;
     private void Update()
     {
+        _combat.DoUpdate();
+        if(AnimatorHelper.IsAnimationPlaying(_animator,0,"Base Layer.Hit"))
+        {
+            IsMovable = false;
+            return;
+        }
+        else
+        {
+            IsMovable=true;
+        }
+
         if (_aiState == AIState.Dead)
         { return; }
 
@@ -362,9 +380,10 @@ public class Enemy : MonoBehaviour, ITargetable
 
     private void OnDamaged()
     {
-        GameObject pooled = _pooledHitVfx.Get();
-        pooled.transform.position = transform.position;
-        pooled.GetComponent<ParticleSystem>().Play();
+        //GameObject pooled = _pooledHitVfx.Get();
+        //pooled.transform.position = transform.position;
+        //pooled.GetComponent<ParticleSystem>().Play();
+        _animator.SetTrigger("Hit");
     }
 
     private IEnumerator DelayedRealease(GameObject vfx)
@@ -372,9 +391,11 @@ public class Enemy : MonoBehaviour, ITargetable
         yield return new WaitForSeconds(2f);
         _pooledHitVfx.Release(vfx);
     }
-
+    Action<GameObject> OnDeadWithSelf;
     private void OnDead()
     {
+        OnDeadWithSelf.Invoke(gameObject);
+
         SetEnableAllCollision(false);
         _aiState = AIState.Dead;
         _animator.SetTrigger("Dead");
@@ -389,6 +410,10 @@ public class Enemy : MonoBehaviour, ITargetable
         StartCoroutine(DelayedDisable());
 
         DropGold();
+    }
+    public void RegisterOnDead(Action<GameObject> ondead)
+    {
+        OnDeadWithSelf += ondead;
     }
 
     private void DropGold()
@@ -534,6 +559,9 @@ public class Enemy : MonoBehaviour, ITargetable
         dmg *= _debuff_Passive_Offensive2_IncreasedDamageTakenMulti;
         _debuff_Passive_Offensive2_IncreasedDamageTakenMulti = 1;
         _combat.Damaged(dmg);
+        GameObject hitEF = ObjectPoolManager.Instance.DequeueObject(hitVFX.preFab);
+        Vector3 finalPosition = this.transform.position + transform.TransformDirection(hitVFX.offSet);
+        hitEF.transform.position = finalPosition;
         DmgTextManager.Instance.OnDmged(dmg, this.transform.position);
     }
 
@@ -576,10 +604,5 @@ public class Enemy : MonoBehaviour, ITargetable
         {
             la.TriggerOnEnterCollider();
         }
-    }
-
-    public void RegisterOnDead(Action onDead)
-    {
-        _combat.OnDead += onDead;
     }
 }

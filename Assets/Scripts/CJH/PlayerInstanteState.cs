@@ -329,15 +329,10 @@ public class PlayerInstanteState : MonoBehaviour
     public Action<bool> OnMeleeModeChanged;
 
     [SerializeField] public SO_Player _playerStatData;
-    private void Awake()
-    {
-        _PlayerMaster = GetComponent<PlayerMaster>();
-
-    }
     private void Start()
     {
-        Restore();
         //UIManager.Instance.UpdateStamina(stamina, MaxStamina);
+
         UpdateHealth();
         UpdateStamina();
         UpdateSkillGauge();
@@ -345,6 +340,8 @@ public class PlayerInstanteState : MonoBehaviour
 
     private void Update()
     {
+        combat.DoUpdate();
+        shield.DoUpdate();
         TestSkill();
 
         Passive_Offensive2_Active_OnUpdate();
@@ -375,6 +372,8 @@ public class PlayerInstanteState : MonoBehaviour
 
     public void Init()
     {
+        _PlayerMaster = GetComponent<PlayerMaster>();
+
         combat = new Combat();
         shield = new Combat();
 
@@ -410,6 +409,20 @@ public class PlayerInstanteState : MonoBehaviour
 
         InitPassive();
         Restore();
+    }
+
+    public void Init_OnSceneLoad()
+    {
+        if (JsonDataManager.GetUserData().TryGetPlayData(out PlayData playData))
+        {
+            combat.ForceChangeHp(playData.InGame_Hp);
+
+            skillGauge = playData.InGame_SkillGauge;
+            bullets = playData.InGame_Bullet;
+            meleeBullets = playData.InGame_MeleeBullet;
+            UpdateBullet();
+            UpdateBullet_Melee();
+        }
     }
 
     //스태미나 소모 
@@ -460,6 +473,12 @@ public class PlayerInstanteState : MonoBehaviour
 
     public void Hit(float dmg, out float finalDmg)
     {
+        if(combat.IsInvincible || shield.IsInvincible)
+        {
+            finalDmg = 0;
+            return;
+        }
+
         OnDamaged?.Invoke();
 
         finalDmg = dmg;
@@ -875,5 +894,11 @@ public class PlayerInstanteState : MonoBehaviour
     {
         combat.ResetEvade();
         shield.ResetEvade();
+    }
+
+    internal void ResetInvincible()
+    {
+        combat.ResetInvincible();
+        shield.ResetInvincible();
     }
 }

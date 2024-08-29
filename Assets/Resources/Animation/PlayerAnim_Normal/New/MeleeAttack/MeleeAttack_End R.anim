@@ -34239,6 +34239,20 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
+  - time: 0
+    functionName: ChargeEnd
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0
+    functionName: SetSuperArmorOnAnim
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 0.06666667
     functionName: Effect2
     data: 
@@ -34248,6 +34262,13 @@ AnimationClip:
     messageOptions: 0
   - time: 0.1
     functionName: EnableDamageBox_Player
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.16666667
+    functionName: ResetSuperArmorOnAnim
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
@@ -24,11 +25,9 @@ public class GameManager : SceneSingleton<GameManager>
 
     public PlayerMaster _PlayerMaster { get; private set; }
 
-    public Enemy[] _enemies;
+    public List<GameObject> _enemies = new List<GameObject>();
 
     public Action OnGameClear;
-
-    public int _deadCount = 0;
 
     public SO_Quest[] unexpectedquests;
     private Quest _currentQuest = new Quest();
@@ -53,17 +52,6 @@ public class GameManager : SceneSingleton<GameManager>
 
     private void Start()
     {
-        _PlayerMaster = FindAnyObjectByType<PlayerMaster>();
-        Assert.IsNotNull(_PlayerMaster);
-
-        _enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
-
-        foreach (Enemy enemy in _enemies)
-        {
-            enemy.RegisterOnDead(OnEnemyDead);
-        }
-
-        NextStageObjects.Init(_rewardType);
         OnSceneLoaded(new Scene(), LoadSceneMode.Single);
     }
 
@@ -81,6 +69,13 @@ public class GameManager : SceneSingleton<GameManager>
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (FindObjectsOfType<GameManager>().Length >= 2)
+        {
+            if (!_init)
+            {
+                return;
+            }
+        }
         if (mode == LoadSceneMode.Single)
         {
             if (_init == false)
@@ -91,6 +86,25 @@ public class GameManager : SceneSingleton<GameManager>
             else
             {
             }
+
+
+            _PlayerMaster = FindAnyObjectByType<PlayerMaster>();
+            NextStageObjects = FindAnyObjectByType<NextStageObjects>();
+            Assert.IsNotNull(_PlayerMaster);
+
+            Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+
+            foreach(Enemy e in enemies)
+            {
+                _enemies.Add(e.gameObject);
+            }
+
+            foreach (Enemy enemy in enemies)
+            {
+                enemy.RegisterOnDead(OnEnemyDead);
+            }
+
+            NextStageObjects.Init(_rewardType);
 
 
             if (unexpectedquests[_currentLevel] != null)
@@ -105,7 +119,7 @@ public class GameManager : SceneSingleton<GameManager>
     {
         int count = 0;
         unexpectedquests = new SO_Quest[_chapterData.ChapterData.Length];
-        for (int i = 0; i < unexpectedquests.Length; i++) 
+        for (int i = 0; i < unexpectedquests.Length; i++)
         {
             SO_Quest r = _randomQuestSet.TryGetRandomQuest();
             if (r != null)
@@ -115,7 +129,7 @@ public class GameManager : SceneSingleton<GameManager>
             unexpectedquests[i] = r;
         }
 
-        if(count == 0)
+        if (count == 0)
         {
             unexpectedquests[UnityEngine.Random.Range(0, unexpectedquests.Length)] = _randomQuestSet.GetRandomQuest();
         }
@@ -123,6 +137,7 @@ public class GameManager : SceneSingleton<GameManager>
 
     public void LoadNextStage()
     {
+        JsonDataManager.GetUserData().SavePlayData_OnSceneExit(_PlayerMaster._PlayerInstanteState, _PlayerMaster._PlayerEquipBlueChip);
         SO_Stage randomStage = GetRandomItem(_chapterData.ChapterData[_currentLevel++ % _chapterData.ChapterData.Length].StageData);
 
         AsyncOperation ao = SceneManager.LoadSceneAsync(randomStage.SceneName);
@@ -135,10 +150,10 @@ public class GameManager : SceneSingleton<GameManager>
         return array[r];
     }
 
-    private void OnEnemyDead()
+    private void OnEnemyDead(GameObject enemy)
     {
-        _deadCount++;
-        if (_enemies.Length == _deadCount)
+        _enemies.Remove(enemy);
+        if (_enemies.Count == 0)
         {
             OnGameClear?.Invoke();
         }
@@ -146,7 +161,7 @@ public class GameManager : SceneSingleton<GameManager>
 
     public bool IsCurrentUnexpectedQuestCleared()
     {
-        if (_currentLevel >= unexpectedquests.Length )
+        if (_currentLevel >= unexpectedquests.Length)
         {
             Debug.LogError("OutOfLength");
             return false;
