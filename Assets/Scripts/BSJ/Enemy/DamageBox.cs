@@ -152,7 +152,7 @@ public class DamageBox : MonoBehaviour
             return (transform.position + Vector3.Scale(transform.rotation * Offset, transform.lossyScale));
         }
     }
-
+        
     private void OnEnable()
     {
         Collider[] result = Physics.OverlapBox(Center, HalfSize, transform.rotation, _targetLayer);
