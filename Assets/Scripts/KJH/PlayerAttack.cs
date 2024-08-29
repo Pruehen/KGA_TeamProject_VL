@@ -258,6 +258,9 @@ public class PlayerAttack : MonoBehaviour
     {
         _currentAttackCount = 0;
         _AttackSystem.ResetAttack();
+        ResetEvadeOnAnim();
+        ResetInvincibleOnAnim();
+        ResetSuperArmorOnAnim();
     }
     public void IncreaseAttackCount()
     {
