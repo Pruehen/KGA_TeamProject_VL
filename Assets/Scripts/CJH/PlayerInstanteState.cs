@@ -474,7 +474,7 @@ public class PlayerInstanteState : MonoBehaviour
         UpdateStamina();
     }
 
-    public void Hit(float dmg, DamageType damageType = DamageType.Normal, out float finalDmg)
+    public void Hit(float dmg, out float finalDmg, DamageType damageType = DamageType.Normal)
     {
         if(combat.IsInvincible || shield.IsInvincible)
         {

@@ -168,7 +168,7 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
 
     public void Hit(float dmg, DamageType damageType = DamageType.Normal)
     {
-        _PlayerInstanteState.Hit(dmg, damageType, out float finalDmg);
+        _PlayerInstanteState.Hit(dmg, out float finalDmg, damageType);
         TryAbsorptFail();
 
         if (finalDmg <= 0) return;
