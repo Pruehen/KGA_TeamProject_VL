@@ -89,7 +89,7 @@ public class Enemy : MonoBehaviour, ITargetable
     [SerializeField] private GameObject _projectilePrefab;
     [SerializeField] private Transform _firePos;
 
-    private float _goldDropAmount;
+    private int _goldDropAmount;
 
     private void Awake()
     {
