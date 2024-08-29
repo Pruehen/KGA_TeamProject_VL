@@ -21,7 +21,6 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
     [SerializeField] Text costText;
     [SerializeField] Text effectText;
 
-    [SerializeField] Text ingameGold;
     [SerializeField] Text outgameGold;
 
     [SerializeField] int TestEmerald = 10000;
@@ -207,7 +206,7 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
         if (suceeded)
         {
             // UI °»½Å
-            ingameGold.text = JsonDataManager.GetUserData().Gold.ToString();
+            outgameGold.text = JsonDataManager.GetUserData().Gold.ToString();
             return true;
         }
         else
