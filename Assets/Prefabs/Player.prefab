@@ -123,6 +123,7 @@ MonoBehaviour:
   SkillData: {fileID: 11400000, guid: 697fc365c538ef2438aa6f635eb536b1, type: 2}
   _ItemAbsorber: {fileID: 6544024869024547094}
   _AttackSystem: {fileID: 8909988477445564789}
+  hit: {fileID: 0}
 --- !u!114 &2680144560742994316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,6 +197,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 558ca11a99c5c8f49afef42e7cde3021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BlueChipVFX: {fileID: 0}
 --- !u!114 &8897946215484108235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -245,6 +247,9 @@ MonoBehaviour:
   projectionSpeed_Forward: 15
   projectionSpeed_Up: 3
   attack_CoolTime: 0.7
+  EnterMelee: {fileID: 0}
+  EnterRangeR: {fileID: 0}
+  EnterRangeL: {fileID: 0}
   attackTrigger: 0
   _currentAttackMod: 0
   _currentAttackKind: 0
@@ -310,6 +315,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2e9c5e2d101cfe4e968a78a9b775681, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startAbsorbing: {fileID: 0}
+  endAbsorbing: {fileID: 0}
   _damageBox: {fileID: 6358046432031639509}
   _attackLcokMove: 0
 --- !u!114 &3176383348458485747
@@ -324,7 +331,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f80012ddb58f5846a77fcd9de5f9e6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ChargeTime: 1.5
+  ChargeTime: 10
+  skill: {fileID: 0}
+  ChargedR: {fileID: 0}
+  ChargedL: {fileID: 0}
+  StartChargeR: {fileID: 0}
+  StartChargeL: {fileID: 0}
+  CurrentChargedVFX: {fileID: 0}
 --- !u!114 &7753793625892610601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -385,7 +398,12 @@ MonoBehaviour:
   player: {fileID: 3370145770967923552}
   moveDuration: 0.3
   target: {x: 0, y: 0, z: 0}
+  RangeSkill3: {fileID: 0}
   RayDistance: 20
+  hand_L: {fileID: 0}
+  hand_R: {fileID: 0}
+  Foot: {fileID: 0}
+  targetpos: {fileID: 0}
 --- !u!114 &7278532214112620415
 MonoBehaviour:
   m_ObjectHideFlags: 0
