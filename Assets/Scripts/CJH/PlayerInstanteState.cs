@@ -111,8 +111,6 @@ public class PlayerInstanteState : MonoBehaviour
     public float GetSkillPower() { return skillPowerBase * SkillPowerMulti; }
     public float DmgMulti { get; set; } = 1f;
 
-    public int Gold { get; set; }
-
     [SerializeField] public float _dashTime = .5f;
     [SerializeField] public float _dashForce = 3f;
     [SerializeField] public float _dashCost = 300f;
@@ -858,7 +856,10 @@ public class PlayerInstanteState : MonoBehaviour
     //골드 관련
     public void AddGold(int amount)
     {
-        Gold += amount;
+        if (JsonDataManager.GetUserData().TryGetPlayData(out PlayData playData))
+        {
+            playData.AddGold_InGame(amount);
+        }
     }
 
     private void OnKnockback()
