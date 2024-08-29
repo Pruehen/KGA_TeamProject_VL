@@ -859,6 +859,7 @@ public class PlayerInstanteState : MonoBehaviour
         if (JsonDataManager.GetUserData().TryGetPlayData(out PlayData playData))
         {
             playData.AddGold_InGame(amount);
+            UIManager.Instance.UpdateGoldInfoUI();
         }
     }
 

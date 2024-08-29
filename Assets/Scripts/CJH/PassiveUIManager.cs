@@ -21,7 +21,8 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
     [SerializeField] Text costText;
     [SerializeField] Text effectText;
 
-    [SerializeField] Text emeraldText;
+    [SerializeField] Text ingameGold;
+    [SerializeField] Text outgameGold;
 
     [SerializeField] int TestEmerald = 10000;
 
@@ -41,7 +42,8 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
         }
         InfoText(PassiveID.Offensive1);
         GetSlotData_OnInit(userData);
-        SetEemeraldText_OnInit();
+
+        SetOutGamGoldText_OnInit();
     }
 
 
@@ -187,16 +189,9 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
     }
 
     //에메랄드 UI를 갱신해주는 메서드
-    public void SetEemeraldText_OnInit()
+    public void SetOutGamGoldText_OnInit()
     {
-        if (JsonDataManager.GetUserData().Gold == 0)
-        {
-            //테스트용 재화 
-            JsonDataManager.GetUserData().AddGold(TestEmerald);
-        }
-
-        emeraldText.text = JsonDataManager.GetUserData().Gold.ToString();
-      
+        outgameGold.text = JsonDataManager.GetUserData().Gold.ToString();
     }
 
 
@@ -212,7 +207,7 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
         if (suceeded)
         {
             // UI 갱신
-            emeraldText.text = JsonDataManager.GetUserData().Gold.ToString();
+            ingameGold.text = JsonDataManager.GetUserData().Gold.ToString();
             return true;
         }
         else
