@@ -18,6 +18,7 @@ public class PlayerInstanteState : MonoBehaviour
     public float AttackSpeed { get => attackSpeed; private set => attackSpeed = value; }
     public int MeleeToRangeRatio { get => _meleeToRangeRatio; private set => _meleeToRangeRatio = value; }
     public float AbsorbingStaminaConsumRate { get => _absorbingStaminaConsumRate; private set => _absorbingStaminaConsumRate = value; }
+
     [SerializeField] private float _absorbingStaminaConsumRate = 300f;
     [SerializeField] SkinnedMeshRenderer _PlayerMesh;
     [SerializeField] Material _ShieldMaterial;
@@ -112,7 +113,7 @@ public class PlayerInstanteState : MonoBehaviour
     public float GetSkillPower() { return skillPowerBase * SkillPowerMulti; }
     public float DmgMulti { get; set; } = 1f;
 
-    public int Gold { get; set; }
+    public float ChargeTime { get => _PlayerMaster.ChargeTime; set => _PlayerMaster.ChargeTime = value; }
 
     [SerializeField] public float _dashTime = .5f;
     [SerializeField] public float _dashForce = 3f;
@@ -398,6 +399,7 @@ public class PlayerInstanteState : MonoBehaviour
         attackSpeed = _playerStatData.attackSpeed;
         attackPowerBase = _playerStatData.attackPower;
         skillPowerBase = _playerStatData.skillPower;
+        ChargeTime = _playerStatData.chargeTime;
 
         moveSpeed = _playerStatData.moveSpeed;
 
@@ -860,7 +862,11 @@ public class PlayerInstanteState : MonoBehaviour
     //골드 관련
     public void AddGold(int amount)
     {
-        Gold += amount;
+        if (JsonDataManager.GetUserData().TryGetPlayData(out PlayData playData))
+        {
+            playData.AddGold_InGame(amount);
+            UIManager.Instance.UpdateGoldInfoUI();
+        }
     }
 
     private void OnKnockback()

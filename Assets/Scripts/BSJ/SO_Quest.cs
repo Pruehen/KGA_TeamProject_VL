@@ -1,7 +1,17 @@
 using UnityEngine;
 
+public enum QuestDfficurty
+{
+    Easy,
+    Normal,
+    Hard,
+}
+
 public class SO_Quest : ScriptableObject
 {
+    public QuestDfficurty Difficurty;
+
+
     public virtual void Init()
     { }
 

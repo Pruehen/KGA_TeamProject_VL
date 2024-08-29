@@ -89,6 +89,8 @@ public class Enemy : MonoBehaviour, ITargetable
     [SerializeField] private GameObject _projectilePrefab;
     [SerializeField] private Transform _firePos;
 
+    private int _goldDropAmount;
+
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -127,6 +129,8 @@ public class Enemy : MonoBehaviour, ITargetable
         _attackCooldown = _enemyData.AttackCooldown;
         _attackMoveCooldoown = _enemyData.AttackMovableCooldown;
         AttackSpeedMulti = _enemyData.AttackSpeedMultiply;
+
+        _goldDropAmount = _enemyData.DropGoldAmount;
 
         _detector.Init(this, "Player",
             _enemyData.EnemyAlramDistance,
@@ -418,8 +422,7 @@ public class Enemy : MonoBehaviour, ITargetable
 
     private void DropGold()
     {
-        GameManager.Instance._PlayerMaster._PlayerInstanteState.AddGold(500);
-        //Instantiate(_goldPrefab, transform.position);
+        GameManager.Instance._PlayerMaster._PlayerInstanteState.AddGold(_goldDropAmount);
     }
 
     private void SetEnableAllCollision(bool condition)
