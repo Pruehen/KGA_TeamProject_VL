@@ -184,7 +184,7 @@ public class UserData
         SaveDataIndex = saveDataIndex;
         SaveTime = DateTime.Now;
         PlayTime = 0;
-        Gold = 500;
+        Gold = 1000;
         Count_Try = 0;
         Count_Clear = 0;
         UnlockPassiveHashSet = new HashSet<PassiveID>();
