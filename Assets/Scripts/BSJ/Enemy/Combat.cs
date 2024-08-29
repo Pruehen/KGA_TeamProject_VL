@@ -130,7 +130,7 @@ public class Combat
         if (!IsDamageable())
             return false;
 
-        if (!IsSuperArmor || type != DamageType.NonKnockback)
+        if (!IsSuperArmor && type != DamageType.NonKnockback)
         {
             OnKnockback?.Invoke();
         }
