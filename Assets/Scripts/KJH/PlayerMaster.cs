@@ -125,8 +125,6 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
 
     private void Awake()
     {
-        JsonDataManager.GetUserData().SavePlayData_OnSceneEnter("SceneName");
-
         _PlayerInstanteState = GetComponent<PlayerInstanteState>();
         _PlayerEquipBlueChip = GetComponent<PlayerEquipBlueChip>();
         _PlayerBuff = GetComponent<PlayerBuff>();

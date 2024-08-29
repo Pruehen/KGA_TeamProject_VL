@@ -183,7 +183,7 @@ public class DashFire : MonoBehaviour
                     }
                 }
 
-                combat.Hit(TIcDmg);
+                combat.Hit(TIcDmg, DamageType.NonKnockback);
                 onHit = true;
             }
 
