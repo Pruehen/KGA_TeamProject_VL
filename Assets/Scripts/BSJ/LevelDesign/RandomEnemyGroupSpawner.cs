@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class RandomEnemyGroupSpawner : MonoBehaviour
 {
-    void Start()
+    void Awake()
     {
+        Debug.Log("siko Awake Enem");
         int childCount = transform.childCount;
 
         int r = Random.Range(0, childCount);

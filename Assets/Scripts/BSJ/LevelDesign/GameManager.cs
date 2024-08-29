@@ -41,6 +41,7 @@ public class GameManager : SceneSingleton<GameManager>
         if (FindObjectsOfType<GameManager>().Length >= 2)
         {
             Destroy(gameObject);
+            return;
         }
         transform.SetParent(null);
         DontDestroyOnLoad(this);
