@@ -13,15 +13,15 @@ public class SO_RandomQuestSetData : ScriptableObject
     private List<SO_Quest> NormalQuests = new List<SO_Quest>();
     private List<SO_Quest> HardQuests = new List<SO_Quest>();
 
-    [Range (0f,100f)]
+    [Range(0f, 100f)]
     public float QuestPosiblity = 30f;
 
-    [Space (15)]
-    [Range (0f,100f)]
+    [Space(15)]
+    [Range(0f, 100f)]
     public float EasyPosiblity = 30f;
-    [Range (0f,100f)]
+    [Range(0f, 100f)]
     public float NormalPosiblity = 30f;
-    [Range (0f,100f)]
+    [Range(0f, 100f)]
     public float HardPosiblity = 30f;
 
     public SO_Quest TryGetRandomQuest()
@@ -29,7 +29,7 @@ public class SO_RandomQuestSetData : ScriptableObject
 
         float r = UnityEngine.Random.value * 100f;
 
-        if(r >= (QuestPosiblity))
+        if (r >= (QuestPosiblity))
         {
             return null;
         }
@@ -40,23 +40,23 @@ public class SO_RandomQuestSetData : ScriptableObject
 
     public SO_Quest GetRandomQuest()
     {
-        foreach(SO_Quest s in Quests)
+        foreach (SO_Quest s in Quests)
         {
             EasyQuests.Clear();
             NormalQuests.Clear();
             HardQuests.Clear();
 
-            if(s.Difficurty == QuestDfficurty.Easy)
+            if (s.Difficurty == QuestDfficurty.Easy)
             {
                 EasyQuests.Add(s);
                 break;
             }
-            if(s.Difficurty == QuestDfficurty.Normal)
+            if (s.Difficurty == QuestDfficurty.Normal)
             {
                 NormalQuests.Add(s);
                 break;
             }
-            if(s.Difficurty == QuestDfficurty.Hard)
+            if (s.Difficurty == QuestDfficurty.Hard)
             {
                 HardQuests.Add(s);
                 break;
@@ -67,20 +67,31 @@ public class SO_RandomQuestSetData : ScriptableObject
         float r = UnityEngine.Random.value;
 
         float normalizedEasy = EasyPosiblity / sum;
-        float normalizedNormal = normalizedEasy + NormalPosiblity / sum;
-        float normalizedHard = normalizedNormal + HardPosiblity / sum;
+        float normalizedNormal = NormalPosiblity / sum;
+        float normalizedHard = HardPosiblity / sum;
 
-        if (r <= normalizedEasy)
+        if (r <= normalizedHard)
         {
-            return EasyQuests[UnityEngine.Random.Range(0, EasyQuests.Count)];
+            if (HardQuests.Count > 0)
+            {
+                return HardQuests[UnityEngine.Random.Range(0, HardQuests.Count)];
+            }
         }
-        else if (r <= normalizedNormal)
+        if (r <= (normalizedHard + normalizedNormal))
         {
+            if (NormalQuests.Count > 0)
+            {
+                return NormalQuests[UnityEngine.Random.Range(0, NormalQuests.Count)];
+            }
             return NormalQuests[UnityEngine.Random.Range(0, NormalQuests.Count)];
         }
         else
         {
-            return HardQuests[UnityEngine.Random.Range(0, HardQuests.Count)];
+            if (EasyQuests.Count > 0)
+            {
+                return EasyQuests[UnityEngine.Random.Range(0, EasyQuests.Count)];
+            }
         }
+        return null;
     }
 }
