@@ -7875,63 +7875,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1001 &2004090481571174740
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1696446837073762037, guid: eb230283e7f2dce40bcb0ec703c5d519, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -9.28376
-      objectReference: {fileID: 0}
-    - target: {fileID: 1696446837073762037, guid: eb230283e7f2dce40bcb0ec703c5d519, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.393548
-      objectReference: {fileID: 0}
-    - target: {fileID: 1696446837073762037, guid: eb230283e7f2dce40bcb0ec703c5d519, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -8.918057
-      objectReference: {fileID: 0}
-    - target: {fileID: 1696446837073762037, guid: eb230283e7f2dce40bcb0ec703c5d519, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1696446837073762037, guid: eb230283e7f2dce40bcb0ec703c5d519, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1696446837073762037, guid: eb230283e7f2dce40bcb0ec703c5d519, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1696446837073762037, guid: eb230283e7f2dce40bcb0ec703c5d519, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1696446837073762037, guid: eb230283e7f2dce40bcb0ec703c5d519, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1696446837073762037, guid: eb230283e7f2dce40bcb0ec703c5d519, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1696446837073762037, guid: eb230283e7f2dce40bcb0ec703c5d519, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3550846003236832305, guid: eb230283e7f2dce40bcb0ec703c5d519, type: 3}
-      propertyPath: m_Name
-      value: HellFire
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: eb230283e7f2dce40bcb0ec703c5d519, type: 3}
 --- !u!223 &2062810609449149201
 Canvas:
   m_ObjectHideFlags: 0
@@ -8879,4 +8822,3 @@ SceneRoots:
   - {fileID: 187774750}
   - {fileID: 1089432051}
   - {fileID: 1299518490}
-  - {fileID: 2004090481571174740}
