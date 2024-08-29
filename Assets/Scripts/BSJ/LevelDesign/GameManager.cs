@@ -16,7 +16,7 @@ public class GameManager : SceneSingleton<GameManager>
 
     public NextStageObjects NextStageObjects;
 
-    private bool _init = false;
+    private bool _unique = false;
     private RewardType _rewardType;
 
     private int _currentLevel;
@@ -31,33 +31,32 @@ public class GameManager : SceneSingleton<GameManager>
 
     public SO_Quest[] unexpectedquests;
     private Quest _currentQuest = new Quest();
-    public SO_RandomQuestSetData _randomQuestSet;
-
-
 
     private void Awake()
     {
         if (FindObjectsOfType<GameManager>().Length >= 2)
         {
             Destroy(gameObject);
+            return;
         }
         transform.SetParent(null);
         DontDestroyOnLoad(this);
-
-        NextStageObjects = FindAnyObjectByType<NextStageObjects>();
-        Assert.IsNotNull(NextStageObjects);
 
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void Start()
     {
-        OnSceneLoaded(new Scene(), LoadSceneMode.Single);
+        OnSceneLoaded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
     }
 
     private void Update()
     {
-        if (unexpectedquests[_currentLevel] != null)
+        if(SceneManager.GetActiveScene().name == "mainGame")
+        {
+            return;
+        }
+        if (unexpectedquests[GetCurrentLevelIndex()] != null)
         {
             _currentQuest.CheckConditionOnUpdate();
         }
@@ -71,30 +70,34 @@ public class GameManager : SceneSingleton<GameManager>
     {
         if (FindObjectsOfType<GameManager>().Length >= 2)
         {
-            if (!_init)
+            if (!_unique)
             {
                 return;
             }
         }
         if (mode == LoadSceneMode.Single)
         {
-            if (_init == false)
-            {
-                _init = true;
-                SetStageQuests();
-            }
-            else
-            {
-            }
+            _unique = true;
 
+            if (scene.name == "mainGame")
+            {
+                return;
+            }
 
             _PlayerMaster = FindAnyObjectByType<PlayerMaster>();
             NextStageObjects = FindAnyObjectByType<NextStageObjects>();
-            Assert.IsNotNull(_PlayerMaster);
+           
+            if (_PlayerMaster == null)
+            {
+                return;
+            }
+            else
+                Assert.IsNotNull(_PlayerMaster);
+
 
             Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
 
-            foreach(Enemy e in enemies)
+            foreach (Enemy e in enemies)
             {
                 _enemies.Add(e.gameObject);
             }
@@ -107,21 +110,22 @@ public class GameManager : SceneSingleton<GameManager>
             NextStageObjects.Init(_rewardType);
 
 
-            if (unexpectedquests[_currentLevel] != null)
+            if (unexpectedquests[GetCurrentLevelIndex()] != null)
             {
-                _currentQuest.Init(unexpectedquests[_currentLevel]);
-                unexpectedquests[_currentLevel].Init();
+                _currentQuest.Init(unexpectedquests[GetCurrentLevelIndex()]);
+                unexpectedquests[GetCurrentLevelIndex()].Init();
             }
         }
     }
 
     private void SetStageQuests()
     {
+        SO_RandomQuestSetData randomQuestSet = _chapterData.RandomQuestsData;
         int count = 0;
         unexpectedquests = new SO_Quest[_chapterData.ChapterData.Length];
         for (int i = 0; i < unexpectedquests.Length; i++)
         {
-            SO_Quest r = _randomQuestSet.TryGetRandomQuest();
+            SO_Quest r = randomQuestSet.TryGetRandomQuest();
             if (r != null)
             {
                 count++;
@@ -131,17 +135,34 @@ public class GameManager : SceneSingleton<GameManager>
 
         if (count == 0)
         {
-            unexpectedquests[UnityEngine.Random.Range(0, unexpectedquests.Length)] = _randomQuestSet.GetRandomQuest();
+            unexpectedquests[UnityEngine.Random.Range(0, unexpectedquests.Length)] = randomQuestSet.GetRandomQuest();
         }
+    }
+
+    public void StartChapter()
+    {
+        int stageNum = 0;
+        SO_Stage randomStage = GetRandomItem(_chapterData.ChapterData[stageNum].StageData);
+
+        AsyncOperation ao = SceneManager.LoadSceneAsync(randomStage.SceneName);
+        ao.allowSceneActivation = true;
+
+        SetStageQuests();
     }
 
     public void LoadNextStage()
     {
+        _enemies.Clear();
         JsonDataManager.GetUserData().SavePlayData_OnSceneExit(_PlayerMaster._PlayerInstanteState, _PlayerMaster._PlayerEquipBlueChip);
-        SO_Stage randomStage = GetRandomItem(_chapterData.ChapterData[_currentLevel++ % _chapterData.ChapterData.Length].StageData);
+        SO_Stage randomStage = GetRandomItem(_chapterData.ChapterData[GetCurrentLevelIndex()].StageData);
 
         AsyncOperation ao = SceneManager.LoadSceneAsync(randomStage.SceneName);
         ao.allowSceneActivation = true;
+    }
+
+    private int GetCurrentLevelIndex()
+    {
+        return _currentLevel++ % _chapterData.ChapterData.Length;
     }
 
     private T GetRandomItem<T>(T[] array)
@@ -161,12 +182,12 @@ public class GameManager : SceneSingleton<GameManager>
 
     public bool IsCurrentUnexpectedQuestCleared()
     {
-        if (_currentLevel >= unexpectedquests.Length)
+        if (GetCurrentLevelIndex() >= unexpectedquests.Length)
         {
             Debug.LogError("OutOfLength");
             return false;
         }
-        if (unexpectedquests[_currentLevel] == null)
+        if (unexpectedquests[GetCurrentLevelIndex()] == null)
         {
 
             return false;

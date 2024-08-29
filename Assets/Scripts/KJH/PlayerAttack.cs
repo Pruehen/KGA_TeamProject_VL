@@ -11,6 +11,7 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] float projectionSpeed_Forward = 15;
     [SerializeField] float projectionSpeed_Up = 3;
     [SerializeField] float attack_CoolTime = 0.7f;
+
     [SerializeField] SO_SKillEvent EnterMelee;
     [SerializeField] SO_SKillEvent EnterRangeR;
     [SerializeField] SO_SKillEvent EnterRangeL;
@@ -48,6 +49,9 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] PlayerAttackKind _currentAttackKind = PlayerAttackKind.RangeNormalAttack;
     [SerializeField] int _initialAttackComboIndex = 0;
     int _currentAttackCount;
+
+    public float attack_ChargeTime { get => _AttackSystem.CloseAttack.ChargeTime; set => _AttackSystem.CloseAttack.ChargeTime = value; }
+
 
     public void Init()
     {
@@ -232,10 +236,12 @@ public class PlayerAttack : MonoBehaviour
                 if (skillSelectionValue == 0)
                 {
                     _PlayerMaster._PlayerSkill.InvokeSkillDamage(randomSkill1);
+                    _PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._PlayerSkill.RangeSkill1);
                 }
                 else
                 {
                     _PlayerMaster._PlayerSkill.InvokeSkillDamage(randomSkill2);
+                    _PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._PlayerSkill.RangeSkill2);
                 }
             }
         }
@@ -356,4 +362,23 @@ public class PlayerAttack : MonoBehaviour
     //    yield return new WaitForSeconds(delayTime);
     //    Attack();
     //}
+    public void BlueChipFire()
+    {
+        //_PlayerMaster._PlayerEquipBlueChip.
+            int level_blueChip_Generic1 = _PlayerMaster.GetBlueChipLevel(BlueChipID.Generic1);
+        if (level_blueChip_Generic1 > 0)//블루칩이 1레벨 이상일경우
+        {
+            BlueChip chip_Generic1 = JsonDataManager.GetBlueChipData(BlueChipID.Generic1);
+            float Dmg = 10+ level_blueChip_Generic1 * 2f;
+            float fireDotDuration = 5f;
+            float fireExploRadius = 1+(level_blueChip_Generic1 * 0.2f);
+            float fireExploDmg = 50 + level_blueChip_Generic1 * 10f;
+            GameObject _DashFire = ObjectPoolManager.Instance.DequeueObject(DashFire);
+            DashFire DF = _DashFire.GetComponent<DashFire>();
+            DF.transform.position=transform.position;
+            DF.SetStat(Dmg, fireDotDuration, fireExploRadius, fireExploDmg);
+            DF.StartFire();
+        }
+    }
+    public GameObject DashFire;
 }
