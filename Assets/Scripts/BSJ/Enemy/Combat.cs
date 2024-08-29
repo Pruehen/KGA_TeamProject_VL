@@ -205,7 +205,7 @@ public class Combat
     public void SetSuperArmor(float time)
     {
         IsSuperArmor = true;
-        OnInvincible?.Invoke();
+        OnSuperArmor?.Invoke();
 
         if (_superArmorTimer < time)
         {
@@ -222,7 +222,7 @@ public class Combat
     public void SetInvincible(float time)
     {
         IsInvincible = true;
-        OnSuperArmor?.Invoke();
+        OnInvincible?.Invoke();
 
         if (_invincibleTimer < time)
         {
