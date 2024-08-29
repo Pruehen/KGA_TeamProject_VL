@@ -15,6 +15,8 @@ public class SO_Player : ScriptableObject
     public float moveSpeed = 6f;
     public float attackSpeed = 1f;
 
+    public float chargeTime = 1f;
+
     public float shieldMax = 100f;
     public float dashTime = .5f;
     public float dashForce = 3f;
@@ -58,5 +60,4 @@ public class SO_Player : ScriptableObject
     [Header("È¹µæ °ü·Ã")]
     public float AcquireSpeed = 30f;
     public AnimationCurve RadiusExpandCurve;
-
 }
