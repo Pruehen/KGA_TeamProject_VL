@@ -5,10 +5,17 @@ using UnityEngine;
 
 public class DashFire : MonoBehaviour
 {
-
+    public enum AttackType
+    {
+        Range,
+        Melee,
+        All
+    }
+    public int currentType;
     [SerializeField] private ITargetable _owner;
     [SerializeField] private LayerMask _targetLayer;
-    private Vector3 _offset;
+    private Vector3 _RangeSize = new Vector3(1f, 1f, 3f);
+    public float _MeleeSize = 3f;
     public Vector3 Defaultoffset = new Vector3(0f, 0.5f, 0.5f);
     [SerializeField] public Vector3 DefaultRange = new Vector3(1f, 1f, 1f);
     private Coroutine _DisableBoxCoroutine;
@@ -25,7 +32,7 @@ public class DashFire : MonoBehaviour
     private float _FireDotDuration = 5f;
 
     [SerializeField]
-    private float _FireExploRadius = 10f;
+    private float _FireExploRadius = 1.3f;
 
     [SerializeField]
     private float _FireExploDmg = 50f;
@@ -92,7 +99,7 @@ public class DashFire : MonoBehaviour
         FireDotDuration = fireDotDuration;
         radius = GetRadius(fireExploRadius);
         FireExploDmg = fireExploDmg;
-        transform.localScale= Vector3.one*fireExploRadius;
+        transform.localScale = Vector3.one * fireExploRadius;
     }
 
     // Private ÇïÆÛ ¸Þ¼­µåµé
@@ -103,7 +110,7 @@ public class DashFire : MonoBehaviour
 
     private float GetRadius(float fireExploRadius)
     {
-        return 5*fireExploRadius;
+        return 1 * fireExploRadius;
     }
 
     private float GetDmg(float Dmg)
@@ -120,11 +127,29 @@ public class DashFire : MonoBehaviour
     {
         return fireExploDmg;
     }
-    public void StartFire()
+    public void StartFire(AttackType attackType)
     {
         //Collider[] result = Physics.OverlapBox(Center, HalfSize, transform.rotation, _targetLayer);
-        Collider[] result = Physics.OverlapSphere(transform.position, _FireExploRadius, _targetLayer);
+        currentType = (int)attackType;
+        if (attackType == AttackType.Range)
+        {
+            StartCoroutine(ExecuteOverlapBoxRoutine());
+        }
+        else if (attackType == AttackType.All)
+        {
+            All();
+        }
+        else
+        {
+            Melee();
+        }
+    }
+    public void All()
+    {
+        transform.GetChild(2).gameObject.SetActive(true);
+
         bool onHit = false;
+        Collider[] result = Physics.OverlapSphere(transform.position, _MeleeSize*_FireExploRadius, _targetLayer);
         foreach (Collider hit in result)
         {
             if (hit.attachedRigidbody == null)
@@ -145,20 +170,20 @@ public class DashFire : MonoBehaviour
                 }
             }
             combat.Hit(FireExploDmg);
-            Debug.Log(FireExploDmg+"ÆøÆÄµô");
+            Debug.Log(FireExploDmg + "ÆøÆÄµô");
             onHit = true;
         }
         if (onHit)
         {
             OnHitCallback?.Invoke();
         }
-        StartCoroutine(ExecuteOverlapBoxRoutine());
+        StartCoroutine(ExecuteOverlapSphereRoutine());
     }
-    IEnumerator ExecuteOverlapBoxRoutine()
+    IEnumerator ExecuteOverlapSphereRoutine()
     {
         for (int i = 0; i < 5; i++)
         {
-            Collider[] result = Physics.OverlapSphere(transform.position, _FireExploRadius, _targetLayer);
+            Collider[] result = Physics.OverlapSphere(transform.position, _MeleeSize*_FireExploRadius, _targetLayer);
             bool onHit = false;
 
             foreach (Collider hit in result)
@@ -197,6 +222,84 @@ public class DashFire : MonoBehaviour
        ObjectPoolManager.Instance.EnqueueObject(gameObject);    
     }
 
+    IEnumerator ExecuteOverlapBoxRoutine()
+    {
+        transform.GetChild(0).gameObject.SetActive(true);
+        for (int i = 0; i < 5; i++)
+        {
+            Collider[] result = Physics.OverlapBox(transform.position, _RangeSize * _FireExploRadius, transform.rotation, _targetLayer);
+            bool onHit = false;
+
+            foreach (Collider hit in result)
+            {
+                if (hit.attachedRigidbody == null)
+                {
+                    continue;
+                }
+
+                ITargetable combat = hit.attachedRigidbody.GetComponent<ITargetable>();
+                if (combat == null)
+                {
+                    continue;
+                }
+
+                ITargetable hitTarget = null;
+                if (hit.TryGetComponent(out hitTarget))
+                {
+                    if (_owner == hitTarget)
+                    {
+                        continue;
+                    }
+                }
+
+                combat.Hit(TIcDmg);
+                onHit = true;
+            }
+
+            if (onHit)
+            {
+                OnHitCallback?.Invoke();
+            }
+            yield return new WaitForSeconds(1.0f);
+        }
+        yield return new WaitForSeconds(1.0f);
+        ObjectPoolManager.Instance.EnqueueObject(gameObject);
+    }
+
+    public void Melee()
+    {
+        transform.GetChild(1).gameObject.SetActive(true);
+        bool onHit = false;
+        Collider[] result = Physics.OverlapSphere(transform.position, _MeleeSize*_FireExploRadius, _targetLayer);
+        foreach (Collider hit in result)
+        {
+            if (hit.attachedRigidbody == null)
+            {
+                continue;
+            }
+            ITargetable combat = hit.attachedRigidbody.GetComponent<ITargetable>();
+            if (combat == null)
+            {
+                continue;
+            }
+            ITargetable hitTarget = null;
+            if (hit.TryGetComponent(out hitTarget))
+            {
+                if (_owner == hitTarget)
+                {
+                    continue;
+                }
+            }
+            combat.Hit(FireExploDmg);
+            Debug.Log(FireExploDmg + "ÆøÆÄµô");
+            onHit = true;
+        }
+        if (onHit)
+        {
+            OnHitCallback?.Invoke();
+        }
+    }
+
     private void OnDrawGizmos()
     {
         if (!enabled)
@@ -204,11 +307,31 @@ public class DashFire : MonoBehaviour
             return;
         }
         Gizmos.color = Color.red;
-        Gizmos.DrawSphere(transform.position, _FireExploRadius);
+        
+        if (currentType > 0)
+        {
+            Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
+            Gizmos.DrawSphere(Vector3.zero, _MeleeSize* _FireExploRadius);
+            Gizmos.matrix = Matrix4x4.identity;
+        }
+        else
+        {
+            Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
+            Gizmos.DrawCube(Vector3.zero, _RangeSize* _FireExploRadius);
+            Gizmos.matrix = Matrix4x4.identity;
+        }
+        
     }
 
     private void OnDestroy()
     {
         OnHitCallback = null;
+    }
+    private void OnDisable()
+    {
+        transform.GetChild(0).gameObject.SetActive(false);
+        transform.GetChild(1).gameObject.SetActive(false);
+        transform.GetChild(2).gameObject.SetActive(false);
+
     }
 }

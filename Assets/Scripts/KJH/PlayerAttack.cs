@@ -1,6 +1,7 @@
 using EnumTypes;
 using System.ComponentModel;
 using UnityEngine;
+using static DashFire;
 
 
 public class PlayerAttack : MonoBehaviour
@@ -360,21 +361,41 @@ public class PlayerAttack : MonoBehaviour
     //}
     public void BlueChipFire()
     {
-        //_PlayerMaster._PlayerEquipBlueChip.
-            int level_blueChip_Generic1 = _PlayerMaster.GetBlueChipLevel(BlueChipID.Generic1);
+        int level_blueChip_Generic1 = _PlayerMaster.GetBlueChipLevel(BlueChipID.Generic1);
         if (level_blueChip_Generic1 > 0)//블루칩이 1레벨 이상일경우
+            //0 간격,1데미지,2지속시간,3폭발피해,4범위
         {
             BlueChip chip_Generic1 = JsonDataManager.GetBlueChipData(BlueChipID.Generic1);
-            float Dmg = 10+ level_blueChip_Generic1 * 2f;
-            float fireDotDuration = 5f;
-            float fireExploRadius = 1+(level_blueChip_Generic1 * 0.2f);
-            float fireExploDmg = 50 + level_blueChip_Generic1 * 10f;
-            GameObject _DashFire = ObjectPoolManager.Instance.DequeueObject(DashFire);
+            float interval = chip_Generic1.Level_VelueList[level_blueChip_Generic1][0];
+            float Dmg = chip_Generic1.Level_VelueList[level_blueChip_Generic1][1];
+            float fireDotDuration = chip_Generic1.Level_VelueList[level_blueChip_Generic1][2];
+            float fireExploDmg = chip_Generic1.Level_VelueList[level_blueChip_Generic1][3];
+            float fireExploRadius = chip_Generic1.Level_VelueList[level_blueChip_Generic1][4];
+            GameObject _DashFire = ObjectPoolManager.Instance.DequeueObject(DashFires);
             DashFire DF = _DashFire.GetComponent<DashFire>();
-            DF.transform.position=transform.position;
-            DF.SetStat(Dmg, fireDotDuration, fireExploRadius, fireExploDmg);
-            DF.StartFire();
+            //if (CurrentAttackKind == PlayerAttackKind.RangeNormalAttack)
+            if (_currentAttackMod == PlayerAttackKind.RangeNormalAttack&& level_blueChip_Generic1 <5)
+            {
+                DF.transform.position = transform.position;
+                DF.transform.rotation = transform.rotation;
+                DF.SetStat(Dmg, fireDotDuration, fireExploRadius, fireExploDmg);
+                DF.StartFire(DashFire.AttackType.Range);
+            }
+            else if(level_blueChip_Generic1==5)
+            {
+                DF.transform.position = transform.position;
+                DF.transform.rotation = transform.rotation;
+                DF.SetStat(Dmg, fireDotDuration, fireExploRadius, fireExploDmg);
+                DF.StartFire(DashFire.AttackType.All);
+            }
+            else
+            {
+                DF.transform.position = transform.position;
+                DF.transform.rotation = transform.rotation;
+                DF.SetStat(Dmg, fireDotDuration, fireExploRadius, fireExploDmg);
+                DF.StartFire(DashFire.AttackType.Melee);
+            }
         }
     }
-    public GameObject DashFire;
+    public GameObject DashFires;
 }
