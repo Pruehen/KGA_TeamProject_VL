@@ -474,7 +474,7 @@ public class PlayerInstanteState : MonoBehaviour
         UpdateStamina();
     }
 
-    public void Hit(float dmg, out float finalDmg)
+    public void Hit(float dmg, DamageType damageType = DamageType.Normal, out float finalDmg)
     {
         if(combat.IsInvincible || shield.IsInvincible)
         {
@@ -496,7 +496,7 @@ public class PlayerInstanteState : MonoBehaviour
         {
             float s = shield.GetHp();
             s -= dmg;
-            shield.Damaged(dmg);
+            shield.Damaged(dmg, damageType);
             if (s < 0)
             {
                 dmg = -s;
@@ -525,7 +525,7 @@ public class PlayerInstanteState : MonoBehaviour
             }
             else
             {
-                combat.Damaged(dmg);
+                combat.Damaged(dmg, damageType);
             }
             //if (_holdTime_Passive_Defensive3 > 0)
             //{
@@ -536,7 +536,7 @@ public class PlayerInstanteState : MonoBehaviour
         }
         else
         {
-            combat.Damaged(dmg);
+            combat.Damaged(dmg, damageType);
         }
         UpdateHealth();
     }
