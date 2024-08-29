@@ -24,6 +24,7 @@ public class NextStageObjects : MonoBehaviour
     }
     private void OnClear()
     {
+        GameManager.Instance.OnGameClear -= OnClear;
         foreach ( NextStageDoor nextStageDoor in _nextStageDoors )
         {
             nextStageDoor.OnClear();
@@ -34,5 +35,9 @@ public class NextStageObjects : MonoBehaviour
         {
             _additionalReward.gameObject.SetActive(true);
         }
+    }
+    private void OnDestroy()
+    {
+        GameManager.Instance.OnGameClear -= OnClear;
     }
 }
