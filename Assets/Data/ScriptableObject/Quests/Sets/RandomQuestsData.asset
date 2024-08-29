@@ -12,13 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c1797c27d9275f4d8e311e1d0aea08e, type: 3}
   m_Name: RandomQuestsData
   m_EditorClassIdentifier: 
-  EasyQuests:
-  - {fileID: 11400000, guid: 0e911c1f04592164a933f28a6d946083, type: 2}
-  NormalQuests:
-  - {fileID: 11400000, guid: 0e911c1f04592164a933f28a6d946083, type: 2}
-  HardQuests:
+  Quests:
+  - {fileID: 11400000, guid: 14ee43ee0d6813849b176d70cda6055d, type: 2}
   - {fileID: 11400000, guid: a5e1d7466b27fc047ae26bc3e583bc46, type: 2}
+  - {fileID: 11400000, guid: 0e911c1f04592164a933f28a6d946083, type: 2}
   QuestPosiblity: 30
-  EasyPosiblity: 30
-  NormalPosiblity: 30
-  HardPosiblity: 30
+  EasyPosiblity: 100
+  NormalPosiblity: 0
+  HardPosiblity: 0
