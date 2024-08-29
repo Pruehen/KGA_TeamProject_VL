@@ -19,7 +19,8 @@ public class PlayerInstanteState : MonoBehaviour
     public int MeleeToRangeRatio { get => _meleeToRangeRatio; private set => _meleeToRangeRatio = value; }
     public float AbsorbingStaminaConsumRate { get => _absorbingStaminaConsumRate; private set => _absorbingStaminaConsumRate = value; }
     [SerializeField] private float _absorbingStaminaConsumRate = 300f;
-
+    [SerializeField] SkinnedMeshRenderer _PlayerMesh;
+    [SerializeField] Material _ShieldMaterial;
 
 
     [SerializeField] private int _meleeToRangeRatio = 2;
@@ -817,6 +818,7 @@ public class PlayerInstanteState : MonoBehaviour
     }
     public void UpdateShild()
     {
+        ShieldMT();
         ShildRatioChanged?.Invoke(shield.GetHpRatio());
     }
     public void UpdateStamina()
@@ -900,5 +902,28 @@ public class PlayerInstanteState : MonoBehaviour
     {
         combat.ResetInvincible();
         shield.ResetInvincible();
+    }
+
+
+    public void ShieldMT()
+    {
+        Debug.Log(Shield);
+
+        // 현재 materials 배열을 가져옵니다.
+        Material[] materials = _PlayerMesh.materials;
+
+        if (Shield > 0)
+        {
+            materials[1] = _ShieldMaterial;
+            Debug.Log("실드있음");
+        }
+        else
+        {
+            materials[1] = null;  // 여기서는 재질을 null로 설정할 수 없으므로, 제거해야 합니다.
+            Debug.Log("실드없음");
+        }
+
+        // 수정된 배열을 다시 SkinnedMeshRenderer에 할당합니다.
+        _PlayerMesh.materials = materials;
     }
 }
