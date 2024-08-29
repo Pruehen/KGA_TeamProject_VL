@@ -167,6 +167,7 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     {
         _PlayerInstanteState.Hit(dmg, out float finalDmg);
         TryAbsorptFail();
+
         if (finalDmg <= 0) return;
         DmgTextManager.Instance.OnDmged(finalDmg, this.transform.position);
         GameObject VFX = ObjectPoolManager.Instance.DequeueObject(hit.preFab);

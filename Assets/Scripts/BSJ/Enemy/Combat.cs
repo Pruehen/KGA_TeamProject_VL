@@ -253,10 +253,6 @@ public class Combat
         {
             _hp = GetMaxHp();
         }
-        if (_hp < 0)
-        {
-            _hp = 1;
-        }
         _dead = false;
     }
 }
