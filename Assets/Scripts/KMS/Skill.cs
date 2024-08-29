@@ -56,6 +56,7 @@ public class Skill : MonoBehaviour
     [SerializeField] private float moveDuration = 0.3f; // 이동할 때 걸리는 시간
     public Vector3 target;
     private Coroutine moveCoroutine;
+    [SerializeField] SO_SKillEvent RangeSkill3;
     private void Awake()
     {
         so_Skill = _master.SkillData;
@@ -149,6 +150,62 @@ public class Skill : MonoBehaviour
             Debug.Log("레이 맞춘 게 없음");
         }
     }
+
+    public void StartRangeSkill3(PlayerSkill skillType)
+    {
+        StartCoroutine(RangeSkill3Coroutine(skillType));
+    }
+
+    private IEnumerator RangeSkill3Coroutine(PlayerSkill skillType)
+    {
+        Camera mainCamera = Camera.main;
+        if (mainCamera == null) yield break;
+
+        // 카메라의 위치에서 forward 방향으로 레이를 쏩니다.
+        Ray ray = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
+        RaycastHit hit;
+        transform.rotation = mainCamera.transform.rotation;
+        float damage = 0f;
+        Vector3 range = new Vector3(1f, 1f, 1f);
+        float distance = 0f;
+        Vector3 offset = new Vector3(0f, 0f, 0f);
+
+        switch (skillType)
+        {
+            case PlayerSkill.RangeSkillAttack3:
+                damage = so_Skill._rangedSkill3 * SkillPower;
+                range = so_Skill._rangedSkill3Range;
+                distance = so_Skill._rangedSkill3Distance;
+                offset = so_Skill._rangedSkill3OffSet;
+                break;
+            default:
+                Debug.LogWarning($"Unrecognized skill: {skillType}");
+                yield break;
+        }
+
+        for (int i = 0; i < 10; i++)
+        {
+            if (Physics.Raycast(ray, out hit, distance, enemyLayerMask))
+            {
+                Vector3 hitPosition = hit.point;
+                _damageBox.transform.position = hitPosition;
+                _damageBox.EnableSkillDamageBox(damage, range, null, 0, offset);
+            }
+            else
+            {
+                _damageBox.transform.localPosition = Vector3.zero;
+                _damageBox.EnableDamageBox(damage, range, null, 0f, offset);
+                Debug.Log("레이 맞춘 게 없음");
+            }
+
+            Effect2(RangeSkill3);
+            yield return new WaitForSeconds(0.04F);
+        }
+
+        Debug.Log("스킬실행 완료");
+        Debug.Log(skillType);
+    }
+
     public void InvokeSkillDamage(PlayerSkill skillType)
     {
         Camera mainCamera = Camera.main;
@@ -369,10 +426,13 @@ public class Skill : MonoBehaviour
                 position = hand_L.position;
                 break;
             case SO_SKillEvent.PlayerPos.Hand_R:
-                position = hand_R.position;  
+                position = hand_R.position;
                 break;
             case SO_SKillEvent.PlayerPos.Foot:
-                position = Foot.position;   
+                position = Foot.position;
+                break;
+            case SO_SKillEvent.PlayerPos.Target:
+                position = targetpos.position;
                 break;
         }
         Vector3 finalPosition = position + transform.TransformDirection(skill.offSet);
@@ -380,9 +440,10 @@ public class Skill : MonoBehaviour
         Quaternion playerRotation = transform.rotation;
         Quaternion finalRotation = playerRotation * Quaternion.Euler(skill.rotation);
         VFX.transform.rotation = finalRotation;
-        VFX.transform.localScale = Vector3.one*skill.size;
+        VFX.transform.localScale = Vector3.one * skill.size;
     }
     [SerializeField] Transform hand_L;
     [SerializeField] Transform hand_R;
     [SerializeField] Transform Foot;
+    [SerializeField] Transform targetpos;
 }

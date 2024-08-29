@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
@@ -24,11 +25,9 @@ public class GameManager : SceneSingleton<GameManager>
 
     public PlayerMaster _PlayerMaster { get; private set; }
 
-    public Enemy[] _enemies;
+    public List<GameObject> _enemies = new List<GameObject>();
 
     public Action OnGameClear;
-
-    public int _deadCount = 0;
 
     public SO_Quest[] unexpectedquests;
     private Quest _currentQuest = new Quest();
@@ -94,9 +93,14 @@ public class GameManager : SceneSingleton<GameManager>
             NextStageObjects = FindAnyObjectByType<NextStageObjects>();
             Assert.IsNotNull(_PlayerMaster);
 
-            _enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+            Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
 
-            foreach (Enemy enemy in _enemies)
+            foreach(Enemy e in enemies)
+            {
+                _enemies.Add(e.gameObject);
+            }
+
+            foreach (Enemy enemy in enemies)
             {
                 enemy.RegisterOnDead(OnEnemyDead);
             }
@@ -147,10 +151,10 @@ public class GameManager : SceneSingleton<GameManager>
         return array[r];
     }
 
-    private void OnEnemyDead()
+    private void OnEnemyDead(GameObject enemy)
     {
-        _deadCount++;
-        if (_enemies.Length == _deadCount)
+        _enemies.Remove(enemy);
+        if (_enemies.Count == 0)
         {
             OnGameClear?.Invoke();
         }

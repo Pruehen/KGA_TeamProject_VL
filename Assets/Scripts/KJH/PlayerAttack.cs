@@ -333,21 +333,21 @@ public class PlayerAttack : MonoBehaviour
         return ran || mel;
     }
 
-    private void SetSuperArmor()
+    private void SetSuperArmorOnAnim()
     {
         _PlayerMaster._PlayerInstanteState.SetSuperArmor(99999999f);
     }
-    private void ResetSuperArmor()
+    private void ResetSuperArmorOnAnim()
     {
         _PlayerMaster._PlayerInstanteState.ResetSuperArmor();
     }
 
     //회피는 대시시 스크립트에서 켜주기도 함
-    private void SetEvade()
+    private void SetEvadeOnAnim()
     {
         _PlayerMaster._PlayerInstanteState.SetEvade(99999999f);
     }
-    private void ResetEvade()
+    private void ResetEvadeOnAnim()
     {
         _PlayerMaster._PlayerInstanteState.ResetEvade();
     }
