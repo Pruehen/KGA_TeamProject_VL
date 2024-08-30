@@ -603,6 +603,10 @@ public class Enemy : MonoBehaviour, ITargetable
 
     public void ForceAlram()
     {
+        if (!gameObject.activeInHierarchy || !gameObject.activeSelf)
+        {
+            return;
+        }
         _detector._detectionRadius = 9999f;
         _detector._detectThroughWall = true;
         SharedFloat detectRange = new SharedFloat();
