@@ -43,6 +43,9 @@ public class UIManager : SceneSingleton<UIManager>
         
     [SerializeField] List<PassiveUI> PassiveUIList;
 
+    [SerializeField] Text questName;
+    [SerializeField] Text questInfo;
+
     private void Start()
     {
         blueChipUI.SetActive(false);
@@ -277,12 +280,22 @@ public class UIManager : SceneSingleton<UIManager>
 
     }
 
-
+   
     public void DrawQuestStartUi(string name, string discription)
     {
+        questName.text = name;
+        questInfo.text = discription;
+        Debug.Log("Name :" + questName.text + "Info :" + questInfo.text);
+
     }
 
     public void DrawQuestUi(bool isHited)
     {
+        if (isHited)
+        {
+            Debug.Log("isHited: " + isHited);
+
+        }
+
     }
 }
