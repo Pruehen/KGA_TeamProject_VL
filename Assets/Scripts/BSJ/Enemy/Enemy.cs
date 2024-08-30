@@ -24,6 +24,12 @@ public enum EnemyType
     Range
 }
 
+public enum DamageType
+{
+    Normal,
+    NonKnockback,
+}
+
 public interface AiAttackAction
 {
     public void DoAttack(DamageBox damageBox, EnemyAttackType enemyAttackType);
@@ -37,7 +43,7 @@ public interface AiAttackAction
 [RequireComponent(typeof(Animator))]
 public class Enemy : MonoBehaviour, ITargetable
 {
-    [Header ("If this var is empty it will spawn _enemyDatas enemy (Not random)")]
+    [Header("If this var is empty it will spawn _enemyDatas enemy (Not random)")]
     [SerializeField] private SO_RandomEnemySet _randomEnemyData;
     [SerializeField] private SO_EnemyBase _enemyData;
     private EnemyType _enemyType;
@@ -112,7 +118,7 @@ public class Enemy : MonoBehaviour, ITargetable
 
     private void Init()
     {
-        if(_randomEnemyData != null)
+        if (_randomEnemyData != null)
         {
             SO_EnemyBase[] randomEnemy = _randomEnemyData.RandomEnemySet;
             _enemyData = randomEnemy[UnityEngine.Random.Range(0, randomEnemy.Length)];
@@ -122,6 +128,7 @@ public class Enemy : MonoBehaviour, ITargetable
         _combat = new Combat();
         _combat.Init(gameObject, _enemyData.Hp);
         _combat.OnDamaged += OnDamaged;
+        _combat.OnKnockback += OnKnockback;
         _combat.OnDead += OnDead;
 
 
@@ -174,6 +181,7 @@ public class Enemy : MonoBehaviour, ITargetable
     {
         _combat.OnDead -= OnDead;
         _combat.OnDamaged -= OnDamaged;
+        _combat.OnKnockback -= OnKnockback;
     }
     public GameObject CreatePool()
     {
@@ -197,14 +205,14 @@ public class Enemy : MonoBehaviour, ITargetable
     private void Update()
     {
         _combat.DoUpdate();
-        if(AnimatorHelper.IsAnimationPlaying(_animator,0,"Base Layer.Hit"))
+        if (AnimatorHelper.IsAnimationPlaying(_animator, 0, "Base Layer.Hit"))
         {
             IsMovable = false;
             return;
         }
         else
         {
-            IsMovable=true;
+            IsMovable = true;
         }
 
         if (_aiState == AIState.Dead)
@@ -382,11 +390,12 @@ public class Enemy : MonoBehaviour, ITargetable
         return _detector.GetTarget();
     }
 
-    private void OnDamaged()
+    private void OnDamaged(DamageType damageType)
     {
-        //GameObject pooled = _pooledHitVfx.Get();
-        //pooled.transform.position = transform.position;
-        //pooled.GetComponent<ParticleSystem>().Play();
+    }
+
+    private void OnKnockback()
+    {
         _animator.SetTrigger("Hit");
     }
 
@@ -555,13 +564,13 @@ public class Enemy : MonoBehaviour, ITargetable
     float _debuff_Passive_Offensive2_IncreasedDamageTakenMulti = 1;
     public void ActiveDebuff_Passive_Offensive2(float value)
     {
-        _debuff_Passive_Offensive2_IncreasedDamageTakenMulti = 1 + value;        
-    }    
-    public void Hit(float dmg)
+        _debuff_Passive_Offensive2_IncreasedDamageTakenMulti = 1 + value;
+    }
+    public void Hit(float dmg, DamageType type = DamageType.Normal)
     {
         dmg *= _debuff_Passive_Offensive2_IncreasedDamageTakenMulti;
         _debuff_Passive_Offensive2_IncreasedDamageTakenMulti = 1;
-        _combat.Damaged(dmg);
+        _combat.Damaged(dmg, type);
         GameObject hitEF = ObjectPoolManager.Instance.DequeueObject(hitVFX.preFab);
         Vector3 finalPosition = this.transform.position + transform.TransformDirection(hitVFX.offSet);
         hitEF.transform.position = finalPosition;
@@ -594,6 +603,10 @@ public class Enemy : MonoBehaviour, ITargetable
 
     public void ForceAlram()
     {
+        if (!gameObject.activeInHierarchy || !gameObject.activeSelf)
+        {
+            return;
+        }
         _detector._detectionRadius = 9999f;
         _detector._detectThroughWall = true;
         SharedFloat detectRange = new SharedFloat();

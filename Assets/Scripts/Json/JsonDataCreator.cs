@@ -351,10 +351,15 @@ public class PlayData
         InGame_SkillGauge = state.skillGauge;
         InGame_Bullet = state.bullets;
         InGame_MeleeBullet = state.meleeBullets;
+        JsonDataManager.GetUserData().AddGold(InGame_Gold - JsonDataManager.GetUserData().Gold);
     }    
     public void SavePlayData_OnSceneEnter(string newStage)//씬 입장 시 호출
     {
         InGame_Stage = newStage;
+    }
+    public void InitGold_InGame(int amount)
+    {
+        InGame_Gold = amount;
     }
     public void AddGold_InGame(int amount)
     {

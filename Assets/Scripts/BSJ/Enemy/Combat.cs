@@ -18,7 +18,7 @@ public class Combat
     [SerializeField] private float _prevHitTime = 0f;
 
     public Func<bool> AdditionalDamageableCheck { get; set; }
-    public Action OnDamaged;
+    public Action<DamageType> OnDamaged;
     public Action OnHeal;
     public Action OnDead;
 
@@ -125,12 +125,12 @@ public class Combat
         }
         return true;
     }
-    public bool Damaged(float damage, Transform attacker = null)
+    public bool Damaged(float damage, DamageType type = DamageType.Normal, Transform attacker = null)
     {
         if (!IsDamageable())
             return false;
 
-        if (!IsSuperArmor)
+        if (!IsSuperArmor && type != DamageType.NonKnockback)
         {
             OnKnockback?.Invoke();
         }
@@ -140,7 +140,7 @@ public class Combat
         damage = Mathf.Max(0f, damage);
         _hp -= damage;
 
-        OnDamaged?.Invoke();
+        OnDamaged?.Invoke(type);
 
         if (_hp <= 0f)
         {
@@ -205,7 +205,7 @@ public class Combat
     public void SetSuperArmor(float time)
     {
         IsSuperArmor = true;
-        OnInvincible?.Invoke();
+        OnSuperArmor?.Invoke();
 
         if (_superArmorTimer < time)
         {
@@ -222,7 +222,7 @@ public class Combat
     public void SetInvincible(float time)
     {
         IsInvincible = true;
-        OnSuperArmor?.Invoke();
+        OnInvincible?.Invoke();
 
         if (_invincibleTimer < time)
         {
@@ -252,10 +252,6 @@ public class Combat
         if (_hp > GetMaxHp())
         {
             _hp = GetMaxHp();
-        }
-        if (_hp < 0)
-        {
-            _hp = 1;
         }
         _dead = false;
     }

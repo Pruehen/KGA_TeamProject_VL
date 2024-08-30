@@ -1,8 +1,6 @@
 using EnumTypes;
 using System.Collections;
 using UnityEngine;
-using static SO_SKillEvent;
-using static UnityEditor.PlayerSettings;
 
 
 public class Skill : MonoBehaviour

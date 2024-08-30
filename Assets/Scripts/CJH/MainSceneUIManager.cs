@@ -14,9 +14,11 @@ public class MainSceneUIManager : SceneSingleton<MainSceneUIManager>
     Text[] slotText;
 
     SaveFillSlot _selectSlotTemp;
+    bool sceneLode = false;
 
     private void Awake()
     {
+     
         startPanel.SetActive(true);
         passiveUI.SetActive(false);
         overwriteStartPanel.SetActive(false);
@@ -27,9 +29,10 @@ public class MainSceneUIManager : SceneSingleton<MainSceneUIManager>
             slotText[i] = selectSlot[i].GetComponentInChildren<Text>();
         }
 
-       
+        InputManager.Instance.IsInteractiveBtnClick = false;
         EventSystem.current.SetSelectedGameObject(startButton.gameObject);
         InputManager.Instance.PropertyChanged += OnInputPropertyChanged;
+
     }
 
     private void Update()
@@ -58,8 +61,6 @@ public class MainSceneUIManager : SceneSingleton<MainSceneUIManager>
                 EnterMainScene_OnEscClick();
             }             
         }
-
-
 
     }
 
@@ -96,11 +97,17 @@ public class MainSceneUIManager : SceneSingleton<MainSceneUIManager>
         switch (e.PropertyName)
         {
             case nameof(InputManager.Instance.IsInteractiveBtnClick):
-                if (InputManager.Instance.IsInteractiveBtnClick == true)
+
+                Button selectedButton = EventSystem.current.currentSelectedGameObject?.GetComponent<Button>();
+                if (selectedButton != null && selectedButton.interactable)
                 {
-                    Button selectedButton = EventSystem.current.currentSelectedGameObject?.GetComponent<Button>();
-                    selectedButton.onClick.Invoke();   
+                    selectedButton.onClick.Invoke();
+                    Debug.Log("Button clicked: " + selectedButton.name);
+
+                    // 버튼 클릭 이후 IsInteractiveBtnClick을 false로 설정하여 중복 호출 방지
+                    InputManager.Instance.IsInteractiveBtnClick = false;
                 }
+
                 break;
         }
     }
@@ -112,6 +119,7 @@ public class MainSceneUIManager : SceneSingleton<MainSceneUIManager>
 
     public void SlotSelect()//게임 시작 버튼 클릭 시 호출
     {
+
         if (startPanel.activeSelf == true)
         {
             EventSystem.current.SetSelectedGameObject(selectSlot[0].gameObject);
@@ -123,7 +131,7 @@ public class MainSceneUIManager : SceneSingleton<MainSceneUIManager>
             {
                 selectSlot[i].GetComponent<SaveFillSlot>().SetData(i);              
             }
-          
-        }      
+
+        }
     }
 }
