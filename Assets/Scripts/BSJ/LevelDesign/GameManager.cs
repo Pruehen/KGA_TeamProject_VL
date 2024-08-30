@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -89,7 +90,6 @@ public class GameManager : SceneSingleton<GameManager>
             if (_init == false)
             {
                 _init = true;
-                SetStageQuests();
             }
 
             _PlayerMaster = FindAnyObjectByType<PlayerMaster>();
@@ -101,12 +101,8 @@ public class GameManager : SceneSingleton<GameManager>
             }
             else
                 Assert.IsNotNull(_PlayerMaster);
-
-
-
+            
             NextStageObjects.Init(_rewardType);
-
-
             if (unexpectedquests[GetCurrentLevelIndex()] != null)
             {
                 _currentQuest.Init(unexpectedquests[GetCurrentLevelIndex()]);
@@ -153,13 +149,28 @@ public class GameManager : SceneSingleton<GameManager>
 
     public void StartChapter()
     {
-        int stageNum = 0;
-        SO_Stage randomStage = GetRandomItem(_chapterData.ChapterData[stageNum].StageData);
+        _enemies.Clear();
+
+        if(JsonDataManager.GetUserData().TryGetPlayData(out PlayData playData))
+        {
+            if (playData.InGame_Stage != null)
+            {
+                _currentLevel = playData.InGame_Stage.StageNum;
+                unexpectedquests = playData.InGame_Quest;
+
+                AsyncOperation ao2 = SceneManager.LoadSceneAsync(playData.InGame_Stage.StageName);
+                ao2.allowSceneActivation = true;
+
+                return;
+            }
+        }
+        SO_Stage randomStage = GetRandomItem(_chapterData.ChapterData[_currentLevel].StageData);
+        SetStageQuests();
+        JsonDataManager.GetUserData().SavePlayData_OnChapterEnter(unexpectedquests);
+        JsonDataManager.GetUserData().SavePlayData_OnSceneEnter(new StageData(randomStage.SceneName, _currentLevel, _rewardType));
 
         AsyncOperation ao = SceneManager.LoadSceneAsync(randomStage.SceneName);
         ao.allowSceneActivation = true;
-
-        var userData = JsonDataManager.GetUserData();
     }
 
     public void LoadNextStage()
@@ -169,6 +180,9 @@ public class GameManager : SceneSingleton<GameManager>
         SO_Stage randomStage = GetRandomItem(_chapterData.ChapterData[GetCurrentLevelIndex()].StageData);
 
         AddLevelIndex();
+
+
+        JsonDataManager.GetUserData().SavePlayData_OnSceneEnter(new StageData(randomStage.SceneName, _currentLevel, _rewardType));
 
         AsyncOperation ao = SceneManager.LoadSceneAsync(randomStage.SceneName);
         ao.allowSceneActivation = true;

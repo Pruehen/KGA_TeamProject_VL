@@ -421,22 +421,22 @@ public class PlayerInstanteState : MonoBehaviour
         UserData userData = JsonDataManager.GetUserData();
         if (userData.TryGetPlayData(out PlayData playData))
         {
-            combat.ForceChangeHp(playData.InGame_Hp);
+            if(playData.InGame_Hp == -1f)
+            {
+                Restore();
+            }
+            else
+            {
+                combat.ForceChangeHp(playData.InGame_Hp);
 
-            skillGauge = playData.InGame_SkillGauge;
-            bullets = playData.InGame_Bullet;
-            meleeBullets = playData.InGame_MeleeBullet;
-
-            playData.InitGold_InGame(userData.Gold);
-            UpdateBullet();
-            UpdateBullet_Melee();
+                skillGauge = playData.InGame_SkillGauge;
+                bullets = playData.InGame_Bullet;
+                meleeBullets = playData.InGame_MeleeBullet;
+            }    
         }
-        else
-        {
-            userData.InitPlayData(userData.Gold);
-            UpdateBullet();
-            UpdateBullet_Melee();
-        }
+        userData.InitPlayData(userData.Gold);
+        UpdateBullet();
+        UpdateBullet_Melee();
     }
 
     //스태미나 소모 
