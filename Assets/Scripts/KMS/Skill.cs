@@ -1,6 +1,7 @@
 using EnumTypes;
 using System.Collections;
 using UnityEngine;
+using static SO_SKillEvent;
 
 
 public class Skill : MonoBehaviour
@@ -447,4 +448,43 @@ public class Skill : MonoBehaviour
     [SerializeField] Transform hand_R;
     [SerializeField] Transform Foot;
     [SerializeField] Transform targetpos;
-}
+    public void Effect3(SO_SKillEvent skill)
+    {
+        GameObject VFX = ObjectPoolManager.Instance.DequeueObject(skill.preFab);
+
+        Vector3 position = Vector3.zero;
+        Transform targetTransform = null;
+
+        // 플레이어의 특정 위치를 가져옴
+        switch (skill.playerPos)
+        {
+            case SO_SKillEvent.PlayerPos.Hand_L:
+                position = hand_L.position;
+                targetTransform = hand_L;  // Transform 설정
+                break;
+            case SO_SKillEvent.PlayerPos.Hand_R:
+                position = hand_R.position;
+                targetTransform = hand_R;  // Transform 설정
+                break;
+            case SO_SKillEvent.PlayerPos.Foot:
+                position = Foot.position;
+                targetTransform = Foot;  // Transform 설정
+                break;
+            case SO_SKillEvent.PlayerPos.Target:
+                position = targetpos.position;
+                targetTransform = targetpos;  // Transform 설정
+                break;
+        }
+
+        Vector3 finalPosition = position + transform.TransformDirection(skill.offSet);
+        VFX.transform.position = finalPosition;
+        Quaternion playerRotation = transform.rotation;
+        Quaternion finalRotation = playerRotation * Quaternion.Euler(skill.rotation);
+        VFX.transform.rotation = finalRotation;
+        VFX.transform.localScale = Vector3.one * skill.size;
+
+        PlayerTrackVFX track = VFX.GetComponent<PlayerTrackVFX>();
+        track.SetTarget(targetTransform);  // Transform을 SetTarget으로 설정
+    }
+
+    }
