@@ -13,7 +13,7 @@ public class Combat
 
     [SerializeField] private bool _dead = false;
 
-    [SerializeField] private float _invincibleTimeOnHit = .1f;
+    [SerializeField] public float InvincibleTimeOnHit = .1f;
 
     [SerializeField] private float _prevHitTime = 0f;
 
@@ -135,7 +135,7 @@ public class Combat
             OnKnockback?.Invoke();
         }
 
-        SetInvincible(_invincibleTimeOnHit);
+        SetInvincible(InvincibleTimeOnHit);
         _prevHitTime = Time.time;
         damage = Mathf.Max(0f, damage);
         _hp -= damage;

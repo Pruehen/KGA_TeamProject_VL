@@ -121,6 +121,7 @@ public class Enemy : MonoBehaviour, ITargetable
 
         _combat = new Combat();
         _combat.Init(gameObject, _enemyData.Hp);
+        _combat.InvincibleTimeOnHit = 0f;
         _combat.OnDamaged += OnDamaged;
         _combat.OnDead += OnDead;
 
