@@ -314,7 +314,13 @@ public class UserData
 
     public void ClearUserData()
     {
-        PlayData = null;
+        PlayData.Clear();
+    }
+
+    public void InitPlayData(int gold)
+    {
+        PlayData = new PlayData();
+        PlayData.AddGold_InGame(gold);
     }
 }
 
@@ -369,6 +375,19 @@ public class PlayData
     public void AddGold_InGame(int amount)
     {
         InGame_Gold += amount;
+    }
+
+    public void Clear()
+    {
+        PlayerInstanteState state = PlayerMaster.Instance._PlayerInstanteState;
+        state.Restore();
+        InGame_Hp = state.GetMaxHp();
+        InGame_SkillGauge = 0f;
+        InGame_MeleeBullet = state.meleeBullets;
+        InGame_Bullet= state.bullets;
+
+        InGame_Gold = 0;
+        InGame_BlueChip_Level.Clear();
     }
 }
 

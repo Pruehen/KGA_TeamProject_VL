@@ -160,12 +160,6 @@ public class GameManager : SceneSingleton<GameManager>
         ao.allowSceneActivation = true;
 
         var userData = JsonDataManager.GetUserData();
-        if (userData.TryGetPlayData(out PlayData playData))
-        {
-            //userData.ClearData();
-            playData.InitGold_InGame(userData.Gold);
-        }
-
     }
 
     public void LoadNextStage()
@@ -245,6 +239,8 @@ public class GameManager : SceneSingleton<GameManager>
     {
         _PlayerMaster._PlayerInstanteState.OnDead -= OnDead;
         JsonDataManager.GetUserData().ClearUserData();
+        
+        _PlayerMaster._PlayerInstanteState.Restore();
         LoadMainScene();
     }
 }

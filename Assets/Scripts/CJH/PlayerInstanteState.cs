@@ -418,18 +418,22 @@ public class PlayerInstanteState : MonoBehaviour
 
     public void Init_OnSceneLoad()
     {
-        if (JsonDataManager.GetUserData().TryGetPlayData(out PlayData playData))
+        UserData userData = JsonDataManager.GetUserData();
+        if (userData.TryGetPlayData(out PlayData playData))
         {
             combat.ForceChangeHp(playData.InGame_Hp);
 
             skillGauge = playData.InGame_SkillGauge;
             bullets = playData.InGame_Bullet;
             meleeBullets = playData.InGame_MeleeBullet;
+
+            playData.InitGold_InGame(userData.Gold);
             UpdateBullet();
             UpdateBullet_Melee();
         }
         else
         {
+            userData.InitPlayData(userData.Gold);
             UpdateBullet();
             UpdateBullet_Melee();
         }
@@ -695,7 +699,7 @@ public class PlayerInstanteState : MonoBehaviour
         UpdateSkillGauge();
     }
 
-    void Restore()
+    public void Restore()
     {
         hp = GetMaxHp();
         combat.ResetCombat();
@@ -704,7 +708,7 @@ public class PlayerInstanteState : MonoBehaviour
         bullets = maxBullets / 3;
         AttackSpeed = 1;
 
-        combat.ResetCombat();
+        Shield = 0f;
     }
     void InitPassive()
     {
