@@ -14,7 +14,7 @@ public class MeleeAttack: MonoBehaviour
     int _animTriggerDashEnd;
     int _animTriggerDash;
 
-    bool _isCharging;
+    public bool _isCharging;
     bool _isCharged;
 
     private float _chargeTime = 1.5f;
