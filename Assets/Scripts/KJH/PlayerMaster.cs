@@ -147,6 +147,7 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
         _PlayerEquipBlueChip.Init_OnSceneLoad();
         _PlayerInstanteState.Init_OnSceneLoad();
 
+        GameManager.Instance.OnPlayerSpawn();
         UIManager.Instance.UpdateGoldInfoUI();
     }
 

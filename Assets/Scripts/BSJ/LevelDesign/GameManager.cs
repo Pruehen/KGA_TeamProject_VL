@@ -102,17 +102,6 @@ public class GameManager : SceneSingleton<GameManager>
                 Assert.IsNotNull(_PlayerMaster);
 
 
-            Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
-
-            foreach (Enemy e in enemies)
-            {
-                _enemies.Add(e.gameObject);
-            }
-
-            foreach (Enemy enemy in enemies)
-            {
-                enemy.RegisterOnDead(OnEnemyDead);
-            }
 
             NextStageObjects.Init(_rewardType);
 
@@ -122,6 +111,21 @@ public class GameManager : SceneSingleton<GameManager>
                 _currentQuest.Init(unexpectedquests[GetCurrentLevelIndex()]);
                 unexpectedquests[GetCurrentLevelIndex()].Init();
             }
+        }
+    }
+
+    private void RegisterEnemies()
+    {
+        Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+
+        foreach (Enemy e in enemies)
+        {
+            _enemies.Add(e.gameObject);
+        }
+
+        foreach (Enemy enemy in enemies)
+        {
+            enemy.RegisterOnDead(OnEnemyDead);
         }
     }
 
@@ -212,5 +216,10 @@ public class GameManager : SceneSingleton<GameManager>
         }
 
         return _currentQuest.IsCleared();
+    }
+
+    public void OnPlayerSpawn()
+    {
+        RegisterEnemies();
     }
 }
