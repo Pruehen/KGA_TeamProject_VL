@@ -860,6 +860,10 @@ public class PlayerInstanteState : MonoBehaviour
         {
             SkillGaugeRecovery(400f);
         }
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+            combat.Heal(999f);
+        }
     }
 
     //골드 관련

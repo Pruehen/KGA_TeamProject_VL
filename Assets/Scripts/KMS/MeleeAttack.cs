@@ -19,7 +19,7 @@ public class MeleeAttack: MonoBehaviour
 
     private float _chargeTime = 1.5f;
     private float _currentChargeTime = 0f;
-    public bool IsCharging { get => IsCharging; set => IsCharging = value; }
+    public bool IsCharging { get => _isCharging; set => _isCharging = value; }
     public float ChargeTime { get => _chargeTime; set => _chargeTime = value; }
 
     Action OnCharged;

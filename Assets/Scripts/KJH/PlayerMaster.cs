@@ -101,7 +101,7 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
         }
         else
         {
-            _PlayerInstanteState.ChangeShield(-9999);
+            _PlayerInstanteState.ChangeShield(0);
         }
     }
     void Execute_BlueChip4_OnModeChange()
@@ -148,6 +148,11 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
         _PlayerInstanteState.Init_OnSceneLoad();
 
         UIManager.Instance.UpdateGoldInfoUI();
+    }
+
+    private void Start()
+    {
+        GameManager.Instance.OnPlayerSpawn();
     }
 
     public Vector3 GetPosition()

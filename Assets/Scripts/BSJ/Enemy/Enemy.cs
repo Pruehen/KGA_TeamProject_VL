@@ -127,6 +127,7 @@ public class Enemy : MonoBehaviour, ITargetable
 
         _combat = new Combat();
         _combat.Init(gameObject, _enemyData.Hp);
+        _combat.InvincibleTimeOnHit = 0f;
         _combat.OnDamaged += OnDamaged;
         _combat.OnKnockback += OnKnockback;
         _combat.OnDead += OnDead;
@@ -404,10 +405,10 @@ public class Enemy : MonoBehaviour, ITargetable
         yield return new WaitForSeconds(2f);
         _pooledHitVfx.Release(vfx);
     }
-    Action<GameObject> OnDeadWithSelf;
+    public Action<Enemy> OnDeadWithSelf;
     private void OnDead()
     {
-        OnDeadWithSelf.Invoke(gameObject);
+        OnDeadWithSelf.Invoke(this);
 
         SetEnableAllCollision(false);
         _aiState = AIState.Dead;
@@ -423,10 +424,6 @@ public class Enemy : MonoBehaviour, ITargetable
         StartCoroutine(DelayedDisable());
 
         DropGold();
-    }
-    public void RegisterOnDead(Action<GameObject> ondead)
-    {
-        OnDeadWithSelf += ondead;
     }
 
     private void DropGold()
