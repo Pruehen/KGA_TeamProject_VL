@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using TreeEditor;
 using UnityEngine;
 
 public class DashFire : MonoBehaviour
@@ -149,7 +148,7 @@ public class DashFire : MonoBehaviour
         transform.GetChild(2).gameObject.SetActive(true);
 
         bool onHit = false;
-        Collider[] result = Physics.OverlapSphere(transform.position, _MeleeSize*_FireExploRadius, _targetLayer);
+        Collider[] result = Physics.OverlapSphere(transform.position, _MeleeSize * _FireExploRadius, _targetLayer);
         foreach (Collider hit in result)
         {
             if (hit.attachedRigidbody == null)
@@ -183,7 +182,7 @@ public class DashFire : MonoBehaviour
     {
         for (int i = 0; i < 5; i++)
         {
-            Collider[] result = Physics.OverlapSphere(transform.position, _MeleeSize*_FireExploRadius, _targetLayer);
+            Collider[] result = Physics.OverlapSphere(transform.position, _MeleeSize * _FireExploRadius, _targetLayer);
             bool onHit = false;
 
             foreach (Collider hit in result)
@@ -219,7 +218,7 @@ public class DashFire : MonoBehaviour
             yield return new WaitForSeconds(1.0f);
         }
         yield return new WaitForSeconds(1.0f);
-       ObjectPoolManager.Instance.EnqueueObject(gameObject);    
+        ObjectPoolManager.Instance.EnqueueObject(gameObject);
     }
 
     IEnumerator ExecuteOverlapBoxRoutine()
@@ -252,7 +251,7 @@ public class DashFire : MonoBehaviour
                     }
                 }
 
-                combat.Hit(TIcDmg,DamageType.NonKnockback);
+                combat.Hit(TIcDmg, DamageType.NonKnockback);
                 onHit = true;
             }
 
@@ -270,7 +269,7 @@ public class DashFire : MonoBehaviour
     {
         transform.GetChild(1).gameObject.SetActive(true);
         bool onHit = false;
-        Collider[] result = Physics.OverlapSphere(transform.position, _MeleeSize*_FireExploRadius, _targetLayer);
+        Collider[] result = Physics.OverlapSphere(transform.position, _MeleeSize * _FireExploRadius, _targetLayer);
         foreach (Collider hit in result)
         {
             if (hit.attachedRigidbody == null)
@@ -307,20 +306,20 @@ public class DashFire : MonoBehaviour
             return;
         }
         Gizmos.color = Color.red;
-        
+
         if (currentType > 0)
         {
             Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
-            Gizmos.DrawSphere(Vector3.zero, _MeleeSize* _FireExploRadius);
+            Gizmos.DrawSphere(Vector3.zero, _MeleeSize * _FireExploRadius);
             Gizmos.matrix = Matrix4x4.identity;
         }
         else
         {
             Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
-            Gizmos.DrawCube(Vector3.zero, _RangeSize* _FireExploRadius);
+            Gizmos.DrawCube(Vector3.zero, _RangeSize * _FireExploRadius);
             Gizmos.matrix = Matrix4x4.identity;
         }
-        
+
     }
 
     private void OnDestroy()

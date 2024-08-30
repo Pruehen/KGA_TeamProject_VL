@@ -17,6 +17,7 @@ public class GameManager : SceneSingleton<GameManager>
     public NextStageObjects NextStageObjects;
 
     private bool _unique = false;
+    private bool _init = false;
     private RewardType _rewardType;
 
     private int _currentLevel;
@@ -84,6 +85,12 @@ public class GameManager : SceneSingleton<GameManager>
                 return;
             }
 
+            if(_init == false)
+            {
+                _init = true;
+                SetStageQuests();
+            }
+
             _PlayerMaster = FindAnyObjectByType<PlayerMaster>();
             NextStageObjects = FindAnyObjectByType<NextStageObjects>();
            
@@ -147,7 +154,6 @@ public class GameManager : SceneSingleton<GameManager>
         AsyncOperation ao = SceneManager.LoadSceneAsync(randomStage.SceneName);
         ao.allowSceneActivation = true;
 
-        SetStageQuests();
     }
 
     public void LoadNextStage()
@@ -156,13 +162,19 @@ public class GameManager : SceneSingleton<GameManager>
         JsonDataManager.GetUserData().SavePlayData_OnSceneExit(_PlayerMaster._PlayerInstanteState, _PlayerMaster._PlayerEquipBlueChip);
         SO_Stage randomStage = GetRandomItem(_chapterData.ChapterData[GetCurrentLevelIndex()].StageData);
 
+        AddLevelIndex();
+
         AsyncOperation ao = SceneManager.LoadSceneAsync(randomStage.SceneName);
         ao.allowSceneActivation = true;
     }
 
     private int GetCurrentLevelIndex()
     {
-        return _currentLevel++ % _chapterData.ChapterData.Length;
+        return _currentLevel % _chapterData.ChapterData.Length;
+    }
+    private void AddLevelIndex()
+    {
+        _currentLevel++;
     }
 
     private T GetRandomItem<T>(T[] array)
