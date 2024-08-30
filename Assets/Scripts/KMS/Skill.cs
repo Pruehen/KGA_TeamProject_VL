@@ -1,6 +1,7 @@
 using EnumTypes;
 using System.Collections;
 using UnityEngine;
+using static SO_SKillEvent;
 
 
 public class Skill : MonoBehaviour
@@ -127,7 +128,7 @@ public class Skill : MonoBehaviour
         RaycastHit hit;
 
         float damage = 0f;
-        Vector3 range = new Vector3(1f, 1f, 1f);
+        Vector3 range = new Vector3(1f, 0, 1f);
         float distance = 1f;
 
 
@@ -137,8 +138,8 @@ public class Skill : MonoBehaviour
         transform.rotation = mainCamera.transform.rotation;
         if (Physics.Raycast(ray, out hit, distance, enemyLayerMask))
         {
-            Vector3 hitPosition = hit.point;
-            target = hit.point;
+            Vector3 hitPosition = new Vector3(hit.point.x,transform.position.y, hit.point.z);
+            target = hitPosition;
             //_damageBox.transform.position = target;
             TargettoRun();
             //데미지 박스의 위치를 미리 이전
@@ -390,7 +391,8 @@ public class Skill : MonoBehaviour
 
         while (elapsedTime < moveDuration)
         {
-            Vector3 newtarget = new Vector3(target.x, player.transform.position.y, target.z);
+            //Vector3 newtarget = new Vector3(target.x, player.transform.position.y, target.z);
+            Vector3 newtarget = new Vector3(target.x, 0, target.z);
             player.transform.position = Vector3.Lerp(startPosition, newtarget, elapsedTime / moveDuration);
             elapsedTime += Time.deltaTime;
             yield return null; // 다음 프레임까지 대기
@@ -446,4 +448,43 @@ public class Skill : MonoBehaviour
     [SerializeField] Transform hand_R;
     [SerializeField] Transform Foot;
     [SerializeField] Transform targetpos;
-}
+    public void Effect3(SO_SKillEvent skill)
+    {
+        GameObject VFX = ObjectPoolManager.Instance.DequeueObject(skill.preFab);
+
+        Vector3 position = Vector3.zero;
+        Transform targetTransform = null;
+
+        // 플레이어의 특정 위치를 가져옴
+        switch (skill.playerPos)
+        {
+            case SO_SKillEvent.PlayerPos.Hand_L:
+                position = hand_L.position;
+                targetTransform = hand_L;  // Transform 설정
+                break;
+            case SO_SKillEvent.PlayerPos.Hand_R:
+                position = hand_R.position;
+                targetTransform = hand_R;  // Transform 설정
+                break;
+            case SO_SKillEvent.PlayerPos.Foot:
+                position = Foot.position;
+                targetTransform = Foot;  // Transform 설정
+                break;
+            case SO_SKillEvent.PlayerPos.Target:
+                position = targetpos.position;
+                targetTransform = targetpos;  // Transform 설정
+                break;
+        }
+
+        Vector3 finalPosition = position + transform.TransformDirection(skill.offSet);
+        VFX.transform.position = finalPosition;
+        Quaternion playerRotation = transform.rotation;
+        Quaternion finalRotation = playerRotation * Quaternion.Euler(skill.rotation);
+        VFX.transform.rotation = finalRotation;
+        VFX.transform.localScale = Vector3.one * skill.size;
+
+        PlayerTrackVFX track = VFX.GetComponent<PlayerTrackVFX>();
+        track.SetTarget(targetTransform);  // Transform을 SetTarget으로 설정
+    }
+
+    }
