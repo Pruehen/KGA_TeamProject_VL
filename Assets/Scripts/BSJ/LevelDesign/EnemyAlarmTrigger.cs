@@ -11,10 +11,6 @@ public class EnemyAlarmTrigger : MonoBehaviour
     {
         _enemyList = GetComponentsInChildren<Enemy>();
     }
-    private void OnValidate()
-    {
-        _enemyList = GetComponentsInChildren<Enemy>();
-    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.attachedRigidbody == null)
