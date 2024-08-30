@@ -14,9 +14,12 @@ public class BlueChipIcon : MonoBehaviour
 
     BlueChipID _id;
     int _level;
+    bool _isActive;
 
     public void SetChipData(BlueChipSlot slot)
     {
+        _isActive = true;
+
         if (slot == null || slot.Level == 0)
         {            
             iconName.text = "¾øÀ½";
@@ -41,23 +44,31 @@ public class BlueChipIcon : MonoBehaviour
     
     public void PickBtn_OnClick_TryAddBlueChip()
     {
-        if (_id != BlueChipID.None)
+        if (_isActive)
         {
-            selectTempId = _id;
-            selecTempLevel = _level;
-
-            if (PlayerMaster.Instance._PlayerEquipBlueChip.TryAddBlueChip(_id, _level))
+            if (_id != BlueChipID.None)
             {
-                UIManager.Instance.BkBlueChipUi();
-                return;
+                selectTempId = _id;
+                selecTempLevel = _level;
+
+                if (PlayerMaster.Instance._PlayerEquipBlueChip.TryAddBlueChip(_id, _level))
+                {
+                    UIManager.Instance.BkBlueChipUi();
+                    return;
+                }
+                UIManager.Instance.PickBUtton();
+                _isActive = false;
             }
-            UIManager.Instance.PickBUtton();
         }
     }
 
     public void PickBtn_OnClick_SwapBlueChip()
     {
-        PlayerMaster.Instance._PlayerEquipBlueChip.SwapBlueChip(_id, selectTempId, selecTempLevel);
-        UIManager.Instance.BkBlueChipUi();
+        if (_isActive)
+        {
+            PlayerMaster.Instance._PlayerEquipBlueChip.SwapBlueChip(_id, selectTempId, selecTempLevel);
+            UIManager.Instance.BkBlueChipUi();
+            _isActive = false;
+        }
     }
 }
