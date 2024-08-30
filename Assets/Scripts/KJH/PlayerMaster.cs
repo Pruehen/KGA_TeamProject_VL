@@ -147,8 +147,12 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
         _PlayerEquipBlueChip.Init_OnSceneLoad();
         _PlayerInstanteState.Init_OnSceneLoad();
 
-        GameManager.Instance.OnPlayerSpawn();
         UIManager.Instance.UpdateGoldInfoUI();
+    }
+
+    private void Start()
+    {
+        GameManager.Instance.OnPlayerSpawn();
     }
 
     public Vector3 GetPosition()
