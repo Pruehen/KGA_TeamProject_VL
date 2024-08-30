@@ -26,7 +26,7 @@ public class GameManager : SceneSingleton<GameManager>
 
     public PlayerMaster _PlayerMaster { get; private set; }
 
-    public List<GameObject> _enemies = new List<GameObject>();
+    public List<Enemy> _enemies = new List<Enemy>();
 
     public Action OnGameClear;
 
@@ -69,6 +69,7 @@ public class GameManager : SceneSingleton<GameManager>
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        Debug.Log("¾À ·ÎµåµÊ");
         if (FindObjectsOfType<GameManager>().Length >= 2)
         {
             if (!_unique)
@@ -102,17 +103,6 @@ public class GameManager : SceneSingleton<GameManager>
                 Assert.IsNotNull(_PlayerMaster);
 
 
-            Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
-
-            foreach (Enemy e in enemies)
-            {
-                _enemies.Add(e.gameObject);
-            }
-
-            foreach (Enemy enemy in enemies)
-            {
-                enemy.RegisterOnDead(OnEnemyDead);
-            }
 
             NextStageObjects.Init(_rewardType);
 
@@ -122,6 +112,21 @@ public class GameManager : SceneSingleton<GameManager>
                 _currentQuest.Init(unexpectedquests[GetCurrentLevelIndex()]);
                 unexpectedquests[GetCurrentLevelIndex()].Init();
             }
+        }
+    }
+
+    private void RegisterEnemies()
+    {
+        Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+
+        foreach (Enemy e in enemies)
+        {
+            _enemies.Add(e);
+        }
+
+        foreach (Enemy enemy in enemies)
+        {
+            enemy.OnDeadWithSelf +=OnEnemyDead;
         }
     }
 
@@ -189,7 +194,7 @@ public class GameManager : SceneSingleton<GameManager>
         return array[r];
     }
 
-    private void OnEnemyDead(GameObject enemy)
+    private void OnEnemyDead(Enemy enemy)
     {
         _enemies.Remove(enemy);
         if (_enemies.Count == 0)
@@ -212,5 +217,19 @@ public class GameManager : SceneSingleton<GameManager>
         }
 
         return _currentQuest.IsCleared();
+    }
+
+    public void OnPlayerSpawn()
+    {
+        foreach(Enemy enemy in _enemies)
+        {
+            if ( enemy != null)
+            {
+                enemy.OnDeadWithSelf -= OnEnemyDead;
+            }
+        }
+        _enemies.Clear();
+
+        RegisterEnemies();
     }
 }
