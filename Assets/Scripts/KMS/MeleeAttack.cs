@@ -97,16 +97,24 @@ public class MeleeAttack: MonoBehaviour
         _animator.ResetTrigger(_animTriggerDash);
     }
 
-    public void ChargeStart()//애니메이션 이벤트 MeleeAttack
+    public void ChargeStartR()//애니메이션 이벤트 MeleeAttack
     {
         OnChargeStart?.Invoke();
         _currentChargeTime = 0f;
         _isCharged = false;
         _isCharging = true;
         Debug.Log("차-지 시작");
-        ChargeStartVFX();
+        ChargeStartVFX(true);
     }
-    
+    public void ChargeStartL()//애니메이션 이벤트 MeleeAttack
+    {
+        OnChargeStart?.Invoke();
+        _currentChargeTime = 0f;
+        _isCharged = false;
+        _isCharging = true;
+        Debug.Log("차-지 시작");
+        ChargeStartVFX(false);
+    }
     public void ChargeEnd()
     {
         _isCharging = false;
@@ -138,9 +146,16 @@ public class MeleeAttack: MonoBehaviour
     [SerializeField] SO_SKillEvent StartChargeR;
     [SerializeField] SO_SKillEvent StartChargeL;
     public GameObject CurrentChargedVFX;
-    public void ChargeStartVFX()
+    public void ChargeStartVFX(bool hand)
     {
-        skill.Effect2(StartChargeR);
+        if (hand)
+        {
+            skill.Effect3(StartChargeR);
+        }
+        else
+        {
+            skill.Effect3(StartChargeL);
+        }
     }
     public void ChargeEndVFX()
     {
