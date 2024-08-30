@@ -1,6 +1,7 @@
 using EnumTypes;
 using System.ComponentModel;
 using UnityEngine;
+using static DashFire;
 
 
 public class PlayerAttack : MonoBehaviour
@@ -11,6 +12,7 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] float projectionSpeed_Forward = 15;
     [SerializeField] float projectionSpeed_Up = 3;
     [SerializeField] float attack_CoolTime = 0.7f;
+
     [SerializeField] SO_SKillEvent EnterMelee;
     [SerializeField] SO_SKillEvent EnterRangeR;
     [SerializeField] SO_SKillEvent EnterRangeL;
@@ -48,6 +50,9 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] PlayerAttackKind _currentAttackKind = PlayerAttackKind.RangeNormalAttack;
     [SerializeField] int _initialAttackComboIndex = 0;
     int _currentAttackCount;
+
+    public float attack_ChargeTime { get => _AttackSystem.CloseAttack.ChargeTime; set => _AttackSystem.CloseAttack.ChargeTime = value; }
+
 
     public void Init()
     {
@@ -232,10 +237,12 @@ public class PlayerAttack : MonoBehaviour
                 if (skillSelectionValue == 0)
                 {
                     _PlayerMaster._PlayerSkill.InvokeSkillDamage(randomSkill1);
+                    _PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._PlayerSkill.RangeSkill1);
                 }
                 else
                 {
                     _PlayerMaster._PlayerSkill.InvokeSkillDamage(randomSkill2);
+                    _PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._PlayerSkill.RangeSkill2);
                 }
             }
         }
@@ -251,6 +258,9 @@ public class PlayerAttack : MonoBehaviour
     {
         _currentAttackCount = 0;
         _AttackSystem.ResetAttack();
+        ResetEvadeOnAnim();
+        ResetInvincibleOnAnim();
+        ResetSuperArmorOnAnim();
     }
     public void IncreaseAttackCount()
     {
@@ -341,6 +351,14 @@ public class PlayerAttack : MonoBehaviour
     {
         _PlayerMaster._PlayerInstanteState.ResetSuperArmor();
     }
+    private void SetInvincibleOnAnim()
+    {
+        _PlayerMaster._PlayerInstanteState.SetInvincible(99999999f);
+    }
+    private void ResetInvincibleOnAnim()
+    {
+        _PlayerMaster._PlayerInstanteState.ResetInvincible();
+    }
 
     //회피는 대시시 스크립트에서 켜주기도 함
     private void SetEvadeOnAnim()
@@ -356,4 +374,43 @@ public class PlayerAttack : MonoBehaviour
     //    yield return new WaitForSeconds(delayTime);
     //    Attack();
     //}
+    public void BlueChipFire()
+    {
+        int level_blueChip_Generic1 = _PlayerMaster.GetBlueChipLevel(BlueChipID.Generic1);
+        if (level_blueChip_Generic1 > 0)//블루칩이 1레벨 이상일경우
+            //0 간격,1데미지,2지속시간,3폭발피해,4범위
+        {
+            BlueChip chip_Generic1 = JsonDataManager.GetBlueChipData(BlueChipID.Generic1);
+            float interval = chip_Generic1.Level_VelueList[level_blueChip_Generic1][0];
+            float Dmg = chip_Generic1.Level_VelueList[level_blueChip_Generic1][1];
+            float fireDotDuration = chip_Generic1.Level_VelueList[level_blueChip_Generic1][2];
+            float fireExploDmg = chip_Generic1.Level_VelueList[level_blueChip_Generic1][3];
+            float fireExploRadius = chip_Generic1.Level_VelueList[level_blueChip_Generic1][4];
+            GameObject _DashFire = ObjectPoolManager.Instance.DequeueObject(DashFires);
+            DashFire DF = _DashFire.GetComponent<DashFire>();
+            //if (CurrentAttackKind == PlayerAttackKind.RangeNormalAttack)
+            if (_currentAttackMod == PlayerAttackKind.RangeNormalAttack&& level_blueChip_Generic1 <5)
+            {
+                DF.transform.position = transform.position;
+                DF.transform.rotation = transform.rotation;
+                DF.SetStat(Dmg, fireDotDuration, fireExploRadius, fireExploDmg);
+                DF.StartFire(DashFire.AttackType.Range);
+            }
+            else if(level_blueChip_Generic1==5)
+            {
+                DF.transform.position = transform.position;
+                DF.transform.rotation = transform.rotation;
+                DF.SetStat(Dmg, fireDotDuration, fireExploRadius, fireExploDmg);
+                DF.StartFire(DashFire.AttackType.All);
+            }
+            else
+            {
+                DF.transform.position = transform.position;
+                DF.transform.rotation = transform.rotation;
+                DF.SetStat(Dmg, fireDotDuration, fireExploRadius, fireExploDmg);
+                DF.StartFire(DashFire.AttackType.Melee);
+            }
+        }
+    }
+    public GameObject DashFires;
 }

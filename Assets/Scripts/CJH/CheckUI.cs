@@ -53,7 +53,7 @@ public class CheckUI : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(curserTemp);
         excutionEvent?.Invoke();
         CheckUIDeActive();
-
+        InputManager.Instance.IsInteractiveBtnClick = false;
         Debug.Log("Yes");        
     }
 

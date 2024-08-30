@@ -1,8 +1,6 @@
+using EnumTypes;
 using System;
 using UnityEngine;
-using EnumTypes;
-using UnityEditor.Experimental.GraphView;
-using UnityEngine.UIElements;
 
 public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
 {
@@ -18,7 +16,7 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     PlayerModChangeManager _PlayerModChangeManager;
     public SO_Skill SkillData;
     [SerializeField] ItemAbsorber _ItemAbsorber;
-    [SerializeField]public AttackSystem _AttackSystem;
+    [SerializeField] public AttackSystem _AttackSystem;
     [SerializeField] SO_SKillEvent hit;
     public bool IsAttackState
     {
@@ -61,6 +59,9 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     {
         get { return _ItemAbsorber._isAbsorbing; }
     }
+
+    public float ChargeTime { get => _PlayerAttack.attack_ChargeTime; set => _PlayerAttack.attack_ChargeTime = value; }
+
     public int GetBlueChipLevel(BlueChipID iD)
     {
         return _PlayerEquipBlueChip.GetBlueChipLevel(iD);
@@ -73,7 +74,7 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
 
         Execute_BlueChip1_OnMeleeHit();
 
-        if(_PlayerInstanteState.meleeBullets <= 0)
+        if (_PlayerInstanteState.meleeBullets <= 0)
         {
             _PlayerModChangeManager.EnterRangeMode();
         }
@@ -82,10 +83,10 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     {
         int level = GetBlueChipLevel(BlueChipID.Melee2);
 
-        if(level > 0)
+        if (level > 0)
         {
             _PlayerInstanteState.ChangeShield(JsonDataManager.GetBlueChipData(BlueChipID.Melee2).Level_VelueList[level][2]);
-        }        
+        }
     }
     void Execute_BlueChip1_OnModeChange(bool isMeleeMode)
     {
@@ -100,7 +101,7 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
         }
         else
         {
-            _PlayerInstanteState.ChangeShield(-9999);
+            _PlayerInstanteState.ChangeShield(0);
         }
     }
     void Execute_BlueChip4_OnModeChange()
@@ -122,8 +123,6 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
 
     private void Awake()
     {
-        JsonDataManager.GetUserData().SavePlayData_OnSceneEnter("SceneName");
-
         _PlayerInstanteState = GetComponent<PlayerInstanteState>();
         _PlayerEquipBlueChip = GetComponent<PlayerEquipBlueChip>();
         _PlayerBuff = GetComponent<PlayerBuff>();
@@ -133,20 +132,27 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
 
         UIManager.Instance.SetPlayerMaster(this);
 
+        _PlayerAttack = GetComponent<PlayerAttack>();
+        _PlayerAttack.Init();
+
+        _PlayerMove = GetComponent<PlayerMove>();
+        _PlayerModChangeManager = GetComponent<PlayerModChangeManager>();
+
         _PlayerPassive.Init();
         _PlayerInstanteState.Init();
 
-        _PlayerMove = GetComponent<PlayerMove>();
-        _PlayerAttack = GetComponent<PlayerAttack>();
-        _PlayerModChangeManager = GetComponent<PlayerModChangeManager>();
 
         _ItemAbsorber.Init(_PlayerInstanteState._playerStatData);
-        _PlayerAttack.Init();
 
         _PlayerEquipBlueChip.Init_OnSceneLoad();
         _PlayerInstanteState.Init_OnSceneLoad();
 
         UIManager.Instance.UpdateGoldInfoUI();
+    }
+
+    private void Start()
+    {
+        GameManager.Instance.OnPlayerSpawn();
     }
 
     public Vector3 GetPosition()
@@ -163,10 +169,11 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     }
 
 
-    public void Hit(float dmg)
+    public void Hit(float dmg, DamageType damageType = DamageType.Normal)
     {
-        _PlayerInstanteState.Hit(dmg, out float finalDmg);
+        _PlayerInstanteState.Hit(dmg, out float finalDmg, damageType);
         TryAbsorptFail();
+
         if (finalDmg <= 0) return;
         DmgTextManager.Instance.OnDmged(finalDmg, this.transform.position);
         GameObject VFX = ObjectPoolManager.Instance.DequeueObject(hit.preFab);
@@ -177,7 +184,7 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
 
     public void TryAbsorptFail()
     {
-        if( _PlayerInstanteState.IsAbsorptState)
+        if (_PlayerInstanteState.IsAbsorptState)
             _PlayerModChangeManager?.EndAbsorptState();
     }
 

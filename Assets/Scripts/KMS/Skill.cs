@@ -1,8 +1,6 @@
 using EnumTypes;
 using System.Collections;
 using UnityEngine;
-using static SO_SKillEvent;
-using static UnityEditor.PlayerSettings;
 
 
 public class Skill : MonoBehaviour
@@ -56,7 +54,9 @@ public class Skill : MonoBehaviour
     [SerializeField] private float moveDuration = 0.3f; // 이동할 때 걸리는 시간
     public Vector3 target;
     private Coroutine moveCoroutine;
-    [SerializeField] SO_SKillEvent RangeSkill3;
+    [SerializeField] public SO_SKillEvent RangeSkill3;
+    [SerializeField] public SO_SKillEvent RangeSkill2;
+    [SerializeField] public SO_SKillEvent RangeSkill1;
     private void Awake()
     {
         so_Skill = _master.SkillData;

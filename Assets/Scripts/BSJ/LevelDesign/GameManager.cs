@@ -16,6 +16,7 @@ public class GameManager : SceneSingleton<GameManager>
 
     public NextStageObjects NextStageObjects;
 
+    private bool _unique = false;
     private bool _init = false;
     private RewardType _rewardType;
 
@@ -25,7 +26,7 @@ public class GameManager : SceneSingleton<GameManager>
 
     public PlayerMaster _PlayerMaster { get; private set; }
 
-    public List<GameObject> _enemies = new List<GameObject>();
+    public List<Enemy> _enemies = new List<Enemy>();
 
     public Action OnGameClear;
 
@@ -42,20 +43,21 @@ public class GameManager : SceneSingleton<GameManager>
         transform.SetParent(null);
         DontDestroyOnLoad(this);
 
-        NextStageObjects = FindAnyObjectByType<NextStageObjects>();
-        Assert.IsNotNull(NextStageObjects);
-
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void Start()
     {
-        OnSceneLoaded(new Scene(), LoadSceneMode.Single);
+        OnSceneLoaded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
     }
 
     private void Update()
     {
-        if (unexpectedquests[_currentLevel] != null)
+        if(SceneManager.GetActiveScene().name == "mainGame")
+        {
+            return;
+        }
+        if (unexpectedquests[GetCurrentLevelIndex()] != null)
         {
             _currentQuest.CheckConditionOnUpdate();
         }
@@ -67,49 +69,64 @@ public class GameManager : SceneSingleton<GameManager>
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        Debug.Log("¾À ·ÎµåµÊ");
         if (FindObjectsOfType<GameManager>().Length >= 2)
         {
-            if (!_init)
+            if (!_unique)
             {
                 return;
             }
         }
         if (mode == LoadSceneMode.Single)
         {
-            if (_init == false)
+            _unique = true;
+
+            if (scene.name == "mainGame")
+            {
+                return;
+            }
+
+            if(_init == false)
             {
                 _init = true;
                 SetStageQuests();
             }
-            else
-            {
-            }
-
 
             _PlayerMaster = FindAnyObjectByType<PlayerMaster>();
             NextStageObjects = FindAnyObjectByType<NextStageObjects>();
-            Assert.IsNotNull(_PlayerMaster);
-
-            Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
-
-            foreach(Enemy e in enemies)
+           
+            if (_PlayerMaster == null)
             {
-                _enemies.Add(e.gameObject);
+                return;
             }
+            else
+                Assert.IsNotNull(_PlayerMaster);
 
-            foreach (Enemy enemy in enemies)
-            {
-                enemy.RegisterOnDead(OnEnemyDead);
-            }
+
 
             NextStageObjects.Init(_rewardType);
 
 
-            if (unexpectedquests[_currentLevel] != null)
+            if (unexpectedquests[GetCurrentLevelIndex()] != null)
             {
-                _currentQuest.Init(unexpectedquests[_currentLevel]);
-                unexpectedquests[_currentLevel].Init();
+                _currentQuest.Init(unexpectedquests[GetCurrentLevelIndex()]);
+                unexpectedquests[GetCurrentLevelIndex()].Init();
             }
+        }
+    }
+
+    private void RegisterEnemies()
+    {
+        Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+
+        foreach (Enemy e in enemies)
+        {
+            _enemies.Add(e);
+        }
+
+        foreach (Enemy enemy in enemies)
+        {
+            enemy.OnDeadWithSelf +=OnEnemyDead;
         }
     }
 
@@ -134,14 +151,41 @@ public class GameManager : SceneSingleton<GameManager>
         }
     }
 
+    public void StartChapter()
+    {
+        int stageNum = 0;
+        SO_Stage randomStage = GetRandomItem(_chapterData.ChapterData[stageNum].StageData);
+
+        AsyncOperation ao = SceneManager.LoadSceneAsync(randomStage.SceneName);
+        ao.allowSceneActivation = true;
+
+        var userData = JsonDataManager.GetUserData();
+        if(userData.TryGetPlayData(out PlayData playData))
+        {
+            playData.InitGold_InGame(userData.Gold);
+        }
+
+    }
+
     public void LoadNextStage()
     {
         _enemies.Clear();
         JsonDataManager.GetUserData().SavePlayData_OnSceneExit(_PlayerMaster._PlayerInstanteState, _PlayerMaster._PlayerEquipBlueChip);
-        SO_Stage randomStage = GetRandomItem(_chapterData.ChapterData[_currentLevel++ % _chapterData.ChapterData.Length].StageData);
+        SO_Stage randomStage = GetRandomItem(_chapterData.ChapterData[GetCurrentLevelIndex()].StageData);
+
+        AddLevelIndex();
 
         AsyncOperation ao = SceneManager.LoadSceneAsync(randomStage.SceneName);
         ao.allowSceneActivation = true;
+    }
+
+    private int GetCurrentLevelIndex()
+    {
+        return _currentLevel % _chapterData.ChapterData.Length;
+    }
+    private void AddLevelIndex()
+    {
+        _currentLevel++;
     }
 
     private T GetRandomItem<T>(T[] array)
@@ -150,7 +194,7 @@ public class GameManager : SceneSingleton<GameManager>
         return array[r];
     }
 
-    private void OnEnemyDead(GameObject enemy)
+    private void OnEnemyDead(Enemy enemy)
     {
         _enemies.Remove(enemy);
         if (_enemies.Count == 0)
@@ -161,17 +205,31 @@ public class GameManager : SceneSingleton<GameManager>
 
     public bool IsCurrentUnexpectedQuestCleared()
     {
-        if (_currentLevel >= unexpectedquests.Length)
+        if (GetCurrentLevelIndex() >= unexpectedquests.Length)
         {
             Debug.LogError("OutOfLength");
             return false;
         }
-        if (unexpectedquests[_currentLevel] == null)
+        if (unexpectedquests[GetCurrentLevelIndex()] == null)
         {
 
             return false;
         }
 
         return _currentQuest.IsCleared();
+    }
+
+    public void OnPlayerSpawn()
+    {
+        foreach(Enemy enemy in _enemies)
+        {
+            if ( enemy != null)
+            {
+                enemy.OnDeadWithSelf -= OnEnemyDead;
+            }
+        }
+        _enemies.Clear();
+
+        RegisterEnemies();
     }
 }

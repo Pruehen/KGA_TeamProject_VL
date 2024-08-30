@@ -25,11 +25,22 @@ public class PlayerMove : MonoBehaviour
     bool _isDashing = false;
     bool _isGrounded = true;
     float _dashTimeStamp;
+    Vector3 _dashDirection;
+
     public bool IsDashing => IsInDashAnimation();
     public void SetDashLock(float time)
     {
         _isMoving = false;
         _isDashing = true;
+
+        Vector3 newPoint = _moveVector3_Origin.normalized;
+
+        if (newPoint == Vector3.zero)
+        {
+            newPoint = new Vector3(0, 0, 1f);
+        }
+
+        _dashDirection = _PlayerCameraMove.CamRotation() * newPoint;
 
         _dashTimeStamp = Time.time;
     }
@@ -202,13 +213,7 @@ public class PlayerMove : MonoBehaviour
 
     private void DashMove()
     {
-        Vector3 newPoint = _moveVector3_Origin.normalized;
-
-        if (newPoint == Vector3.zero)
-        {
-            newPoint = new Vector3(0, 0, 1f);
-        }
-        _Rigidbody.velocity = _PlayerCameraMove.CamRotation() * newPoint * _PlayerMaster._PlayerInstanteState.DashForce;
+        _Rigidbody.velocity = _dashDirection * _PlayerMaster._PlayerInstanteState.DashForce;
     }
 
     public bool IsInDashAnimation()

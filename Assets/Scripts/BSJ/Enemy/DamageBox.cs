@@ -1,16 +1,13 @@
-using EnumTypes;
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditorInternal.ReorderableList;
 
 public class DamageBox : MonoBehaviour
 {
     [SerializeField] private ITargetable _owner;
     [SerializeField] private LayerMask _targetLayer;
     private Vector3 _offset;
-    public Vector3 Defaultoffset = new Vector3(0f,0.5f,0.5f);
-    [SerializeField]public Vector3 DefaultRange= new Vector3(1f, 1f, 1f);
+    public Vector3 Defaultoffset = new Vector3(0f, 0.5f, 0.5f);
+    [SerializeField] public Vector3 DefaultRange = new Vector3(1f, 1f, 1f);
     private Coroutine _DisableBoxCoroutine;
 
 
