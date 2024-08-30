@@ -753,7 +753,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  _randomQuestSet: {fileID: 11400000, guid: eb37c6a02ede3bb44819358e48268e4f, type: 2}
 --- !u!1 &6975323383527796040
 GameObject:
   m_ObjectHideFlags: 3
@@ -858,7 +857,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7080660061182668634}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.025792714, y: 0, z: 0, w: 0.99966735}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1283,16 +1282,69 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8679059042399350276, guid: 46a2d3f310067064f84db1700631524b, type: 3}
+      propertyPath: m_Name
+      value: QuestPanel
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8679059042399350276, guid: 46a2d3f310067064f84db1700631524b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8561321419633158027}
+    - targetCorrespondingSourceObject: {fileID: 8679059042399350276, guid: 46a2d3f310067064f84db1700631524b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4181090977492609034}
   m_SourcePrefab: {fileID: 100100000, guid: 46a2d3f310067064f84db1700631524b, type: 3}
 --- !u!224 &5747998620108434104 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4948640817398870840, guid: 46a2d3f310067064f84db1700631524b, type: 3}
   m_PrefabInstance: {fileID: 822439992380971392}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8294455032274466692 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8679059042399350276, guid: 46a2d3f310067064f84db1700631524b, type: 3}
+  m_PrefabInstance: {fileID: 822439992380971392}
+  m_PrefabAsset: {fileID: 0}
+--- !u!222 &8561321419633158027
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8294455032274466692}
+  m_CullTransparentMesh: 1
+--- !u!114 &4181090977492609034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8294455032274466692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1001 &850112873815253084
 PrefabInstance:
   m_ObjectHideFlags: 0

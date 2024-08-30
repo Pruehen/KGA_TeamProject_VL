@@ -277,12 +277,12 @@ public class UIManager : SceneSingleton<UIManager>
 
     }
 
-    public void QuestPanel()
+
+    public void DrawQuestStartUi(string name, string discription)
     {
-
-        queastPanel.SetActive(true);
-
-
     }
 
+    public void DrawQuestUi(bool isHited)
+    {
+    }
 }

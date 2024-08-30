@@ -231,5 +231,7 @@ public class GameManager : SceneSingleton<GameManager>
         _enemies.Clear();
 
         RegisterEnemies();
+
+
     }
 }

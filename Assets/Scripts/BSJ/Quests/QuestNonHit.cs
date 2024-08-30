@@ -3,9 +3,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "QuestNonHitTimeData", menuName = "Quests/Condition/QuestNonHitTime", order = 0)]
 public class QuestNonHitTime : SO_Quest
 {
-    public float LimitTime;
-
-    private float timeCounter;
     private bool isHited;
 
     public override void Init()
@@ -13,14 +10,21 @@ public class QuestNonHitTime : SO_Quest
         isHited = false;
 
         PlayerMaster.Instance._PlayerInstanteState.OnDamaged += OnDamaged;
+
+        UIManager.Instance.DrawQuestStartUi(Name, Discription);
     }
     public override bool CheckConditionOnUpdate()
     {
-        if(isHited)
+        if (isHited)
         {
             return false;
+
+
         }
-        return true;
+        UIManager.Instance.DrawQuestUi(isHited);
+
+            return true;
+
     }
 
     private void OnDamaged()

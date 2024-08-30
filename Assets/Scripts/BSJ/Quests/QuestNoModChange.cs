@@ -10,6 +10,8 @@ public class QuestNoModChange : SO_Quest
         isModChanged = false;
 
         PlayerMaster.Instance._PlayerInstanteState.OnMeleeModeChanged += OnModChanged;
+
+        UIManager.Instance.DrawQuestStartUi(Name, Discription);
     }
     public override bool CheckConditionOnUpdate()
     {
