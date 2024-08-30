@@ -173,7 +173,7 @@ public class UIManager : SceneSingleton<UIManager>
 
     public void OutGame()
     {
-        SceneManager.LoadScene("mainGame");
+        GameManager.Instance.EndGame();
     }
 
     public void OnHealthRatioChanged(float value)

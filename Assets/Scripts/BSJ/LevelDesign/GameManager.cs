@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -70,6 +69,7 @@ public class GameManager : SceneSingleton<GameManager>
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        _initChapter = false;
         Debug.Log("씬 로드됨");
         if (FindObjectsOfType<GameManager>().Length >= 2)
         {
@@ -101,7 +101,7 @@ public class GameManager : SceneSingleton<GameManager>
             }
             else
                 Assert.IsNotNull(_PlayerMaster);
-            
+
             NextStageObjects.Init(_rewardType);
             if (unexpectedquests[GetCurrentLevelIndex()] != null)
             {
@@ -147,11 +147,15 @@ public class GameManager : SceneSingleton<GameManager>
         }
     }
 
+    bool _initChapter = false;
     public void StartChapter()
     {
+        if (_initChapter)
+            return;
+        _initChapter = true;
         _enemies.Clear();
 
-        if(JsonDataManager.GetUserData().TryGetPlayData(out PlayData playData))
+        if (JsonDataManager.GetUserData().TryGetPlayData(out PlayData playData))
         {
             if (playData.InGame_Stage != null)
             {
@@ -256,6 +260,20 @@ public class GameManager : SceneSingleton<GameManager>
         userData.TryGetPlayData(out PlayData playData);
         userData.AddGold(playData.InGame_Gold - userData.Gold);
         userData.ClearAndSaveUserData();
+        LoadMainScene();
+    }
+
+    public void EndGame()
+    {
+        var userData = JsonDataManager.GetUserData();
+        if (userData.TryGetPlayData(out PlayData playData))
+        {
+            userData.AddGold(playData.InGame_Gold - userData.Gold);
+        }
+        else
+        {
+            Debug.LogWarning("왜 없지 플레이데이터");
+        }
         LoadMainScene();
     }
 }

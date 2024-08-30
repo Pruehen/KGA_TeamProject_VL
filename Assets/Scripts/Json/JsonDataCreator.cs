@@ -309,6 +309,7 @@ public class UserData
     public void AddGold(int amount)
     {
         Gold += amount;
+        Save();
     }
 
     public bool TryUseGold(int amount)
@@ -333,7 +334,7 @@ public class UserData
         {
             PlayData = new PlayData();
         }
-        PlayData.AddGold_InGame(gold);
+        PlayData.InitGold_InGame(gold);
     }
 }
 public class StageData
