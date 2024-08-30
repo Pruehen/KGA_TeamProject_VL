@@ -101,7 +101,7 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
         }
         else
         {
-            _PlayerInstanteState.ChangeShield(-9999);
+            _PlayerInstanteState.ChangeShield(0);
         }
     }
     void Execute_BlueChip4_OnModeChange()
