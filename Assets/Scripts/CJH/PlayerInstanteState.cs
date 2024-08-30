@@ -474,7 +474,7 @@ public class PlayerInstanteState : MonoBehaviour
         UpdateStamina();
     }
 
-    public void Hit(float dmg, out float finalDmg)
+    public void Hit(float dmg, out float finalDmg, DamageType damageType = DamageType.Normal)
     {
         if(combat.IsInvincible || shield.IsInvincible)
         {
@@ -496,7 +496,7 @@ public class PlayerInstanteState : MonoBehaviour
         {
             float s = shield.GetHp();
             s -= dmg;
-            shield.Damaged(dmg);
+            shield.Damaged(dmg, damageType);
             if (s < 0)
             {
                 dmg = -s;
@@ -504,16 +504,16 @@ public class PlayerInstanteState : MonoBehaviour
             UpdateShild();
             return;
         }
-
-        combat.Damaged(dmg);
-        if (hp <= 0)
+        float tempHp = hp;
+        tempHp -= dmg;
+        if (tempHp <= 0)
         {
             if (passive_Defensive3 != null && passive_Defensive3.ActiveCount > 0)
             {
                 passive_Defensive3.Active(out _holdTime_Passive_Defensive3);
 
                 combat.SetInvincible(_holdTime_Passive_Defensive3);
-                combat.ForceChangeHp(hp);
+                combat.ForceChangeHp(passive_Defensive3.HpHoldValue);
                 finalDmg = 0;
 
                 Debug.Log("무적 발동!");
@@ -521,8 +521,11 @@ public class PlayerInstanteState : MonoBehaviour
             }
             if(combat.IsInvincible)
             {
-                hp = passive_Defensive3.HpHoldValue;
                 finalDmg = 0;
+            }
+            else
+            {
+                combat.Damaged(dmg, damageType);
             }
             //if (_holdTime_Passive_Defensive3 > 0)
             //{
@@ -530,12 +533,12 @@ public class PlayerInstanteState : MonoBehaviour
             //    Debug.Log("핫하 무적이다!");
             //    finalDmg = 0;
             //}
-            UpdateHealth();
         }
         else
         {
-            UpdateHealth();
+            combat.Damaged(dmg, damageType);
         }
+        UpdateHealth();
     }
     void OnDead()
     {

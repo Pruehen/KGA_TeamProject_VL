@@ -86,7 +86,14 @@ public class GameManager : SceneSingleton<GameManager>
 
             _PlayerMaster = FindAnyObjectByType<PlayerMaster>();
             NextStageObjects = FindAnyObjectByType<NextStageObjects>();
-            Assert.IsNotNull(_PlayerMaster);
+           
+            if (_PlayerMaster == null)
+            {
+                return;
+            }
+            else
+                Assert.IsNotNull(_PlayerMaster);
+
 
             Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
 

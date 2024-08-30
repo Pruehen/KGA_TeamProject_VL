@@ -12,7 +12,7 @@ public interface ITargetable
 {
     public Vector3 GetPosition();    
 
-    public void Hit(float dmg);
+    public void Hit(float dmg, DamageType type = DamageType.Normal);
     public bool IsDead();
 }
 

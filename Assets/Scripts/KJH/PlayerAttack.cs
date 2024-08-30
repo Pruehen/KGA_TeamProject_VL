@@ -258,6 +258,9 @@ public class PlayerAttack : MonoBehaviour
     {
         _currentAttackCount = 0;
         _AttackSystem.ResetAttack();
+        ResetEvadeOnAnim();
+        ResetInvincibleOnAnim();
+        ResetSuperArmorOnAnim();
     }
     public void IncreaseAttackCount()
     {
@@ -347,6 +350,14 @@ public class PlayerAttack : MonoBehaviour
     private void ResetSuperArmorOnAnim()
     {
         _PlayerMaster._PlayerInstanteState.ResetSuperArmor();
+    }
+    private void SetInvincibleOnAnim()
+    {
+        _PlayerMaster._PlayerInstanteState.SetInvincible(99999999f);
+    }
+    private void ResetInvincibleOnAnim()
+    {
+        _PlayerMaster._PlayerInstanteState.ResetInvincible();
     }
 
     //회피는 대시시 스크립트에서 켜주기도 함

@@ -208,7 +208,7 @@ public class DashFire : MonoBehaviour
                     }
                 }
 
-                combat.Hit(TIcDmg);
+                combat.Hit(TIcDmg, DamageType.NonKnockback);
                 onHit = true;
             }
 
@@ -252,7 +252,7 @@ public class DashFire : MonoBehaviour
                     }
                 }
 
-                combat.Hit(TIcDmg);
+                combat.Hit(TIcDmg,DamageType.NonKnockback);
                 onHit = true;
             }
 
