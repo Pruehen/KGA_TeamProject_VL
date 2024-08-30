@@ -14,12 +14,12 @@ public class MeleeAttack: MonoBehaviour
     int _animTriggerDashEnd;
     int _animTriggerDash;
 
-    public bool _isCharging;
+    bool _isCharging;
     bool _isCharged;
 
     private float _chargeTime = 1.5f;
     private float _currentChargeTime = 0f;
-    public bool IsCharging { get => IsCharging; set => IsCharging = value; }
+    public bool IsCharging { get => _isCharging; set => _isCharging = value; }
     public float ChargeTime { get => _chargeTime; set => _chargeTime = value; }
 
     Action OnCharged;
