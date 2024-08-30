@@ -127,7 +127,7 @@ public class Skill : MonoBehaviour
         RaycastHit hit;
 
         float damage = 0f;
-        Vector3 range = new Vector3(1f, 1f, 1f);
+        Vector3 range = new Vector3(1f, 0, 1f);
         float distance = 1f;
 
 
@@ -137,8 +137,8 @@ public class Skill : MonoBehaviour
         transform.rotation = mainCamera.transform.rotation;
         if (Physics.Raycast(ray, out hit, distance, enemyLayerMask))
         {
-            Vector3 hitPosition = hit.point;
-            target = hit.point;
+            Vector3 hitPosition = new Vector3(hit.point.x,transform.position.y, hit.point.z);
+            target = hitPosition;
             //_damageBox.transform.position = target;
             TargettoRun();
             //데미지 박스의 위치를 미리 이전
@@ -390,7 +390,8 @@ public class Skill : MonoBehaviour
 
         while (elapsedTime < moveDuration)
         {
-            Vector3 newtarget = new Vector3(target.x, player.transform.position.y, target.z);
+            //Vector3 newtarget = new Vector3(target.x, player.transform.position.y, target.z);
+            Vector3 newtarget = new Vector3(target.x, 0, target.z);
             player.transform.position = Vector3.Lerp(startPosition, newtarget, elapsedTime / moveDuration);
             elapsedTime += Time.deltaTime;
             yield return null; // 다음 프레임까지 대기
