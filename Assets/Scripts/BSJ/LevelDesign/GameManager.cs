@@ -53,7 +53,7 @@ public class GameManager : SceneSingleton<GameManager>
 
     private void Update()
     {
-        if(SceneManager.GetActiveScene().name == "mainGame")
+        if (SceneManager.GetActiveScene().name == "mainGame")
         {
             return;
         }
@@ -86,7 +86,7 @@ public class GameManager : SceneSingleton<GameManager>
                 return;
             }
 
-            if(_init == false)
+            if (_init == false)
             {
                 _init = true;
                 SetStageQuests();
@@ -94,7 +94,7 @@ public class GameManager : SceneSingleton<GameManager>
 
             _PlayerMaster = FindAnyObjectByType<PlayerMaster>();
             NextStageObjects = FindAnyObjectByType<NextStageObjects>();
-           
+
             if (_PlayerMaster == null)
             {
                 return;
@@ -126,7 +126,7 @@ public class GameManager : SceneSingleton<GameManager>
 
         foreach (Enemy enemy in enemies)
         {
-            enemy.OnDeadWithSelf +=OnEnemyDead;
+            enemy.OnDeadWithSelf += OnEnemyDead;
         }
     }
 
@@ -160,7 +160,7 @@ public class GameManager : SceneSingleton<GameManager>
         ao.allowSceneActivation = true;
 
         var userData = JsonDataManager.GetUserData();
-        if(userData.TryGetPlayData(out PlayData playData))
+        if (userData.TryGetPlayData(out PlayData playData))
         {
             //userData.ClearData();
             playData.InitGold_InGame(userData.Gold);
@@ -177,6 +177,11 @@ public class GameManager : SceneSingleton<GameManager>
         AddLevelIndex();
 
         AsyncOperation ao = SceneManager.LoadSceneAsync(randomStage.SceneName);
+        ao.allowSceneActivation = true;
+    }
+    public void LoadMainScene()
+    {
+        AsyncOperation ao = SceneManager.LoadSceneAsync("mainGame");
         ao.allowSceneActivation = true;
     }
 
@@ -222,9 +227,9 @@ public class GameManager : SceneSingleton<GameManager>
 
     public void OnPlayerSpawn()
     {
-        foreach(Enemy enemy in _enemies)
+        foreach (Enemy enemy in _enemies)
         {
-            if ( enemy != null)
+            if (enemy != null)
             {
                 enemy.OnDeadWithSelf -= OnEnemyDead;
             }
@@ -232,5 +237,14 @@ public class GameManager : SceneSingleton<GameManager>
         _enemies.Clear();
 
         RegisterEnemies();
+
+        _PlayerMaster._PlayerInstanteState.OnDead += OnDead;
+    }
+
+    private void OnDead()
+    {
+        _PlayerMaster._PlayerInstanteState.OnDead -= OnDead;
+        JsonDataManager.GetUserData().ClearUserData();
+        LoadMainScene();
     }
 }

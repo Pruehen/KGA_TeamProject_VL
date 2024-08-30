@@ -222,7 +222,7 @@ public class UIManager : SceneSingleton<UIManager>
     }
     public void UpdateGoldInfoUI()
     {
-        float playerEmerald = JsonDataManager.GetUserData().TryGetPlayData(out PlayData playData) ? playData.InGame_Gold : -999999999f;
+        float playerEmerald = JsonDataManager.GetUserData().TryGetPlayData(out PlayData playData) ? playData.InGame_Gold : JsonDataManager.GetUserData().Gold;
 
         emeraldText.text = playerEmerald.ToString();
     }

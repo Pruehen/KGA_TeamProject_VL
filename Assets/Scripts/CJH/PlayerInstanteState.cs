@@ -26,6 +26,8 @@ public class PlayerInstanteState : MonoBehaviour
 
     [SerializeField] private int _meleeToRangeRatio = 2;
 
+    public Action OnDead;
+
     bool _isMeleeMode;
     public bool IsMeleeMode
     {
@@ -382,7 +384,7 @@ public class PlayerInstanteState : MonoBehaviour
         combat.Init(gameObject, GetMaxHp());
 
         combat.OnKnockback += OnKnockback;
-        combat.OnDead += OnDead;
+        combat.OnDead += HandleOnDead;
 
         shield.Init(gameObject, GetMaxShield());
         shield.OnKnockback += OnKnockback;
@@ -423,6 +425,11 @@ public class PlayerInstanteState : MonoBehaviour
             skillGauge = playData.InGame_SkillGauge;
             bullets = playData.InGame_Bullet;
             meleeBullets = playData.InGame_MeleeBullet;
+            UpdateBullet();
+            UpdateBullet_Melee();
+        }
+        else
+        {
             UpdateBullet();
             UpdateBullet_Melee();
         }
@@ -540,9 +547,10 @@ public class PlayerInstanteState : MonoBehaviour
         }
         UpdateHealth();
     }
-    void OnDead()
+    void HandleOnDead()
     {
         Debug.Log("플레이어 사망");
+        OnDead?.Invoke();
         Destroy(this.gameObject);
     }
 

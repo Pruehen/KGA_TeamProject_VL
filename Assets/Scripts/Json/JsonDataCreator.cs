@@ -312,9 +312,9 @@ public class UserData
         return true;
     }
 
-    public void ClearData()
+    public void ClearUserData()
     {
-        PlayData = new PlayData();
+        PlayData = null;
     }
 }
 
