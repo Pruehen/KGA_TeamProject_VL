@@ -312,9 +312,10 @@ public class UserData
         return true;
     }
 
-    public void ClearUserData()
+    public void ClearAndSaveUserData()
     {
         PlayData.Clear();
+        Save();
     }
 
     public void InitPlayData(int gold)

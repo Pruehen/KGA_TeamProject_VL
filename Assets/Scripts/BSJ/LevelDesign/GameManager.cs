@@ -237,10 +237,11 @@ public class GameManager : SceneSingleton<GameManager>
 
     private void OnDead()
     {
+        UserData userData = JsonDataManager.GetUserData();
         _PlayerMaster._PlayerInstanteState.OnDead -= OnDead;
-        JsonDataManager.GetUserData().ClearUserData();
-        
-        _PlayerMaster._PlayerInstanteState.Restore();
+        userData.TryGetPlayData(out PlayData playData);
+        userData.AddGold(playData.InGame_Gold - userData.Gold);
+        userData.ClearAndSaveUserData();
         LoadMainScene();
     }
 }
