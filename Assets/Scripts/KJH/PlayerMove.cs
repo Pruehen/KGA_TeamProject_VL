@@ -155,6 +155,8 @@ public class PlayerMove : MonoBehaviour
         }
         else if (_PlayerMaster.IsAttackState)
         {
+            if (_attackSystem.CloseAttack.IsCharging)
+                return;
             _lookTargetPos.y = 0f;
 
             Quaternion targetRotation = Quaternion.LookRotation(GetCamForward(), Vector3.up);
