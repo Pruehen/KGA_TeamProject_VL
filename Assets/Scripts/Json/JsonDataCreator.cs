@@ -311,6 +311,11 @@ public class UserData
         Gold -= amount;
         return true;
     }
+
+    public void ClearData()
+    {
+        PlayData = new PlayData();
+    }
 }
 
 public class PlayData

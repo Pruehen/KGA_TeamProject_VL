@@ -162,6 +162,7 @@ public class GameManager : SceneSingleton<GameManager>
         var userData = JsonDataManager.GetUserData();
         if(userData.TryGetPlayData(out PlayData playData))
         {
+            //userData.ClearData();
             playData.InitGold_InGame(userData.Gold);
         }
 
@@ -170,7 +171,7 @@ public class GameManager : SceneSingleton<GameManager>
     public void LoadNextStage()
     {
         _enemies.Clear();
-        //JsonDataManager.GetUserData().SavePlayData_OnSceneExit(_PlayerMaster._PlayerInstanteState, _PlayerMaster._PlayerEquipBlueChip);
+        JsonDataManager.GetUserData().SavePlayData_OnSceneExit(_PlayerMaster._PlayerInstanteState, _PlayerMaster._PlayerEquipBlueChip);
         SO_Stage randomStage = GetRandomItem(_chapterData.ChapterData[GetCurrentLevelIndex()].StageData);
 
         AddLevelIndex();
