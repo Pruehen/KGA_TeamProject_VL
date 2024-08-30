@@ -154,6 +154,12 @@ public class GameManager : SceneSingleton<GameManager>
         AsyncOperation ao = SceneManager.LoadSceneAsync(randomStage.SceneName);
         ao.allowSceneActivation = true;
 
+        var userData = JsonDataManager.GetUserData();
+        if(userData.TryGetPlayData(out PlayData playData))
+        {
+            playData.InitGold_InGame(userData.Gold);
+        }
+
     }
 
     public void LoadNextStage()
