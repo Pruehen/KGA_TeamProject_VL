@@ -18,11 +18,15 @@ public class PlayerInstanteState : MonoBehaviour
     public float AttackSpeed { get => attackSpeed; private set => attackSpeed = value; }
     public int MeleeToRangeRatio { get => _meleeToRangeRatio; private set => _meleeToRangeRatio = value; }
     public float AbsorbingStaminaConsumRate { get => _absorbingStaminaConsumRate; private set => _absorbingStaminaConsumRate = value; }
-    [SerializeField] private float _absorbingStaminaConsumRate = 300f;
 
+    [SerializeField] private float _absorbingStaminaConsumRate = 300f;
+    [SerializeField] SkinnedMeshRenderer _PlayerMesh;
+    [SerializeField] Material _ShieldMaterial;
 
 
     [SerializeField] private int _meleeToRangeRatio = 2;
+
+    public Action OnDead;
 
     bool _isMeleeMode;
     public bool IsMeleeMode
@@ -110,6 +114,8 @@ public class PlayerInstanteState : MonoBehaviour
     public float SkillPowerMulti { get; set; } = 1f;
     public float GetSkillPower() { return skillPowerBase * SkillPowerMulti; }
     public float DmgMulti { get; set; } = 1f;
+
+    public float ChargeTime { get => _PlayerMaster.ChargeTime; set => _PlayerMaster.ChargeTime = value; }
 
     [SerializeField] public float _dashTime = .5f;
     [SerializeField] public float _dashForce = 3f;
@@ -378,7 +384,7 @@ public class PlayerInstanteState : MonoBehaviour
         combat.Init(gameObject, GetMaxHp());
 
         combat.OnKnockback += OnKnockback;
-        combat.OnDead += OnDead;
+        combat.OnDead += HandleOnDead;
 
         shield.Init(gameObject, GetMaxShield());
         shield.OnKnockback += OnKnockback;
@@ -395,6 +401,7 @@ public class PlayerInstanteState : MonoBehaviour
         attackSpeed = _playerStatData.attackSpeed;
         attackPowerBase = _playerStatData.attackPower;
         skillPowerBase = _playerStatData.skillPower;
+        ChargeTime = _playerStatData.chargeTime;
 
         moveSpeed = _playerStatData.moveSpeed;
 
@@ -411,16 +418,25 @@ public class PlayerInstanteState : MonoBehaviour
 
     public void Init_OnSceneLoad()
     {
-        if (JsonDataManager.GetUserData().TryGetPlayData(out PlayData playData))
+        UserData userData = JsonDataManager.GetUserData();
+        if (userData.TryGetPlayData(out PlayData playData))
         {
-            combat.ForceChangeHp(playData.InGame_Hp);
+            if(playData.InGame_Hp == -1f)
+            {
+                Restore();
+            }
+            else
+            {
+                combat.ForceChangeHp(playData.InGame_Hp);
 
-            skillGauge = playData.InGame_SkillGauge;
-            bullets = playData.InGame_Bullet;
-            meleeBullets = playData.InGame_MeleeBullet;
-            UpdateBullet();
-            UpdateBullet_Melee();
+                skillGauge = playData.InGame_SkillGauge;
+                bullets = playData.InGame_Bullet;
+                meleeBullets = playData.InGame_MeleeBullet;
+            }    
         }
+        userData.InitPlayData(userData.Gold);
+        UpdateBullet();
+        UpdateBullet_Melee();
     }
 
     //스태미나 소모 
@@ -469,7 +485,7 @@ public class PlayerInstanteState : MonoBehaviour
         UpdateStamina();
     }
 
-    public void Hit(float dmg, out float finalDmg)
+    public void Hit(float dmg, out float finalDmg, DamageType damageType = DamageType.Normal)
     {
         if(combat.IsInvincible || shield.IsInvincible)
         {
@@ -491,7 +507,7 @@ public class PlayerInstanteState : MonoBehaviour
         {
             float s = shield.GetHp();
             s -= dmg;
-            shield.Damaged(dmg);
+            shield.Damaged(dmg, damageType);
             if (s < 0)
             {
                 dmg = -s;
@@ -499,16 +515,16 @@ public class PlayerInstanteState : MonoBehaviour
             UpdateShild();
             return;
         }
-
-        combat.Damaged(dmg);
-        if (hp <= 0)
+        float tempHp = hp;
+        tempHp -= dmg;
+        if (tempHp <= 0)
         {
             if (passive_Defensive3 != null && passive_Defensive3.ActiveCount > 0)
             {
                 passive_Defensive3.Active(out _holdTime_Passive_Defensive3);
 
                 combat.SetInvincible(_holdTime_Passive_Defensive3);
-                combat.ForceChangeHp(hp);
+                combat.ForceChangeHp(passive_Defensive3.HpHoldValue);
                 finalDmg = 0;
 
                 Debug.Log("무적 발동!");
@@ -516,8 +532,11 @@ public class PlayerInstanteState : MonoBehaviour
             }
             if(combat.IsInvincible)
             {
-                hp = passive_Defensive3.HpHoldValue;
                 finalDmg = 0;
+            }
+            else
+            {
+                combat.Damaged(dmg, damageType);
             }
             //if (_holdTime_Passive_Defensive3 > 0)
             //{
@@ -525,16 +544,17 @@ public class PlayerInstanteState : MonoBehaviour
             //    Debug.Log("핫하 무적이다!");
             //    finalDmg = 0;
             //}
-            UpdateHealth();
         }
         else
         {
-            UpdateHealth();
+            combat.Damaged(dmg, damageType);
         }
+        UpdateHealth();
     }
-    void OnDead()
+    void HandleOnDead()
     {
         Debug.Log("플레이어 사망");
+        OnDead?.Invoke();
         Destroy(this.gameObject);
     }
 
@@ -679,7 +699,7 @@ public class PlayerInstanteState : MonoBehaviour
         UpdateSkillGauge();
     }
 
-    void Restore()
+    public void Restore()
     {
         hp = GetMaxHp();
         combat.ResetCombat();
@@ -688,7 +708,7 @@ public class PlayerInstanteState : MonoBehaviour
         bullets = maxBullets / 3;
         AttackSpeed = 1;
 
-        combat.ResetCombat();
+        Shield = 0f;
     }
     void InitPassive()
     {
@@ -815,6 +835,7 @@ public class PlayerInstanteState : MonoBehaviour
     }
     public void UpdateShild()
     {
+        ShieldMT();
         ShildRatioChanged?.Invoke(shield.GetHpRatio());
     }
     public void UpdateStamina()
@@ -850,6 +871,10 @@ public class PlayerInstanteState : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F4))
         {
             SkillGaugeRecovery(400f);
+        }
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+            combat.Heal(999f);
         }
     }
 
@@ -902,5 +927,28 @@ public class PlayerInstanteState : MonoBehaviour
     {
         combat.ResetInvincible();
         shield.ResetInvincible();
+    }
+
+
+    public void ShieldMT()
+    {
+        Debug.Log(Shield);
+
+        // 현재 materials 배열을 가져옵니다.
+        Material[] materials = _PlayerMesh.materials;
+
+        if (Shield > 0)
+        {
+            materials[1] = _ShieldMaterial;
+            Debug.Log("실드있음");
+        }
+        else
+        {
+            materials[1] = null;  // 여기서는 재질을 null로 설정할 수 없으므로, 제거해야 합니다.
+            Debug.Log("실드없음");
+        }
+
+        // 수정된 배열을 다시 SkinnedMeshRenderer에 할당합니다.
+        _PlayerMesh.materials = materials;
     }
 }

@@ -1,12 +1,12 @@
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
 using EnumTypes;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 public class BlueChip
-{    
+{
     [JsonProperty] public string Name { get; private set; }
     [JsonProperty] public string Desc { get; private set; }
     [JsonProperty] public string IconName { get; private set; }
@@ -14,14 +14,14 @@ public class BlueChip
 
     [JsonConstructor]
     public BlueChip(string name, string desc, string iconName, Dictionary<int, List<float>> level_VelueList)
-    {        
+    {
         Name = name;
         Desc = desc;
         IconName = iconName;
         Level_VelueList = level_VelueList;
     }
     public BlueChip(int id)
-    {        
+    {
         Name = "블루칩 이름";
         Desc = "블루칩 설명";
         IconName = "아이콘 이름";
@@ -42,7 +42,7 @@ public class BlueChip
         return $"{level} / {Level_VelueList.Count}";
     }
     public string PrintInfo(int level)
-    {        
+    {
         return string.Format(Desc, Level_VelueList[level].Cast<object>().ToArray());
     }
 }
@@ -115,7 +115,7 @@ public class PassiveTable
     {
         dic = new Dictionary<PassiveID, PassiveData>();
         foreach (PassiveID passiveType in Enum.GetValues(typeof(PassiveID)))
-        {            
+        {
             dic.Add(passiveType, new PassiveData(passiveType));
         }
     }
@@ -126,7 +126,7 @@ public class PassiveTable
 }
 
 public class UserData
-{    
+{
     [JsonProperty] public int SaveDataIndex { get; private set; }
     [JsonProperty] public DateTime SaveTime { get; private set; }
     [JsonProperty] public int PlayTime { get; private set; }
@@ -139,7 +139,7 @@ public class UserData
     [JsonProperty] public Dictionary<int, bool> SlotIndex_SlotUnlock_Dic { get; private set; }
     [JsonProperty] public PlayData PlayData { get; private set; }
 
-    [JsonConstructor]   
+    [JsonConstructor]
     public UserData(
         int saveDataIndex,
         DateTime saveTime,
@@ -184,7 +184,7 @@ public class UserData
         SaveDataIndex = saveDataIndex;
         SaveTime = DateTime.Now;
         PlayTime = 0;
-        Gold = 0;
+        Gold = 1000;
         Count_Try = 0;
         Count_Clear = 0;
         UnlockPassiveHashSet = new HashSet<PassiveID>();
@@ -216,18 +216,27 @@ public class UserData
         PlayData.SavePlayData_OnSceneExit(state, equipBlueChip);
         Save();
     }
-    public void SavePlayData_OnSceneEnter(string newStage)//씬 입장 시 호출
+    public void SavePlayData_OnSceneEnter(StageData newStage)//씬 입장 시 호출
     {
-        if(PlayData != null)
+        if (PlayData != null)
         {
             PlayData.SavePlayData_OnSceneEnter(newStage);
             Save();
         }
     }
+    public void SavePlayData_OnChapterEnter(SO_Quest[] questData)
+    {
+        if (PlayData == null)
+        {
+            PlayData = new PlayData();
+        }
+        PlayData.SavePlayData_OnChapterEnter(questData);
+        Save();
+    }
 
     public bool TryGetPlayData(out PlayData playData)
     {
-        if(PlayData == null)
+        if (PlayData == null)
         {
             playData = null;
             return false;
@@ -241,7 +250,7 @@ public class UserData
 
     public void TryAddPassive(PassiveID id)
     {
-        if(UsePassiveHashSet.Add(id))
+        if (UsePassiveHashSet.Add(id))
         {
             Save();
             Debug.Log($"패시브 추가 : {id}");
@@ -257,7 +266,7 @@ public class UserData
         if (UsePassiveHashSet.Remove(id))
         {
             Save();
-            Debug.Log($"패시브 제거 : {id}");            
+            Debug.Log($"패시브 제거 : {id}");
         }
         else
         {
@@ -278,7 +287,7 @@ public class UserData
     }
     public void TryUnLockPassiveSlot(int slotIndex)
     {
-        if(SlotIndex_SlotUnlock_Dic.ContainsKey(slotIndex))
+        if (SlotIndex_SlotUnlock_Dic.ContainsKey(slotIndex))
         {
             SlotIndex_SlotUnlock_Dic[slotIndex] = true;
         }
@@ -300,16 +309,45 @@ public class UserData
     public void AddGold(int amount)
     {
         Gold += amount;
+        Save();
     }
 
     public bool TryUseGold(int amount)
     {
-        if(Gold - amount < 0)
+        if (Gold - amount < 0)
         {
             return false;
         }
         Gold -= amount;
         return true;
+    }
+
+    public void ClearAndSaveUserData()
+    {
+        PlayData.Clear();
+        Save();
+    }
+
+    public void InitPlayData(int gold)
+    {
+        if (PlayData == null)
+        {
+            PlayData = new PlayData();
+        }
+        PlayData.InitGold_InGame(gold);
+    }
+}
+public class StageData
+{
+    [JsonProperty] public string StageName;
+    [JsonProperty] public int StageNum;
+    [JsonProperty] public RewardType RewardType;
+
+    public StageData(string stageName, int stageNum, RewardType rewardType)
+    {
+        StageName = stageName;
+        StageNum = stageNum;
+        RewardType = rewardType;
     }
 }
 
@@ -317,14 +355,15 @@ public class PlayData
 {
     [JsonProperty] public int InGame_Gold { get; private set; }
     [JsonProperty] public Dictionary<BlueChipID, int> InGame_BlueChip_Level { get; private set; }
-    [JsonProperty] public string InGame_Stage { get; private set; }
+    [JsonProperty] public StageData InGame_Stage { get; private set; }
+    [JsonProperty] public SO_Quest[] InGame_Quest { get; private set; }
     [JsonProperty] public float InGame_Hp { get; private set; }
     [JsonProperty] public float InGame_SkillGauge { get; private set; }
     [JsonProperty] public int InGame_Bullet { get; private set; }
     [JsonProperty] public int InGame_MeleeBullet { get; private set; }
 
     [JsonConstructor]
-    public PlayData(int InGame_Gold, Dictionary<BlueChipID, int> InGame_BlueChip_Level, string InGame_Stage, float inGame_Hp, float inGame_SkillGauge, int inGame_Bullet, int inGame_MeleeBullet)
+    public PlayData(int InGame_Gold, Dictionary<BlueChipID, int> InGame_BlueChip_Level, StageData InGame_Stage, float inGame_Hp, float inGame_SkillGauge, int inGame_Bullet, int inGame_MeleeBullet)
     {
         this.InGame_Gold = InGame_Gold;
         this.InGame_BlueChip_Level = InGame_BlueChip_Level;
@@ -335,13 +374,14 @@ public class PlayData
         InGame_MeleeBullet = inGame_MeleeBullet;
     }
 
-    public PlayData() 
+    public PlayData()
     {
+        InGame_Hp = -1f;
         InGame_BlueChip_Level = new Dictionary<BlueChipID, int>();
     }
-    
+
     public void SavePlayData_OnSceneExit(PlayerInstanteState state, PlayerEquipBlueChip equipBlueChip)//씬 변환 시 호출
-    {        
+    {
         InGame_BlueChip_Level.Clear();
         foreach (var item in equipBlueChip.GetBlueChipDic())
         {
@@ -351,14 +391,38 @@ public class PlayData
         InGame_SkillGauge = state.skillGauge;
         InGame_Bullet = state.bullets;
         InGame_MeleeBullet = state.meleeBullets;
-    }    
-    public void SavePlayData_OnSceneEnter(string newStage)//씬 입장 시 호출
+        JsonDataManager.GetUserData().AddGold(InGame_Gold - JsonDataManager.GetUserData().Gold);
+    }
+    public void SavePlayData_OnSceneEnter(StageData newStage)//씬 입장 시 호출
     {
         InGame_Stage = newStage;
+    }
+    public void SavePlayData_OnChapterEnter(SO_Quest[] questData)
+    {
+        InGame_Quest = questData;
+    }
+    public void InitGold_InGame(int amount)
+    {
+        InGame_Gold = amount;
     }
     public void AddGold_InGame(int amount)
     {
         InGame_Gold += amount;
+    }
+
+    public void Clear()
+    {
+        PlayerInstanteState state = PlayerMaster.Instance._PlayerInstanteState;
+        state.Restore();
+        InGame_Hp = state.GetMaxHp();
+        InGame_SkillGauge = 0f;
+        InGame_MeleeBullet = state.meleeBullets;
+        InGame_Bullet = state.bullets;
+        InGame_Stage = null;
+        InGame_Quest = null;
+
+        InGame_Gold = 0;
+        InGame_BlueChip_Level.Clear();
     }
 }
 
@@ -366,18 +430,18 @@ public class UserDataList
 {
     public Dictionary<int, UserData> dic;
     public int UseIndex { get; private set; }
-    
+
     public UserDataList(Dictionary<int, UserData> dic)
     {
         this.dic = dic;
     }
     public UserDataList()
     {
-        dic = new Dictionary<int, UserData>();        
+        dic = new Dictionary<int, UserData>();
     }
     public UserData GetUserData()
     {
-        if(dic.ContainsKey(UseIndex))
+        if (dic.ContainsKey(UseIndex))
         {
             Debug.Log($"{UseIndex} 세이브파일 로드");
             return dic[UseIndex];
@@ -398,12 +462,12 @@ public class UserDataList
     }
     public void DeleteUserData(int index)
     {
-        dic.Remove(index);        
+        dic.Remove(index);
     }
     public void SetUserDataIndex(int index)
     {
         if (dic.ContainsKey(index))
-        {            
+        {
             UseIndex = index;
         }
         else
@@ -414,7 +478,7 @@ public class UserDataList
         }
     }
     public static string FilePath()
-    {        
+    {
         return $"/Data/UserData/SaveFile.json";
     }
 }
@@ -423,7 +487,7 @@ public class JsonDataCreator : MonoBehaviour
 {
     public void Awake()
     {
-        JsonDataManager.jsonCache.Lode();        
+        JsonDataManager.jsonCache.Lode();
         JsonDataManager.jsonCache.Save();
     }
 }

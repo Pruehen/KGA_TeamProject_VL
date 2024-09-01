@@ -14,7 +14,7 @@ public class AttackSystem : MonoBehaviour
     int hashAttackComboInitialIndex = Animator.StringToHash("AttackComboInitialIndex");
     int hasAttackSpeed = Animator.StringToHash("AttackSpeed");
     int hashSkill = Animator.StringToHash("Skill");
-    MeleeAttack _closeAttack;
+    public MeleeAttack CloseAttack;
     Skill _closeSkill;
     [SerializeField] public SO_SKillEvent startAbsorbing;
     [SerializeField] public SO_SKillEvent endAbsorbing;
@@ -23,9 +23,9 @@ public class AttackSystem : MonoBehaviour
     {
         TryGetComponent(out _animator);
         TryGetComponent(out _playerAttack);
-        TryGetComponent(out _closeAttack);
+        TryGetComponent(out CloseAttack);
         TryGetComponent(out _closeSkill);
-        _closeAttack.Init(_animator, onCharged, onChargeEnd, onChargeFail,onChargeStart);
+        CloseAttack.Init(_animator, onCharged, onChargeEnd, onChargeFail,onChargeStart);
         _closeSkill.Init(_animator);
         _PlayerMaster = GetComponent<PlayerMaster>();
 
@@ -93,7 +93,7 @@ public class AttackSystem : MonoBehaviour
 
     public void OnRelease()
     {
-        _closeAttack.EndAttack();
+        CloseAttack.EndAttack();
     }
     public void OnReleaseLoop()
     {
@@ -146,7 +146,7 @@ public class AttackSystem : MonoBehaviour
     public void ResetAttack()
     {
         ReleaseLockMove();
-        _closeAttack.ChargeFail();
+        CloseAttack.ChargeFail();
     }
     public void OnUseSkillGauge()
     {

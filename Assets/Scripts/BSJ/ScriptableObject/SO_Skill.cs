@@ -51,5 +51,4 @@ public class SO_Skill : ScriptableObject
     public Vector3 MeleedefaultAttackOffset = new Vector3(1f, 1f, 1f);
     public Vector3 MeleeChargedAttackOffset = new Vector3(0f, 0f, 0f);
 
-
 }

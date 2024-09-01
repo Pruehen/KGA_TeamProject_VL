@@ -16,6 +16,7 @@ public class GameManager : SceneSingleton<GameManager>
 
     public NextStageObjects NextStageObjects;
 
+    private bool _unique = false;
     private bool _init = false;
     private RewardType _rewardType;
 
@@ -25,7 +26,7 @@ public class GameManager : SceneSingleton<GameManager>
 
     public PlayerMaster _PlayerMaster { get; private set; }
 
-    public List<GameObject> _enemies = new List<GameObject>();
+    public List<Enemy> _enemies = new List<Enemy>();
 
     public Action OnGameClear;
 
@@ -42,20 +43,21 @@ public class GameManager : SceneSingleton<GameManager>
         transform.SetParent(null);
         DontDestroyOnLoad(this);
 
-        NextStageObjects = FindAnyObjectByType<NextStageObjects>();
-        Assert.IsNotNull(NextStageObjects);
-
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void Start()
     {
-        OnSceneLoaded(new Scene(), LoadSceneMode.Single);
+        OnSceneLoaded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
     }
 
     private void Update()
     {
-        if (unexpectedquests[_currentLevel] != null)
+        if (SceneManager.GetActiveScene().name == "mainGame")
+        {
+            return;
+        }
+        if (unexpectedquests[GetCurrentLevelIndex()] != null)
         {
             _currentQuest.CheckConditionOnUpdate();
         }
@@ -67,49 +69,60 @@ public class GameManager : SceneSingleton<GameManager>
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        _initChapter = false;
+        Debug.Log("씬 로드됨");
         if (FindObjectsOfType<GameManager>().Length >= 2)
         {
-            if (!_init)
+            if (!_unique)
             {
                 return;
             }
         }
         if (mode == LoadSceneMode.Single)
         {
+            _unique = true;
+
+            if (scene.name == "mainGame")
+            {
+                return;
+            }
+
             if (_init == false)
             {
                 _init = true;
-                SetStageQuests();
             }
-            else
-            {
-            }
-
 
             _PlayerMaster = FindAnyObjectByType<PlayerMaster>();
             NextStageObjects = FindAnyObjectByType<NextStageObjects>();
-            Assert.IsNotNull(_PlayerMaster);
 
-            Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
-
-            foreach(Enemy e in enemies)
+            if (_PlayerMaster == null)
             {
-                _enemies.Add(e.gameObject);
+                return;
             }
-
-            foreach (Enemy enemy in enemies)
-            {
-                enemy.RegisterOnDead(OnEnemyDead);
-            }
+            else
+                Assert.IsNotNull(_PlayerMaster);
 
             NextStageObjects.Init(_rewardType);
-
-
-            if (unexpectedquests[_currentLevel] != null)
+            if (unexpectedquests[GetCurrentLevelIndex()] != null)
             {
-                _currentQuest.Init(unexpectedquests[_currentLevel]);
-                unexpectedquests[_currentLevel].Init();
+                _currentQuest.Init(unexpectedquests[GetCurrentLevelIndex()]);
+                unexpectedquests[GetCurrentLevelIndex()].Init();
             }
+        }
+    }
+
+    private void RegisterEnemies()
+    {
+        Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+
+        foreach (Enemy e in enemies)
+        {
+            _enemies.Add(e);
+        }
+
+        foreach (Enemy enemy in enemies)
+        {
+            enemy.OnDeadWithSelf += OnEnemyDead;
         }
     }
 
@@ -134,14 +147,63 @@ public class GameManager : SceneSingleton<GameManager>
         }
     }
 
+    bool _initChapter = false;
+    public void StartChapter()
+    {
+        if (_initChapter)
+            return;
+        _initChapter = true;
+        _enemies.Clear();
+
+        if (JsonDataManager.GetUserData().TryGetPlayData(out PlayData playData))
+        {
+            if (playData.InGame_Stage != null)
+            {
+                _currentLevel = playData.InGame_Stage.StageNum;
+                unexpectedquests = playData.InGame_Quest;
+
+                AsyncOperation ao2 = SceneManager.LoadSceneAsync(playData.InGame_Stage.StageName);
+                ao2.allowSceneActivation = true;
+
+                return;
+            }
+        }
+        SO_Stage randomStage = GetRandomItem(_chapterData.ChapterData[_currentLevel].StageData);
+        SetStageQuests();
+        JsonDataManager.GetUserData().SavePlayData_OnChapterEnter(unexpectedquests);
+        JsonDataManager.GetUserData().SavePlayData_OnSceneEnter(new StageData(randomStage.SceneName, _currentLevel, _rewardType));
+
+        AsyncOperation ao = SceneManager.LoadSceneAsync(randomStage.SceneName);
+        ao.allowSceneActivation = true;
+    }
+
     public void LoadNextStage()
     {
         _enemies.Clear();
         JsonDataManager.GetUserData().SavePlayData_OnSceneExit(_PlayerMaster._PlayerInstanteState, _PlayerMaster._PlayerEquipBlueChip);
-        SO_Stage randomStage = GetRandomItem(_chapterData.ChapterData[_currentLevel++ % _chapterData.ChapterData.Length].StageData);
+        SO_Stage randomStage = GetRandomItem(_chapterData.ChapterData[GetCurrentLevelIndex()].StageData);
+
+        AddLevelIndex();
+
+
+        JsonDataManager.GetUserData().SavePlayData_OnSceneEnter(new StageData(randomStage.SceneName, _currentLevel, _rewardType));
 
         AsyncOperation ao = SceneManager.LoadSceneAsync(randomStage.SceneName);
         ao.allowSceneActivation = true;
+    }
+    public void LoadMainScene()
+    {
+        AsyncOperation ao = SceneManager.LoadSceneAsync("mainGame");
+        ao.allowSceneActivation = true;
+    }
+
+    private int GetCurrentLevelIndex()
+    {
+        return _currentLevel % _chapterData.ChapterData.Length;
+    }
+    private void AddLevelIndex()
+    {
+        _currentLevel++;
     }
 
     private T GetRandomItem<T>(T[] array)
@@ -150,7 +212,7 @@ public class GameManager : SceneSingleton<GameManager>
         return array[r];
     }
 
-    private void OnEnemyDead(GameObject enemy)
+    private void OnEnemyDead(Enemy enemy)
     {
         _enemies.Remove(enemy);
         if (_enemies.Count == 0)
@@ -161,17 +223,57 @@ public class GameManager : SceneSingleton<GameManager>
 
     public bool IsCurrentUnexpectedQuestCleared()
     {
-        if (_currentLevel >= unexpectedquests.Length)
+        if (GetCurrentLevelIndex() >= unexpectedquests.Length)
         {
             Debug.LogError("OutOfLength");
             return false;
         }
-        if (unexpectedquests[_currentLevel] == null)
+        if (unexpectedquests[GetCurrentLevelIndex()] == null)
         {
 
             return false;
         }
 
         return _currentQuest.IsCleared();
+    }
+
+    public void OnPlayerSpawn()
+    {
+        foreach (Enemy enemy in _enemies)
+        {
+            if (enemy != null)
+            {
+                enemy.OnDeadWithSelf -= OnEnemyDead;
+            }
+        }
+        _enemies.Clear();
+
+        RegisterEnemies();
+
+        _PlayerMaster._PlayerInstanteState.OnDead += OnDead;
+    }
+
+    private void OnDead()
+    {
+        UserData userData = JsonDataManager.GetUserData();
+        _PlayerMaster._PlayerInstanteState.OnDead -= OnDead;
+        userData.TryGetPlayData(out PlayData playData);
+        userData.AddGold(playData.InGame_Gold - userData.Gold);
+        userData.ClearAndSaveUserData();
+        LoadMainScene();
+    }
+
+    public void EndGame()
+    {
+        var userData = JsonDataManager.GetUserData();
+        if (userData.TryGetPlayData(out PlayData playData))
+        {
+            userData.AddGold(playData.InGame_Gold - userData.Gold);
+        }
+        else
+        {
+            Debug.LogWarning("왜 없지 플레이데이터");
+        }
+        LoadMainScene();
     }
 }

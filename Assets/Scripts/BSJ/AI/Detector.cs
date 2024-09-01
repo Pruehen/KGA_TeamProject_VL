@@ -84,6 +84,8 @@ public class Detector : MonoBehaviour
         {
             return false;
         }
+        if(_detectThroughWall)
+            return true;
         return IsTargetVisible(Target);
     }
 

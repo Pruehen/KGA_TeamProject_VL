@@ -7,11 +7,7 @@ public class EnemyAlarmTrigger : MonoBehaviour
 
 
 
-    private void OnAwake()
-    {
-        _enemyList = GetComponentsInChildren<Enemy>();
-    }
-    private void OnValidate()
+    private void Awake()
     {
         _enemyList = GetComponentsInChildren<Enemy>();
     }

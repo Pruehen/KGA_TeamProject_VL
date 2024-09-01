@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using EnumTypes;
 using System;
 using Unity.VisualScripting;
+using UnityEngine.SceneManagement;
 
 public class UIManager : SceneSingleton<UIManager>
 {
@@ -27,9 +28,10 @@ public class UIManager : SceneSingleton<UIManager>
     [SerializeField] GameObject pickBlueChip;
     [SerializeField] GameObject holdBlueChip;
     [SerializeField] GameObject outGamePassive;
-  
+    [SerializeField] GameObject CheckUI;
+    
 
-    PlayerInstanteState _PlayerState;
+      PlayerInstanteState _PlayerState;
     PlayerMaster _PlayerMaster;
 
     [SerializeField] Button pickButton;
@@ -86,6 +88,8 @@ public class UIManager : SceneSingleton<UIManager>
                 HoldButtonMove();
             }
 
+            ReturnMainGame();
+
         }
 
         if (Input.GetKeyDown(KeyCode.Tab))
@@ -94,6 +98,10 @@ public class UIManager : SceneSingleton<UIManager>
         }
     }
 
+    private void ReturnMainGame()
+    {
+        CheckUIManager.Instance.CheckUiActive_OnClick(OutGame, "게임을 나가시겠습니까?");
+    }
 
     private void Awake()
     {
@@ -107,23 +115,26 @@ public class UIManager : SceneSingleton<UIManager>
             case nameof(InputManager.Instance.IsInteractiveBtnClick):
                 if (InputManager.Instance.IsInteractiveBtnClick == true)
                 {
-                    if (blueChipUI.activeSelf == true && pickBlueChip.activeSelf == true)
+                    if (EventSystem.current.currentSelectedGameObject?.GetComponent<Button>())
                     {
-
-                        Button selectedButton = EventSystem.current.currentSelectedGameObject?.GetComponent<Button>();
-                        selectedButton.onClick.Invoke();
-
+                        if (CheckUI.activeSelf == false && holdBlueChip.activeSelf == true && pickBlueChip.activeSelf == false)
+                        {
+                            return;
+                        }
+                        else {
+                            Button selectedButton = EventSystem.current.currentSelectedGameObject?.GetComponent<Button>();
+                            selectedButton.onClick.Invoke();
+                        }
+                      
                     }
-                    else
-                    {
-                        return;
-                    }
-                   
+                  
+
 
                 }
                 break;
         }
     }
+
 
     public void SetPlayerMaster(PlayerMaster pm)
     {
@@ -140,6 +151,7 @@ public class UIManager : SceneSingleton<UIManager>
             {
                 usePasiveList.Add(item);
             }
+            usePasiveList.Sort();
             for (int i = 0; i < usePasiveList.Count; i++)
             {
                 PassiveUIList[i].SetPassiveId(usePasiveList[i]);
@@ -159,6 +171,10 @@ public class UIManager : SceneSingleton<UIManager>
         }
     }
 
+    public void OutGame()
+    {
+        GameManager.Instance.EndGame();
+    }
 
     public void OnHealthRatioChanged(float value)
     {
@@ -206,7 +222,7 @@ public class UIManager : SceneSingleton<UIManager>
     }
     public void UpdateGoldInfoUI()
     {
-        float playerEmerald = JsonDataManager.GetUserData().TryGetPlayData(out PlayData playData) ? playData.InGame_Gold : -999999999f;
+        float playerEmerald = JsonDataManager.GetUserData().TryGetPlayData(out PlayData playData) ? playData.InGame_Gold : JsonDataManager.GetUserData().Gold;
 
         emeraldText.text = playerEmerald.ToString();
     }

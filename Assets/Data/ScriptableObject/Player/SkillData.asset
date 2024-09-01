@@ -18,8 +18,8 @@ MonoBehaviour:
   _rangedSkill2: 7
   _rangedSkill3: 1
   _rangedSkill4: 10
-  _meleeSkill1: 10
-  _meleeSkill2: 10
+  _meleeSkill1: 7.5
+  _meleeSkill2: 7.5
   _meleeSkill3_1: 0.25
   _meleeSkill3_2: 0.5
   _meleeSkill3_3: 10
@@ -32,8 +32,8 @@ MonoBehaviour:
   _meleeSkill2Range: {x: 3, y: 10, z: 10}
   _meleeSkill3Range: {x: 3, y: 10, z: 5}
   _meleeSkill4Range: {x: 8, y: 10, z: 8}
-  MeleedefaultAttackRange: {x: 1, y: 10, z: 1.5}
-  MeleeChargedAttackRange: {x: 1, y: 10, z: 2.5}
+  MeleedefaultAttackRange: {x: 2, y: 10, z: 2}
+  MeleeChargedAttackRange: {x: 2, y: 10, z: 5}
   _rangedSkill1Distance: 20
   _rangedSkill2Distance: 0
   _rangedSkill3Distance: 20
@@ -47,5 +47,5 @@ MonoBehaviour:
   _meleeSkill2OffSet: {x: 0, y: 0, z: 5}
   _meleeSkill3OffSet: {x: 0, y: 0, z: 2.5}
   _meleeSkill4OffSet: {x: 0, y: 0, z: 0}
-  MeleedefaultAttackOffset: {x: 0, y: 0, z: 0.75}
-  MeleeChargedAttackOffset: {x: 0, y: 0, z: 1.25}
+  MeleedefaultAttackOffset: {x: 0, y: 0, z: 1}
+  MeleeChargedAttackOffset: {x: 0, y: 0, z: 2.5}

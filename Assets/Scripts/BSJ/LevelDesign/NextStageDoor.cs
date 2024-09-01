@@ -7,6 +7,15 @@ public class NextStageDoor : MonoBehaviour
     [SerializeField] private RewardType _rewardType;
     [SerializeField] private GameObject _currencyIcon;
     [SerializeField] private GameObject _blueChipIcon;
+    [SerializeField] private bool _isOnClear = true;
+
+    private void Awake()
+    {
+        if( !_isOnClear )
+        {
+            Init(_rewardType);
+        }
+    }
 
     public void Init(RewardType rewardType)
     {

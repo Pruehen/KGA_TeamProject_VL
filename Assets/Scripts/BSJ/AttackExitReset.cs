@@ -15,7 +15,9 @@ public class AttackExitReset : StateMachineBehaviour
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (animator.GetAnimatorTransitionInfo(0).anyState)
+        AnimatorStateInfo nextState = animator.GetNextAnimatorStateInfo(0);
+        AnimatorTransitionInfo currentTransition = animator.GetAnimatorTransitionInfo(0);
+        if (currentTransition.anyState && nextState.fullPathHash != stateInfo.fullPathHash)
         {
             _playerAttack.ResetAttack();
             

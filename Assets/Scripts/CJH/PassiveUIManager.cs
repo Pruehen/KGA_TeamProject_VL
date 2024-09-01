@@ -1,6 +1,5 @@
 using EnumTypes;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -21,7 +20,6 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
     [SerializeField] Text costText;
     [SerializeField] Text effectText;
 
-    [SerializeField] Text ingameGold;
     [SerializeField] Text outgameGold;
 
     [SerializeField] int TestEmerald = 10000;
@@ -185,7 +183,7 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
 
     public void OnClickStartButton()
     {
-        SceneManager.LoadScene("TestScene");
+        GameManager.Instance.StartChapter();
     }
 
     //에메랄드 UI를 갱신해주는 메서드
@@ -207,7 +205,7 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
         if (suceeded)
         {
             // UI 갱신
-            ingameGold.text = JsonDataManager.GetUserData().Gold.ToString();
+            outgameGold.text = JsonDataManager.GetUserData().Gold.ToString();
             return true;
         }
         else
