@@ -2,70 +2,16 @@
   "dic": {
     "0": {
       "SaveDataIndex": 0,
-      "SaveTime": "2024-08-27T10:49:24.2481246+09:00",
+      "SaveTime": "2024-09-01T22:21:59.5410597+09:00",
       "PlayTime": 0,
-      "Gold": 0,
+      "Gold": 500,
       "Count_Try": 0,
       "Count_Clear": 0,
       "UnlockPassiveHashSet": [
-        4,
-        3,
-        1,
-        9,
-        8,
-        14
+        2
       ],
       "UsePassiveHashSet": [
-        4,
-        3,
-        8,
-        9,
-        14
-      ],
-      "IsClearAchievementsKey": [],
-      "SlotIndex_SlotUnlock_Dic": {
-        "0": true,
-        "2": true,
-        "4": true,
-        "1": true,
-        "3": true,
-        "5": false
-      },
-      "PlayData": null
-    },
-    "1": {
-      "SaveDataIndex": 1,
-      "SaveTime": "2024-08-27T10:45:26.3994613+09:00",
-      "PlayTime": 0,
-      "Gold": 0,
-      "Count_Try": 0,
-      "Count_Clear": 0,
-      "UnlockPassiveHashSet": [],
-      "UsePassiveHashSet": [],
-      "IsClearAchievementsKey": [],
-      "SlotIndex_SlotUnlock_Dic": {
-        "0": true,
-        "2": true,
-        "4": true,
-        "1": false,
-        "3": false,
-        "5": false
-      },
-      "PlayData": null
-    },
-    "2": {
-      "SaveDataIndex": 2,
-      "SaveTime": "2024-08-27T10:47:26.0312829+09:00",
-      "PlayTime": 0,
-      "Gold": 8000,
-      "Count_Try": 0,
-      "Count_Clear": 0,
-      "UnlockPassiveHashSet": [
-        1,
-        4
-      ],
-      "UsePassiveHashSet": [
-        1
+        2
       ],
       "IsClearAchievementsKey": [],
       "SlotIndex_SlotUnlock_Dic": {
@@ -76,7 +22,31 @@
         "3": false,
         "5": false
       },
-      "PlayData": null
+      "PlayData": {
+        "InGame_Gold": 500,
+        "InGame_BlueChip_Level": {},
+        "InGame_Stage": {
+          "StageName": "LevelScene Block 3",
+          "StageNum": 1,
+          "RewardType": 0
+        },
+        "InGame_Quest": [
+          null,
+          {
+            "LimitTime": 180.0,
+            "Difficurty": 0,
+            "name": "QuestClearInTimeData",
+            "hideFlags": 0
+          },
+          null,
+          null,
+          null
+        ],
+        "InGame_Hp": -1.0,
+        "InGame_SkillGauge": 0.0,
+        "InGame_Bullet": 0,
+        "InGame_MeleeBullet": 0
+      }
     }
   },
   "UseIndex": 0
