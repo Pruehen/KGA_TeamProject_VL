@@ -199,6 +199,12 @@ public class GameManager : SceneSingleton<GameManager>
 
     private void RegisterEnemies()
     {
+        foreach (var enemy in _enemies)
+        {
+            enemy.OnDeadWithSelf = null;
+        }
+        _enemies.Clear();
+
         Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
 
         foreach (Enemy e in enemies)
