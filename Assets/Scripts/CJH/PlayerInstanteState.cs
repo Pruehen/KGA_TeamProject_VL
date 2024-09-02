@@ -876,7 +876,7 @@ public class PlayerInstanteState : MonoBehaviour
         {
             combat.Heal(999f);
         }
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.F9))
         {
             GameManager.Instance.KillAll();
         }
