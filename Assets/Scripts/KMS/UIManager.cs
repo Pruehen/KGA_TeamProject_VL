@@ -44,8 +44,6 @@ public class UIManager : SceneSingleton<UIManager>
         
     [SerializeField] List<PassiveUI> PassiveUIList;
 
-    [SerializeField] Text questName;
-    [SerializeField] Text questInfo;
 
     private void Start()
     {
