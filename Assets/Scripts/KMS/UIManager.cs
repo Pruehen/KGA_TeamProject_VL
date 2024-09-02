@@ -16,6 +16,7 @@ public class UIManager : SceneSingleton<UIManager>
     [SerializeField] Image shildPoint;
     [SerializeField] Image skillPoint;
     [SerializeField] Image interactive;
+    [SerializeField] Image bossHealth;
 
     [SerializeField] TextMeshProUGUI TMP_BulletText;
     [SerializeField] TextMeshProUGUI TMP_MeleeBulletText;
@@ -28,10 +29,11 @@ public class UIManager : SceneSingleton<UIManager>
     [SerializeField] GameObject pickBlueChip;
     [SerializeField] GameObject holdBlueChip;
     [SerializeField] GameObject outGamePassive;
-    [SerializeField] GameObject CheckUI;
-    
+    [SerializeField] GameObject checkUI;
+    [SerializeField] Text questName;
+    [SerializeField] Text questInfo;
 
-      PlayerInstanteState _PlayerState;
+    PlayerInstanteState _PlayerState;
     PlayerMaster _PlayerMaster;
 
     [SerializeField] Button pickButton;
@@ -117,7 +119,7 @@ public class UIManager : SceneSingleton<UIManager>
                 {
                     if (EventSystem.current.currentSelectedGameObject?.GetComponent<Button>())
                     {
-                        if (CheckUI.activeSelf == false && holdBlueChip.activeSelf == true && pickBlueChip.activeSelf == false)
+                        if (checkUI.activeSelf == false && holdBlueChip.activeSelf == true && pickBlueChip.activeSelf == false)
                         {
                             return;
                         }
@@ -268,6 +270,24 @@ public class UIManager : SceneSingleton<UIManager>
             outGamePassive.SetActive(false);
             pickBlueChip.SetActive(true);
             TimeManager.instance.TimeStart();
+        }
+
+    }
+
+    public void DrawQuestStartUi(string name, string discription)
+    {
+        questName.text = name;
+        questInfo.text = discription;
+        Debug.Log("Name :" + questName.text + "Info :" + questInfo.text);
+
+    }
+
+    public void DrawQuestUi(bool isHited)
+    {
+        if (isHited)
+        {
+            Debug.Log("isHited: " + isHited);
+
         }
 
     }

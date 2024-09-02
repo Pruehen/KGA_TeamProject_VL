@@ -648,6 +648,7 @@ MonoBehaviour:
   shildPoint: {fileID: 8417947715189381021}
   skillPoint: {fileID: 3413287738594881792}
   interactive: {fileID: 6851618012068423707}
+  bossHealth: {fileID: 0}
   TMP_BulletText: {fileID: 8047616854185508886}
   TMP_MeleeBulletText: {fileID: 6597465155115990015}
   UI_MeleeBulletUI: {fileID: 1372150740773236630}
@@ -658,7 +659,9 @@ MonoBehaviour:
   pickBlueChip: {fileID: 9139173303872008459}
   holdBlueChip: {fileID: 3596495545465976639}
   outGamePassive: {fileID: 9106105910447382887}
-  CheckUI: {fileID: 4022663997830404666}
+  checkUI: {fileID: 0}
+  questName: {fileID: 1349946764090579454}
+  questInfo: {fileID: 1414473001411691308}
   pickButton: {fileID: 2186483501392198421}
   holdButton: {fileID: 3833804032776794808}
   escImage: {fileID: 7484984315175232287}
@@ -3227,6 +3230,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Boss Hp UI
       objectReference: {fileID: 0}
+    - target: {fileID: 7278576652356109750, guid: 1672e8cec35b7d84f80ec624ac7b98d8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4248,11 +4255,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: QuestPanel
       objectReference: {fileID: 0}
+    - target: {fileID: 5787031128580768441, guid: f60a87c80fe0df1468cdac3aa2a7ab4c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f60a87c80fe0df1468cdac3aa2a7ab4c, type: 3}
+--- !u!1 &1349946764090579454 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2407255655662542749, guid: f60a87c80fe0df1468cdac3aa2a7ab4c, type: 3}
+  m_PrefabInstance: {fileID: 3734525527312975459}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1414473001411691308 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2338076966899942735, guid: f60a87c80fe0df1468cdac3aa2a7ab4c, type: 3}
+  m_PrefabInstance: {fileID: 3734525527312975459}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &2013718625581881845 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2891760961666621334, guid: f60a87c80fe0df1468cdac3aa2a7ab4c, type: 3}
@@ -5106,11 +5127,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7c41048764fa367448fbf7e77451a5b9, type: 3}
---- !u!1 &4022663997830404666 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5184540142379596655, guid: 7c41048764fa367448fbf7e77451a5b9, type: 3}
-  m_PrefabInstance: {fileID: 8079581279309717845}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &6714493493362831809 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3246774395971489940, guid: 7c41048764fa367448fbf7e77451a5b9, type: 3}
