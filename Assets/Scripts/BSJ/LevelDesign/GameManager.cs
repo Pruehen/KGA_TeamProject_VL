@@ -262,7 +262,8 @@ public class GameManager : SceneSingleton<GameManager>
 
     public void KillAll()
     {
-        foreach(var enemy in _enemies)
+        List<Enemy> enemyList = new List<Enemy>(_enemies);
+        foreach(var enemy in enemyList)
         {
             enemy.Hit(9999f);
         }
