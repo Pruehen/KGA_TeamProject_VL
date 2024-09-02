@@ -37,20 +37,17 @@ public class StageSystem
     }
     public SO_Stage GetNextStage()
     {
-        List<SO_Stage> availables = _chapterData.ChapterData[GetCurrentLevelIndex()].GetAvailableStages();
+        List<SO_Stage> availables = _chapterData.ChapterData[CurrentStageNum].GetAvailableStages();
         var randomStage = availables[UnityEngine.Random.Range(0, availables.Count)];
         AddLevelIndex();
         CurrentStage = randomStage;
         return randomStage;
 
     }
-    private int GetCurrentLevelIndex()
-    {
-        return _currentStageNum % _chapterData.ChapterData.Length;
-    }
     private void AddLevelIndex()
     {
         _currentStageNum++;
+        CurrentStageNum = _currentStageNum % _chapterData.ChapterData.Length;
     }
 
     public void Clear()
