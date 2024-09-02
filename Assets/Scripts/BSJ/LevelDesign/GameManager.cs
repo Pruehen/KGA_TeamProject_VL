@@ -248,6 +248,7 @@ public class GameManager : SceneSingleton<GameManager>
     public void LoadNextStage()
     {
         SO_Stage nextStage = _stageSystem.GetNextStage();
+        JsonDataManager.GetUserData().SavePlayData_OnSceneExit(_PlayerMaster._PlayerInstanteState,_PlayerMaster._PlayerEquipBlueChip);
         LoadSceneAsync(nextStage.SceneName);
     }
 
