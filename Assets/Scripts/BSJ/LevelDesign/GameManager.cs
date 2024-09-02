@@ -67,7 +67,7 @@ public class GameManager : SceneSingleton<GameManager>
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log("¾À ·ÎµåµÊ");
+        Debug.Log("ï¿½ï¿½ ï¿½Îµï¿½ï¿½");
         if (FindObjectsOfType<GameManager>().Length >= 2)
         {
             if (!_unique)
@@ -239,7 +239,7 @@ public class GameManager : SceneSingleton<GameManager>
         }
         else
         {
-            Debug.LogWarning("¿Ö ¾øÁö ÇÃ·¹ÀÌµ¥ÀÌÅÍ");
+            Debug.LogWarning("ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ìµï¿½ï¿½ï¿½ï¿½ï¿½");
         }
         LoadMainScene();
     }

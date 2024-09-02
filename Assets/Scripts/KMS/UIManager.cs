@@ -44,6 +44,9 @@ public class UIManager : SceneSingleton<UIManager>
         
     [SerializeField] List<PassiveUI> PassiveUIList;
 
+    [SerializeField] Text questName;
+    [SerializeField] Text questInfo;
+
     private void Start()
     {
         blueChipUI.SetActive(false);
@@ -87,10 +90,14 @@ public class UIManager : SceneSingleton<UIManager>
         {
             if (blueChipUI.activeSelf == true)
             {
+
                 HoldButtonMove();
             }
+            else
+            { 
+               ReturnMainGame();
 
-            ReturnMainGame();
+            }
 
         }
 
@@ -102,7 +109,7 @@ public class UIManager : SceneSingleton<UIManager>
 
     private void ReturnMainGame()
     {
-        CheckUIManager.Instance.CheckUiActive_OnClick(OutGame, "°ÔÀÓÀ» ³ª°¡½Ã°Ú½À´Ï±î?");
+        CheckUIManager.Instance.CheckUiActive_OnClick(OutGame, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ã°Ú½ï¿½ï¿½Ï±ï¿½?");
     }
 
     private void Awake()
@@ -207,7 +214,7 @@ public class UIManager : SceneSingleton<UIManager>
         skillPoint.fillAmount = value;
     }
 
-    //½ÃÀÛ
+    //ï¿½ï¿½ï¿½ï¿½
     public void BlueChipUI()
     {
 
@@ -230,7 +237,7 @@ public class UIManager : SceneSingleton<UIManager>
     }
 
   
-    //FÅ°¸¦ ´­·¯ ºí·çÄ¨À» ¼±ÅÃÇÏ¸é È£­ŒµÇ´Â ÇÔ¼ö
+    //FÅ°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ä¨ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ È£ï¿½ï¿½ï¿½Ç´ï¿½ ï¿½Ô¼ï¿½
     public void PickBUtton()
     {
         escImage.SetActive(true);
@@ -239,7 +246,7 @@ public class UIManager : SceneSingleton<UIManager>
     }
 
 
-    //Esc¸¦ ´­·¯ ±³Ã¼¸¦ Ãë¼ÒÇÏ¸é È£ÃâµÇ´Â ÇÔ¼ö
+    //Escï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ È£ï¿½ï¿½Ç´ï¿½ ï¿½Ô¼ï¿½
     public void HoldButtonMove()
     {
         escImage.SetActive(false);

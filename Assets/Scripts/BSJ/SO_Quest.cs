@@ -10,6 +10,8 @@ public enum QuestDfficurty
 public class SO_Quest : ScriptableObject
 {
     public QuestDfficurty Difficurty;
+    public string Name;
+    public string Discription;
 
 
     public virtual void Init()

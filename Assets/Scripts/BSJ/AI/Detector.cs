@@ -26,6 +26,9 @@ public class Detector : MonoBehaviour
             _target = value;
         }
     }
+
+    public float TargetDistance { get { return Vector3.Distance(transform.position, _latestTarget.position); } }
+
     private Collider _target;
 
     private Collider _lastTarget;

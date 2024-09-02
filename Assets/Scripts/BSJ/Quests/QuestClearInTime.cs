@@ -9,6 +9,8 @@ public class QuestClearInTime : SO_Quest
     public override void Init()
     {
         timeCounter = 0f;
+
+        UIManager.Instance.DrawQuestStartUi(Name, Discription);
     }
     public override bool CheckConditionOnUpdate()
     {
