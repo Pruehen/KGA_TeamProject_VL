@@ -60,7 +60,7 @@ public class PlayerModChangeManager : MonoBehaviour
                 {
                     if (IsAbsorptState)
                     {
-                        _PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._AttackSystem.endAbsorbing);
+                        //_PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._AttackSystem.endAbsorbing);
                     }
                     EnterMeleeMode();
                 }
@@ -87,7 +87,7 @@ public class PlayerModChangeManager : MonoBehaviour
     {
         PlayerInstanteState state = _PlayerMaster._PlayerInstanteState;
         state.AcquireBullets(state.meleeBullets * state.MeleeToRangeRatio);
-        //_PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._AttackSystem.endAbsorbing);
+        //
         _PlayerMaster._PlayerInstanteState.BulletClear_Melee();
 
         IsAbsorptState = false;
@@ -100,10 +100,12 @@ public class PlayerModChangeManager : MonoBehaviour
         if (value <= 0)
         {
             EndAbsorptState();
+
         }
         else
         {
-                EndAbsorptState();
+            _PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._AttackSystem.endAbsorbing);
+            EndAbsorptState();
         }
 
         if (HasBlueChip5_AutoChange() == false)
@@ -114,6 +116,7 @@ public class PlayerModChangeManager : MonoBehaviour
     public void EnterMeleeMode()
     {
         ObjectPoolManager.Instance.AllDestroyObject(_PlayerMaster._AttackSystem.startAbsorbing.preFab);
+
         //_PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._AttackSystem.endAbsorbing);
         PlayerInstanteState state = _PlayerMaster._PlayerInstanteState;
 
@@ -126,7 +129,7 @@ public class PlayerModChangeManager : MonoBehaviour
             Debug.Log($"{value}개 흡수");
             if (value <= 0)
             {
-                _PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._AttackSystem.endAbsorbing);
+                //_PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._AttackSystem.endAbsorbing);
                 EndAbsorptState();
             }
         }
@@ -136,7 +139,7 @@ public class PlayerModChangeManager : MonoBehaviour
 
             if (value > 1)
             {
-                _PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._AttackSystem.endAbsorbing);
+                //_PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._AttackSystem.endAbsorbing);
                 Debug.Log($"{value}개 흡수, 근접 모드 변환");
                 state.AcquireBullets_Melee(value);
                 IsMeleeMode = true;                

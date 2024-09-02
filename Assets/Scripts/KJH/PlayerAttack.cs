@@ -172,7 +172,7 @@ public class PlayerAttack : MonoBehaviour
         {
             skillBool = false;
             delayTime = 0;
-            _AttackSystem.StartSkill((int)CurrentAttackKind, _PlayerMaster._PlayerInstanteState.skillGauge);
+            _AttackSystem.StartSkill(_currentAttackMod, _PlayerMaster._PlayerInstanteState.skillGauge);
         }
         prevAttackTrigger = attackTrigger;
     }
