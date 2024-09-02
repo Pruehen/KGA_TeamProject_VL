@@ -32,6 +32,7 @@ public class UIManager : SceneSingleton<UIManager>
     [SerializeField] GameObject checkUI;
     [SerializeField] Text questName;
     [SerializeField] Text questInfo;
+    [SerializeField] Animator questAni;
 
     PlayerInstanteState _PlayerState;
     PlayerMaster _PlayerMaster;
@@ -281,6 +282,9 @@ public class UIManager : SceneSingleton<UIManager>
 
     public void DrawQuestStartUi(string name, string discription)
     {
+        //시작 일반 등장
+        questAni.SetBool("Quest", true);
+
         questName.text = name;
         questInfo.text = discription;
         Debug.Log("Name :" + questName.text + "Info :" + questInfo.text);
@@ -296,5 +300,28 @@ public class UIManager : SceneSingleton<UIManager>
         }
 
     }
+
+    public void QuestClear()
+    {
+        questAni.SetBool("Quest", true);
+    }
+    public void Questfail()
+    {
+        questAni.SetBool("QuestFail", true);
+    }
+
+    public void QuestReturn()
+    {
+        if (questAni.GetBool("Quest") == true)
+        {
+            questAni.SetBool("Quest", false);
+        }
+
+        if (questAni.GetBool("QuestFail") == true)
+        {
+            questAni.SetBool("QuestFail", false);
+        }
+    }
+
 
 }
