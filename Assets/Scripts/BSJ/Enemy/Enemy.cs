@@ -217,7 +217,13 @@ public class Enemy : MonoBehaviour, ITargetable
         }
 
         if (_aiState == AIState.Dead)
-        { return; }
+        {
+            if(Mathf.Abs(_rigidbody.velocity.y) < .1f)
+            {
+                _rigidbody.velocity = Vector3.zero;
+            }
+            return;
+        }
 
         if (_navMeshAgent.velocity.magnitude > 0.1f)
         {
@@ -410,13 +416,21 @@ public class Enemy : MonoBehaviour, ITargetable
     {
         OnDeadWithSelf.Invoke(this);
 
-        SetEnableAllCollision(false);
+        _characterCollider.gameObject.layer = LayerMask.NameToLayer("Ragdoll");
+
+        if (_characterEnvCollider != null)
+        {
+            _characterEnvCollider.gameObject.layer = LayerMask.NameToLayer("Ragdoll");
+        }
+
+        _rigidbody.freezeRotation = true;
+        SetEnableRigidbody(true);
+
         _aiState = AIState.Dead;
         _animator.SetTrigger("Dead");
         _animator.SetBool("IsDead", true);
         _currentMoveTime = 9999999999f;
         _behaviorTree.DisableBehavior();
-        _navMeshAgent.isStopped = true;
 
         PlayerMaster.Instance._PlayerInstanteState.OnEnemyDestroy();
 
@@ -613,6 +627,8 @@ public class Enemy : MonoBehaviour, ITargetable
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (_aiState == AIState.Dead)
+            return;
         if (AiAttack is LaunchAttack la)
         {
             la.TriggerOnEnterCollider();
