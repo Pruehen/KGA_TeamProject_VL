@@ -224,13 +224,13 @@ public class UserData
             Save();
         }
     }
-    public void SavePlayData_OnChapterEnter(SO_Quest[] questData)
+    public void SavePlayData_Quest(SO_Quest[] questData)
     {
         if (PlayData == null)
         {
             PlayData = new PlayData();
         }
-        PlayData.SavePlayData_OnChapterEnter(questData);
+        PlayData.SavePlayData_Quest(questData);
         Save();
     }
 
@@ -399,7 +399,7 @@ public class PlayData
     {
         InGame_Stage = newStage;
     }
-    public void SavePlayData_OnChapterEnter(SO_Quest[] questData)
+    public void SavePlayData_Quest(SO_Quest[] questData)
     {
         InGame_Quest = questData;
     }
