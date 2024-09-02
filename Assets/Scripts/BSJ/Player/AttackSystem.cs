@@ -62,7 +62,7 @@ public class AttackSystem : MonoBehaviour
 
 
         _animator.SetInteger(hashAttackComboInitialIndex, comboIndex);
-        _animator.SetFloat(hasAttackSpeed, _PlayerMaster._PlayerInstanteState.AttackSpeed);
+        _animator.SetFloat(hasAttackSpeed, _PlayerMaster._PlayerInstanteState.AttackSpeed());
 
     }
     public void StartSkill(PlayerAttackKind mod, float skillGauge)
@@ -73,6 +73,7 @@ public class AttackSystem : MonoBehaviour
             _animator.SetInteger(hashAttackMod, (int)mod);
             _animator.SetFloat("SkillGauge", skillGauge);
             _animator.SetTrigger(hashSkill);
+            _animator.SetFloat(hasAttackSpeed, _PlayerMaster._PlayerInstanteState.AttackSpeed());
             LockMove();
             Debug.Log(skillGauge);
             GetComponent<Rigidbody>().velocity = Vector3.zero;
