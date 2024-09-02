@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,8 @@ public class Spike : MonoBehaviour, ITargetable
     [SerializeField] private GameObject _trashPrefab;
     private float _damageTimeStamp;
 
+    public Action OnDead { get; internal set; }
+
     public Vector3 GetPosition()
     {
         return transform.position;
@@ -20,6 +23,7 @@ public class Spike : MonoBehaviour, ITargetable
         _hp -= dmg;
         if (_hp <= 0f)
         {
+            OnDead?.Invoke();
             SpawnTrash();
         }
     }
