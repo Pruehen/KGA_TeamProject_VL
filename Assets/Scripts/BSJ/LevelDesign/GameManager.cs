@@ -191,15 +191,6 @@ public class GameManager : SceneSingleton<GameManager>
 
     public void OnPlayerSpawn()
     {
-        foreach (Enemy enemy in _enemies)
-        {
-            if (enemy != null)
-            {
-                enemy.OnDeadWithSelf -= OnEnemyDead;
-            }
-        }
-        _enemies.Clear();
-
         RegisterEnemies();
 
         _PlayerMaster._PlayerInstanteState.OnDead += OnDead;
