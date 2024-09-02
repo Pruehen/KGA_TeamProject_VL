@@ -28,7 +28,8 @@ public class UIManager : SceneSingleton<UIManager>
     [SerializeField] GameObject pickBlueChip;
     [SerializeField] GameObject holdBlueChip;
     [SerializeField] GameObject outGamePassive;
-    [SerializeField] GameObject CheckUI;
+    [SerializeField] GameObject checkUI;
+    [SerializeField] GameObject queastPanel;
     
 
       PlayerInstanteState _PlayerState;
@@ -41,6 +42,9 @@ public class UIManager : SceneSingleton<UIManager>
     [SerializeField] Text emeraldText;
         
     [SerializeField] List<PassiveUI> PassiveUIList;
+
+    [SerializeField] Text questName;
+    [SerializeField] Text questInfo;
 
     private void Start()
     {
@@ -85,10 +89,14 @@ public class UIManager : SceneSingleton<UIManager>
         {
             if (blueChipUI.activeSelf == true)
             {
+
                 HoldButtonMove();
             }
+            else
+            { 
+               ReturnMainGame();
 
-            ReturnMainGame();
+            }
 
         }
 
@@ -117,7 +125,7 @@ public class UIManager : SceneSingleton<UIManager>
                 {
                     if (EventSystem.current.currentSelectedGameObject?.GetComponent<Button>())
                     {
-                        if (CheckUI.activeSelf == false && holdBlueChip.activeSelf == true && pickBlueChip.activeSelf == false)
+                        if (checkUI.activeSelf == false && holdBlueChip.activeSelf == true && pickBlueChip.activeSelf == false)
                         {
                             return;
                         }
@@ -272,4 +280,22 @@ public class UIManager : SceneSingleton<UIManager>
 
     }
 
+   
+    public void DrawQuestStartUi(string name, string discription)
+    {
+        questName.text = name;
+        questInfo.text = discription;
+        Debug.Log("Name :" + questName.text + "Info :" + questInfo.text);
+
+    }
+
+    public void DrawQuestUi(bool isHited)
+    {
+        if (isHited)
+        {
+            Debug.Log("isHited: " + isHited);
+
+        }
+
+    }
 }

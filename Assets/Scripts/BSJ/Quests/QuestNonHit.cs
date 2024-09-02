@@ -10,14 +10,21 @@ public class QuestNonHit : SO_Quest
         isHited = false;
 
         PlayerMaster.Instance._PlayerInstanteState.OnDamaged += OnDamaged;
+
+        UIManager.Instance.DrawQuestStartUi(Name, Discription);
     }
     public override bool CheckConditionOnUpdate()
     {
-        if(isHited)
+        if (isHited)
         {
             return false;
+
+
         }
-        return true;
+        UIManager.Instance.DrawQuestUi(isHited);
+
+            return true;
+
     }
 
     private void OnDamaged()
