@@ -15,7 +15,45 @@ public class PlayerInstanteState : MonoBehaviour
     public int meleeBullets { get; private set; }
     public float skillGauge { get; private set; }
     public bool IsAbsorptState { get; set; }
-    public float AttackSpeed { get => attackSpeed; private set => attackSpeed = value; }
+    public float DefaultAttackSpeed { get => attackSpeed; private set => attackSpeed = value; }
+    public float AttackSpeed()
+    {
+        int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Generic3);
+        if (level > 0)
+        {
+            float percentageIncrease;
+
+            if (skillGauge >= 400)
+            {
+
+                percentageIncrease = JsonDataManager.GetBlueChipData(BlueChipID.Generic3).Level_VelueList[level][3] / 100f;
+                return DefaultAttackSpeed * (1 + percentageIncrease);
+            }
+            else if (skillGauge >= 300)
+            {
+                percentageIncrease = JsonDataManager.GetBlueChipData(BlueChipID.Generic3).Level_VelueList[level][2] / 100f;
+                return DefaultAttackSpeed * (1 + percentageIncrease);
+            }
+            else if (skillGauge >= 200)
+            {
+                percentageIncrease = JsonDataManager.GetBlueChipData(BlueChipID.Generic3).Level_VelueList[level][1] / 100f;
+                return DefaultAttackSpeed * (1 + percentageIncrease);
+            }
+            else if (skillGauge >= 100)
+            {
+                percentageIncrease = JsonDataManager.GetBlueChipData(BlueChipID.Generic3).Level_VelueList[level][0] / 100f;
+                return DefaultAttackSpeed * (1 + percentageIncrease);
+            }
+            else
+            {
+                return DefaultAttackSpeed; 
+            }
+        }
+        else
+        {
+            return DefaultAttackSpeed; 
+        }
+    }
     public int MeleeToRangeRatio { get => _meleeToRangeRatio; private set => _meleeToRangeRatio = value; }
     public float AbsorbingStaminaConsumRate { get => _absorbingStaminaConsumRate; private set => _absorbingStaminaConsumRate = value; }
 
@@ -706,7 +744,7 @@ public class PlayerInstanteState : MonoBehaviour
         stamina = MaxStamina;
         skillGauge = 0;
         bullets = maxBullets / 3;
-        AttackSpeed = 1;
+        DefaultAttackSpeed = 1;
 
         Shield = 0f;
     }
