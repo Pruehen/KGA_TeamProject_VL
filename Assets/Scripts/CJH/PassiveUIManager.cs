@@ -183,7 +183,7 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
 
     public void OnClickStartButton()
     {
-        GameManager.Instance.StartChapter();
+        GameManager.Instance.StartGame();
     }
 
     //에메랄드 UI를 갱신해주는 메서드
