@@ -340,14 +340,16 @@ public class UserData
 public class StageData
 {
     [JsonProperty] public string StageName;
+    [JsonProperty] public SO_Stage Stage;
     [JsonProperty] public int StageNum;
     [JsonProperty] public RewardType RewardType;
 
-    public StageData(string stageName, int stageNum, RewardType rewardType)
+    public StageData(string stageName, int stageNum, RewardType rewardType, SO_Stage stage)
     {
         StageName = stageName;
         StageNum = stageNum;
         RewardType = rewardType;
+        Stage = stage;
     }
 }
 

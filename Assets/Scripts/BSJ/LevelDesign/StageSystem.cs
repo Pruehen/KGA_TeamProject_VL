@@ -19,21 +19,22 @@ public class StageSystem
 
 
     bool _initChapter = false;
+    public void LoadChapter(int stageNum, SO_Stage stage)
+    {
+        StartChapter();
+
+        CurrentStageNum = stageNum;
+        CurrentStage = stage;
+    }
+
     public void StartChapter()
     {
         if (_initChapter)
             return;
         _initChapter = true;
-
+        
         OnChapterStart?.Invoke();
     }
-    public void LoadChapter(int stageNum)
-    {
-        StartChapter();
-
-        CurrentStageNum = stageNum;
-    }
-
     public SO_Stage GetNextStage()
     {
         List<SO_Stage> availables = _chapterData.ChapterData[GetCurrentLevelIndex()].GetAvailableStages();
