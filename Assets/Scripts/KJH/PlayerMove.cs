@@ -149,8 +149,6 @@ public class PlayerMove : MonoBehaviour
     {
         if (_PlayerMaster.IsMeleeMode && _isDashing && _PlayerMaster.IsAttackState)
         {
-            // 캐릭터를 이동 방향으로 회전
-            //if (_moveVector3 != Vector3.zero && _isMoving && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove)
             RotateToVelocity();
         }
         else if (_PlayerMaster.IsAttackState)
@@ -166,6 +164,10 @@ public class PlayerMove : MonoBehaviour
         {
             // 캐릭터를 이동 방향으로 회전
             if (_moveVector3 != Vector3.zero && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove)
+            {
+                RotateToVelocity();
+            }
+            else if (_isDashing)
             {
                 RotateToVelocity();
             }
