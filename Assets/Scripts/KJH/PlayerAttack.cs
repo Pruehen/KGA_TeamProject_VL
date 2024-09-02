@@ -357,6 +357,8 @@ public class PlayerAttack : MonoBehaviour
     }
     private void ResetInvincibleOnAnim()
     {
+        if (_PlayerMaster.isDashing)
+            return;
         _PlayerMaster._PlayerInstanteState.ResetInvincible();
     }
 
@@ -367,6 +369,8 @@ public class PlayerAttack : MonoBehaviour
     }
     private void ResetEvadeOnAnim()
     {
+        if (_PlayerMaster.isDashing)
+            return;
         _PlayerMaster._PlayerInstanteState.ResetEvade();
     }
     //IEnumerator Attack_Delayed(float delayTime)
