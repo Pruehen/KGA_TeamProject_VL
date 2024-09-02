@@ -3,8 +3,12 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    [SerializeField] float rotSpeed = 0.2f;
-
+    [SerializeField] float defaultrotSpeed;
+    [SerializeField] float rotSpeed()
+    {
+        return defaultrotSpeed * _playerInstanteState.AttackSpeed();
+    }
+    
     Vector3 _moveVector3_Origin;
     Vector3 _moveVector3;
     Vector3 _lookTargetPos;
@@ -12,7 +16,7 @@ public class PlayerMove : MonoBehaviour
     AttackSystem _attackSystem;
 
     Animator _animator;
-
+    PlayerInstanteState _playerInstanteState;
 
 
     private void Start()
@@ -59,6 +63,7 @@ public class PlayerMove : MonoBehaviour
         _PlayerMaster = GetComponent<PlayerMaster>();
 
         _PlayerCameraMove = PlayerCameraMove.Instance;
+        _playerInstanteState = GetComponent<PlayerInstanteState>();
     }
 
     public void FixedUpdate()
@@ -158,7 +163,7 @@ public class PlayerMove : MonoBehaviour
             _lookTargetPos.y = 0f;
 
             Quaternion targetRotation = Quaternion.LookRotation(GetCamForward(), Vector3.up);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed());
         }
         else //if (_isMoving)
         {
@@ -179,7 +184,7 @@ public class PlayerMove : MonoBehaviour
         _lookTargetPos = _Rigidbody.velocity;
         _lookTargetPos.y = 0f;
         Quaternion targetRotation = Quaternion.LookRotation(_lookTargetPos, Vector3.up);
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed);
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotSpeed());
     }
 
     private Vector3 GetCamForward()
