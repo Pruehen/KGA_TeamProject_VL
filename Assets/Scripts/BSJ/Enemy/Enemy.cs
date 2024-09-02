@@ -414,7 +414,7 @@ public class Enemy : MonoBehaviour, ITargetable
     public Action<Enemy> OnDeadWithSelf;
     private void OnDead()
     {
-        OnDeadWithSelf.Invoke(this);
+        OnDeadWithSelf?.Invoke(this);
 
         _characterCollider.gameObject.layer = LayerMask.NameToLayer("Ragdoll");
 
