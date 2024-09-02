@@ -1,11 +1,8 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "QuestNonHitTimeData", menuName = "Quests/Condition/QuestNonHitTime", order = 0)]
-public class QuestNonHitTime : SO_Quest
+public class QuestNonHit : SO_Quest
 {
-    public float LimitTime;
-
-    private float timeCounter;
     private bool isHited;
 
     public override void Init()
