@@ -876,6 +876,10 @@ public class PlayerInstanteState : MonoBehaviour
         {
             combat.Heal(999f);
         }
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            GameManager.Instance.KillAll();
+        }
     }
 
     //골드 관련
