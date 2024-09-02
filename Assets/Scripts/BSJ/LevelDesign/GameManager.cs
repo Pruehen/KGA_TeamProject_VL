@@ -141,9 +141,10 @@ public class GameManager : SceneSingleton<GameManager>
         {
             if (playData.InGame_Stage != null)
             {
-                _stageSystem.LoadChapter(playData.InGame_Stage.StageNum);
+                _stageSystem.LoadChapter(playData.InGame_Stage.StageNum, playData.InGame_Stage.Stage);
                 unexpectedquests = playData.InGame_Quest;
 
+                
                 LoadSceneAsync(playData.InGame_Stage.StageName);
                 return;
             }
@@ -151,10 +152,10 @@ public class GameManager : SceneSingleton<GameManager>
 
         //Start New
         _stageSystem.StartChapter();
-        SO_Stage randomStage = _stageSystem.GetNextStage();
+        SO_Stage randomStage = _stageSystem.GetCurrentRandomStage();
         SetStageQuests();
         JsonDataManager.GetUserData().SavePlayData_OnChapterEnter(unexpectedquests);
-        JsonDataManager.GetUserData().SavePlayData_OnSceneEnter(new StageData(randomStage.SceneName, _stageSystem.CurrentStageNum, _rewardType));
+        JsonDataManager.GetUserData().SavePlayData_OnSceneEnter(new StageData(randomStage.SceneName, _stageSystem.CurrentStageNum, _rewardType,_stageSystem.CurrentStage));
         LoadSceneAsync(randomStage.SceneName);
     }
     private T GetRandomItem<T>(T[] array)
@@ -191,15 +192,6 @@ public class GameManager : SceneSingleton<GameManager>
 
     public void OnPlayerSpawn()
     {
-        foreach (Enemy enemy in _enemies)
-        {
-            if (enemy != null)
-            {
-                enemy.OnDeadWithSelf -= OnEnemyDead;
-            }
-        }
-        _enemies.Clear();
-
         RegisterEnemies();
 
         _PlayerMaster._PlayerInstanteState.OnDead += OnDead;
@@ -207,6 +199,12 @@ public class GameManager : SceneSingleton<GameManager>
 
     private void RegisterEnemies()
     {
+        foreach (var enemy in _enemies)
+        {
+            enemy.OnDeadWithSelf = null;
+        }
+        _enemies.Clear();
+
         Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
 
         foreach (Enemy e in enemies)
@@ -226,7 +224,10 @@ public class GameManager : SceneSingleton<GameManager>
         _PlayerMaster._PlayerInstanteState.OnDead -= OnDead;
         userData.TryGetPlayData(out PlayData playData);
         userData.AddGold(playData.InGame_Gold - userData.Gold);
+
         userData.ClearAndSaveUserData();
+        JsonDataManager.GetUserData().SavePlayData_OnSceneEnter(new StageData(_stageSystem.CurrentStage.SceneName, _stageSystem.CurrentStageNum, _rewardType, _stageSystem.CurrentStage));
+
         LoadMainScene();
     }
 
@@ -241,13 +242,17 @@ public class GameManager : SceneSingleton<GameManager>
         {
             Debug.LogWarning("�� ���� �÷��̵�����");
         }
+
+        JsonDataManager.GetUserData().SavePlayData_OnSceneEnter(new StageData(_stageSystem.CurrentStage.SceneName, _stageSystem.CurrentStageNum, _rewardType, _stageSystem.CurrentStage));
+
         LoadMainScene();
     }
 
 
     public void LoadNextStage()
     {
-        SO_Stage nextStage = _stageSystem.GetNextStage();
+        SO_Stage nextStage = _stageSystem.GetNextRandomStage();
+        JsonDataManager.GetUserData().SavePlayData_OnSceneExit(_PlayerMaster._PlayerInstanteState,_PlayerMaster._PlayerEquipBlueChip);
         LoadSceneAsync(nextStage.SceneName);
     }
 
@@ -259,5 +264,14 @@ public class GameManager : SceneSingleton<GameManager>
     public void LoadMainScene()
     {
         LoadSceneAsync("mainGame");
+    }
+
+    public void KillAll()
+    {
+        List<Enemy> enemyList = new List<Enemy>(_enemies);
+        foreach(var enemy in enemyList)
+        {
+            enemy.Hit(9999f);
+        }
     }
 }
