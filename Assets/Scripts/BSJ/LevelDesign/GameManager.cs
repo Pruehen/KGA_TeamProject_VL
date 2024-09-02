@@ -259,4 +259,13 @@ public class GameManager : SceneSingleton<GameManager>
     {
         LoadSceneAsync("mainGame");
     }
+
+    public void KillAll()
+    {
+        List<Enemy> enemyList = new List<Enemy>(_enemies);
+        foreach(var enemy in enemyList)
+        {
+            enemy.Hit(9999f);
+        }
+    }
 }
