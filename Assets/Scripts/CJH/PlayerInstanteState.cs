@@ -26,22 +26,22 @@ public class PlayerInstanteState : MonoBehaviour
             if (skillGauge >= 400)
             {
 
-                percentageIncrease = JsonDataManager.GetBlueChipData(BlueChipID.Generic3).Level_VelueList[level][4] / 10f;
+                percentageIncrease = JsonDataManager.GetBlueChipData(BlueChipID.Generic3).Level_VelueList[level][3] / 100f;
                 return DefaultAttackSpeed * (1 + percentageIncrease);
             }
             else if (skillGauge >= 300)
             {
-                percentageIncrease = JsonDataManager.GetBlueChipData(BlueChipID.Generic3).Level_VelueList[level][3] / 10f;
+                percentageIncrease = JsonDataManager.GetBlueChipData(BlueChipID.Generic3).Level_VelueList[level][2] / 100f;
                 return DefaultAttackSpeed * (1 + percentageIncrease);
             }
             else if (skillGauge >= 200)
             {
-                percentageIncrease = JsonDataManager.GetBlueChipData(BlueChipID.Generic3).Level_VelueList[level][2] / 10f;
+                percentageIncrease = JsonDataManager.GetBlueChipData(BlueChipID.Generic3).Level_VelueList[level][1] / 100f;
                 return DefaultAttackSpeed * (1 + percentageIncrease);
             }
             else if (skillGauge >= 100)
             {
-                percentageIncrease = JsonDataManager.GetBlueChipData(BlueChipID.Generic3).Level_VelueList[level][1] / 10f;
+                percentageIncrease = JsonDataManager.GetBlueChipData(BlueChipID.Generic3).Level_VelueList[level][0] / 100f;
                 return DefaultAttackSpeed * (1 + percentageIncrease);
             }
             else
