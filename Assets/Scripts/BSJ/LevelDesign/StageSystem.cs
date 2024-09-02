@@ -35,14 +35,18 @@ public class StageSystem
         
         OnChapterStart?.Invoke();
     }
-    public SO_Stage GetNextStage()
+    public SO_Stage GetCurrentRandomStage()
     {
         List<SO_Stage> availables = _chapterData.ChapterData[CurrentStageNum].GetAvailableStages();
         var randomStage = availables[UnityEngine.Random.Range(0, availables.Count)];
-        AddLevelIndex();
         CurrentStage = randomStage;
         return randomStage;
 
+    }
+    internal SO_Stage GetNextRandomStage()
+    {
+        AddLevelIndex();
+        return GetCurrentRandomStage();
     }
     private void AddLevelIndex()
     {
@@ -54,4 +58,5 @@ public class StageSystem
     {
         CurrentStage.Cleared = true;
     }
+
 }

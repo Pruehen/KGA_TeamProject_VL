@@ -152,7 +152,7 @@ public class GameManager : SceneSingleton<GameManager>
 
         //Start New
         _stageSystem.StartChapter();
-        SO_Stage randomStage = _stageSystem.GetNextStage();
+        SO_Stage randomStage = _stageSystem.GetCurrentRandomStage();
         SetStageQuests();
         JsonDataManager.GetUserData().SavePlayData_OnChapterEnter(unexpectedquests);
         JsonDataManager.GetUserData().SavePlayData_OnSceneEnter(new StageData(randomStage.SceneName, _stageSystem.CurrentStageNum, _rewardType,_stageSystem.CurrentStage));
@@ -224,7 +224,10 @@ public class GameManager : SceneSingleton<GameManager>
         _PlayerMaster._PlayerInstanteState.OnDead -= OnDead;
         userData.TryGetPlayData(out PlayData playData);
         userData.AddGold(playData.InGame_Gold - userData.Gold);
+
         userData.ClearAndSaveUserData();
+        JsonDataManager.GetUserData().SavePlayData_OnSceneEnter(new StageData(_stageSystem.CurrentStage.SceneName, _stageSystem.CurrentStageNum, _rewardType, _stageSystem.CurrentStage));
+
         LoadMainScene();
     }
 
@@ -239,13 +242,16 @@ public class GameManager : SceneSingleton<GameManager>
         {
             Debug.LogWarning("�� ���� �÷��̵�����");
         }
+
+        JsonDataManager.GetUserData().SavePlayData_OnSceneEnter(new StageData(_stageSystem.CurrentStage.SceneName, _stageSystem.CurrentStageNum, _rewardType, _stageSystem.CurrentStage));
+
         LoadMainScene();
     }
 
 
     public void LoadNextStage()
     {
-        SO_Stage nextStage = _stageSystem.GetNextStage();
+        SO_Stage nextStage = _stageSystem.GetNextRandomStage();
         JsonDataManager.GetUserData().SavePlayData_OnSceneExit(_PlayerMaster._PlayerInstanteState,_PlayerMaster._PlayerEquipBlueChip);
         LoadSceneAsync(nextStage.SceneName);
     }
