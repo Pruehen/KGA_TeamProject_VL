@@ -14,9 +14,12 @@ public class QuestNoModChange : SO_Quest
 
         UIManager.Instance.DrawQuestStartUi(Name, Discription);
     }
-    public override bool CheckConditionOnUpdate()
+    public override void DoUpdate()
     {
-        if(isModChanged)
+    }
+    public override bool IsCleared()
+    {
+        if (isModChanged)
         {
             return false;
         }

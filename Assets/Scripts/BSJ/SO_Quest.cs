@@ -12,14 +12,28 @@ public class SO_Quest : ScriptableObject
     public QuestDfficurty Difficurty;
     public string Name;
     public string Discription;
+    public bool IsQuestUpdatable = false;
 
 
     public virtual void Init()
     { }
 
-    public virtual bool CheckConditionOnUpdate()
+    public virtual void DoUpdate()
+    {
+    }
+
+    public virtual bool IsCleared()
     {
         return false;
+    }
+
+    protected virtual void QuestFail()
+    {
+        UIManager.Instance.Questfail();
+    }
+    protected virtual void QuestClear()
+    {
+        UIManager.Instance.QuestClear();
     }
 
     public virtual void OnEnd()
@@ -41,14 +55,14 @@ public class Quest
         _questCondition.Init();
     }
 
-    public void CheckConditionOnUpdate()
+    public void DoUpdateQuest()
     {
         if(_questCondition == null)
         {
             Debug.LogWarning("씬 로드시 초기화가 업데이트보다 느림");
             return ;
         }
-        _cleared = _questCondition.CheckConditionOnUpdate();
+        _questCondition.DoUpdate();
     }
 
     public void StartQuest()

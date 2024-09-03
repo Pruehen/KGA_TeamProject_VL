@@ -57,7 +57,7 @@ public class GameManager : SceneSingleton<GameManager>
         }
         if (unexpectedquests[_stageSystem.CurrentStageNum] != null)
         {
-            _currentQuest.CheckConditionOnUpdate();
+            _currentQuest.DoUpdateQuest();
         }
     }
     public void SetRewordType(RewardType rewordType)

@@ -14,7 +14,11 @@ public class QuestNonHit : SO_Quest
 
         UIManager.Instance.DrawQuestStartUi(Name, Discription);
     }
-    public override bool CheckConditionOnUpdate()
+    public override void DoUpdate()
+    {
+    }
+
+    public override bool IsCleared()
     {
         if (isHited)
         {
@@ -22,10 +26,7 @@ public class QuestNonHit : SO_Quest
 
 
         }
-        UIManager.Instance.DrawQuestUi(isHited);
-
-            return true;
-
+        return true;
     }
 
     private void OnDamaged()
