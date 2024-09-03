@@ -96,7 +96,29 @@ public class ObjectPoolManager : SceneSingleton<ObjectPoolManager>
             objectPools[itemType].count++;
         }
     }
-    public void EnqueueObject(GameObject item)//다 쓴 건 큐에 다시 담음. Destroy를 대체함.
+    public void CreatePool(AudioClip audioClip, int count = 10)
+    {
+        string itemType = audioClip.name;
+        if (!objectPools.ContainsKey(itemType))
+        {
+            GameObject pool = new GameObject();
+            pool.transform.SetParent(this.transform);
+            pool.name = itemType + "Pool";
+            objectPools.Add(itemType, new Pool(pool.transform));
+        }
+
+        for (int i = 0; i < count; i++)
+        {
+            GameObject item = new GameObject(itemType);
+            item.transform.SetParent(objectPools[itemType].transform);
+            AudioSource audioSource = item.AddComponent<AudioSource>();
+            audioSource.clip = audioClip;
+            objectPools[itemType].queue.EnqueuePool(item);
+            objectPools[itemType].count++;
+        }
+    }
+
+public void EnqueueObject(GameObject item)//다 쓴 건 큐에 다시 담음. Destroy를 대체함.
     {
         string itemType = item.name;
         if (!objectPools.ContainsKey(itemType))//키가 없는 경우
@@ -188,6 +210,28 @@ public class ObjectPoolManager : SceneSingleton<ObjectPoolManager>
         }
     }
 
+    public GameObject DequeueObject(AudioClip audioClip, Vector3 pos)
+    {
+        string itemType = audioClip.name;
+
+        if (!objectPools.ContainsKey(itemType))
+        {
+            CreatePool(audioClip); // 자동으로 풀을 생성
+        }
+
+        GameObject dequeneObject = objectPools[itemType].queue.DequeuePool(pos);
+
+        if (dequeneObject != null)
+        {
+            return dequeneObject; // 해당 오브젝트를 반환
+        }
+        else
+        {
+            CreatePool(audioClip, objectPools[itemType].count); // 풀 확장
+            dequeneObject = objectPools[itemType].queue.DequeuePool(pos);
+            return dequeneObject;
+        }
+    }
     /// <summary>
     /// 시간을 지정해서 반환함
     /// </summary>

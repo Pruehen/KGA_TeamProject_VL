@@ -1,12 +1,13 @@
 using System.ComponentModel;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    [SerializeField] float defaultrotSpeed;
+    [SerializeField] float defaultrotSpeed = 0.3f;
     [SerializeField] float rotSpeed()
     {
-        return defaultrotSpeed * _playerInstanteState.AttackSpeed();
+        return defaultrotSpeed * math.max(1, _playerInstanteState.AttackSpeed());
     }
     
     Vector3 _moveVector3_Origin;
