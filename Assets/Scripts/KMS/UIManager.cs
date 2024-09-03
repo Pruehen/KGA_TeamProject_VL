@@ -33,6 +33,7 @@ public class UIManager : SceneSingleton<UIManager>
     [SerializeField] Text questName;
     [SerializeField] Text questInfo;
     [SerializeField] Animator questAni;
+    [SerializeField] Toggle questToggle;
 
     PlayerInstanteState _PlayerState;
     PlayerMaster _PlayerMaster;
@@ -85,6 +86,8 @@ public class UIManager : SceneSingleton<UIManager>
 
     private void Update()
     {
+        QuestReturn();
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (blueChipUI.activeSelf == true)
@@ -282,9 +285,8 @@ public class UIManager : SceneSingleton<UIManager>
 
     public void DrawQuestStartUi(string name, string discription)
     {
-        //시작 일반 등장
+        questToggle.isOn = false;
         questAni.SetBool("Quest", true);
-
         questName.text = name;
         questInfo.text = discription;
         Debug.Log("Name :" + questName.text + "Info :" + questInfo.text);
@@ -301,25 +303,33 @@ public class UIManager : SceneSingleton<UIManager>
 
     }
 
+    //성공
     public void QuestClear()
     {
+        questToggle.isOn = true;
         questAni.SetBool("Quest", true);
     }
+
+    //실패 
     public void Questfail()
     {
+        questToggle.isOn = false;
         questAni.SetBool("QuestFail", true);
     }
 
+   
     public void QuestReturn()
     {
-        if (questAni.GetBool("Quest") == true)
+        AnimatorStateInfo currentState = questAni.GetCurrentAnimatorStateInfo(0);
+
+        if (currentState.IsName("OutQuestPanel"))
         {
             questAni.SetBool("Quest", false);
         }
 
-        if (questAni.GetBool("QuestFail") == true)
+        if (currentState.IsName("FailOutQuestPanel"))
         {
-            questAni.SetBool("QuestFail", false);
+            questAni.SetBool(" QuestFail", false);
         }
     }
 
