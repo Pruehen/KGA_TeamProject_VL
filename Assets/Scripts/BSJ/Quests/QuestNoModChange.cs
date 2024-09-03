@@ -16,6 +16,12 @@ public class QuestNoModChange : SO_Quest
     }
     public override void DoUpdate()
     {
+        if (IsQuestEnd)
+            return;
+        if(isModChanged)
+        {
+            QuestFail();
+        }
     }
     public override bool IsCleared()
     {
@@ -23,6 +29,7 @@ public class QuestNoModChange : SO_Quest
         {
             return false;
         }
+        QuestClear();
         return true;
     }
 

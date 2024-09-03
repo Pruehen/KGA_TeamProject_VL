@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public enum QuestDfficurty
@@ -12,11 +13,12 @@ public class SO_Quest : ScriptableObject
     public QuestDfficurty Difficurty;
     public string Name;
     public string Discription;
-    public bool IsQuestUpdatable = false;
-
+    public bool IsQuestEnd = false;
 
     public virtual void Init()
-    { }
+    {
+        IsQuestEnd = false;
+    }
 
     public virtual void DoUpdate()
     {
@@ -29,10 +31,20 @@ public class SO_Quest : ScriptableObject
 
     protected virtual void QuestFail()
     {
+        if (IsQuestEnd)
+        {
+            return;
+        }
+        IsQuestEnd = true;
         UIManager.Instance.Questfail();
     }
     protected virtual void QuestClear()
     {
+        if (IsQuestEnd)
+        {
+            return;
+        }
+        IsQuestEnd = true;
         UIManager.Instance.QuestClear();
     }
 
@@ -42,12 +54,10 @@ public class SO_Quest : ScriptableObject
     }
 }
 
+[Serializable]
 public class Quest
 {
     SO_Quest _questCondition;
-
-    public bool _cleared;
-    public bool _start;
 
     public void Init(SO_Quest quest)
     {
@@ -57,25 +67,21 @@ public class Quest
 
     public void DoUpdateQuest()
     {
-        if(_questCondition == null)
+        if (_questCondition == null)
         {
             Debug.LogWarning("씬 로드시 초기화가 업데이트보다 느림");
-            return ;
+            return;
         }
         _questCondition.DoUpdate();
     }
 
-    public void StartQuest()
-    {
-        _start = true;
-    }
-
     public bool IsCleared()
     {
-        return _cleared;
+        return _questCondition.IsCleared();
     }
 
     public void OnEnd()
     {
+        _questCondition.OnEnd();
     }
 }
