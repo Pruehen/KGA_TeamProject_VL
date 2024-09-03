@@ -49,17 +49,14 @@ public class SO_RandomQuestSetData : ScriptableObject
             if (s.Difficurty == QuestDfficurty.Easy)
             {
                 EasyQuests.Add(s);
-                break;
             }
             if (s.Difficurty == QuestDfficurty.Normal)
             {
                 NormalQuests.Add(s);
-                break;
             }
             if (s.Difficurty == QuestDfficurty.Hard)
             {
                 HardQuests.Add(s);
-                break;
             }
         }
 
