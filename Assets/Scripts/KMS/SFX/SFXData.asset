@@ -12,16 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80e42a495e809a44d9ca2be693f4eba5, type: 3}
   m_Name: SFXData
   m_EditorClassIdentifier: 
-  clip: {fileID: 0}
   VFXvolum: 1
   BGMvolum: 1
   lobby: {fileID: 0}
   gameRoom: {fileID: 0}
   bossRoom: {fileID: 0}
-  playerstep: {fileID: 0}
+  playerstep: {fileID: 8300000, guid: 1af8b87789c86614499d46d087cb2005, type: 3}
   playerHit: {fileID: 0}
-  playerDead: {fileID: 0}
-  playerMeleeTransform: {fileID: 0}
+  playerDead: {fileID: 8300000, guid: 1af8b87789c86614499d46d087cb2005, type: 3}
+  Absorbeing: {fileID: 8300000, guid: 1af8b87789c86614499d46d087cb2005, type: 3}
+  playerMeleeTransform: {fileID: 8300000, guid: 1af8b87789c86614499d46d087cb2005, type: 3}
   playerRangeTransform: {fileID: 0}
   playerRangeProjectileHIt: {fileID: 0}
   playerMeleeAttackHit: {fileID: 0}
