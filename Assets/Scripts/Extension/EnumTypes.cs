@@ -1,3 +1,4 @@
+using System;
 using UnityEngine.Assertions;
 
 namespace EnumTypes
@@ -36,7 +37,7 @@ namespace EnumTypes
         None
     }
 
-    public enum EnemyAttackType
+    public enum AttackType
     {
         Melee,
         Jump
@@ -105,4 +106,41 @@ namespace EnumTypes
         MeleeSkillAttack4
     }
 
+
+    public enum AIState
+    {
+        Idle,
+        Patrol,
+        Wait,
+        Chase,
+        JustLostTarget,
+        Attack,
+        Dead
+    }
+    public enum EnemyType
+    {
+        Normal,
+        Jump,
+        Range
+    }
+
+    public enum DamageType
+    {
+        Normal,
+        NonKnockback,
+    }
+
+    public enum AttackRangeType
+    {
+        Close,
+        Far
+    }
+    [Flags]
+    public enum Phase
+    {
+        First = 1,
+        Second = 2,
+        Third = 4,
+        Fourth = 8,
+    }
 }

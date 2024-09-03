@@ -7,14 +7,14 @@ namespace BehaviorDesigner.Runtime.Tasks
     [TaskIcon("{SkinColor}ReflectionIcon.png")]
     public class BTC_IsJustLossTarget : Conditional
     {
-        public Enemy owner;
+        public EnemyBase owner;
         public SharedTransform target;
         public SharedVector3 targetPos;
         public SharedFloat detectRange;
 
         public override void OnAwake()
         {
-            owner = GetComponent<Enemy>();
+            owner = GetComponent<EnemyBase>();
         }
 
         public override TaskStatus OnUpdate()

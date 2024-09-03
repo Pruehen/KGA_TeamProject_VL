@@ -3,13 +3,13 @@ using UnityEngine;
 public class EnemyAlarmTrigger : MonoBehaviour
 {
     private float maxScale;
-    private Enemy[] _enemyList;
+    private EnemyBase[] _enemyList;
 
 
 
     private void Awake()
     {
-        _enemyList = GetComponentsInChildren<Enemy>();
+        _enemyList = GetComponentsInChildren<EnemyBase>();
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -25,7 +25,7 @@ public class EnemyAlarmTrigger : MonoBehaviour
     }
     private void AlramAll()
     {
-        foreach (Enemy enemy in _enemyList)
+        foreach (EnemyBase enemy in _enemyList)
         {
             enemy.ForceAlram();
         }

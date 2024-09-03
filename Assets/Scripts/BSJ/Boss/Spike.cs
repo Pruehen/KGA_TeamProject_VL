@@ -1,6 +1,5 @@
+using EnumTypes;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Spike : MonoBehaviour, ITargetable
@@ -46,7 +45,7 @@ public class Spike : MonoBehaviour, ITargetable
             return;
         }
 
-        if(rbOther.CompareTag("Player"))
+        if (rbOther.CompareTag("Player"))
         {
             if (Time.time >= _damageTimeStamp + _cooldown)
             {

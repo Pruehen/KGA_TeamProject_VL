@@ -1,14 +1,16 @@
+using EnumTypes;
+
 namespace BehaviorDesigner.Runtime.Tasks
 {
     public class BTA_SetState : Action
     {
-        public Enemy enemy;
+        public EnemyBase enemy;
         public AIState state;
 
         public override void OnAwake()
         {
             base.OnAwake();
-            enemy = GetComponent<Enemy>();
+            enemy = GetComponent<EnemyBase>();
         }
 
         public override TaskStatus OnUpdate()

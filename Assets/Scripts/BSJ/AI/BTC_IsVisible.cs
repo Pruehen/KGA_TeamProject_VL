@@ -7,21 +7,26 @@ namespace BehaviorDesigner.Runtime.Tasks
     [TaskIcon("{SkinColor}ReflectionIcon.png")]
     public class BTC_IsVisible : Conditional
     {
-        public Enemy owner;
+        public Detector _detector;
         public bool isAttack;
 
         public override void OnAwake()
         {
-            owner = GetComponent<Enemy>();
+            EnemyBase owner = GetComponent<EnemyBase>();
+            if (owner == null)
+            {
+                Debug.LogError("noEnemyBase found");
+            }
+            _detector = owner.Detector;
         }
 
         public override TaskStatus OnUpdate()
         {
-            if (owner == null)
+            if (_detector == null)
             {
-                return TaskStatus.Failure;
+                Debug.LogError("no Detector found");
             }
-            if(owner.IsTargetVisible())
+            if(_detector.IsTargetVisible())
             {
                 return TaskStatus.Success;
             }

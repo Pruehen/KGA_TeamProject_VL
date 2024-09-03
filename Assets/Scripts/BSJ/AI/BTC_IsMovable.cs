@@ -7,11 +7,11 @@ namespace BehaviorDesigner.Runtime.Tasks
     [TaskIcon("{SkinColor}ReflectionIcon.png")]
     public class BTC_IsMovable : Conditional
     {
-        public Enemy owner;
+        public EnemyBase owner;
 
         public override void OnAwake()
         {
-            owner = GetComponent<Enemy>();
+            owner = GetComponent<EnemyBase>();
         }
 
         public override TaskStatus OnUpdate()

@@ -20,7 +20,7 @@ public class GameManager : SceneSingleton<GameManager>
 
     public PlayerMaster _PlayerMaster { get; private set; }
 
-    public List<Enemy> _enemies = new List<Enemy>();
+    public List<EnemyBase> _enemies = new List<EnemyBase>();
 
     public SO_Quest[] unexpectedquests;
     private Quest _currentQuest = new Quest();
@@ -163,7 +163,7 @@ public class GameManager : SceneSingleton<GameManager>
         return array[r];
     }
 
-    private void OnEnemyDead(Enemy enemy)
+    private void OnEnemyDead(EnemyBase enemy)
     {
         _enemies.Remove(enemy);
         if (_enemies.Count == 0)
@@ -191,7 +191,7 @@ public class GameManager : SceneSingleton<GameManager>
 
     public void OnPlayerSpawn()
     {
-        foreach (Enemy enemy in _enemies)
+        foreach (EnemyBase enemy in _enemies)
         {
             if (enemy != null)
             {
@@ -207,14 +207,14 @@ public class GameManager : SceneSingleton<GameManager>
 
     private void RegisterEnemies()
     {
-        Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+        EnemyBase[] enemies = FindObjectsByType<EnemyBase>(FindObjectsSortMode.None);
 
-        foreach (Enemy e in enemies)
+        foreach (EnemyBase e in enemies)
         {
             _enemies.Add(e);
         }
 
-        foreach (Enemy enemy in enemies)
+        foreach (EnemyBase enemy in enemies)
         {
             enemy.OnDeadWithSelf += OnEnemyDead;
         }

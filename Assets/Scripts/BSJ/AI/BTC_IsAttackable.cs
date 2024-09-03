@@ -7,18 +7,17 @@ namespace BehaviorDesigner.Runtime.Tasks
     [TaskIcon("{SkinColor}ReflectionIcon.png")]
     public class BTC_IsAttackable : Conditional
     {
-        public Enemy owner;
+        public EnemyBase owner;
 
         public override void OnAwake()
         {
-            owner = GetComponent<Enemy>();
+            owner = GetComponent<EnemyBase>();
         }
         public override TaskStatus OnUpdate()
         {
             if (owner == null)
             {
-                Debug.LogWarning("Unable to compare field - compare value is null");
-                return TaskStatus.Failure;
+                Debug.LogError("Unable to find field - value is null");
             }
 
             if (owner.IsAttackable())

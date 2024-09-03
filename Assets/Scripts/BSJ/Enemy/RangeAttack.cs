@@ -56,7 +56,7 @@ public class RangeAttack : AiAttackAction
         }
         return;
     }
-    public void DoAttack(DamageBox damageBox, EnemyAttackType enemyAttackType)
+    public void DoAttack(DamageBox damageBox, AttackType enemyAttackType)
     {
         rotatable = false;
         Vector3 enemyToPlayerDir = (-transform.position + targetTrf.position).normalized;

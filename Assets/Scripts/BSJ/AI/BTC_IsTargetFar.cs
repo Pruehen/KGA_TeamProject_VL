@@ -7,26 +7,28 @@ namespace BehaviorDesigner.Runtime.Tasks
     [TaskIcon("{SkinColor}ReflectionIcon.png")]
     public class BTC_IsTargetFar : Conditional
     {
-        public Enemy owner;
+        public Detector _detector;
         public SharedFloat range = 3f;
 
         public override void OnAwake()
         {
-            owner = GetComponent<Enemy>();
+            EnemyBase owner = GetComponent<EnemyBase>();
+            if (owner == null)
+            {
+                Debug.LogError("no EnemyBase found");
+            }
+            _detector = owner.Detector;
         }
         public override TaskStatus OnUpdate()
         {
-            if (owner == null)
+            if (_detector == null)
             {
-                Debug.LogWarning("Unable to compare field - compare value is null");
-                return TaskStatus.Failure;
+                Debug.LogError("no Detector found");
             }
-
-            if (owner.IsTargetFar(range.Value))
+            if (_detector.IsTargetFar(range.Value))
             {
                 return TaskStatus.Success;
             }
-
             return TaskStatus.Failure;
         }
     }

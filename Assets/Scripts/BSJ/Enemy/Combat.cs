@@ -1,3 +1,4 @@
+using EnumTypes;
 using System;
 using UnityEngine;
 
@@ -56,9 +57,8 @@ public class Combat
         ResetCombat();
     }
 
-    public void DoUpdate()
+    public void DoUpdate(float deltaTime)
     {
-        float deltaTime = Time.deltaTime;
         if (_evadeTimer > 0f)
         {
             _evadeTimer -= deltaTime;
