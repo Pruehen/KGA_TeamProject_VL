@@ -748,13 +748,12 @@ MonoBehaviour:
   NextStageObjects: {fileID: 3973591298328088328}
   _enemies: []
   unexpectedquests:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 14ee43ee0d6813849b176d70cda6055d, type: 2}
+  - {fileID: 11400000, guid: a5e1d7466b27fc047ae26bc3e583bc46, type: 2}
+  - {fileID: 11400000, guid: 0e911c1f04592164a933f28a6d946083, type: 2}
   _stageSystem:
-    _chapterData: {fileID: 0}
-  _randomQuestsData: {fileID: 0}
+    _chapterData: {fileID: 11400000, guid: c3e6ab949535945459d22aa36c3d847d, type: 2}
+  _randomQuestsData: {fileID: 11400000, guid: eb37c6a02ede3bb44819358e48268e4f, type: 2}
 --- !u!1 &6975323383527796040
 GameObject:
   m_ObjectHideFlags: 3

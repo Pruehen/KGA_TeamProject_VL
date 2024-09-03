@@ -31,6 +31,8 @@ public class GameManager : SceneSingleton<GameManager>
 
     [SerializeField] private SO_RandomQuestSetData _randomQuestsData;
 
+    bool _isLoading = false;
+
     private void Awake()
     {
         if (FindObjectsOfType<GameManager>().Length >= 2)
@@ -67,6 +69,7 @@ public class GameManager : SceneSingleton<GameManager>
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        _isLoading = false;
         Debug.Log("�� �ε��");
         if (FindObjectsOfType<GameManager>().Length >= 2)
         {
@@ -128,12 +131,16 @@ public class GameManager : SceneSingleton<GameManager>
         {
             unexpectedquests[UnityEngine.Random.Range(0, unexpectedquests.Length)] = randomQuestSet.GetRandomQuest();
         }
+
+        JsonDataManager.GetUserData().SavePlayData_Quest(unexpectedquests);
     }
 
     bool _initChapter = false;
 
     public void StartGame()
     {
+        if (_isLoading)
+            return;
         _enemies.Clear();
 
         //Load
@@ -144,7 +151,7 @@ public class GameManager : SceneSingleton<GameManager>
                 _stageSystem.LoadChapter(playData.InGame_Stage.StageNum, playData.InGame_Stage.Stage);
                 unexpectedquests = playData.InGame_Quest;
 
-                
+
                 LoadSceneAsync(playData.InGame_Stage.StageName);
                 return;
             }
@@ -154,8 +161,7 @@ public class GameManager : SceneSingleton<GameManager>
         _stageSystem.StartChapter();
         SO_Stage randomStage = _stageSystem.GetCurrentRandomStage();
         SetStageQuests();
-        JsonDataManager.GetUserData().SavePlayData_OnChapterEnter(unexpectedquests);
-        JsonDataManager.GetUserData().SavePlayData_OnSceneEnter(new StageData(randomStage.SceneName, _stageSystem.CurrentStageNum, _rewardType,_stageSystem.CurrentStage));
+        JsonDataManager.GetUserData().SavePlayData_OnSceneEnter(new StageData(randomStage.SceneName, _stageSystem.CurrentStageNum, _rewardType, _stageSystem.CurrentStage));
         LoadSceneAsync(randomStage.SceneName);
     }
     private T GetRandomItem<T>(T[] array)
@@ -251,13 +257,24 @@ public class GameManager : SceneSingleton<GameManager>
 
     public void LoadNextStage()
     {
+        if (_isLoading)
+            return;
         SO_Stage nextStage = _stageSystem.GetNextRandomStage();
-        JsonDataManager.GetUserData().SavePlayData_OnSceneExit(_PlayerMaster._PlayerInstanteState,_PlayerMaster._PlayerEquipBlueChip);
+        if(_stageSystem.CurrentStageNum == 0)
+        {
+            SetStageQuests();
+        }
+        JsonDataManager.GetUserData().SavePlayData_OnSceneExit(_PlayerMaster._PlayerInstanteState, _PlayerMaster._PlayerEquipBlueChip);
         LoadSceneAsync(nextStage.SceneName);
     }
 
     public void LoadSceneAsync(string sceneName)
     {
+        if (_isLoading)
+        {
+            return;
+        }
+        _isLoading = true;
         AsyncOperation ao = SceneManager.LoadSceneAsync(sceneName);
         ao.allowSceneActivation = true;
     }
@@ -269,7 +286,7 @@ public class GameManager : SceneSingleton<GameManager>
     public void KillAll()
     {
         List<Enemy> enemyList = new List<Enemy>(_enemies);
-        foreach(var enemy in enemyList)
+        foreach (var enemy in enemyList)
         {
             enemy.Hit(9999f);
         }
