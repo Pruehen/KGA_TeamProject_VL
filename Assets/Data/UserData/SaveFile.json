@@ -2,9 +2,9 @@
   "dic": {
     "0": {
       "SaveDataIndex": 0,
-      "SaveTime": "2024-09-02T13:13:24.1400965+09:00",
+      "SaveTime": "2024-09-03T12:04:07.2904822+09:00",
       "PlayTime": 0,
-      "Gold": 200,
+      "Gold": 500,
       "Count_Try": 0,
       "Count_Clear": 0,
       "UnlockPassiveHashSet": [
@@ -23,31 +23,46 @@
         "5": false
       },
       "PlayData": {
-        "InGame_Gold": 200,
+        "InGame_Gold": 500,
         "InGame_BlueChip_Level": {},
         "InGame_Stage": {
           "StageName": "LevelScene Block 3",
-          "Stage": null,
-          "StageNum": 1,
+          "Stage": {
+            "SceneName": "LevelScene Block 3",
+            "Cleared": false,
+            "name": "Stage_Block1_3",
+            "hideFlags": 0
+          },
+          "StageNum": 0,
           "RewardType": 0
         },
         "InGame_Quest": [
           {
+            "LimitTime": 600.0,
             "Difficurty": 0,
             "Name": "날 막을자 더 없나?",
             "Discription": "10분안에 맵의 모든 적을 처치하세요!",
+            "IsQuestUpdatable": false,
             "name": "QuestClearInTimeData",
             "hideFlags": 0
           },
           null,
           null,
           null,
-          null
+          {
+            "LimitTime": 600.0,
+            "Difficurty": 0,
+            "Name": "날 막을자 더 없나?",
+            "Discription": "10분안에 맵의 모든 적을 처치하세요!",
+            "IsQuestUpdatable": false,
+            "name": "QuestClearInTimeData",
+            "hideFlags": 0
+          }
         ],
         "InGame_Hp": -1.0,
         "InGame_SkillGauge": 0.0,
-        "InGame_Bullet": 16,
-        "InGame_MeleeBullet": 5
+        "InGame_Bullet": 0,
+        "InGame_MeleeBullet": 0
       }
     }
   },
