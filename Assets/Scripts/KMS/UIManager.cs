@@ -34,6 +34,7 @@ public class UIManager : SceneSingleton<UIManager>
     [SerializeField] Text questInfo;
     [SerializeField] Animator questAni;
     [SerializeField] Toggle questToggle;
+    [SerializeField] Text questTimer;
 
     PlayerInstanteState _PlayerState;
     PlayerMaster _PlayerMaster;
@@ -297,8 +298,13 @@ public class UIManager : SceneSingleton<UIManager>
     {
         if (isHited)
         {
-            Debug.Log("isHited: " + isHited);
-
+            //실패
+            Questfail();
+        }
+        else
+        {
+            //성공
+            QuestClear();
         }
 
     }
@@ -333,5 +339,18 @@ public class UIManager : SceneSingleton<UIManager>
         }
     }
 
+    //시간
+    public void QuestTimerText(float timeCounter)
+    {
+        //Mathf.FloorToInt는 소수점 이하를 버리고 내림하여 가장 가까운 정수로 변환
+        int minutes = Mathf.FloorToInt(timeCounter / 60);
 
+        //Mathf.FloorToInt를 사용하여 소수점 이하를 버리고 내림
+        int seconds = Mathf.FloorToInt(timeCounter % 60);
+
+        // 분과 초를 00:00 형식의 문자열로 포맷팅하여 questTimer.text에 설정
+        // {0:00} - 두 자리로 포맷된 minutes 값
+        // {1:00} - 두 자리로 포맷된 seconds 값
+        questTimer.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+    }
 }

@@ -15,6 +15,7 @@ public class QuestClearInTime : SO_Quest
     public override bool CheckConditionOnUpdate()
     {
         timeCounter += Time.deltaTime;
+        UIManager.Instance.QuestTimerText(timeCounter);
         if (timeCounter > LimitTime)
         {
             return false;
