@@ -112,7 +112,7 @@ public class UIManager : SceneSingleton<UIManager>
 
     private void ReturnMainGame()
     {
-        CheckUIManager.Instance.CheckUiActive_OnClick(OutGame, "������ �����ðڽ��ϱ�?");
+        CheckUIManager.Instance.CheckUiActive_OnClick(OutGame, "게임을 나가시겠습니까?");
     }
 
     private void Awake()
