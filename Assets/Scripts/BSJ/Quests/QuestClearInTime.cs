@@ -8,6 +8,7 @@ public class QuestClearInTime : SO_Quest
 
     public override void Init()
     {
+        base.Init();
         timeCounter = 0f;
 
         UIManager.Instance.DrawQuestStartUi(Name, Discription);

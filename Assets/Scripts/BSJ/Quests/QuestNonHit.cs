@@ -7,6 +7,7 @@ public class QuestNonHit : SO_Quest
 
     public override void Init()
     {
+        base.Init();
         isHited = false;
 
         PlayerMaster.Instance._PlayerInstanteState.OnDamaged += OnDamaged;

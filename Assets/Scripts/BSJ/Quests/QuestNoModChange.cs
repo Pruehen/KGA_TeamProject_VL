@@ -7,6 +7,7 @@ public class QuestNoModChange : SO_Quest
 
     public override void Init()
     {
+        base.Init();
         isModChanged = false;
 
         PlayerMaster.Instance._PlayerInstanteState.OnMeleeModeChanged += OnModChanged;
