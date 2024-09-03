@@ -23,7 +23,7 @@ public class GameManager : SceneSingleton<GameManager>
     public List<Enemy> _enemies = new List<Enemy>();
 
     public SO_Quest[] unexpectedquests;
-    private Quest _currentQuest = new Quest();
+    private Quest _currentQuest;
 
     [SerializeField] private StageSystem _stageSystem;
 
@@ -105,6 +105,7 @@ public class GameManager : SceneSingleton<GameManager>
             NextStageObjects.Init(_rewardType);
             if (unexpectedquests[_stageSystem.CurrentStageNum] != null)
             {
+                _currentQuest = new Quest();
                 _currentQuest.Init(unexpectedquests[_stageSystem.CurrentStageNum]);
                 unexpectedquests[_stageSystem.CurrentStageNum].Init();
             }
@@ -177,6 +178,7 @@ public class GameManager : SceneSingleton<GameManager>
         {
             _stageSystem.Clear();
             OnGameClear?.Invoke();
+            _currentQuest?.IsCleared();
         }
     }
 

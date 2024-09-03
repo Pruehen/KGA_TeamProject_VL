@@ -16,14 +16,13 @@ public class QuestClearInTime : SO_Quest
     public override void DoUpdate()
     {
         UIManager.Instance.QuestTimerText(timeCounter);
-        if (IsQuestUpdatable)
+        if (IsQuestEnd)
             return;
         timeCounter += Time.deltaTime;
 
         if(!IsCleared())
         {
             QuestFail();
-            IsQuestUpdatable = true;
         }
     }
     public override bool IsCleared()
@@ -32,6 +31,7 @@ public class QuestClearInTime : SO_Quest
         {
             return false;
         }
+        QuestClear();
         return true;
     }
 }

@@ -16,6 +16,12 @@ public class QuestNonHit : SO_Quest
     }
     public override void DoUpdate()
     {
+        if (IsQuestEnd)
+            return;
+        if (isHited)
+        {
+            QuestFail();
+        }
     }
 
     public override bool IsCleared()
@@ -23,9 +29,8 @@ public class QuestNonHit : SO_Quest
         if (isHited)
         {
             return false;
-
-
         }
+        QuestClear();
         return true;
     }
 

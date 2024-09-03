@@ -2,16 +2,16 @@
   "dic": {
     "0": {
       "SaveDataIndex": 0,
-      "SaveTime": "2024-09-03T12:04:07.2904822+09:00",
+      "SaveTime": "2024-09-03T12:16:32.4097517+09:00",
       "PlayTime": 0,
       "Gold": 500,
       "Count_Try": 0,
       "Count_Clear": 0,
       "UnlockPassiveHashSet": [
-        0
+        2
       ],
       "UsePassiveHashSet": [
-        0
+        2
       ],
       "IsClearAchievementsKey": [],
       "SlotIndex_SlotUnlock_Dic": {
@@ -26,26 +26,18 @@
         "InGame_Gold": 500,
         "InGame_BlueChip_Level": {},
         "InGame_Stage": {
-          "StageName": "LevelScene Block 3",
+          "StageName": "LevelScene Block 2",
           "Stage": {
-            "SceneName": "LevelScene Block 3",
+            "SceneName": "LevelScene Block 2",
             "Cleared": false,
-            "name": "Stage_Block1_3",
+            "name": "Stage_Block1_2",
             "hideFlags": 0
           },
           "StageNum": 0,
           "RewardType": 0
         },
         "InGame_Quest": [
-          {
-            "LimitTime": 600.0,
-            "Difficurty": 0,
-            "Name": "날 막을자 더 없나?",
-            "Discription": "10분안에 맵의 모든 적을 처치하세요!",
-            "IsQuestUpdatable": false,
-            "name": "QuestClearInTimeData",
-            "hideFlags": 0
-          },
+          null,
           null,
           null,
           null,
@@ -55,6 +47,7 @@
             "Name": "날 막을자 더 없나?",
             "Discription": "10분안에 맵의 모든 적을 처치하세요!",
             "IsQuestUpdatable": false,
+            "IsQuestEnd": false,
             "name": "QuestClearInTimeData",
             "hideFlags": 0
           }
