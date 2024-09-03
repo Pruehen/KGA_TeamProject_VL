@@ -124,7 +124,7 @@ public class AttackSystem : MonoBehaviour
         Debug.Log("흡수");
         _animator.SetTrigger("Absorbeing");
         _closeSkill.Effect2(startAbsorbing);
-        //SM.Instance.PlaySound2();
+        SM.Instance.PlaySound2(SM.Instance.Absorbeing,transform.position);
     }
     public void AbsoberEnd()
     {

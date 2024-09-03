@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    [SerializeField] float defaultrotSpeed;
+    [SerializeField] float defaultrotSpeed = 0.3f;
     [SerializeField] float rotSpeed()
     {
         return defaultrotSpeed * math.max(1, _playerInstanteState.AttackSpeed());
