@@ -228,8 +228,8 @@ public class GameManager : SceneSingleton<GameManager>
 
     private void OnDead()
     {
-        UserData userData = JsonDataManager.GetUserData();
         _PlayerMaster._PlayerInstanteState.OnDead -= OnDead;
+        UserData userData = JsonDataManager.GetUserData();
         userData.TryGetPlayData(out PlayData playData);
         userData.AddGold(playData.InGame_Gold - userData.Gold);
 

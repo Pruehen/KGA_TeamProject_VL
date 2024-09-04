@@ -13,14 +13,15 @@ MonoBehaviour:
   m_Name: JumpAttack
   m_EditorClassIdentifier: 
   Id: 2
-  Phase: 0
-  AttackRangeType: 0
+  Phase: -1
+  AttackRangeType: -1
   AttackRange: 15
   CoolDown: 0
+  Priority: 0
   AimRotateSpeed: 10
   JumpAngle: 30
   MeleeRange: 3
-  HommingForce: 100
+  HommingForce: 3
   AttackDamage: 100
   JumpAttackDamage: 100
   AttackCancleDistance: 0.7

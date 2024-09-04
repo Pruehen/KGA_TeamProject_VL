@@ -35,7 +35,7 @@ public class EnemyBase : MonoBehaviour, ITargetable
     public float CurrentStateTime => _currentStateTime;
 
     protected bool _isMovable = true;
-    public bool IsMovable => _isMovable && !Attack.IsAttacking;
+    public bool IsMovable => _isMovable && !Attack.IsAttacking && Move.IsGrounded;
 
 
     protected IObjectPool<GameObject> _pooledHitVfx;
@@ -82,7 +82,7 @@ public class EnemyBase : MonoBehaviour, ITargetable
 
         _enemyAttack.Init(this, GetComponentInChildren<DamageBox>(),
             _enemyData, _animator);
-        _enemyMove.Init(transform, _rigidbody, _navMeshAgent);
+        _enemyMove.Init(this ,transform, _rigidbody, _navMeshAgent);
 
         _goldDropAmount = _enemyData.DropGoldAmount;
 
@@ -155,21 +155,15 @@ public class EnemyBase : MonoBehaviour, ITargetable
 
     protected void UpdateRotation()
     {
-        Vector3 dir = _navMeshAgent.destination - transform.position;
-        dir = dir.normalized;
-        if (_detector.GetLatestTarget() != null && _aiState == AIState.Chase)
+        if (_detector.GetLatestTarget() != null && _aiState == AIState.Chase || Move.isHomming)
         {
             Vector3 orig = transform.position;
             Vector3 target = _detector.GetLatestTarget().position;
             orig.y = 0;
             target.y = 0;
             look = Quaternion.LookRotation(target - orig, Vector3.up).normalized;
-            Rotator.SmoothRotate(transform, look, rotateSpeed, Time.deltaTime);
         }
-        else
-        {
-            Rotator.SmoothRotate(transform, look, rotateSpeed, Time.deltaTime);
-        }
+        Rotator.SmoothRotate(transform, look, rotateSpeed, Time.deltaTime);
     }
 
 
@@ -287,7 +281,6 @@ public class EnemyBase : MonoBehaviour, ITargetable
         gameObject.SetActive(false);
     }
     #endregion
-
 
     protected void OnCollisionStay(Collision collision)
     {

@@ -70,7 +70,10 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         private void MoveToTarget(NavMeshAgent agent, Vector3 target)
         {
-            agent.destination = target;
+            if (agent.pathPending == false)
+            {
+                agent.destination = target;
+            }
         }
         private void MoveToTarget2D(NavMeshAgent agent, Vector3 target)
         {

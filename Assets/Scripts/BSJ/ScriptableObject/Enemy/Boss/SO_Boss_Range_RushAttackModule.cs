@@ -7,7 +7,6 @@ public class SO_Boss_Range_RushAttackModule : SO_AttackModule
     public float DashTime = 1f;
     public override void StartAttack(EnemyBase owner)
     {
-        owner.SetEnableRigidbody(true);
         owner.Animator.SetBool("EndAttackMove", false);
         owner.gameObject.layer = LayerMask.NameToLayer("LaunchedEnemy");
         owner.CharacterCollider.gameObject.layer = LayerMask.NameToLayer("LaunchedEnemy");
@@ -21,7 +20,6 @@ public class SO_Boss_Range_RushAttackModule : SO_AttackModule
 
         if (!move.IsGrounded)
         {
-            owner.SetEnableRigidbody(false);
             transform.Translate(-Vector3.up * deltatime * 10f);
         }
         else

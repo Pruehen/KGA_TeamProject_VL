@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Boss_Both_UltimateAttackModule
   m_EditorClassIdentifier: 
   Id: 6
-  Phase: 0
-  AttackRangeType: 0
-  AttackRange: 0
-  CoolDown: 0
+  Phase: 2
+  AttackRangeType: -1
+  AttackRange: 9999
+  CoolDown: 30
   Priority: 50
   Prefab_projectile: {fileID: 0}
   ProjectileDamage: 0

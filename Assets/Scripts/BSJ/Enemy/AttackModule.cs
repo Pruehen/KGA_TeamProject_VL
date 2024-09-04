@@ -12,10 +12,11 @@ public class AttackModule
     public bool Inited { get; internal set; }
 
     public bool IsUpdateMove;
+    private bool IsMoveStarted;
 
     private Timer _timer;
     private float _prevAttackTime;
-
+    internal bool hasAttacked;
 
     public AttackModule(EnemyBase enemyBase, SO_AttackModule attackModuleData)
     {
@@ -37,7 +38,7 @@ public class AttackModule
     }
     public virtual void DoCurUpdate(float deltaTime)
     {
-        if (IsUpdateMove)
+        if (IsUpdateMove && IsMoveStarted)
         {
             AttackModuleData.UpdateAttackMove(deltaTime, owner);
         }
@@ -55,6 +56,7 @@ public class AttackModule
     {
         _timer.StartTimer();
         Available = false;
+        IsMoveStarted = false;
     }
 
     public virtual void StartAttackModulAction(EnemyBase owner)
@@ -65,6 +67,7 @@ public class AttackModule
     public virtual void StartAttackMove(EnemyBase owner)
     {
         IsUpdateMove = true;
+        IsMoveStarted = true;
         AttackModuleData.StartAttackMove(owner);
     }
     private void OnCoolEnd()

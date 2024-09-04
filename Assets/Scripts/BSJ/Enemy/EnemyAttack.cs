@@ -22,15 +22,16 @@ public class EnemyAttack
 
     float _attackSpeedMulti = 1f;
 
-    private bool _isAttacking;
+    private bool _isAnimAttacking;
     private bool _isAttackAnim;
-    public bool IsAttacking { get { return _isAttackAnim || _isAttacking; } }
+    public bool IsAttacking { get { return _isAttackAnim || _isAnimAttacking; } }
 
     private Phase _phase = Phase.First;
     private AttackRangeType _attackRangeType = AttackRangeType.Close;
 
 
     private AttackModule _currentAttack;
+    public AttackModule CurrentAttack => _currentAttack;
 
     private Animator _animator;
     float AttackSpeedMulti
@@ -45,6 +46,7 @@ public class EnemyAttack
             _animator.SetFloat("AttackSpeed", value);
         }
     }
+
 
     public void Init(EnemyBase owner, DamageBox damageBox, SO_EnemyBase _enemyData, Animator animator)
     {
@@ -178,7 +180,7 @@ public class EnemyAttack
 
     public void StartAttackAnimation()
     {
-        _isAttacking = true;
+        _isAnimAttacking = true;
         _animator.SetInteger("AttackId", _currentAttack.AttackModuleData.Id);
         _animator.SetTrigger("Attack");
         _currentAttack.StartAttack();
@@ -201,7 +203,7 @@ public class EnemyAttack
 
     private void OnAnimEnd()
     {
-        _isAttacking = false;
+        _isAnimAttacking = false;
     }
 
     public void OnCollisionStay(Collision collision)
