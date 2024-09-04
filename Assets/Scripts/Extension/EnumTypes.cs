@@ -129,11 +129,11 @@ namespace EnumTypes
         Normal,
         NonKnockback,
     }
-
+    [Flags]
     public enum AttackRangeType
     {
-        Close,
-        Far
+        Close = 1,
+        Far = 2
     }
     [Flags]
     public enum Phase
