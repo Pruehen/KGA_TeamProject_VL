@@ -19,41 +19,44 @@ public class StageSystem
 
 
     bool _initChapter = false;
+    public void LoadChapter(int stageNum, SO_Stage stage)
+    {
+        StartChapter();
+
+        CurrentStageNum = stageNum;
+        CurrentStage = stage;
+    }
+
     public void StartChapter()
     {
         if (_initChapter)
             return;
         _initChapter = true;
-
+        
         OnChapterStart?.Invoke();
     }
-    public void LoadChapter(int stageNum)
+    public SO_Stage GetCurrentRandomStage()
     {
-        StartChapter();
-
-        CurrentStageNum = stageNum;
-    }
-
-    public SO_Stage GetNextStage()
-    {
-        List<SO_Stage> availables = _chapterData.ChapterData[GetCurrentLevelIndex()].GetAvailableStages();
+        List<SO_Stage> availables = _chapterData.ChapterData[CurrentStageNum].GetAvailableStages();
         var randomStage = availables[UnityEngine.Random.Range(0, availables.Count)];
-        AddLevelIndex();
         CurrentStage = randomStage;
         return randomStage;
 
     }
-    private int GetCurrentLevelIndex()
+    internal SO_Stage GetNextRandomStage()
     {
-        return _currentStageNum % _chapterData.ChapterData.Length;
+        AddLevelIndex();
+        return GetCurrentRandomStage();
     }
     private void AddLevelIndex()
     {
         _currentStageNum++;
+        CurrentStageNum = _currentStageNum % _chapterData.ChapterData.Length;
     }
 
     public void Clear()
     {
         CurrentStage.Cleared = true;
     }
+
 }

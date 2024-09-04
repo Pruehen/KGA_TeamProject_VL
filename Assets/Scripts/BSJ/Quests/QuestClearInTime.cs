@@ -8,17 +8,30 @@ public class QuestClearInTime : SO_Quest
 
     public override void Init()
     {
+        base.Init();
         timeCounter = 0f;
 
         UIManager.Instance.DrawQuestStartUi(Name, Discription);
     }
-    public override bool CheckConditionOnUpdate()
+    public override void DoUpdate()
     {
+        UIManager.Instance.QuestTimerText(timeCounter);
+        if (IsQuestEnd)
+            return;
         timeCounter += Time.deltaTime;
+
+        if(!IsCleared())
+        {
+            QuestFail();
+        }
+    }
+    public override bool IsCleared()
+    {
         if (timeCounter > LimitTime)
         {
             return false;
         }
+        QuestClear();
         return true;
     }
 }
