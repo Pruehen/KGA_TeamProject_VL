@@ -2,6 +2,7 @@ using EnumTypes;
 using System;
 using UnityEngine;
 
+[Serializable]
 public class Spike : MonoBehaviour, ITargetable
 {
     [SerializeField] private float _cooldown;

@@ -35,7 +35,8 @@ public class EnemyBase : MonoBehaviour, ITargetable
     public float CurrentStateTime => _currentStateTime;
 
     protected bool _isMovable = true;
-    public bool IsMovable => _isMovable;
+    public bool IsMovable => _isMovable && !Attack.IsAttacking;
+
 
     protected IObjectPool<GameObject> _pooledHitVfx;
     [SerializeField] protected SO_SKillEvent hitVFX;
@@ -44,6 +45,7 @@ public class EnemyBase : MonoBehaviour, ITargetable
 
     [SerializeField] protected Transform _firePos;
     [SerializeField] protected GameObject _projectilePrefab;
+    public Transform FirePos => _firePos;
 
     protected int _goldDropAmount;
     private bool _isKnocked;
@@ -80,7 +82,7 @@ public class EnemyBase : MonoBehaviour, ITargetable
 
         _enemyAttack.Init(this, GetComponentInChildren<DamageBox>(),
             _enemyData, _animator);
-        _enemyMove.Init(transform, _rigidbody);
+        _enemyMove.Init(transform, _rigidbody, _navMeshAgent);
 
         _goldDropAmount = _enemyData.DropGoldAmount;
 
@@ -109,15 +111,6 @@ public class EnemyBase : MonoBehaviour, ITargetable
         _combat.DoUpdate(Time.deltaTime);
         _enemyAttack.DoUpdate(Time.deltaTime);
         _enemyMove.DoUpdate(Time.deltaTime);
-        if (AnimatorHelper.IsOnlyAnimationPlaying(_animator, 0, "Base Layer.Hit"))
-        {
-            _isKnocked = false;
-            return;
-        }
-        else
-        {
-            _isKnocked = true;
-        }
 
         if (_aiState == AIState.Dead)
         {
@@ -128,7 +121,16 @@ public class EnemyBase : MonoBehaviour, ITargetable
             return;
         }
 
-        if(Attack.IsAttacking)
+        if (AnimatorHelper.IsOnlyAnimationPlaying(_animator, 0, "Base Layer.Hit"))
+        {
+            _isKnocked = true;
+        }
+        else
+        {
+            _isKnocked = false;
+        }
+
+        if (Attack.IsAttacking)
         {
             _isMovable = false;
         }

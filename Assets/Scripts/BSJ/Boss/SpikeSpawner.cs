@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpikeSpawner : MonoBehaviour
 {
-    [SerializeField] private SpikeTimer _spikeTimer;
+    [SerializeField] private Timer _spikeTimer;
     [SerializeField] private Spike _spike;
     [SerializeField] private GameObject _anticipateModel;
 
@@ -12,22 +12,28 @@ public class SpikeSpawner : MonoBehaviour
     {
         _anticipateModel.SetActive(true);
         _spike.gameObject.SetActive(false);
-        _spikeTimer.OnTimerEnd += EnableSpike;
-        _spikeTimer.OnTimerEnd += DisableSelf;
-        _spike.OnDead += DisableSelf;
         _spikeTimer.StartTimer();
+        _spikeTimer.OnEnd += EnableSpike;
+        _spike.OnDead += DoReset;
+    }
+
+    private void Update()
+    {
+        _spikeTimer.DoUpdate(Time.deltaTime);
     }
 
     private void EnableSpike()
     {
         _spike.gameObject.SetActive(true);
+        _anticipateModel.SetActive(false);
     }
     private void DisableSelf()
     {
         gameObject.SetActive(false);
     }
-    private void DisableAncitipate()
+    private void DoReset()
     {
-        _anticipateModel.SetActive(false);
+        _spikeTimer.ResetTimer();
+        gameObject.SetActive(false);
     }
 }

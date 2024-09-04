@@ -9,12 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28eab4ce2b1e4fa42ac127bf826e69ad, type: 3}
-  m_Name: Boss_Close_AttackModuleData
+  m_Script: {fileID: 11500000, guid: e1d9108b7a6b8eb4698c70b7439d7bff, type: 3}
+  m_Name: Boss_Both_UltimateAttackModule
   m_EditorClassIdentifier: 
-  Id: 0
-  Phase: -1
+  Id: 6
+  Phase: 0
   AttackRangeType: 0
-  AttackRange: 2
-  CoolDown: 3
-  Priority: 110
+  AttackRange: 0
+  CoolDown: 0
+  Priority: 50
+  Prefab_projectile: {fileID: 0}
+  ProjectileDamage: 0
+  ProjectileSpeed: 0

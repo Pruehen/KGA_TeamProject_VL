@@ -11,11 +11,11 @@ public class EnemyAnimEvent : MonoBehaviour
     }
     private void EnableDamageBox()
     {
-        _owner.Attack.EnableDamageBox();
+        _owner.Attack.StartModulAction();
     }
     private void ShootProjectile()
     {
-        _owner.Attack.ShootProjectile();
+        _owner.Attack.StartModulAction();
     }
     private void Move_Attack(int type)
     {

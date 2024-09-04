@@ -1,12 +1,13 @@
 using System;
+using UnityEngine;
 
 [Serializable]
 public class Timer
 {
     public Action OnEnd;
     private float _time;
-    private float _limit;
-    private bool _isStop;
+    [SerializeField] private float _limit;
+    [SerializeField] private bool _isStop = true;
     public bool IsStop { get { return _isStop; } private set { _isStop = value; } }
 
 
@@ -33,6 +34,12 @@ public class Timer
     public void StartTimer()
     {
         IsStop = false;
+        _time = 0f;
+    }
+
+    public void ResetTimer()
+    {
+        IsStop = true;
         _time = 0f;
     }
 }

@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f99fbc9c6464b6f469f2112535008620, type: 3}
   m_Name: Boss_Close_Back_JumpAttackModuleData
   m_EditorClassIdentifier: 
-  Id: 1
+  Id: 2
   Phase: -1
   AttackRangeType: 0
   AttackRange: 16
   CoolDown: 10
+  Priority: 90
   JumpAngle: 30
   JumpForce: 15

@@ -6,17 +6,22 @@ public class AttackModule
 {
     public EnemyBase owner;
     public SO_AttackModule AttackModuleData;
-    private bool _available;
+    private bool _available = true;
     public bool Available { get { return _available; } private set { _available = value; } }
+
+    public bool Inited { get; internal set; }
 
     public bool IsUpdateMove;
 
     private Timer _timer;
+    private float _prevAttackTime;
+
 
     public AttackModule(EnemyBase enemyBase, SO_AttackModule attackModuleData)
     {
         owner = enemyBase;
         AttackModuleData = attackModuleData;
+        Inited = true;
     }
 
     public virtual void Init(EnemyBase owner)
@@ -29,10 +34,14 @@ public class AttackModule
     public virtual void DoUpdate(float deltaTime)
     {
         _timer.DoUpdate(deltaTime);
-        if(IsUpdateMove)
+    }
+    public virtual void DoCurUpdate(float deltaTime)
+    {
+        if (IsUpdateMove)
         {
             AttackModuleData.UpdateAttackMove(deltaTime, owner);
         }
+        AttackModuleData.UpdateAttack(deltaTime, owner, ref _prevAttackTime);
     }
     public virtual bool IsAttackable(AttackRangeType attackRangeType, Phase phase)
     {
@@ -46,6 +55,11 @@ public class AttackModule
     {
         _timer.StartTimer();
         Available = false;
+    }
+
+    public virtual void StartAttackModulAction(EnemyBase owner)
+    {
+        AttackModuleData.StartAttack(owner);
     }
 
     public virtual void StartAttackMove(EnemyBase owner)
