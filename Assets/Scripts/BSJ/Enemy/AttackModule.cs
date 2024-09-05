@@ -62,8 +62,6 @@ public class AttackModule
     public virtual void StartAttack()
     {
         _timer.StartTimer();
-        Available = false;
-        IsMoveStarted = false;
         PrevAttackTime = Time.time;
         Debug.Log(Time.time);
     }
@@ -71,6 +69,8 @@ public class AttackModule
     public virtual void StartAttackModulAction(EnemyBase owner)
     {
         AttackModuleData.StartAttack(owner);
+        Available = false;
+        IsMoveStarted = false;
         IsAttacking = true;
     }
 

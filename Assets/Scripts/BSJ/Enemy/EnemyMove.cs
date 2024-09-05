@@ -22,6 +22,9 @@ public class EnemyMove
     public bool IsForceMove { get; internal set; }
     public Vector3 ForceMoveTarget => _forceMoveTarget;
 
+    public bool IsDashing { get; private set; }
+    public bool IsCollided_upNormal { get; private set; }
+
     private Vector3 _forceMoveTarget;
 
     public bool IsLaunchEnd = false;
@@ -71,11 +74,7 @@ public class EnemyMove
                 if (isHomming)
                     IsHommingEnd = true;
                 SetEnableRigidbody(false);
-                IsLaunching = false;
-                IsLaunchEnd = true;
-                isHomming = false;
-                _owner.gameObject.layer = LayerMask.NameToLayer("EnemyCollider");
-                _owner.CharacterCollider.gameObject.layer = LayerMask.NameToLayer("EnemyCollider");
+                ResetLaunch();
             }
         }
 
@@ -92,6 +91,23 @@ public class EnemyMove
             }
         }
     }
+
+    public void ResetLaunch()
+    {
+        IsLaunching = false;
+        IsLaunchEnd = true;
+        isHomming = false;
+        _owner.gameObject.layer = LayerMask.NameToLayer("EnemyCollider");
+        _owner.CharacterCollider.gameObject.layer = LayerMask.NameToLayer("EnemyCollider");
+    }
+    public void ResetDash()
+    {
+        IsDashing = false;
+        isHomming = false;
+        _owner.gameObject.layer = LayerMask.NameToLayer("EnemyCollider");
+        _owner.CharacterCollider.gameObject.layer = LayerMask.NameToLayer("EnemyCollider");
+    }
+
     private bool IsNavMeshMoving(NavMeshAgent agent)
     {
         return agent.updatePosition && agent.velocity.magnitude >= 0.1f && !agent.isStopped;
@@ -104,12 +120,21 @@ public class EnemyMove
     public void OnCollisionStay(Collision collision)
     {
         IsCollided = true;
+
+        foreach (var contect in collision.contacts)
+        {
+
+            if (Vector3.Dot(contect.normal, Vector3.up) > .8f)
+            {
+                IsCollided_upNormal = true;
+            }
+        }
     }
 
     public void Launch(Vector3 vel)
     {
         isHomming = false;
-        Launch_Only(vel);
+        LaunchOnly(vel);
     }
 
     private Transform _hommingTarget;
@@ -119,10 +144,10 @@ public class EnemyMove
         _hommingTarget = target;
         _hommingForce = force;
         isHomming = true;
-        Launch_Only(vel);
+        LaunchOnly(vel);
     }
 
-    private void Launch_Only(Vector3 vel)
+    public void LaunchOnly(Vector3 vel)
     {
         SetEnableRigidbody(true);
         LaunchedTime = Time.time;
@@ -135,6 +160,23 @@ public class EnemyMove
 
         _owner.gameObject.layer = LayerMask.NameToLayer("LaunchedEnemy");
         _owner.CharacterCollider.gameObject.layer = LayerMask.NameToLayer("LaunchedEnemy");
+    }
+
+    public void StartHommoingGroundedDash(Vector3 vel, Transform target, float force)
+    {
+        _hommingTarget = target;
+        _hommingForce = force;
+        isHomming = true;
+        SetEnableRigidbody(true);
+        IsDashing = true;
+        IsCollided_upNormal = false;
+        DashOnly(vel);
+        _owner.gameObject.layer = LayerMask.NameToLayer("LaunchedEnemy");
+        _owner.CharacterCollider.gameObject.layer = LayerMask.NameToLayer("LaunchedEnemy");
+    }
+    public void DashOnly(Vector3 vel)
+    {
+        Rigidbody.velocity = vel;
     }
 
 
