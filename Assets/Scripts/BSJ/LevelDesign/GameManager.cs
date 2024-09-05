@@ -226,7 +226,7 @@ public class GameManager : SceneSingleton<GameManager>
         }
     }
 
-    private void OnDead()
+    private void OnDead(Combat self)
     {
         _PlayerMaster._PlayerInstanteState.OnDead -= OnDead;
         UserData userData = JsonDataManager.GetUserData();

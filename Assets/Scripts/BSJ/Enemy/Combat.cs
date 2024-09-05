@@ -21,7 +21,7 @@ public class Combat
     public Func<bool> AdditionalDamageableCheck { get; set; }
     public Action<DamageType> OnDamaged;
     public Action OnHeal;
-    public Action OnDead;
+    public Action<Combat> OnDead;
 
 
     public Action OnAttackSucceeded;
@@ -147,7 +147,7 @@ public class Combat
         if (_hp <= 0f)
         {
             _dead = true;
-            OnDead?.Invoke();
+            OnDead?.Invoke(this);
         }
         return true;
     }
