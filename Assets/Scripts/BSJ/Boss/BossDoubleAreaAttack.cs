@@ -65,6 +65,7 @@ public class BossDoubleAreaAttack : MonoBehaviour
         {
             _timer.ResetTimer();
             _timer.OnEnd = null;
+            gameObject.SetActive(false);
             return;
         }
         AreaDamageToPlayer(_condition);

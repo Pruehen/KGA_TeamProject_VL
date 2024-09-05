@@ -13,7 +13,7 @@ public class EnemyBase : MonoBehaviour, ITargetable
     [SerializeField] protected EnemyMove _enemyMove;
     [SerializeField] protected Detector _detector;
     [SerializeField] protected Combat[] _combat;
-    protected int _phase;
+    protected Phase _phase = Phase.First;
     public Action<EnemyBase> OnDeadWithSelf;
 
     public Detector Detector => _detector;
@@ -241,7 +241,7 @@ public class EnemyBase : MonoBehaviour, ITargetable
     {
         dmg *= _debuff_Passive_Offensive2_IncreasedDamageTakenMulti;
         _debuff_Passive_Offensive2_IncreasedDamageTakenMulti = 1;
-        _combat[_phase].Damaged(dmg, type);
+        _combat[EnumHelper.ConvertEnumFlagToInt(_phase)].Damaged(dmg, type);
         GameObject hitEF = ObjectPoolManager.Instance.DequeueObject(hitVFX.preFab);
         Vector3 finalPosition = this.transform.position + transform.TransformDirection(hitVFX.offSet);
         hitEF.transform.position = finalPosition;
@@ -270,31 +270,35 @@ public class EnemyBase : MonoBehaviour, ITargetable
 
 
     #region OnDead
-    protected void OnDead()
+    protected void OnDead(Combat self)
     {
-        OnDeadWithSelf.Invoke(this);
-
-        _characterCollider.gameObject.layer = LayerMask.NameToLayer("Ragdoll");
-
-        if (_characterEnvCollider != null)
+        if (self == _combat[_combat.Length - 1])
         {
-            _characterEnvCollider.gameObject.layer = LayerMask.NameToLayer("Ragdoll");
+            OnDeadWithSelf.Invoke(this);
+            _characterCollider.gameObject.layer = LayerMask.NameToLayer("Ragdoll");
+
+            if (_characterEnvCollider != null)
+            {
+                _characterEnvCollider.gameObject.layer = LayerMask.NameToLayer("Ragdoll");
+            }
+
+            _rigidbody.freezeRotation = true;
+            SetEnableRigidbody(true);
+
+            _aiState = AIState.Dead;
+            _animator.SetTrigger("Dead");
+            _animator.SetBool("IsDead", true);
+            _behaviorTree.DisableBehavior();
+
+            PlayerMaster.Instance._PlayerInstanteState.OnEnemyDestroy();
+
+            StopAllCoroutines();
+            StartCoroutine(DelayedDisable());
+
+            DropGold();
         }
-
-        _rigidbody.freezeRotation = true;
-        SetEnableRigidbody(true);
-
-        _aiState = AIState.Dead;
-        _animator.SetTrigger("Dead");
-        _animator.SetBool("IsDead", true);
-        _behaviorTree.DisableBehavior();
-
-        PlayerMaster.Instance._PlayerInstanteState.OnEnemyDestroy();
-
-        StopAllCoroutines();
-        StartCoroutine(DelayedDisable());
-
-        DropGold();
+        _phase = (Phase)((int)_phase << 1);
+        Attack.SetAttackPhaseType(_phase);
     }
 
     protected void DropGold()

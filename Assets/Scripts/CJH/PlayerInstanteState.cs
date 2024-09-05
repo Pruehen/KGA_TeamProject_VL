@@ -64,7 +64,7 @@ public class PlayerInstanteState : MonoBehaviour
 
     [SerializeField] private int _meleeToRangeRatio = 2;
 
-    public Action OnDead;
+    public Action<Combat> OnDead;
 
     bool _isMeleeMode;
     public bool IsMeleeMode
@@ -589,10 +589,10 @@ public class PlayerInstanteState : MonoBehaviour
         }
         UpdateHealth();
     }
-    void HandleOnDead()
+    void HandleOnDead(Combat self)
     {
         Debug.Log("플레이어 사망");
-        OnDead?.Invoke();
+        OnDead?.Invoke(self);
         Destroy(this.gameObject);
     }
 
