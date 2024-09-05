@@ -16,9 +16,13 @@ public class SFX : ScriptableObject
     public AudioClip playerstep;
     public AudioClip playerHit;
     public AudioClip playerDead;
+    public AudioClip playerSetBlueChip;
     public AudioClip Absorbeing;
     public AudioClip playerMeleeTransform;
     public AudioClip playerRangeTransform;
+    public AudioClip playerMeleeTransformRelease;
+    public AudioClip playerRangeAttack;
+    public AudioClip playerRangeAttack4;
     public AudioClip playerRangeProjectileHIt;
     public AudioClip playerMeleeAttackHit;
     public AudioClip playerCharging;
@@ -42,40 +46,39 @@ public class SFX : ScriptableObject
     public AudioClip NPCAttack;
     public AudioClip NPCDeath;
 
-    // Dictionary to map strings to AudioClips
-    public Dictionary<string, AudioClip> audioClipDictionary;
+    //public Dictionary<string, AudioClip> audioClipDictionary;
 
-    private void OnEnable()
-    {
-        // Initialize and populate the dictionary
-        audioClipDictionary = new Dictionary<string, AudioClip>
-        {
-            { "playerstep", playerstep },
-            { "playerHit", playerHit },
-            { "playerDead", playerDead },
-            { "playerMeleeTransform", playerMeleeTransform },
-            { "playerRangeTransform", playerRangeTransform },
-            { "playerRangeProjectileHIt", playerRangeProjectileHIt },
-            { "playerMeleeAttackHit", playerMeleeAttackHit },
-            { "playerCharging", playerCharging },
-            { "playerCharged", playerCharged },
-            { "playerChargedAttack", playerChargedAttack },
-            { "playerDash", playerDash },
-            { "RangeSkill1", RangeSkill1 },
-            { "RangeSkill2", RangeSkill2 },
-            { "RangeSkill3", RangeSkill3 },
-            { "RangeSkill4", RangeSkill4 },
-            { "MeleeSkill1", MeleeSkill1 },
-            { "MeleeSkill2_1", MeleeSkill2_1 },
-            { "MeleeSkill2_2", MeleeSkill2_2 },
-            { "MeleeSkill3", MeleeSkill3 },
-            { "MeleeSkill4_1", MeleeSkill4_1 },
-            { "MeleeSkill4_2", MeleeSkill4_2 },
-            { "NPCStep", NPCStep },
-            { "NPCHit", NPCHit },
-            { "NPCAttack", NPCAttack },
-            { "NPCDeath", NPCDeath },
-            // Add more mappings as needed
-        };
-    }
+    //private void OnEnable()
+    //{
+    //    // Initialize and populate the dictionary
+    //    audioClipDictionary = new Dictionary<string, AudioClip>
+    //    {
+    //        { "playerstep", playerstep },
+    //        { "playerHit", playerHit },
+    //        { "playerDead", playerDead },
+    //        { "playerMeleeTransform", playerMeleeTransform },
+    //        { "playerRangeTransform", playerRangeTransform },
+    //        { "playerRangeProjectileHIt", playerRangeProjectileHIt },
+    //        { "playerMeleeAttackHit", playerMeleeAttackHit },
+    //        { "playerCharging", playerCharging },
+    //        { "playerCharged", playerCharged },
+    //        { "playerChargedAttack", playerChargedAttack },
+    //        { "playerDash", playerDash },
+    //        { "RangeSkill1", RangeSkill1 },
+    //        { "RangeSkill2", RangeSkill2 },
+    //        { "RangeSkill3", RangeSkill3 },
+    //        { "RangeSkill4", RangeSkill4 },
+    //        { "MeleeSkill1", MeleeSkill1 },
+    //        { "MeleeSkill2_1", MeleeSkill2_1 },
+    //        { "MeleeSkill2_2", MeleeSkill2_2 },
+    //        { "MeleeSkill3", MeleeSkill3 },
+    //        { "MeleeSkill4_1", MeleeSkill4_1 },
+    //        { "MeleeSkill4_2", MeleeSkill4_2 },
+    //        { "NPCStep", NPCStep },
+    //        { "NPCHit", NPCHit },
+    //        { "NPCAttack", NPCAttack },
+    //        { "NPCDeath", NPCDeath },
+    //        // Add more mappings as needed
+    //    };
+    //}
 }

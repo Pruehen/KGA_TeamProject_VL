@@ -54,5 +54,6 @@ public class Projectile : MonoBehaviour
         }
 
         ObjectPoolManager.Instance.EnqueueObject(this.gameObject);
+        SM.Instance.PlaySound2("playerRangeProjectileHIt", transform.position);
     }
 }

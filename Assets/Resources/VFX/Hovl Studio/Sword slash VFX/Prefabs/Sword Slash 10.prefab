@@ -9829,6 +9829,7 @@ GameObject:
   - component: {fileID: 4144931221060082}
   - component: {fileID: 198189196357569358}
   - component: {fileID: 199762555884646244}
+  - component: {fileID: 7592507954627848441}
   m_Layer: 0
   m_Name: Sword Slash 10
   m_TagString: Untagged
@@ -14733,6 +14734,20 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &7592507954627848441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1485466043327710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b83bcd1bc70c19408cb347d2245ade3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SoundName: playerRangeAttack4
+  SB: {fileID: 0}
 --- !u!1 &1513448526828228
 GameObject:
   m_ObjectHideFlags: 0
