@@ -13,7 +13,7 @@ public class EnemyAttack
     [SerializeField] private Transform _firePos;
 
     private EnemyBase _owner;
-    private AttackModule[] _modules;
+    [SerializeField] private AttackModule[] _modules;
     private AttackModule _defaultAttack;
     private DamageBox _attackCollider;
 
@@ -24,7 +24,15 @@ public class EnemyAttack
 
     private bool _isAnimAttacking;
     private bool _isAttackAnim;
-    public bool IsAttacking { get { return _isAttackAnim || _isAnimAttacking; } }
+    public bool IsAttacking
+    {
+        get
+        {
+            return _isAttackAnim ||
+                _isAnimAttacking ||
+                (CurrentAttack?.IsAttacking ?? false);
+        }
+    }
 
     private Phase _phase = Phase.First;
     private AttackRangeType _attackRangeType = AttackRangeType.Close;
@@ -46,7 +54,6 @@ public class EnemyAttack
             _animator.SetFloat("AttackSpeed", value);
         }
     }
-
 
     public void Init(EnemyBase owner, DamageBox damageBox, SO_EnemyBase _enemyData, Animator animator)
     {
@@ -147,7 +154,7 @@ public class EnemyAttack
         int p = availableAttacks[0].AttackModuleData.Priority;
         foreach (AttackModule attack in availableAttacks)
         {
-            if(attack.AttackModuleData.Priority == p)
+            if (attack.AttackModuleData.Priority == p)
             {
                 samePriority.Add(attack);
             }

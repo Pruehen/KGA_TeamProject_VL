@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 4625951251192767705}
   m_Layer: 9
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -143,10 +143,19 @@ MonoBehaviour:
     _modulesSetupData: []
     _defaultAttackSetupData: {fileID: 11400000, guid: 2c622612390d49b469e3683830392826, type: 2}
     _rangeTypeThreshold: 15
-    _randomAttack: 0
+    _isPriorityAttack: 0
     _firePos: {fileID: 300571122579109741}
+    _modules: []
   _enemyMove:
-    IsJumping: 0
+    IsLaunching: 0
+    LaunchedTime: 0
+    IsGrounded: 0
+    IsLanded: 0
+    IsMoving: 0
+    IsLaunchEnd: 0
+    IsCrashed: 0
+    IsCollided: 0
+    isHomming: 0
   _detector: {fileID: 456772779722488808}
   _combat:
     _maxHp: 100

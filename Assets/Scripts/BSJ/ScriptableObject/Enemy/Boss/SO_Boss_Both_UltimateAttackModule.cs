@@ -7,10 +7,11 @@ public class SO_Boss_Both_UltimateAttackModule : SO_RangeModule
 {
     public override void StartAttack(EnemyBase owner)
     {
-        Transform targetTrf = owner.Detector.GetLatestTarget();
+        Transform targetTrf = owner.transform;
         Vector3 targetPos = targetTrf.position;
         targetPos.y = 0f;
         GameObject projectileObject = GameObject.Instantiate(Prefab_projectile,
             targetPos, Quaternion.identity);
+        projectileObject.GetComponent<BossDoubleAreaAttack>().Init(owner.Attack.CurrentAttack.Range);
     }
 }
