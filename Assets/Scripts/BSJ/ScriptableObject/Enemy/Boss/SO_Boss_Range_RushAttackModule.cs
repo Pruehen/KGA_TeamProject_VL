@@ -11,8 +11,9 @@ public class SO_Boss_Range_RushAttackModule : SO_AttackModule
         owner.gameObject.layer = LayerMask.NameToLayer("LaunchedEnemy");
         owner.CharacterCollider.gameObject.layer = LayerMask.NameToLayer("LaunchedEnemy");
     }
-    public override void UpdateAttack(float deltatime, EnemyBase owner, ref float prevAttackTime)
+    public override void UpdateAttack(float deltatime, EnemyBase owner)
     {
+        base.UpdateAttack(deltatime, owner);
         Transform transform = owner.transform;
 
         Vector3 vel = (transform.forward * DashVelocity);
@@ -26,7 +27,7 @@ public class SO_Boss_Range_RushAttackModule : SO_AttackModule
         {
             owner.Rigidbody.velocity = vel;
         }
-        if(Time.time > prevAttackTime + DashTime)
+        if(Time.time > owner.Attack.CurrentAttack.PrevAttackTime + DashTime)
         {
             owner.Animator.SetTrigger("EndAttackMove");
             owner.gameObject.layer = LayerMask.NameToLayer("EnemyCollider");

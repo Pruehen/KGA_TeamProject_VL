@@ -5,100 +5,110 @@ using UnityEngine;
 [Serializable]
 public class BossDoubleAreaAttack : MonoBehaviour
 {
-    [SerializeField] float distance_middle = 15f;
-    [SerializeField] float distance_max = 15f;
-    [SerializeField] float damage = 60f;
-    [SerializeField] float anticipateTime = 60f;
-    [SerializeField] AttackRangeType condition = AttackRangeType.Close;
-    [SerializeField] Timer timer;
-    [SerializeField] Transform model_anticipate;
-    [SerializeField] Material mat_anticipate;
+    [SerializeField] float _distance_middle = 15f;
+    [SerializeField] float _distance_max = 15f;
+    [SerializeField] float _damage = 60f;
+    [SerializeField] float _anticipateTime = 60f;
+    [SerializeField] AttackRangeType _condition = AttackRangeType.Close;
+    [SerializeField] Timer _timer;
+    [SerializeField] Transform _model_anticipate;
+    [SerializeField] Material _mat_anticipate;
 
-    [SerializeField] Vector3 Pos;
-    [SerializeField] int val;
+    [SerializeField] Vector3 _pos;
+    [SerializeField] bool _inside;
+
+    [SerializeField] int _attackCount;
+    int _curAttackCount;
 
     private void Awake()
     {
-        mat_anticipate = model_anticipate.GetComponent<Renderer>().sharedMaterial;   
+        _mat_anticipate = _model_anticipate.GetComponent<Renderer>().sharedMaterial;
     }
 
     public void Init(AttackRangeType condition)
     {
-        this.condition = condition;
+        this._condition = condition;
 
-        model_anticipate.localScale = Vector3.one * distance_max;
+        _model_anticipate.localScale = Vector3.one * _distance_max * 2f;
 
-        mat_anticipate.SetFloat("_Float", distance_middle);
+        _mat_anticipate.SetFloat("_Float", _distance_middle);
+
+        _mat_anticipate.SetVector("_Pos", transform.position);
 
         if (condition == AttackRangeType.Close)
         {
-            mat_anticipate.SetInt("_Inside", 1);
+            _mat_anticipate.SetInt("_Inside", 1);
             condition = AttackRangeType.Far;
         }
         else
         {
-            mat_anticipate.SetInt("_Inside", 0);
-            mat_anticipate.SetFloat("InnerCircle", distance_middle);
+            _mat_anticipate.SetInt("_Inside", 0);
+            _mat_anticipate.SetFloat("InnerCircle", _distance_middle);
             condition = AttackRangeType.Close;
         }
-        timer.OnEnd = OnTimeEnd;
-        timer.StartTimer();
+        _timer.OnEnd += OnTimeEnd;
+        _timer.StartTimer();
     }
-    private void OnEnable()
+    private void OnDisable()
     {
-        Init(condition);
+        _timer.ResetTimer();
     }
-
     private void Update()
     {
-        timer.DoUpdate(Time.deltaTime);
+        _timer.DoUpdate(Time.deltaTime);
     }
 
     private void OnTimeEnd()
     {
-        AreaDamageToPlayer(condition);
+        _curAttackCount++;
+        if(_curAttackCount >= _attackCount)
+        {
+            _timer.ResetTimer();
+            _timer.OnEnd = null;
+            return;
+        }
+        AreaDamageToPlayer(_condition);
         Flip();
-        timer.StartTimer();
+        _timer.StartTimer();
     }
 
     public void AreaDamageToPlayer(AttackRangeType range)
     {
         PlayerMaster target = PlayerMaster.Instance;
 
-        float dist = Vector3.Distance(target.transform.position, transform.position);
+        Vector3 a = target.transform.position;
+        Vector3 b = transform.position - a;
+        b.y = 0f;
+
+        float dist = b.magnitude;
 
         if (range == AttackRangeType.Close)
         {
-            if (dist < distance_middle)
+            if (dist < _distance_middle)
             {
-                target.Hit(damage);
+                target.Hit(_damage);
             }
         }
         else
         {
-            if (dist > distance_middle)
+            if (dist > _distance_middle)
             {
-                target.Hit(damage);
+                target.Hit(_damage);
             }
         }
     }
 
     private void Flip()
     {
-        if (condition == AttackRangeType.Close)
+        if (_condition == AttackRangeType.Close)
         {
-            condition = AttackRangeType.Far;
+            _condition = AttackRangeType.Far;
+            _mat_anticipate.SetInt("_Inside", 0);
         }
         else
         {
-            condition &= ~AttackRangeType.Close;
+            _condition = AttackRangeType.Close;
+            _mat_anticipate.SetInt("_Inside", 1);
         }
-    }
-    private void OnValidate()
-    {
-
-        mat_anticipate.SetVector("_Pos", Pos);
-        mat_anticipate.SetInt("_Inside", val);
-        mat_anticipate.SetFloat("_Float", distance_middle);
     }
 }

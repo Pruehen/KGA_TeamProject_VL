@@ -23,13 +23,21 @@ public class SO_Boss_Close_Back_JumpAttackModule : SO_AttackModule
 
         move.Launch(vel);
         animator.SetBool("EndAttackMove", false);
+
+        owner.Attack.CurrentAttack.hasAttacked = false;
     }
     public override void UpdateAttackMove(float time, EnemyBase owner)
     {
         EnemyMove move = owner.Move;
 
-        if(move.IsLanded || move.IsCrashed)
+        if (owner.Attack.CurrentAttack.hasAttacked)
         {
+            return;
+        }
+
+        if (move.IsLanded || move.IsCrashed)
+        {
+            owner.Attack.CurrentAttack.hasAttacked = true;
             owner.Animator.SetTrigger("EndAttackMove");
         }
     }
