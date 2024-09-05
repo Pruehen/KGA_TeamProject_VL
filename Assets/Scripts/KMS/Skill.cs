@@ -130,7 +130,7 @@ public class Skill : MonoBehaviour
         float damage = 0f;
         Vector3 range = new Vector3(1f, 0, 1f);
         float distance = 1f;
-
+        SM.Instance.PlaySound2("MeleeSkill4_1", transform.position);
 
         damage = so_Skill._rangedSkill4 * SkillPower;
         range = so_Skill._rangedSkill4Range;
