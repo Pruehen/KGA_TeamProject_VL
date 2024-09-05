@@ -274,6 +274,8 @@ public class EnemyBase : MonoBehaviour, ITargetable
     {
         if (self == _combat[_combat.Length - 1])
         {
+	        SM.Instance.PlaySound2("NPCDeath", transform.position);
+	        
             OnDeadWithSelf.Invoke(this);
             _characterCollider.gameObject.layer = LayerMask.NameToLayer("Ragdoll");
 

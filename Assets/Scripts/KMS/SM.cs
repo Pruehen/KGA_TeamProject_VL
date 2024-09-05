@@ -1,3 +1,4 @@
+using BehaviorDesigner.Runtime.Tasks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,17 +15,21 @@ public class SM : GlobalSingleton<SM>
         InitializeAudioDictionary();
     }
 
-    private void InitializeAudioDictionary()
+    private void InitializeAudioDictionary()//AWAKE할때 sfxData로부터 오디오클립을 받아옴
     {
         audioClipDictionary = new Dictionary<string, AudioClip>
         {
             { "playerstep", sfxData.playerstep },
             { "playerHit", sfxData.playerHit },
             { "playerDead", sfxData.playerDead },
+            { "playerSetBlueChip", sfxData.playerSetBlueChip },
             { "Absorbeing", sfxData.Absorbeing },
             { "playerMeleeTransform", sfxData.playerMeleeTransform },
+            { "playerMeleeTransformRelease", sfxData.playerMeleeTransformRelease },
             { "playerRangeTransform", sfxData.playerRangeTransform },
             { "playerRangeProjectileHIt", sfxData.playerRangeProjectileHIt },
+            { "playerRangeAttack", sfxData.playerRangeAttack },
+            { "playerRangeAttack4", sfxData.playerRangeAttack4 },
             { "playerMeleeAttackHit", sfxData.playerMeleeAttackHit },
             { "playerCharging", sfxData.playerCharging },
             { "playerCharged", sfxData.playerCharged },
@@ -48,23 +53,41 @@ public class SM : GlobalSingleton<SM>
     }
 
 
-    public void PlaySound2(string soundName, Vector3 position)
+    public GameObject PlaySound2(string soundName, Vector3 position)
     {
+
         if (audioClipDictionary.TryGetValue(soundName, out AudioClip audioClip))
         {
             GameObject sb = ObjectPoolManager.Instance.DequeueObject(audioClip, position);
             sb.transform.position = position;
+
             AudioSource audioSource = sb.GetComponent<AudioSource>();
+            if (audioSource == null)
+            {
+                audioSource = sb.AddComponent<AudioSource>();
+                audioSource = sb.GetComponent<AudioSource>();
+            }
             audioSource.clip = audioClip;
             audioSource.Play();
+            if (!audioSource.loop)//루프가 켜져있지 않을시 Lenth만큼 재생후 풀에반환함
+            {
+                StartCoroutine(ReturnToPoolAfterPlayback(audioSource));
+            }
+            return sb;
         }
         else
         {
             Debug.LogWarning($"Sound '{soundName}' not found in SFX data.");
+            return null;
         }
+        
     }
-
-        public void PlaySoundAtPosition(AudioClip clip, Vector3 position)
+    private IEnumerator ReturnToPoolAfterPlayback(AudioSource _audioSource)
+    {
+        yield return new WaitForSeconds(_audioSource.clip.length);
+        ObjectPoolManager.Instance.EnqueueObject(_audioSource.transform.gameObject);
+    }
+    public void PlaySoundAtPosition(AudioClip clip, Vector3 position)
     {
         AudioSource.PlayClipAtPoint(clip, position);
     }

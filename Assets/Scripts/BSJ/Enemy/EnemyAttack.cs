@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class EnemyAttack
 {
-    [SerializeField] private SO_AttackModule[] _modulesSetupData;
+    [SerializeField] private SO_AttackModule[] _modulesSetupData;   
     [SerializeField] private SO_AttackModule _defaultAttackSetupData;
     [SerializeField] private float _rangeTypeThreshold = 15f;
     [SerializeField] private bool _isPriorityAttack = false;
@@ -192,6 +192,7 @@ public class EnemyAttack
         _animator.SetInteger("AttackId", _currentAttack.AttackModuleData.Id);
         _animator.SetTrigger("Attack");
         _currentAttack.StartAttack();
+        SM.Instance.PlaySound2("NPCAttack", this._firePos.transform.position);
     }
     public void StartModulAction()
     {
@@ -207,6 +208,7 @@ public class EnemyAttack
         if (_attackCollider == null)
             return;
         _attackCollider.EnableDamageBox(_attackDamage);
+        
     }
 
     private void OnAnimEnd()

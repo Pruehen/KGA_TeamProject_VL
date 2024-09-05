@@ -4866,6 +4866,7 @@ GameObject:
   - component: {fileID: 451792}
   - component: {fileID: 19848222}
   - component: {fileID: 19920358}
+  - component: {fileID: 9183742467089578082}
   m_Layer: 0
   m_Name: MagicPillarBlastBlue
   m_TagString: Untagged
@@ -9705,6 +9706,20 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &9183742467089578082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 159062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b83bcd1bc70c19408cb347d2245ade3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SoundName: RangeSkill1
+  SB: {fileID: 0}
 --- !u!1 &186300
 GameObject:
   m_ObjectHideFlags: 0

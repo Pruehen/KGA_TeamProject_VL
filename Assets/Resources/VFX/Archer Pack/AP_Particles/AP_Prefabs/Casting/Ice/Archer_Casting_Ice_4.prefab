@@ -9961,6 +9961,7 @@ GameObject:
   - component: {fileID: 7954289829613554534}
   - component: {fileID: 7954289829613554533}
   - component: {fileID: -4079894112825191961}
+  - component: {fileID: 7000908639184268246}
   m_Layer: 0
   m_Name: Archer_Casting_Ice_4
   m_TagString: Untagged
@@ -14869,6 +14870,20 @@ MonoBehaviour:
   Projectile: {fileID: 8441863345641960822, guid: c884c5290ff255a448a6d5c7e62d2f87, type: 3}
   Launch: {fileID: 555139398692985738, guid: bbd56a50e48ed7f4f8d09dd22af4325b, type: 3}
   Time: 0.93
+--- !u!114 &7000908639184268246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7954289829613554531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b83bcd1bc70c19408cb347d2245ade3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SoundName: playerRangeTransform
+  SB: {fileID: 0}
 --- !u!1 &7954289830170524587
 GameObject:
   m_ObjectHideFlags: 0
