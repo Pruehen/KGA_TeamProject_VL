@@ -12,13 +12,18 @@ public class SO_AttackModule : ScriptableObject
     public float AttackRange;
     public float CoolDown;
     public int Priority;
+    public float AttackTime = .5f;
 
     public virtual void StartAttack(EnemyBase owner)
     {
         owner.Attack.EnableDamageBox();
     }
-    public virtual void UpdateAttack(float time, EnemyBase owner, ref float prevAttackTime)
+    public virtual void UpdateAttack(float time, EnemyBase owner)
     {
+        if(Time.time >= owner.Attack.CurrentAttack.PrevAttackTime + AttackTime)
+        {
+            owner.Attack.CurrentAttack.EndAttack();
+        }
     }
     public virtual void StartAttackMove(EnemyBase owner)
     {
