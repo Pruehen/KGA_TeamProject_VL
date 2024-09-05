@@ -206,7 +206,7 @@ public class PlayerInstanteState : MonoBehaviour
             Collider[] colliders = Physics.OverlapSphere(this.transform.position, passive_Offensive2.CheckDistance_ToEnemy, LayerMask_EnemyCheck);
             foreach (var item in colliders)
             {
-                if (item.transform.parent != null && item.transform.parent.TryGetComponent(out Enemy enemy))
+                if (item.transform.parent != null && item.transform.parent.TryGetComponent(out EnemyBase enemy))
                 {
                     enemy.ActiveDebuff_Passive_Offensive2(passive_Offensive2.DmgGain);
                 }
@@ -382,8 +382,8 @@ public class PlayerInstanteState : MonoBehaviour
 
     private void Update()
     {
-        combat.DoUpdate();
-        shield.DoUpdate();
+        combat.DoUpdate(Time.deltaTime);
+        shield.DoUpdate(Time.deltaTime);
         TestSkill();
 
         Passive_Offensive2_Active_OnUpdate();

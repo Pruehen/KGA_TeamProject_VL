@@ -1,21 +1,31 @@
+
+using UnityEngine;
+
 namespace BehaviorDesigner.Runtime.Tasks
 {
     public class BTA_Attack : Action
     {
-        public Enemy owner;
+        private EnemyAttack _attack;
+        [SerializeField] private SharedFloat _range;
 
         public override void OnAwake()
         {
-            owner = GetComponent<Enemy>();
+            EnemyBase owner = GetComponent<EnemyBase>();
+            if (owner == null)
+            {
+                Debug.LogError("no EnemyBase found");
+            }
+            _attack = owner.Attack;
         }
 
         public override TaskStatus OnUpdate()
         {
-            if (owner.IsDead()) 
+            if (_attack.IsAttacking)
             {
-                return TaskStatus.Failure;
+                return TaskStatus.Success;
             }
-            owner.StartAttackAnimation();
+            _attack.StartAttackAnimation();
+            _range.Value = 0f;
             return TaskStatus.Success;
         }
     }

@@ -1,3 +1,4 @@
+using EnumTypes;
 using UnityEngine;
 
 public interface IInteractable
@@ -29,4 +30,12 @@ public abstract class Passive
     public abstract void SetPassiveData();
     public abstract void Active();
     public abstract void DeActive();    
+}
+
+public interface AiAttackAction
+{
+    public void DoAttack(DamageBox damageBox, AttackType enemyAttackType);
+    public void DoUpdate();
+    public bool IsAttacking();
+    public void StartAttackAnim();
 }

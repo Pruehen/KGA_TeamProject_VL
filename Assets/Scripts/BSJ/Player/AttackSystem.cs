@@ -28,7 +28,6 @@ public class AttackSystem : MonoBehaviour
         CloseAttack.Init(_animator, onCharged, onChargeEnd, onChargeFail,onChargeStart);
         _closeSkill.Init(_animator);
         _PlayerMaster = GetComponent<PlayerMaster>();
-
     }
 
 

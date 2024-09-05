@@ -1,3 +1,4 @@
+using EnumTypes;
 using System;
 using System.Collections;
 using UnityEngine;

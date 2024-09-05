@@ -7,32 +7,37 @@ namespace BehaviorDesigner.Runtime.Tasks
     {
         public SharedVector3 targetPosition;
         public SharedTransform target;
-        public Enemy owner;
+        public Detector _detector;
         public bool isDynamicDestination = false;
         public bool isChaseEvenLost = false;
 
         public override void OnAwake()
         {
-            owner = GetComponent<Enemy>();
+            EnemyBase owner = GetComponent<EnemyBase>();
+            if (owner == null)
+            {
+                Debug.LogError("no EnemyBase found");
+            }
+            _detector = owner.Detector;
         }
 
         public override TaskStatus OnUpdate()
         {
-            if (owner == null)
+            if (_detector == null)
             {
-                Debug.LogWarning("Unable to compare field - compare value is null");
-                return TaskStatus.Failure;
+                Debug.LogError("no Detector found");
             }
-
             if(isChaseEvenLost)
             {
-                target.Value = owner.GetTargetAlways();
-                targetPosition = owner.GetTargetPositionAlways();
+                Transform t = _detector.GetLatestTarget();
+                target.Value = t;
+                targetPosition.Value = t.position;
             }
             else
             {
-                targetPosition.Value = owner.GetTargetPosition();
-                target.Value = owner.GetTarget();
+                Transform t = _detector.GetTarget();
+                target.Value = t;
+                targetPosition.Value = t.position;
             }
             return TaskStatus.Success;
         }

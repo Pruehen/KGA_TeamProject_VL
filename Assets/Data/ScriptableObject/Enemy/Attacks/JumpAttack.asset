@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 502a113cdb854c0419b0d5ea2d68e28a, type: 3}
+  m_Name: JumpAttack
+  m_EditorClassIdentifier: 
+  Id: 2
+  Phase: -1
+  AttackRangeType: -1
+  AttackRange: 15
+  CoolDown: 0
+  Priority: 0
+  AimRotateSpeed: 10
+  JumpAngle: 30
+  MeleeRange: 3
+  HommingForce: 3
+  AttackDamage: 100
+  JumpAttackDamage: 100
+  AttackCancleDistance: 0.7

@@ -5,32 +5,37 @@ namespace BehaviorDesigner.Runtime.Tasks
 {
     public class BTA_MoveToLastTarget : Action
     {
-        public Enemy enemy;
-        public NavMeshAgent agent;
+        public Detector _detector;
+        public NavMeshAgent _agent;
         public bool isDynamicDestination = false;
         Transform _lastTarget;
 
         public override void OnAwake()
         {
-            agent = GetComponent<NavMeshAgent>();
-            enemy = GetComponent<Enemy>();
+            EnemyBase owner = GetComponent<EnemyBase>();
+            if (owner == null)
+            {
+                Debug.LogError("no EnemyBase found");
+            }
+            _agent = owner.NavAgent;
+            _detector = owner.Detector;
         }
 
         public override void OnStart()
         {
-            SetMovable(agent, true);
-            MoveToTarget2D(agent, enemy.GetLastTargetPosition());
+            SetMovable(_agent, true);
+            MoveToTarget2D(_agent, _detector.GetLastPosition());
         }
 
         public override TaskStatus OnUpdate()
         {
             //네브메시가 경로 계산중인지 확인 해야함
-            if (agent.pathPending == true)
+            if (_agent.pathPending == true)
             {
                 return TaskStatus.Running;
             }
 
-            bool isArrived = agent.remainingDistance <= agent.stoppingDistance;
+            bool isArrived = _agent.remainingDistance <= _agent.stoppingDistance;
             if (isArrived)
             {
                 return TaskStatus.Success;
@@ -39,12 +44,12 @@ namespace BehaviorDesigner.Runtime.Tasks
             {
                 return TaskStatus.Failure;
             }
-            MoveToTarget2D(agent, _lastTarget.position);
+            MoveToTarget2D(_agent, _lastTarget.position);
             return TaskStatus.Running;
         }
         public override void OnEnd()
         {
-            agent.isStopped = true;
+            _agent.isStopped = true;
         }
 
 

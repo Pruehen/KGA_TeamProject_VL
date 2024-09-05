@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79a08b6ba5265ed468a7c988669ebd03, type: 3}
+  m_Name: Boss_Range_ComboAttackModuleData
+  m_EditorClassIdentifier: 
+  Id: 4
+  Phase: -1
+  AttackRangeType: 2
+  AttackRange: 15
+  CoolDown: 10
+  Priority: 60
+  Prefab_projectile: {fileID: 6126931894786530910, guid: 1b3a1beea048433488506622740c359a, type: 3}
+  ProjectileDamage: 5
+  ProjectileSpeed: 30
+  Interval: 0.1

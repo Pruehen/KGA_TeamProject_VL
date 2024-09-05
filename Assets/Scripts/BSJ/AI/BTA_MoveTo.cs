@@ -6,21 +6,26 @@ namespace BehaviorDesigner.Runtime.Tasks
     public class BTA_MoveTo : Action
     {
         public SharedVector3 targetPostion;
-        public NavMeshAgent agent;
-        public Enemy enemy;
+        public Detector _detector;
+        public NavMeshAgent _agent;
         public bool isDynamicDestination = false;
         public bool isChaseEvenLose = false;
 
         public override void OnAwake()
         {
-            agent = GetComponent<NavMeshAgent>();
-            enemy = GetComponent<Enemy>();
+            EnemyBase owner = GetComponent<EnemyBase>();
+            if (owner == null)
+            {
+                Debug.LogError("no EnemyBase found");
+            }
+            _agent = owner.NavAgent;
+            _detector = owner.Detector;
         }
 
         public override void OnStart()
         {
-            SetMovable(agent, true);
-            MoveToTarget(agent, targetPostion.Value);
+            SetMovable(_agent, true);
+            MoveToTarget(_agent, targetPostion.Value);
         }
 
         public override TaskStatus OnUpdate()
@@ -29,30 +34,30 @@ namespace BehaviorDesigner.Runtime.Tasks
             {
                 if (isChaseEvenLose)
                 {
-                    targetPostion.Value = enemy.GetTargetPositionAlways();
+                    targetPostion.Value = _detector.GetLatestTarget().position;
                 }
                 else
                 {
-                    targetPostion.Value = enemy.GetTargetPosition();
+                    targetPostion.Value = _detector.GetTarget().position;
                 }
             }
             //네브메시가 경로 계산중인지 확인 해야함
-            if (agent.pathPending == true)
+            if (_agent.pathPending == true)
             {
                 return TaskStatus.Running;
             }
 
-            bool isArrived = agent.remainingDistance <= agent.stoppingDistance;
+            bool isArrived = _agent.remainingDistance <= _agent.stoppingDistance;
             if (isArrived)
             {
                 return TaskStatus.Success;
             }
-            MoveToTarget(agent, targetPostion.Value);
+            MoveToTarget(_agent, targetPostion.Value);
             return TaskStatus.Running;
         }
         public override void OnEnd()
         {
-            agent.isStopped = true;
+            _agent.isStopped = true;
         }
 
 
@@ -65,7 +70,10 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         private void MoveToTarget(NavMeshAgent agent, Vector3 target)
         {
-            agent.destination = target;
+            if (agent.pathPending == false)
+            {
+                agent.destination = target;
+            }
         }
         private void MoveToTarget2D(NavMeshAgent agent, Vector3 target)
         {

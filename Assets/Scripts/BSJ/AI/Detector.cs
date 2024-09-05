@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Detector : MonoBehaviour
 {
-    [SerializeField] private Enemy _owner;
+    [SerializeField] private EnemyBase _owner;
     private string _targetTag;
     public float _detectionRadius;
     public bool _detectThroughWall;
@@ -36,7 +36,7 @@ public class Detector : MonoBehaviour
 
     [SerializeField] private LayerMask _targetLayer;
     [SerializeField] private LayerMask _groundLayer;
-    public void Init(Enemy owner ,string targetTag, float detectionRadius, bool detectThroughWall)
+    public void Init(EnemyBase owner ,string targetTag, float detectionRadius, bool detectThroughWall)
     {
         _owner = owner;
         _targetTag = targetTag;
@@ -48,7 +48,7 @@ public class Detector : MonoBehaviour
     {
         if (_owner == null)
         {
-            _owner = transform.parent.GetComponent<Enemy>();
+            _owner = transform.parent.GetComponent<EnemyBase>();
         }
     }
 
@@ -113,11 +113,6 @@ public class Detector : MonoBehaviour
         }
         return false;
     }
-
-    private void OnDrawGizmosSelected()
-    {
-        _owner.EnableDebug();
-    }
     public Vector3 GetPosition()
     {
         return _lastValidPostion;
@@ -140,5 +135,26 @@ public class Detector : MonoBehaviour
     public Transform GetLatestTarget()
     {
         return _latestTarget;
+    }
+
+
+    public bool IsTargetFar(float range)
+    {
+        Transform target = GetLatestTarget();
+
+        if (target == null)
+        {
+            return false;
+        }
+        float dist = Vector3.Distance(GetLatestTarget().position, transform.position);
+        if (dist >= range)
+        {
+            return true;
+        }
+        return false;
+    }
+    public bool IsTargetNear(float range)
+    {
+        return !IsTargetFar(range);
     }
 }

@@ -1,8 +1,8 @@
+using EnumTypes;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class Spike : MonoBehaviour, ITargetable
 {
     [SerializeField] private float _cooldown;
@@ -46,7 +46,7 @@ public class Spike : MonoBehaviour, ITargetable
             return;
         }
 
-        if(rbOther.CompareTag("Player"))
+        if (rbOther.CompareTag("Player"))
         {
             if (Time.time >= _damageTimeStamp + _cooldown)
             {

@@ -421,7 +421,6 @@ public class PlayData
         InGame_MeleeBullet = state.meleeBullets;
         InGame_Bullet = state.bullets;
         InGame_Stage = null;
-        InGame_Quest = null;
 
         InGame_Gold = 0;
         InGame_BlueChip_Level.Clear();

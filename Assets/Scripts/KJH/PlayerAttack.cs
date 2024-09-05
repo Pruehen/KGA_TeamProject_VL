@@ -338,8 +338,8 @@ public class PlayerAttack : MonoBehaviour
 
     private bool IsDashAttack()
     {
-        bool ran = AnimatorHelper.IsAnimationPlaying(_animator, 0, "Base Layer.Dash Attack");
-        bool mel = AnimatorHelper.IsAnimationPlaying(_animator, 0, "Base Layer.Dash Range");
+        bool ran = AnimatorHelper.IsOnlyAnimationPlaying(_animator, 0, "Base Layer.Dash Attack");
+        bool mel = AnimatorHelper.IsOnlyAnimationPlaying(_animator, 0, "Base Layer.Dash Range");
         return ran || mel;
     }
 

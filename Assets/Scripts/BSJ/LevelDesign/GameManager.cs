@@ -20,7 +20,7 @@ public class GameManager : SceneSingleton<GameManager>
 
     public PlayerMaster _PlayerMaster { get; private set; }
 
-    public List<Enemy> _enemies = new List<Enemy>();
+    public List<EnemyBase> _enemies = new List<EnemyBase>();
 
     public SO_Quest[] unexpectedquests;
     private Quest _currentQuest;
@@ -171,7 +171,7 @@ public class GameManager : SceneSingleton<GameManager>
         return array[r];
     }
 
-    private void OnEnemyDead(Enemy enemy)
+    private void OnEnemyDead(EnemyBase enemy)
     {
         _enemies.Remove(enemy);
         if (_enemies.Count == 0)
@@ -213,14 +213,14 @@ public class GameManager : SceneSingleton<GameManager>
         }
         _enemies.Clear();
 
-        Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+        EnemyBase[] enemies = FindObjectsByType<EnemyBase>(FindObjectsSortMode.None);
 
-        foreach (Enemy e in enemies)
+        foreach (EnemyBase e in enemies)
         {
             _enemies.Add(e);
         }
 
-        foreach (Enemy enemy in enemies)
+        foreach (EnemyBase enemy in enemies)
         {
             enemy.OnDeadWithSelf += OnEnemyDead;
         }
@@ -228,8 +228,8 @@ public class GameManager : SceneSingleton<GameManager>
 
     private void OnDead()
     {
-        UserData userData = JsonDataManager.GetUserData();
         _PlayerMaster._PlayerInstanteState.OnDead -= OnDead;
+        UserData userData = JsonDataManager.GetUserData();
         userData.TryGetPlayData(out PlayData playData);
         userData.AddGold(playData.InGame_Gold - userData.Gold);
 
@@ -287,7 +287,7 @@ public class GameManager : SceneSingleton<GameManager>
 
     public void KillAll()
     {
-        List<Enemy> enemyList = new List<Enemy>(_enemies);
+        List<EnemyBase> enemyList = new List<EnemyBase>(_enemies);
         foreach (var enemy in enemyList)
         {
             enemy.Hit(9999f);

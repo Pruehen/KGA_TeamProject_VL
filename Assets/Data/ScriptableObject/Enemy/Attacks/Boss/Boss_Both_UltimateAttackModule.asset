@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1d9108b7a6b8eb4698c70b7439d7bff, type: 3}
+  m_Name: Boss_Both_UltimateAttackModule
+  m_EditorClassIdentifier: 
+  Id: 6
+  Phase: 2
+  AttackRangeType: -1
+  AttackRange: 9999
+  CoolDown: 30
+  Priority: 50
+  Prefab_projectile: {fileID: 0}
+  ProjectileDamage: 0
+  ProjectileSpeed: 0

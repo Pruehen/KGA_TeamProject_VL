@@ -2,11 +2,11 @@ namespace BehaviorDesigner.Runtime.Tasks
 {
     public class BTA_Idle : Action
     {
-        public Enemy owner;
+        public EnemyBase owner;
 
         public override void OnAwake()
         {
-            owner = GetComponent<Enemy>();
+            owner = GetComponent<EnemyBase>();
         }
 
         public override TaskStatus OnUpdate()
