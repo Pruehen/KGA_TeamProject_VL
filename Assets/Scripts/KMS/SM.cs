@@ -57,14 +57,25 @@ public class SM : GlobalSingleton<SM>
             AudioSource audioSource = sb.GetComponent<AudioSource>();
             audioSource.clip = audioClip;
             audioSource.Play();
+            if (!audioSource.loop)
+            {
+                StartCoroutine(ReturnToPoolAfterPlayback(audioSource));
+            }
         }
         else
         {
             Debug.LogWarning($"Sound '{soundName}' not found in SFX data.");
         }
     }
+    private IEnumerator ReturnToPoolAfterPlayback(AudioSource _audioSource)
+    {
+        // Wait for the length of the audio clip to finish
+        yield return new WaitForSeconds(_audioSource.clip.length);
 
-        public void PlaySoundAtPosition(AudioClip clip, Vector3 position)
+        // Return the object to the pool
+        ObjectPoolManager.Instance.EnqueueObject(_audioSource.transform.gameObject);
+    }
+    public void PlaySoundAtPosition(AudioClip clip, Vector3 position)
     {
         AudioSource.PlayClipAtPoint(clip, position);
     }
