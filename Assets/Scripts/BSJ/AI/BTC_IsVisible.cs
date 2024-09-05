@@ -8,7 +8,6 @@ namespace BehaviorDesigner.Runtime.Tasks
     public class BTC_IsVisible : Conditional
     {
         public Detector _detector;
-        public bool isAttack;
 
         public override void OnAwake()
         {

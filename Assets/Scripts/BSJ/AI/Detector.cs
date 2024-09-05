@@ -7,7 +7,6 @@ public class Detector : MonoBehaviour
     [SerializeField] private EnemyBase _owner;
     private string _targetTag;
     public float _detectionRadius;
-    public bool _detectThroughWall;
 
     private Vector3 _lastValidPostion;
 
@@ -36,12 +35,11 @@ public class Detector : MonoBehaviour
 
     [SerializeField] private LayerMask _targetLayer;
     [SerializeField] private LayerMask _groundLayer;
-    public void Init(EnemyBase owner ,string targetTag, float detectionRadius, bool detectThroughWall)
+    public void Init(EnemyBase owner ,string targetTag, float detectionRadius)
     {
         _owner = owner;
         _targetTag = targetTag;
         _detectionRadius = detectionRadius;
-        _detectThroughWall = detectThroughWall;
     }
 
     private void OnValidate()
@@ -67,13 +65,13 @@ public class Detector : MonoBehaviour
 
         //check overlap contains player taged
 
-        Collider col = overlap.FirstOrDefault((col) => col.CompareTag("Player"));
+        Collider playerCol = overlap.FirstOrDefault((col) => col.CompareTag("Player"));
 
-        isPlayerInRange = col != null;
+        isPlayerInRange = playerCol != null;
 
         if(isPlayerInRange)
         {
-            Target = col;
+            Target = playerCol;
             _lastValidPostion = Target.bounds.center;
         }
         else
@@ -87,8 +85,6 @@ public class Detector : MonoBehaviour
         {
             return false;
         }
-        if(_detectThroughWall)
-            return true;
         return IsTargetVisible(Target);
     }
 

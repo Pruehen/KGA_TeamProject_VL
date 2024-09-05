@@ -13,6 +13,15 @@ public class SO_AttackModule : ScriptableObject
     public float CoolDown;
     public int Priority;
     public float AttackTime = .5f;
+    public bool IsAttackType = true;
+
+
+    public virtual void StartAction(EnemyBase owner)
+    {
+    }
+
+    public virtual void UpdateAction(EnemyBase owner)
+    { }
 
     public virtual void StartAttack(EnemyBase owner)
     {

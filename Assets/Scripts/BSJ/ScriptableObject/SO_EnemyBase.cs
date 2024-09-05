@@ -5,7 +5,7 @@ public class SO_EnemyBase : ScriptableObject
 {
     [Space(10)]
     [Header("체력")]
-    public float Hp = 100f;
+    public float[] Hp = { 100f };
     [Space(10)]
     [Header("감지")]
     public float EnemyAlramDistance = 6f;
