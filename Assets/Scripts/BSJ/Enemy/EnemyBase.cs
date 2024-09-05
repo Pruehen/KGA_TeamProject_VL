@@ -245,6 +245,7 @@ public class EnemyBase : MonoBehaviour, ITargetable
     #region OnDead
     protected void OnDead()
     {
+        SM.Instance.PlaySound2("NPCDeath", transform.position);
         OnDeadWithSelf.Invoke(this);
 
         _characterCollider.gameObject.layer = LayerMask.NameToLayer("Ragdoll");
