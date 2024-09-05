@@ -19,6 +19,10 @@ public class EnemyMove
     public Rigidbody Rigidbody => _rigidbody;
 
     public bool IsHommingEnd { get; internal set; }
+    public bool IsForceMove { get; internal set; }
+    public Vector3 ForceMoveTarget => _forceMoveTarget;
+
+    private Vector3 _forceMoveTarget;
 
     public bool IsLaunchEnd = false;
 
@@ -62,7 +66,7 @@ public class EnemyMove
                 IsLanded = IsLanded || (IsGrounded && Rigidbody.velocity.y <= 0.1f);
                 IsCrashed = IsCrashed || IsCollided;
             }
-            if(IsLanded || IsCrashed)
+            if (IsLanded || IsCrashed)
             {
                 if (isHomming)
                     IsHommingEnd = true;
@@ -81,7 +85,7 @@ public class EnemyMove
             Vector3 a = transform.position;
             Vector3 b = _hommingTarget.position;
             a.y = b.y;
-            if(Vector3.Distance(a,b) <= .3f)
+            if (Vector3.Distance(a, b) <= .3f)
             {
                 IsHommingEnd = true;
                 isHomming = false;
@@ -137,6 +141,38 @@ public class EnemyMove
     public void SetEnableRigidbody(bool condition)
     {
         _owner.SetEnableRigidbody(condition);
+    }
+
+    public void SetRandomForceMoveTarget()
+    {
+        Vector3 target = Vector3.zero;
+        int maxTry = 50;
+        int count = 0;
+        while (true)
+        {
+            float randX = UnityEngine.Random.Range(-1f, 1f);
+            float randZ = UnityEngine.Random.Range(-1f, 1f);
+            Vector3 randDir = new Vector3(randX, 0f, randZ);
+
+            float randDist = UnityEngine.Random.Range(3f, 5f);
+
+            target = randDir * randDist;
+
+            Ray ray = new Ray(transform.position, target);
+            bool hit = Physics.SphereCast(ray, 1f);
+            if (hit || count >= maxTry)
+            {
+                break;
+            }
+        }
+        if (target != Vector3.zero)
+        {
+            _forceMoveTarget = transform.position + target;
+        }
+        else
+        {
+            IsForceMove = false;
+        }
     }
 }
 

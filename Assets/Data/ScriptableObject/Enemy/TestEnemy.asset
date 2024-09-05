@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 251ae742ae74ecf46993ae798c550d4c, type: 3}
   m_Name: TestEnemy
   m_EditorClassIdentifier: 
-  Hp: 99999
+  Hp:
+  - 999999
   EnemyAlramDistance: 0
   AttackDamage: 2
   AttackRange: 2
   AttackCooldown: 2
   AttackMovableCooldown: 0.6
   AttackSpeedMultiply: 1
+  DropGoldAmount: 100
