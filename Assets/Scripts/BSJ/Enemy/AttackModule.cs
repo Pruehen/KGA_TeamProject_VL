@@ -48,6 +48,7 @@ public class AttackModule
         }
         if (IsAttacking)
             AttackModuleData.UpdateAttack(deltaTime, owner);
+        AttackModuleData.UpdateAction(owner);
     }
     public virtual bool IsAttackable(AttackRangeType attackRangeType, Phase phase)
     {
@@ -87,5 +88,10 @@ public class AttackModule
     {
         IsAttacking = false;
         PrevFireTime = 0f;
+    }
+
+    public void StartAction()
+    {
+        AttackModuleData.StartAction(owner);
     }
 }

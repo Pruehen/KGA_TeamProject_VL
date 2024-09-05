@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 251ae742ae74ecf46993ae798c550d4c, type: 3}
   m_Name: EnemyData
   m_EditorClassIdentifier: 
-  Hp: 200
+  Hp:
+  - 100
   EnemyAlramDistance: 10
   AttackDamage: 20
   AttackRange: 2
   AttackCooldown: 1
   AttackMovableCooldown: 0.6
   AttackSpeedMultiply: 1
+  DropGoldAmount: 100

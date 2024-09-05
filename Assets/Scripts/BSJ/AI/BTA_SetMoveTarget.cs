@@ -8,7 +8,6 @@ namespace BehaviorDesigner.Runtime.Tasks
         public SharedVector3 targetPosition;
         public SharedTransform target;
         public Detector _detector;
-        public bool isDynamicDestination = false;
         public bool isChaseEvenLost = false;
 
         public override void OnAwake()

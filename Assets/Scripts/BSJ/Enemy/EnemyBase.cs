@@ -12,7 +12,8 @@ public class EnemyBase : MonoBehaviour, ITargetable
     [SerializeField] protected EnemyAttack _enemyAttack;
     [SerializeField] protected EnemyMove _enemyMove;
     [SerializeField] protected Detector _detector;
-    [SerializeField] protected Combat _combat;
+    [SerializeField] protected Combat[] _combat;
+    protected int _phase;
     public Action<EnemyBase> OnDeadWithSelf;
 
     public Detector Detector => _detector;
@@ -70,19 +71,22 @@ public class EnemyBase : MonoBehaviour, ITargetable
         _animator = GetComponent<Animator>();
 
         _detector.Init(this, "Player",
-            _enemyData.EnemyAlramDistance,
-            false);
+            _enemyData.EnemyAlramDistance);
 
-        _combat = new Combat();
-        _combat.Init(gameObject, _enemyData.Hp);
-        _combat.InvincibleTimeOnHit = 0f;
-        _combat.OnDamaged += OnDamaged;
-        _combat.OnKnockback += OnKnockback;
-        _combat.OnDead += OnDead;
+        _combat = new Combat[_enemyData.Hp.Length];
+        for (int i = 0; i < _combat.Length; i++)
+        {
+            _combat[i] = new Combat();
+            _combat[i].Init(gameObject, _enemyData.Hp[i]);
+            _combat[i].InvincibleTimeOnHit = 0f;
+            _combat[i].OnDamaged += OnDamaged;
+            _combat[i].OnKnockback += OnKnockback;
+            _combat[i].OnDead += OnDead;
+        }
 
         _enemyAttack.Init(this, GetComponentInChildren<DamageBox>(),
             _enemyData, _animator);
-        _enemyMove.Init(this ,transform, _rigidbody, _navMeshAgent);
+        _enemyMove.Init(this, transform, _rigidbody, _navMeshAgent);
 
         _goldDropAmount = _enemyData.DropGoldAmount;
 
@@ -100,15 +104,21 @@ public class EnemyBase : MonoBehaviour, ITargetable
     }
     protected void OnDestroy()
     {
-        _combat.OnDead -= OnDead;
-        _combat.OnDamaged -= OnDamaged;
-        _combat.OnKnockback -= OnKnockback;
+        foreach (Combat combat in _combat)
+        {
+            combat.OnDead -= OnDead;
+            combat.OnDamaged -= OnDamaged;
+            combat.OnKnockback -= OnKnockback;
+        }
     }
     Quaternion look;
     float rotateSpeed = 10f;
     protected void Update()
     {
-        _combat.DoUpdate(Time.deltaTime);
+        foreach (Combat combat in _combat)
+        {
+            combat.DoUpdate(Time.deltaTime);
+        }
         _enemyAttack.DoUpdate(Time.deltaTime);
         _enemyMove.DoUpdate(Time.deltaTime);
 
@@ -175,7 +185,16 @@ public class EnemyBase : MonoBehaviour, ITargetable
     }
     public bool IsAttackable()
     {
-        return !_enemyAttack.IsAttacking;
+        if (Attack.CurrentAttack == null)
+        {
+            return false;
+        }
+        if (Attack.CurrentAttack.AttackModuleData == null)
+        {
+            return false;
+        }
+        bool isAttackType = Attack.CurrentAttack.AttackModuleData.IsAttackType;
+        return !Attack.IsAttacking && isAttackType;
     }
 
     protected void ResetEnemy()
@@ -222,7 +241,7 @@ public class EnemyBase : MonoBehaviour, ITargetable
     {
         dmg *= _debuff_Passive_Offensive2_IncreasedDamageTakenMulti;
         _debuff_Passive_Offensive2_IncreasedDamageTakenMulti = 1;
-        _combat.Damaged(dmg, type);
+        _combat[_phase].Damaged(dmg, type);
         GameObject hitEF = ObjectPoolManager.Instance.DequeueObject(hitVFX.preFab);
         Vector3 finalPosition = this.transform.position + transform.TransformDirection(hitVFX.offSet);
         hitEF.transform.position = finalPosition;
@@ -230,7 +249,15 @@ public class EnemyBase : MonoBehaviour, ITargetable
     }
     public virtual bool IsDead()
     {
-        return _combat.IsDead();
+        bool isDead = false;
+
+
+        foreach (Combat combat in _combat)
+        {
+            isDead = isDead | combat.IsDead();
+        }
+
+        return isDead;
     }
     protected void OnDamaged(DamageType damageType)
     {
@@ -301,7 +328,6 @@ public class EnemyBase : MonoBehaviour, ITargetable
             return;
         }
         _detector._detectionRadius = 9999f;
-        _detector._detectThroughWall = true;
         SharedFloat detectRange = new SharedFloat();
         detectRange.Value = 9999f;
         _behaviorTree.SetVariable("DetectRange", detectRange);
@@ -395,5 +421,6 @@ public class EnemyBase : MonoBehaviour, ITargetable
         yield return new WaitForSeconds(2f);
         _pooledHitVfx.Release(vfx);
     }
+
     #endregion
 }

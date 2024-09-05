@@ -25,7 +25,7 @@ namespace BehaviorDesigner.Runtime.Tasks
             if(isNull.Value != null)
                 return TaskStatus.Success;
 
-            if(_detector.GetLatestTarget() != null)
+            if(_detector.GetLatestTarget() != null && _detector.IsTargetVisible())
             {
                 isNull.Value = _detector.GetLatestTarget();
                 return TaskStatus.Success;

@@ -125,10 +125,11 @@ public class EnemyAttack
         }
         if (am == null)
         {
-            _currentAttack = _defaultAttack;
-            return _defaultAttack;
+            am = _defaultAttack;
         }
         _currentAttack = am;
+
+        am.StartAction();
         return am;
     }
 

@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96bc778c3f4d6ed4896c23751481483e, type: 3}
   m_Name: JumpingEnemyData
   m_EditorClassIdentifier: 
-  Hp: 150
+  Hp:
+  - 100
   EnemyAlramDistance: 15
   AttackDamage: 20
   AttackRange: 15
