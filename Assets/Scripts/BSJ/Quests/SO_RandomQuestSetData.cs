@@ -40,26 +40,22 @@ public class SO_RandomQuestSetData : ScriptableObject
 
     public SO_Quest GetRandomQuest()
     {
+        EasyQuests.Clear();
+        NormalQuests.Clear();
+        HardQuests.Clear();
         foreach (SO_Quest s in Quests)
         {
-            EasyQuests.Clear();
-            NormalQuests.Clear();
-            HardQuests.Clear();
-
             if (s.Difficurty == QuestDfficurty.Easy)
             {
                 EasyQuests.Add(s);
-                break;
             }
             if (s.Difficurty == QuestDfficurty.Normal)
             {
                 NormalQuests.Add(s);
-                break;
             }
             if (s.Difficurty == QuestDfficurty.Hard)
             {
                 HardQuests.Add(s);
-                break;
             }
         }
 

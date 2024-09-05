@@ -16,6 +16,7 @@ public class UIManager : SceneSingleton<UIManager>
     [SerializeField] Image shildPoint;
     [SerializeField] Image skillPoint;
     [SerializeField] Image interactive;
+    [SerializeField] Image bossHealth;
 
     [SerializeField] TextMeshProUGUI TMP_BulletText;
     [SerializeField] TextMeshProUGUI TMP_MeleeBulletText;
@@ -29,10 +30,13 @@ public class UIManager : SceneSingleton<UIManager>
     [SerializeField] GameObject holdBlueChip;
     [SerializeField] GameObject outGamePassive;
     [SerializeField] GameObject checkUI;
-    [SerializeField] GameObject queastPanel;
-    
+    [SerializeField] Text questName;
+    [SerializeField] Text questInfo;
+    [SerializeField] Animator questAni;
+    [SerializeField] Toggle questToggle;
+    [SerializeField] Text questTimer;
 
-      PlayerInstanteState _PlayerState;
+    PlayerInstanteState _PlayerState;
     PlayerMaster _PlayerMaster;
 
     [SerializeField] Button pickButton;
@@ -43,8 +47,6 @@ public class UIManager : SceneSingleton<UIManager>
         
     [SerializeField] List<PassiveUI> PassiveUIList;
 
-    [SerializeField] Text questName;
-    [SerializeField] Text questInfo;
 
     private void Start()
     {
@@ -85,6 +87,8 @@ public class UIManager : SceneSingleton<UIManager>
 
     private void Update()
     {
+        QuestReturn();
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (blueChipUI.activeSelf == true)
@@ -108,7 +112,7 @@ public class UIManager : SceneSingleton<UIManager>
 
     private void ReturnMainGame()
     {
-        CheckUIManager.Instance.CheckUiActive_OnClick(OutGame, "°ÔÀÓÀ» ³ª°¡½Ã°Ú½À´Ï±î?");
+        CheckUIManager.Instance.CheckUiActive_OnClick(OutGame, "ê²Œì„ì„ ë‚˜ê°€ì‹œê² ìŠµë‹ˆê¹Œ?");
     }
 
     private void Awake()
@@ -213,7 +217,7 @@ public class UIManager : SceneSingleton<UIManager>
         skillPoint.fillAmount = value;
     }
 
-    //½ÃÀÛ
+    //ï¿½ï¿½ï¿½ï¿½
     public void BlueChipUI()
     {
 
@@ -236,7 +240,7 @@ public class UIManager : SceneSingleton<UIManager>
     }
 
   
-    //FÅ°¸¦ ´­·¯ ºí·çÄ¨À» ¼±ÅÃÇÏ¸é È£­ŒµÇ´Â ÇÔ¼ö
+    //FÅ°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ä¨ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ È£ï¿½ï¿½ï¿½Ç´ï¿½ ï¿½Ô¼ï¿½
     public void PickBUtton()
     {
         escImage.SetActive(true);
@@ -245,7 +249,7 @@ public class UIManager : SceneSingleton<UIManager>
     }
 
 
-    //Esc¸¦ ´­·¯ ±³Ã¼¸¦ Ãë¼ÒÇÏ¸é È£ÃâµÇ´Â ÇÔ¼ö
+    //Escï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ È£ï¿½ï¿½Ç´ï¿½ ï¿½Ô¼ï¿½
     public void HoldButtonMove()
     {
         escImage.SetActive(false);
@@ -280,9 +284,10 @@ public class UIManager : SceneSingleton<UIManager>
 
     }
 
-   
     public void DrawQuestStartUi(string name, string discription)
     {
+        questToggle.isOn = false;
+        questAni.SetBool("Quest", true);
         questName.text = name;
         questInfo.text = discription;
         Debug.Log("Name :" + questName.text + "Info :" + questInfo.text);
@@ -293,9 +298,59 @@ public class UIManager : SceneSingleton<UIManager>
     {
         if (isHited)
         {
-            Debug.Log("isHited: " + isHited);
-
+            //ì‹¤íŒ¨
+            Questfail();
+        }
+        else
+        {
+            //ì„±ê³µ
+            QuestClear();
         }
 
+    }
+
+    //ì„±ê³µ
+    public void QuestClear()
+    {
+        questToggle.isOn = true;
+        questAni.SetBool("Quest", true);
+    }
+
+    //ì‹¤íŒ¨ 
+    public void Questfail()
+    {
+        questToggle.isOn = false;
+        questAni.SetBool("QuestFail", true);
+    }
+
+   
+    public void QuestReturn()
+    {
+        AnimatorStateInfo currentState = questAni.GetCurrentAnimatorStateInfo(0);
+
+        if (currentState.IsName("OutQuestPanel"))
+        {
+            questAni.SetBool("Quest", false);
+        }
+
+        if (currentState.IsName("FailOutQuestPanel"))
+        {
+            questAni.SetBool(" QuestFail", false);
+        }
+    }
+
+    //ì‹œê°„
+    public void QuestTimerText(float timeCounter)
+    {
+        //Mathf.FloorToIntëŠ” ì†Œìˆ˜ì  ì´í•˜ë¥¼ ë²„ë¦¬ê³  ë‚´ë¦¼í•˜ì—¬ ê°€ì¥ ê°€ê¹Œìš´ ì •ìˆ˜ë¡œ ë³€í™˜
+        int minutes = Mathf.FloorToInt(timeCounter / 60);
+
+        //Mathf.FloorToIntë¥¼ ì‚¬ìš©í•˜ì—¬ ì†Œìˆ˜ì  ì´í•˜ë¥¼ ë²„ë¦¬ê³  ë‚´ë¦¼
+        int seconds = Mathf.FloorToInt(timeCounter % 60);
+
+        // ë¶„ê³¼ ì´ˆë¥¼ 00:00 í˜•ì‹ì˜ ë¬¸ìì—´ë¡œ í¬ë§·íŒ…í•˜ì—¬ questTimer.textì— ì„¤ì •
+        // {0:00} - ë‘ ìë¦¬ë¡œ í¬ë§·ëœ minutes ê°’
+        // {1:00} - ë‘ ìë¦¬ë¡œ í¬ë§·ëœ seconds ê°’
+        questTimer.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 }

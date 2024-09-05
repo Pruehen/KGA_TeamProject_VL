@@ -7,18 +7,29 @@ public class QuestNoModChange : SO_Quest
 
     public override void Init()
     {
+        base.Init();
         isModChanged = false;
 
         PlayerMaster.Instance._PlayerInstanteState.OnMeleeModeChanged += OnModChanged;
 
         UIManager.Instance.DrawQuestStartUi(Name, Discription);
     }
-    public override bool CheckConditionOnUpdate()
+    public override void DoUpdate()
     {
+        if (IsQuestEnd)
+            return;
         if(isModChanged)
+        {
+            QuestFail();
+        }
+    }
+    public override bool IsCleared()
+    {
+        if (isModChanged)
         {
             return false;
         }
+        QuestClear();
         return true;
     }
 

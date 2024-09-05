@@ -748,13 +748,12 @@ MonoBehaviour:
   NextStageObjects: {fileID: 3973591298328088328}
   _enemies: []
   unexpectedquests:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 14ee43ee0d6813849b176d70cda6055d, type: 2}
+  - {fileID: 11400000, guid: a5e1d7466b27fc047ae26bc3e583bc46, type: 2}
+  - {fileID: 11400000, guid: 0e911c1f04592164a933f28a6d946083, type: 2}
   _stageSystem:
-    _chapterData: {fileID: 0}
-  _randomQuestsData: {fileID: 0}
+    _chapterData: {fileID: 11400000, guid: c3e6ab949535945459d22aa36c3d847d, type: 2}
+  _randomQuestsData: {fileID: 11400000, guid: eb37c6a02ede3bb44819358e48268e4f, type: 2}
 --- !u!1 &6975323383527796040
 GameObject:
   m_ObjectHideFlags: 3
@@ -1048,6 +1047,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4224725398327422089}
     m_Modifications:
+    - target: {fileID: 492936813858251396, guid: 46a2d3f310067064f84db1700631524b, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -669
+      objectReference: {fileID: 0}
     - target: {fileID: 998147275962996870, guid: 46a2d3f310067064f84db1700631524b, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
@@ -1075,6 +1078,10 @@ PrefabInstance:
     - target: {fileID: 1087447237533624075, guid: 46a2d3f310067064f84db1700631524b, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -281.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1325467196145757806, guid: 46a2d3f310067064f84db1700631524b, type: 3}
+      propertyPath: m_Color.a
+      value: 0.5882353
       objectReference: {fileID: 0}
     - target: {fileID: 1622713347520623095, guid: 46a2d3f310067064f84db1700631524b, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1232,6 +1239,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5288202973318694817, guid: 46a2d3f310067064f84db1700631524b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 123
+      objectReference: {fileID: 0}
+    - target: {fileID: 5780191631648807341, guid: 46a2d3f310067064f84db1700631524b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6189209344979028304, guid: 46a2d3f310067064f84db1700631524b, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -1283,10 +1298,6 @@ PrefabInstance:
     - target: {fileID: 7583250831268966690, guid: 46a2d3f310067064f84db1700631524b, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8679059042399350276, guid: 46a2d3f310067064f84db1700631524b, type: 3}
-      propertyPath: m_Name
-      value: QuestPanel
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

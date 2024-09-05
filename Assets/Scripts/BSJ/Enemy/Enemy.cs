@@ -41,15 +41,13 @@ public interface AiAttackAction
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(Animator))]
-public class Enemy : MonoBehaviour, ITargetable
+public class Enemy : EnemyBase
 {
     [Header("If this var is empty it will spawn _enemyDatas enemy (Not random)")]
     [SerializeField] private SO_RandomEnemySet _randomEnemyData;
     [SerializeField] private SO_EnemyBase _enemyData;
     private EnemyType _enemyType;
     [SerializeField] private bool _isMovable = true;
-    [SerializeField] private Combat _combat;
-    [SerializeField] SO_SKillEvent hitVFX;
 
     private DamageBox _attackCollider;
 
@@ -414,7 +412,7 @@ public class Enemy : MonoBehaviour, ITargetable
     public Action<Enemy> OnDeadWithSelf;
     private void OnDead()
     {
-        OnDeadWithSelf.Invoke(this);
+        OnDeadWithSelf?.Invoke(this);
 
         _characterCollider.gameObject.layer = LayerMask.NameToLayer("Ragdoll");
 
@@ -566,32 +564,6 @@ public class Enemy : MonoBehaviour, ITargetable
         _navMeshAgent.isStopped = true;
     }
 
-    // interface
-    public Vector3 GetPosition()
-    {
-        return transform.position;
-    }
-
-    float _debuff_Passive_Offensive2_IncreasedDamageTakenMulti = 1;
-    public void ActiveDebuff_Passive_Offensive2(float value)
-    {
-        _debuff_Passive_Offensive2_IncreasedDamageTakenMulti = 1 + value;
-    }
-    public void Hit(float dmg, DamageType type = DamageType.Normal)
-    {
-        dmg *= _debuff_Passive_Offensive2_IncreasedDamageTakenMulti;
-        _debuff_Passive_Offensive2_IncreasedDamageTakenMulti = 1;
-        _combat.Damaged(dmg, type);
-        GameObject hitEF = ObjectPoolManager.Instance.DequeueObject(hitVFX.preFab);
-        Vector3 finalPosition = this.transform.position + transform.TransformDirection(hitVFX.offSet);
-        hitEF.transform.position = finalPosition;
-        DmgTextManager.Instance.OnDmged(dmg, this.transform.position);
-    }
-
-    public bool IsDead()
-    {
-        return _combat.IsDead();
-    }
 
     public Vector3 GetTargetPositionAlways()
     {
