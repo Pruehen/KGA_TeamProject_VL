@@ -21,7 +21,10 @@ MonoBehaviour:
   AttackTime: 0.5
   IsAttackType: 1
   IsImmediate: 0
-  DamageBoxRange: {x: 2.77, y: 2.34, z: 1.17}
+  Damage: 10
+  DamageBox:
+    Offset: {x: 0, y: 0, z: 0}
+    Range: {x: 1, y: 1, z: 1}
   Prefab_projectile: {fileID: 7686152690139746698, guid: 6a1a0c164b828494a8818733ce17b5a4, type: 3}
   ProjectileDamage: 0
   ProjectileSpeed: 0
