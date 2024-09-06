@@ -14,12 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: 7
   Phase: -1
-  AttackRangeType: -1
+  AttackRangeType: 2
   AttackRange: 99999
   CoolDown: 0
   Priority: 99999999
   AttackTime: 0.5
   IsAttackType: 0
-  Prefab_projectile: {fileID: 0}
-  ProjectileDamage: 0
-  ProjectileSpeed: 0
+  IsImmediate: 0
