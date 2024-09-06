@@ -127,9 +127,7 @@ public class EnemyAttack
         {
             am = _defaultAttack;
         }
-        _currentAttack = am;
-
-        am.StartAction();
+        _currentAttack = am;;
         return am;
     }
 
@@ -186,21 +184,21 @@ public class EnemyAttack
         return _currentAttack;
     }
 
-    public void StartAttackAnimation()
+    public void StartAttackAnim()
     {
         _isAnimAttacking = true;
         _animator.SetInteger("AttackId", _currentAttack.AttackModuleData.Id);
         _animator.SetTrigger("Attack");
-        _currentAttack.StartAttack();
         SM.Instance.PlaySound2("NPCAttack", this._firePos.transform.position);
+        _currentAttack.StartAction(_owner);
     }
-    public void StartModulAction()
+    public void StartModulAttack(int type)
     {
-        _currentAttack.StartAttackModulAction(_owner);
+        _currentAttack.StartAttack(_owner, type);
     }
     public void StartAttackMove(int type)
     {
-        _currentAttack.StartAttackMove(_owner);
+        _currentAttack.StartAttackMove(_owner, type);
         return;
     }
     public void EnableDamageBox()

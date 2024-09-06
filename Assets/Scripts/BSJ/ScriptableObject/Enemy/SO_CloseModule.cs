@@ -3,8 +3,8 @@ using System;
 using UnityEngine;
 using UnityEngine.AI;
 
-[CreateAssetMenu(fileName = "Boss_Close_AttackModuleData", menuName = "Enemy/AttackModule/Boss_Close_Attack")]
-public class SO_Boss_Close_AttackModule : SO_AttackModule
+[CreateAssetMenu(fileName = "CloseAttackModuleData", menuName = "Enemy/AttackModule/CloseAttackModule")]
+public class SO_CloseModule : SO_AttackModule
 {
     public override void StartAttack(EnemyBase owner, int type)
     {

@@ -7,9 +7,10 @@ public class SO_Boss_Range_RushAttackModule : SO_AttackModule
     public float DashTime = 1f;
     public float HommingForce = 10f;
 
-    public override void StartAttackMove(EnemyBase owner)
+    public override void StartAttackMove(EnemyBase owner, int type)
     {
-        base.StartAttackMove(owner);
+        base.StartAttackMove(owner, type);
+
         owner.Animator.SetBool("EndAttackMove", false);
         Transform targetTrf = owner.Detector.GetLatestTarget();
         Vector3 start = owner.transform.position;
@@ -22,9 +23,9 @@ public class SO_Boss_Range_RushAttackModule : SO_AttackModule
 
         owner.Move.StartHommoingGroundedDash(vel,targetTrf,HommingForce);
     }
-    public override void UpdateAttackMove(float deltatime, EnemyBase owner)
+    public override void UpdateAttackMove(EnemyBase owner, int type, float deltaTime)
     {
-        base.UpdateAttackMove(deltatime, owner);
+        base.UpdateAttackMove(owner, type, deltaTime);
 
         if(owner.Detector.TargetDistance > 2f)
         {
@@ -52,9 +53,9 @@ public class SO_Boss_Range_RushAttackModule : SO_AttackModule
         }
     }
 
-    // called in animation event
-    public override void StartAttack(EnemyBase owner)
+    public override void StartAttack(EnemyBase owner, int type)
     {
+        base.StartAttack(owner, type);
         owner.Attack.EnableDamageBox();
     }
 }

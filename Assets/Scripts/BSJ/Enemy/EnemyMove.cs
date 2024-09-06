@@ -73,7 +73,6 @@ public class EnemyMove
             {
                 if (isHomming)
                     IsHommingEnd = true;
-                SetEnableRigidbody(false);
                 ResetLaunch();
             }
         }
@@ -94,6 +93,7 @@ public class EnemyMove
 
     public void ResetLaunch()
     {
+        SetEnableRigidbody(false);
         IsLaunching = false;
         IsLaunchEnd = true;
         isHomming = false;
@@ -102,6 +102,7 @@ public class EnemyMove
     }
     public void ResetDash()
     {
+        SetEnableRigidbody(false);
         IsDashing = false;
         isHomming = false;
         _owner.gameObject.layer = LayerMask.NameToLayer("EnemyCollider");

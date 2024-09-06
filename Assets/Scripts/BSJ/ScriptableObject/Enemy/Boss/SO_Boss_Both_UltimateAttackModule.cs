@@ -5,8 +5,10 @@ using UnityEngine.AI;
 [CreateAssetMenu(fileName = "Boss_Both_UltimateAttackModule", menuName = "Enemy/AttackModule/Boss_Both_UltimateAttack")]
 public class SO_Boss_Both_UltimateAttackModule : SO_RangeModule
 {
-    public override void StartAttack(EnemyBase owner)
+    public override void StartAttack(EnemyBase owner, int type)
     {
+        //base.StartAttack(owner, type);
+
         Transform targetTrf = owner.transform;
         Vector3 targetPos = targetTrf.position;
         targetPos.y = 0f;

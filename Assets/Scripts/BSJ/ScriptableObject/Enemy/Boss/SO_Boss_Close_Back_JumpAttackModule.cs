@@ -5,8 +5,9 @@ public class SO_Boss_Close_Back_JumpAttackModule : SO_AttackModule
 {
     public float JumpAngle = 30f;
     public float JumpForce = 15f;
-    public override void StartAttackMove(EnemyBase owner)
+    public override void StartAttackMove(EnemyBase owner, int type)
     {
+        base.StartAttackMove(owner, type);
         EnemyMove move = owner.Move;
         Transform transform = owner.transform;
         Rigidbody rb = owner.Rigidbody;
@@ -26,8 +27,9 @@ public class SO_Boss_Close_Back_JumpAttackModule : SO_AttackModule
 
         owner.Attack.CurrentAttack.hasAttacked = false;
     }
-    public override void UpdateAttackMove(float time, EnemyBase owner)
+    public override void UpdateAttackMove(EnemyBase owner, int type, float deltaTime)
     {
+        base.UpdateAttackMove(owner,type,deltaTime);
         EnemyMove move = owner.Move;
 
         if (owner.Attack.CurrentAttack.hasAttacked)

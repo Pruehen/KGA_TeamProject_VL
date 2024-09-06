@@ -11,14 +11,15 @@ public class SO_JumpModule : SO_AttackModule
     public float JumpAttackDamage = 100f;
     public float AttackCancleDistance = .7f;
 
-    public override void StartAttack(EnemyBase owner)
+    public override void StartAttack(EnemyBase owner, int type)
     {
-        base.StartAttack(owner);
+        base.StartAttack(owner, type);
 
         owner.Animator.SetBool("EndAttackMove", false);
     }
-    public override void StartAttackMove(EnemyBase owner)
+    public override void StartAttackMove(EnemyBase owner, int type)
     {
+        base.StartAttackMove(owner, type);
         EnemyMove move = owner.Move;
         Transform transform = owner.transform;
         Transform targetTrf = owner.Detector.GetLatestTarget();
@@ -38,8 +39,9 @@ public class SO_JumpModule : SO_AttackModule
 
         owner.Attack.CurrentAttack.hasAttacked = false;
     }
-    public override void UpdateAttackMove(float time, EnemyBase owner)
+    public override void UpdateAttackMove(EnemyBase owner, int type, float deltaTime)
     {
+        base.UpdateAttackMove( owner, type,deltaTime);
         EnemyMove move = owner.Move;
 
         if(owner.Attack.CurrentAttack.hasAttacked)

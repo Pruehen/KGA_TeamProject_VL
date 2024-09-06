@@ -20,24 +20,28 @@ public class SO_AttackModule : ScriptableObject
     {
     }
 
-    public virtual void UpdateAction(EnemyBase owner)
+    public virtual void UpdateAction(EnemyBase owner, float time)
     { }
 
-    public virtual void StartAttack(EnemyBase owner)
+    public virtual void StartAttack(EnemyBase owner, int type)
     {
-        owner.Attack.EnableDamageBox();
     }
-    public virtual void UpdateAttack(float time, EnemyBase owner)
+    public virtual void UpdateAttack(EnemyBase owner, int type, float time)
     {
         if(Time.time >= owner.Attack.CurrentAttack.PrevAttackTime + AttackTime)
         {
             owner.Attack.CurrentAttack.EndAttack();
         }
     }
-    public virtual void StartAttackMove(EnemyBase owner)
+    public virtual void StartAttackMove(EnemyBase owner, int type)
     {
+        if (owner.Attack.CurrentAttack.IsUpdateMove)
+        {
+            return;
+        }
+        owner.Attack.CurrentAttack.IsUpdateMove = true;
     }
-    public virtual void UpdateAttackMove(float time, EnemyBase owner)
+    public virtual void UpdateAttackMove(EnemyBase owner, int type, float time)
     {
     }
 }

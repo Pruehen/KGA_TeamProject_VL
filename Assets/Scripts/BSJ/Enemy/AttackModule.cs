@@ -21,6 +21,8 @@ public class AttackModule
 
     private Timer _timer;
     internal bool hasAttacked;
+    private int _moveType;
+    private int _attackType;
 
     public AttackModule(EnemyBase enemyBase, SO_AttackModule attackModuleData)
     {
@@ -43,12 +45,10 @@ public class AttackModule
     public virtual void DoCurUpdate(float deltaTime)
     {
         if (IsUpdateMove && IsMoveStarted)
-        {
-            AttackModuleData.UpdateAttackMove(deltaTime, owner);
-        }
+            AttackModuleData.UpdateAttackMove(owner,_moveType, deltaTime);
         if (IsAttacking)
-            AttackModuleData.UpdateAttack(deltaTime, owner);
-        AttackModuleData.UpdateAction(owner);
+            AttackModuleData.UpdateAttack(owner,_attackType, deltaTime);
+        AttackModuleData.UpdateAction(owner, deltaTime);
     }
     public virtual bool IsAttackable(AttackRangeType attackRangeType, Phase phase)
     {
@@ -59,27 +59,32 @@ public class AttackModule
         }
         return false;
     }
-    public virtual void StartAttack()
-    {
-        _timer.StartTimer();
-        PrevAttackTime = Time.time;
-        Debug.Log(Time.time);
-    }
 
-    public virtual void StartAttackModulAction(EnemyBase owner)
+    public void StartAction(EnemyBase owner)
     {
-        AttackModuleData.StartAttack(owner);
         Available = false;
         IsMoveStarted = false;
+        IsAttacking = false;
+        AttackModuleData.StartAction(owner);
+        _timer.StartTimer();
+    }
+    public void StartAttack(EnemyBase owner, int type)
+    {
+        _attackType = type;
+
         IsAttacking = true;
+        PrevAttackTime = Time.time;
+        Debug.Log(Time.time);
+        AttackModuleData.StartAttack(owner, type);
+    }
+    public void StartAttackMove(EnemyBase owner, int type)
+    {
+        _moveType = type;
+
+        IsMoveStarted = true;
+        AttackModuleData.StartAttackMove(owner, type);
     }
 
-    public virtual void StartAttackMove(EnemyBase owner)
-    {
-        IsUpdateMove = true;
-        IsMoveStarted = true;
-        AttackModuleData.StartAttackMove(owner);
-    }
     private void OnCoolEnd()
     {
         Available = true;
@@ -88,10 +93,5 @@ public class AttackModule
     {
         IsAttacking = false;
         PrevFireTime = 0f;
-    }
-
-    public void StartAction()
-    {
-        AttackModuleData.StartAction(owner);
     }
 }

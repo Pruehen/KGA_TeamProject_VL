@@ -1,6 +1,4 @@
-using EnumTypes;
 using UnityEngine;
-using UnityEngine.AI;
 
 [CreateAssetMenu(fileName = "RangeAttackModuleData", menuName = "Enemy/AttackModule/AttackRange")]
 public class SO_RangeModule : SO_AttackModule
@@ -9,8 +7,9 @@ public class SO_RangeModule : SO_AttackModule
     public float ProjectileDamage;
     public float ProjectileSpeed;
 
-    public override void StartAttack(EnemyBase owner)
+    public override void StartAttack(EnemyBase owner, int type)
     {
+        base.StartAttack(owner, type);
         Transform targetTrf = owner.Detector.GetLatestTarget();
         Transform firePos = owner.FirePos;
 

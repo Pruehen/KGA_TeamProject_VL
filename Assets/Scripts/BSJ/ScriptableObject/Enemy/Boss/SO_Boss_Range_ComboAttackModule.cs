@@ -4,15 +4,16 @@ using UnityEngine;
 public class SO_Boss_Range_ComboAttackModule : SO_RangeModule
 {
     public float Interval;
-    public override void StartAttack(EnemyBase owner)
-    {
-    }
 
-    public override void UpdateAttack(float deltatime, EnemyBase owner)
+    public override void StartAttack(EnemyBase owner, int type)
     {
-        base.UpdateAttack(deltatime, owner);
+        //base.StartAttack(owner, type);
+    }
+    public override void UpdateAttack(EnemyBase owner, int type, float deltaTime)
+    {
+        base.UpdateAttack(owner, type, deltaTime);
         //여러번 공격하고싶은데 멤버 변수가 없어서 전에 공격했던 시간을 저장할 곳이 필요하다
-        if (Time.time > owner.Attack.CurrentAttack.PrevFireTime + Interval )
+        if (Time.time > owner.Attack.CurrentAttack.PrevFireTime + Interval)
         {
             Transform targetTrf = owner.Detector.GetLatestTarget();
             Transform firePos = owner.FirePos;

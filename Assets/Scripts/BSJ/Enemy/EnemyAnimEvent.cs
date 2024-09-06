@@ -9,15 +9,11 @@ public class EnemyAnimEvent : MonoBehaviour
     {
         _owner = GetComponent<EnemyBase>();
     }
-    private void EnableDamageBox()
+    private void StartAttackModulAttack(int type)
     {
-        _owner.Attack.StartModulAction();
+        _owner.Attack.StartModulAttack(type);
     }
-    private void ShootProjectile()
-    {
-        _owner.Attack.StartModulAction();
-    }
-    private void Move_Attack(int type)
+    private void StartAttackModulMove(int type)
     {
         _owner.Attack.StartAttackMove(type);
     }

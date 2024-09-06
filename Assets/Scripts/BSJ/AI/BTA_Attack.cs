@@ -24,7 +24,7 @@ namespace BehaviorDesigner.Runtime.Tasks
             {
                 return TaskStatus.Success;
             }
-            _attack.StartAttackAnimation();
+            _attack.StartAttackAnim();
             _range.Value = 0f;
             return TaskStatus.Success;
         }
