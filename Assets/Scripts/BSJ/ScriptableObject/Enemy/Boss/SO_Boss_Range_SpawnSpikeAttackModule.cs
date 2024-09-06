@@ -9,7 +9,7 @@ public class SO_Boss_Range_SpawnSpikeAttackModule : SO_RangeModule
     {
         //base.StartAttack(owner, type);
 
-        owner.Attack.EnableDamageBox();
+        owner.Attack.EnableDamageBox(Damage, DamageBox.Offset, DamageBox.Range);
 
         Transform targetTrf = owner.Detector.GetLatestTarget();
         Vector3 targetPos = targetTrf.position;

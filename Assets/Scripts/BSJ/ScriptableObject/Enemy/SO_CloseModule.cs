@@ -9,6 +9,6 @@ public class SO_CloseModule : SO_AttackModule
     public override void StartAttack(EnemyBase owner, int type)
     {
         base.StartAttack(owner, type);
-        owner.Attack.EnableDamageBox();
+        owner.Attack.EnableDamageBox(Damage, DamageBox.Offset, DamageBox.Range);
     }
 }

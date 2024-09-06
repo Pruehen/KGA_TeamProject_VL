@@ -51,6 +51,8 @@ public class EnemyBase : MonoBehaviour, ITargetable
     protected int _goldDropAmount;
     private bool _isKnocked;
 
+    public DamageBox DamageBox;
+
     protected void Awake()
     {
         Init();

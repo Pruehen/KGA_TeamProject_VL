@@ -17,7 +17,6 @@ public class EnemyAttack
     private AttackModule _defaultAttack;
     private DamageBox _attackCollider;
 
-    private float _attackDamage;
     private float _colDamage;
 
     float _attackSpeedMulti = 1f;
@@ -60,7 +59,6 @@ public class EnemyAttack
         _owner = owner;
         _animator = animator;
         _attackCollider = damageBox;
-        _attackDamage = _enemyData.AttackDamage;
         AttackSpeedMulti = _enemyData.AttackSpeedMultiply;
 
         _defaultAttack = new AttackModule(_owner, _defaultAttackSetupData);
@@ -213,11 +211,13 @@ public class EnemyAttack
         _currentAttack.StartAttackMove(_owner, type);
         return;
     }
-    public void EnableDamageBox()
+    public void EnableDamageBox(float damage ,Vector3 offset, Vector3 range)
     {
         if (_attackCollider == null)
             return;
-        _attackCollider.EnableDamageBox(_attackDamage);
+        _attackCollider.SetRange(range);
+        _attackCollider.SetOffset(offset);
+        _attackCollider.EnableOnly(damage);
         
     }
 

@@ -56,6 +56,6 @@ public class SO_Boss_Range_RushAttackModule : SO_AttackModule
     public override void StartAttack(EnemyBase owner, int type)
     {
         base.StartAttack(owner, type);
-        owner.Attack.EnableDamageBox();
+        owner.Attack.EnableDamageBox(Damage, DamageBox.Offset, DamageBox.Range);
     }
 }

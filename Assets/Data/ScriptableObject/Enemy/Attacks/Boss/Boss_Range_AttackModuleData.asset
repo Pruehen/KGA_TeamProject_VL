@@ -18,6 +18,10 @@ MonoBehaviour:
   AttackRange: 15
   CoolDown: 3
   Priority: 100
+  AttackTime: 0.5
+  IsAttackType: 1
+  IsImmediate: 0
+  DamageBoxRange: {x: 1.74, y: 1.18, z: 1.25}
   Prefab_projectile: {fileID: 6126931894786530910, guid: 1b3a1beea048433488506622740c359a, type: 3}
   ProjectileDamage: 20
   ProjectileSpeed: 30
