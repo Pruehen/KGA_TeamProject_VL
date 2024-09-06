@@ -128,6 +128,12 @@ public class EnemyAttack
             am = _defaultAttack;
         }
         _currentAttack = am;;
+
+        if(CurrentAttack.AttackModuleData.IsAttackType == false)
+        {
+            CurrentAttack.StartAction(_owner);
+        }
+
         return am;
     }
 
@@ -186,11 +192,17 @@ public class EnemyAttack
 
     public void StartAttackAnim()
     {
+        _currentAttack.StartAction(_owner);
+
+        if (CurrentAttack.AttackModuleData.IsAttackType == false)
+        {
+            return;
+        }
+
         _isAnimAttacking = true;
         _animator.SetInteger("AttackId", _currentAttack.AttackModuleData.Id);
         _animator.SetTrigger("Attack");
         SM.Instance.PlaySound2("NPCAttack", this._firePos.transform.position);
-        _currentAttack.StartAction(_owner);
     }
     public void StartModulAttack(int type)
     {
