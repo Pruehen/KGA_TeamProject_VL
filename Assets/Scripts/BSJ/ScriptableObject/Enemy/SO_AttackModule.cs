@@ -14,6 +14,7 @@ public class SO_AttackModule : ScriptableObject
     public int Priority;
     public float AttackTime = .5f;
     public bool IsAttackType = true;
+    public bool IsImmediate = false;
 
 
     public virtual void StartAction(EnemyBase owner)

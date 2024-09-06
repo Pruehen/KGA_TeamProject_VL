@@ -19,6 +19,8 @@ public class AttackModule
     public bool IsUpdateMove;
     private bool IsMoveStarted;
 
+    public float PrevMoveTime { get; private set; }
+
     private Timer _timer;
     internal bool hasAttacked;
     private int _moveType;
@@ -52,6 +54,13 @@ public class AttackModule
     }
     public virtual bool IsAttackable(AttackRangeType attackRangeType, Phase phase)
     {
+        if(AttackModuleData.IsImmediate)
+        {
+            if(owner.Detector.TargetDistance > AttackModuleData.AttackRange  )
+            {
+                return false;
+            }
+        }
         if ((attackRangeType & AttackModuleData.AttackRangeType) != 0 && Available && ((AttackModuleData.Phase & phase) != 0))
         {
             Range = attackRangeType;
@@ -82,6 +91,7 @@ public class AttackModule
         _moveType = type;
 
         IsMoveStarted = true;
+        PrevMoveTime = Time.time;
         AttackModuleData.StartAttackMove(owner, type);
     }
 

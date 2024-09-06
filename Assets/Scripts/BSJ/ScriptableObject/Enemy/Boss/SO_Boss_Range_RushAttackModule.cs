@@ -45,7 +45,7 @@ public class SO_Boss_Range_RushAttackModule : SO_AttackModule
             owner.Attack.CurrentAttack.IsUpdateMove = false;
         }
 
-        if(Time.time > owner.Attack.CurrentAttack.PrevAttackTime + DashTime)
+        if(Time.time > owner.Attack.CurrentAttack.PrevMoveTime + DashTime)
         {
             owner.Animator.SetTrigger("EndAttackMove");
             owner.Move.ResetDash();
