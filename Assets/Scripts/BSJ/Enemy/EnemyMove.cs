@@ -35,12 +35,37 @@ public class EnemyMove
 
     public bool isHomming = false;
 
+    private float _defaultMoveSpeed;
+
+    public float MoveSpeed
+    {
+        get
+        {
+            return _agent.speed;
+        }
+        set
+        {
+            _agent.speed = value;
+        }
+    }
+
+    public void ResetMoveSpeed()
+    {
+        MoveSpeed = _defaultMoveSpeed;
+    }
+
+
+    Quaternion look;
+    float rotateSpeed = 10f;
+
     public void Init(EnemyBase owner, Transform transform, Rigidbody rigidbody, NavMeshAgent agent)
     {
         _owner = owner;
         this.transform = transform;
         _rigidbody = rigidbody;
         _agent = agent;
+
+        _defaultMoveSpeed = _agent.speed;
     }
     public void DoUpdate(float deltaTime)
     {
