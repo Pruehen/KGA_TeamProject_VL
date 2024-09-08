@@ -257,4 +257,9 @@ public class Combat
         }
         _dead = false;
     }
+
+    public void ResetDead()
+    {
+        _dead = false;
+    }
 }

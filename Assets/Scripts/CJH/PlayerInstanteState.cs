@@ -993,6 +993,20 @@ public class PlayerInstanteState : MonoBehaviour
         // 수정된 배열을 다시 SkinnedMeshRenderer에 할당합니다.
         _PlayerMesh.materials = materials;
     }
+
+    public void HealShield(float v)
+    {
+        shield.ResetDead();
+        shield.Heal(v);
+        UpdateShild();
+    }
+
+    public void SetMaxShield(float v)
+    {
+        shield.SetMaxHp(v);
+        shield.Heal(v);
+        UpdateShild();
+    }
     [SerializeField] private GameObject _blueChipChest;
     public void SpawnBluechipChest()
     {
