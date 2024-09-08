@@ -10,24 +10,25 @@ public class BossDoubleAreaAttack : MonoBehaviour
     [SerializeField] float _damage = 60f;
     [SerializeField] float _anticipateTime = 60f;
     [SerializeField] AttackRangeType _condition = AttackRangeType.Close;
-    [SerializeField] Timer _timer;
     [SerializeField] Transform _model_anticipate;
     [SerializeField] Material _mat_anticipate;
 
     [SerializeField] Vector3 _pos;
     [SerializeField] bool _inside;
 
-    [SerializeField] int _attackCount;
+    [SerializeField] int _attackCount = 2;
     int _curAttackCount;
+    [SerializeField] LayerMask _targetLayer;
 
     private void Awake()
     {
         _mat_anticipate = _model_anticipate.GetComponent<Renderer>().sharedMaterial;
     }
 
-    public void Init(AttackRangeType condition)
+    public void Init(float damage, AttackRangeType condition)
     {
         this._condition = condition;
+        _damage = damage;
 
         _model_anticipate.localScale = Vector3.one * _distance_max * 2f;
 
@@ -46,55 +47,37 @@ public class BossDoubleAreaAttack : MonoBehaviour
             _mat_anticipate.SetFloat("InnerCircle", _distance_middle);
             condition = AttackRangeType.Close;
         }
-        _timer.OnEnd += OnTimeEnd;
-        _timer.StartTimer();
-    }
-    private void OnDisable()
-    {
-        _timer.ResetTimer();
-    }
-    private void Update()
-    {
-        _timer.DoUpdate(Time.deltaTime);
-    }
-
-    private void OnTimeEnd()
-    {
-        _curAttackCount++;
-        if(_curAttackCount >= _attackCount)
-        {
-            _timer.ResetTimer();
-            _timer.OnEnd = null;
-            gameObject.SetActive(false);
-            return;
-        }
-        AreaDamageToPlayer(_condition);
-        Flip();
-        _timer.StartTimer();
     }
 
     public void AreaDamageToPlayer(AttackRangeType range)
     {
-        PlayerMaster target = PlayerMaster.Instance;
+        Collider[] cols = Physics.OverlapSphere(transform.position, _distance_max, _targetLayer);
+        if(cols.Length == 0)
+            return;
 
-        Vector3 a = target.transform.position;
-        Vector3 b = transform.position - a;
-        b.y = 0f;
-
-        float dist = b.magnitude;
-
-        if (range == AttackRangeType.Close)
+        foreach (Collider targetCol in cols)
         {
-            if (dist < _distance_middle)
+            if (!targetCol.TryGetComponent(out ITargetable target))
+                continue;
+            Vector3 a = target.GetPosition();
+            Vector3 b = transform.position - a;
+            b.y = 0f;
+
+            float dist = b.magnitude;
+
+            if (range == AttackRangeType.Close)
             {
-                target.Hit(_damage);
+                if (dist < _distance_middle)
+                {
+                    target.Hit(_damage);
+                }
             }
-        }
-        else
-        {
-            if (dist > _distance_middle)
+            else
             {
-                target.Hit(_damage);
+                if (dist > _distance_middle)
+                {
+                    target.Hit(_damage);
+                }
             }
         }
     }
@@ -111,5 +94,17 @@ public class BossDoubleAreaAttack : MonoBehaviour
             _condition = AttackRangeType.Close;
             _mat_anticipate.SetInt("_Inside", 1);
         }
+    }
+
+    public void Trigger()
+    {
+        _curAttackCount++;
+        AreaDamageToPlayer(_condition);
+        if (_curAttackCount >= _attackCount)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+        Flip();
     }
 }
