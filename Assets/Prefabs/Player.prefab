@@ -175,6 +175,7 @@ MonoBehaviour:
   executionCount: 0
   moveSpeed: 6
   _playerStatData: {fileID: 11400000, guid: ebc369b68647668448baaa8562d27f32, type: 2}
+  _blueChipChest: {fileID: 2413302034138487427, guid: 0242175b70f29b542808d3806195a38a, type: 3}
 --- !u!114 &6370585067071046547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -231,7 +232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9302ead29b1a854479aa6ca7d347daa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotSpeed: 0.1
+  defaultrotSpeed: 0.3
 --- !u!114 &6736053533579567610
 MonoBehaviour:
   m_ObjectHideFlags: 0

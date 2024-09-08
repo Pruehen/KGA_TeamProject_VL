@@ -993,4 +993,11 @@ public class PlayerInstanteState : MonoBehaviour
         // 수정된 배열을 다시 SkinnedMeshRenderer에 할당합니다.
         _PlayerMesh.materials = materials;
     }
+    [SerializeField] private GameObject _blueChipChest;
+    public void SpawnBluechipChest()
+    {
+        Vector3 pos = transform.position;
+        pos += transform.forward + transform.right;
+        Instantiate(_blueChipChest, pos, Quaternion.identity);
+    }
 }
