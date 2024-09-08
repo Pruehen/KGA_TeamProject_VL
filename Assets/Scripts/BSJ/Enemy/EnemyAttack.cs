@@ -126,13 +126,11 @@ public class EnemyAttack
         if (am == null)
         {
             am = _defaultAttack;
+            _defaultAttack.Range = _attackRangeType; // temp logic default attack doen not check IsAttackable() so range is not setted
         }
-        _currentAttack = am;;
+        _currentAttack = am;
 
-        if(CurrentAttack.AttackModuleData.IsAttackType == false)
-        {
             CurrentAttack.StartAction(_owner);
-        }
 
         return am;
     }
