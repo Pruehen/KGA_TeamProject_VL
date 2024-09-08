@@ -154,10 +154,17 @@ public class EnemyBase : MonoBehaviour, ITargetable
         if (Move.IsMoving)
         {
             _animator.SetBool("IsMoving", true);
+
+            Vector3 localVelocity = transform.InverseTransformDirection(_navMeshAgent.velocity.normalized);
+
+            _animator.SetFloat("MoveX", localVelocity.x);
+            _animator.SetFloat("MoveY", localVelocity.z);
         }
         else
         {
             _animator.SetBool("IsMoving", false);
+            _animator.SetFloat("MoveX", 0f);
+            _animator.SetFloat("MoveY", 0f);
         }
 
         _currentStateTime += Time.deltaTime;
@@ -261,8 +268,8 @@ public class EnemyBase : MonoBehaviour, ITargetable
     {
         if (self == _combat[_combat.Length - 1])
         {
-	        SM.Instance.PlaySound2("NPCDeath", transform.position);
-	        
+            SM.Instance.PlaySound2("NPCDeath", transform.position);
+
             OnDeadWithSelf.Invoke(this);
             _characterCollider.gameObject.layer = LayerMask.NameToLayer("Ragdoll");
 
