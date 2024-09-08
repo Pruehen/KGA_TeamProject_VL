@@ -234,6 +234,11 @@ public class GameManager : SceneSingleton<GameManager>
         userData.AddGold(playData.InGame_Gold - userData.Gold);
 
         userData.ClearAndSaveUserData();
+        if(_stageSystem.CurrentStage == null)
+        {
+            Debug.LogWarning("CurrentStage is Null");
+            return;
+        }
         JsonDataManager.GetUserData().SavePlayData_OnSceneEnter(new StageData(_stageSystem.CurrentStage.SceneName, _stageSystem.CurrentStageNum, _rewardType, _stageSystem.CurrentStage));
 
         LoadMainScene();
