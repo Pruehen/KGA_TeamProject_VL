@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class EnemyAttack
 {
-    [SerializeField] private SO_AttackModule[] _modulesSetupData;   
+    [SerializeField] private SO_AttackModule[] _modulesSetupData;
     [SerializeField] private SO_AttackModule _defaultAttackSetupData;
     [SerializeField] private float _rangeTypeThreshold = 15f;
     [SerializeField] private bool _isPriorityAttack = false;
@@ -130,7 +130,7 @@ public class EnemyAttack
         }
         _currentAttack = am;
 
-            CurrentAttack.StartAction(_owner);
+        CurrentAttack.StartAction(_owner);
 
         return am;
     }
@@ -190,12 +190,13 @@ public class EnemyAttack
 
     public void StartAttackAnim()
     {
-        _currentAttack.StartAction(_owner);
 
         if (CurrentAttack.AttackModuleData.IsAttackType == false)
         {
             return;
         }
+
+        CurrentAttack.AttackModuleData.StartAnim(_owner);
 
         _isAnimAttacking = true;
         _animator.SetInteger("AttackId", _currentAttack.AttackModuleData.Id);
@@ -211,14 +212,14 @@ public class EnemyAttack
         _currentAttack.StartAttackMove(_owner, type);
         return;
     }
-    public void EnableDamageBox(float damage ,Vector3 offset, Vector3 range)
+    public void EnableDamageBox(float damage, Vector3 offset, Vector3 range)
     {
         if (_attackCollider == null)
             return;
         _attackCollider.SetRange(range);
         _attackCollider.SetOffset(offset);
         _attackCollider.EnableOnly(damage);
-        
+
     }
 
     private void OnAnimEnd()
