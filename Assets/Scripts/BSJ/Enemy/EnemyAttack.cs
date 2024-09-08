@@ -54,6 +54,8 @@ public class EnemyAttack
         }
     }
 
+    public BossDoubleAreaAttack CurrentProjectile { get; internal set; }
+
     public void Init(EnemyBase owner, DamageBox damageBox, SO_EnemyBase _enemyData, Animator animator)
     {
         _owner = owner;
