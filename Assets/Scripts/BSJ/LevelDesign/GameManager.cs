@@ -110,11 +110,6 @@ public class GameManager : SceneSingleton<GameManager>
                 _currentQuest.Init(unexpectedquests[_stageSystem.CurrentStageNum]);
                 unexpectedquests[_stageSystem.CurrentStageNum].Init();
             }
-
-            if(_startedStage)
-            { 
-                _PlayerMaster._PlayerInstanteState.SpawnBluechipChest();
-            }
         }
     }
 
