@@ -202,7 +202,7 @@ public class EnemyAttack
         _isAnimAttacking = true;
         _animator.SetInteger("AttackId", _currentAttack.AttackModuleData.Id);
         _animator.SetTrigger("Attack");
-        SM.Instance.PlaySound2("NPCAttack", this._firePos.transform.position);
+        //SM.Instance.PlaySound2("NPCAttack", this._firePos.transform.position);
     }
     public void StartModulAttack(int type)
     {
@@ -218,7 +218,8 @@ public class EnemyAttack
         if (_attackCollider == null)
             return;
         _attackCollider.EnableDamageBox(_attackDamage);
-        
+        SM.Instance.PlaySound2("NPCAttack", this._firePos.transform.position);
+
     }
 
     private void OnAnimEnd()
