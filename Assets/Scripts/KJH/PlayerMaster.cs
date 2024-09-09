@@ -96,7 +96,8 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
 
             if (level > 0)
             {
-                _PlayerInstanteState.SetMaxShield(JsonDataManager.GetBlueChipData(BlueChipID.Melee2).Level_VelueList[level][0]);
+                _PlayerInstanteState.ChangeShield(JsonDataManager.GetBlueChipData(BlueChipID.Melee2).Level_VelueList[level][0]);
+                _PlayerInstanteState.SetMaxShield(JsonDataManager.GetBlueChipData(BlueChipID.Melee2).Level_VelueList[level][1]);
             }
         }
         else
