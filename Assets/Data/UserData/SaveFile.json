@@ -4,7 +4,7 @@
       "SaveDataIndex": 0,
       "SaveTime": "2024-09-05T14:49:07.9224164+09:00",
       "PlayTime": 0,
-      "Gold": 1200,
+      "Gold": 2100,
       "Count_Try": 0,
       "Count_Clear": 0,
       "UnlockPassiveHashSet": [],
@@ -19,21 +19,31 @@
         "5": false
       },
       "PlayData": {
-        "InGame_Gold": 1200,
+        "InGame_Gold": 2100,
         "InGame_BlueChip_Level": {},
-        "InGame_Stage": null,
-        "InGame_Quest": [
-          null,
-          null,
-          null,
-          {
-            "Difficurty": 0,
-            "Name": "날 막을자 더 없나?",
-            "Discription": "10분안에 맵의 모든 적을 처치하세요!",
-            "IsQuestEnd": true,
-            "name": "QuestClearInTimeData",
+        "InGame_Stage": {
+          "StageName": "LevelScene Block 2",
+          "Stage": {
+            "SceneName": "LevelScene Block 2",
+            "Cleared": false,
+            "name": "Stage_Block1_2",
             "hideFlags": 0
           },
+          "StageNum": 0,
+          "RewardType": 0
+        },
+        "InGame_Quest": [
+          {
+            "Difficurty": 0,
+            "Name": "아무일도 없었다",
+            "Discription": "맵을 노히트로 클리어 하세요!",
+            "IsQuestEnd": true,
+            "name": "QuestNonHitData",
+            "hideFlags": 0
+          },
+          null,
+          null,
+          null,
           null
         ],
         "InGame_Hp": 100.0,
