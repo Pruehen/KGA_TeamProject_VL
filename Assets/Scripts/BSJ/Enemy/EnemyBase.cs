@@ -332,6 +332,10 @@ public class EnemyBase : MonoBehaviour, ITargetable
         detectRange.Value = 9999f;
         _behaviorTree.SetVariable("DetectRange", detectRange);
     }
+    public void StartSFX(string SFX)
+    {
+        SM.Instance.PlaySound2(SFX,transform.position);
+    }
 
     #endregion
 

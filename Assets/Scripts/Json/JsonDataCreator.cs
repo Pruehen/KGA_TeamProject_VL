@@ -363,8 +363,9 @@ public class PlayData
     [JsonProperty] public float InGame_SkillGauge { get; private set; }
     [JsonProperty] public int InGame_Bullet { get; private set; }
     [JsonProperty] public int InGame_MeleeBullet { get; private set; }
+    [JsonProperty] public bool InGame_StageStarted { get; private set; }
 
-    [JsonConstructor]
+[JsonConstructor]
     public PlayData(int InGame_Gold, Dictionary<BlueChipID, int> InGame_BlueChip_Level, StageData InGame_Stage, float inGame_Hp, float inGame_SkillGauge, int inGame_Bullet, int inGame_MeleeBullet)
     {
         this.InGame_Gold = InGame_Gold;
@@ -398,6 +399,7 @@ public class PlayData
     public void SavePlayData_OnSceneEnter(StageData newStage)//씬 입장 시 호출
     {
         InGame_Stage = newStage;
+        InGame_StageStarted = true;
     }
     public void SavePlayData_Quest(SO_Quest[] questData)
     {
@@ -421,6 +423,7 @@ public class PlayData
         InGame_MeleeBullet = state.meleeBullets;
         InGame_Bullet = state.bullets;
         InGame_Stage = null;
+        InGame_StageStarted = false;
 
         InGame_Gold = 0;
         InGame_BlueChip_Level.Clear();

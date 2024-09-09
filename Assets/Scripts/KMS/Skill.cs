@@ -640,5 +640,9 @@ public class Skill : MonoBehaviour
         PlayerTrackVFX track = VFX.GetComponent<PlayerTrackVFX>();
         track.SetTarget(targetTransform);  // Transform을 SetTarget으로 설정
     }
-
+    public void StartSFX(string SFX)
+    {
+        SM.Instance.PlaySound2(SFX, transform.position);
     }
+
+}

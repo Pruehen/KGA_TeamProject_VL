@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MeleeAttack: MonoBehaviour
 {
-    
+    public PlayerMaster _playerMaster;
     InputManager _InputManager;
     Animator _animator;
 
@@ -99,21 +99,29 @@ public class MeleeAttack: MonoBehaviour
 
     public void ChargeStartR()//애니메이션 이벤트 MeleeAttack
     {
-        OnChargeStart?.Invoke();
-        _currentChargeTime = 0f;
-        _isCharged = false;
-        _isCharging = true;
-        Debug.Log("차-지 시작");
-        ChargeStartVFX(true);
+
+            OnChargeStart?.Invoke();
+            _currentChargeTime = 0f;
+            _isCharged = false;
+            _isCharging = true;
+            Debug.Log("차-지 시작");
+        if (_playerMaster._PlayerAttack.attackTrigger)
+        {
+            ChargeStartVFX(true);
+        }
     }
     public void ChargeStartL()//애니메이션 이벤트 MeleeAttack
     {
-        OnChargeStart?.Invoke();
-        _currentChargeTime = 0f;
-        _isCharged = false;
-        _isCharging = true;
-        Debug.Log("차-지 시작");
-        ChargeStartVFX(false);
+        
+            OnChargeStart?.Invoke();
+            _currentChargeTime = 0f;
+            _isCharged = false;
+            _isCharging = true;
+            Debug.Log("차-지 시작");
+        if (_playerMaster._PlayerAttack.attackTrigger)
+        {
+            ChargeStartVFX(false);
+        }
     }
     public void ChargeEnd()
     {
