@@ -38,6 +38,8 @@ public class EnemyBase : MonoBehaviour, ITargetable
     protected bool _isMovable = true;
     public bool IsMovable => _isMovable && !Attack.IsAttacking && Move.IsGrounded;
 
+    public bool IsStarafe_able = false;
+
 
     protected IObjectPool<GameObject> _pooledHitVfx;
     [SerializeField] protected SO_SKillEvent hitVFX;
@@ -157,19 +159,25 @@ public class EnemyBase : MonoBehaviour, ITargetable
 
             Vector3 localVelocity = transform.InverseTransformDirection(_navMeshAgent.velocity.normalized);
 
-            _animator.SetFloat("MoveX", localVelocity.x);
-            _animator.SetFloat("MoveY", localVelocity.z);
+            SetStrafeAnimVals(localVelocity);
         }
         else
         {
             _animator.SetBool("IsMoving", false);
-            _animator.SetFloat("MoveX", 0f);
-            _animator.SetFloat("MoveY", 0f);
+            SetStrafeAnimVals(Vector3.zero);
         }
 
         _currentStateTime += Time.deltaTime;
     }
 
+    public void SetStrafeAnimVals(Vector3 localVelocity)
+    {
+        if (IsStarafe_able)
+        {
+            _animator.SetFloat("MoveX", localVelocity.x);
+            _animator.SetFloat("MoveY", localVelocity.z);
+        }
+    }
 
 
     public void SetState(AIState state)
