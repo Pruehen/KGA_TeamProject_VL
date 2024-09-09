@@ -219,6 +219,7 @@ public class EnemyAttack
         _attackCollider.SetRange(range);
         _attackCollider.SetOffset(offset);
         _attackCollider.EnableOnly(damage);
+        SM.Instance.PlaySound2("NPCAttack", this._firePos.transform.position);
 
     }
 
