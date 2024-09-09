@@ -145,6 +145,7 @@ public class GameManager : SceneSingleton<GameManager>
         if (_isLoading)
             return;
         _enemies.Clear();
+        _currentQuest = null;
 
         //Load
         if (JsonDataManager.GetUserData().TryGetPlayData(out PlayData playData))
@@ -188,7 +189,10 @@ public class GameManager : SceneSingleton<GameManager>
             _stageSystem.Clear();
             _startedStage = false;
             OnGameClear?.Invoke();
-            _currentQuest?.IsCleared();
+            if(_currentQuest != null && unexpectedquests[_stageSystem.CurrentStageNum] != null)
+            {
+                _currentQuest?.IsCleared();
+            }
         }
     }
 
@@ -201,7 +205,6 @@ public class GameManager : SceneSingleton<GameManager>
         }
         if (unexpectedquests[_stageSystem.CurrentStageNum] == null)
         {
-
             return false;
         }
 
