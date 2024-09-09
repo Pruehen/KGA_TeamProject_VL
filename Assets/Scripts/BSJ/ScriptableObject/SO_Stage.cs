@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,4 +8,9 @@ public class SO_Stage : ScriptableObject
     public string SceneName;
 
     public bool Cleared;
+
+    public void ResetStageData()
+    {
+        Cleared = false;
+    }
 }

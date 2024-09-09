@@ -55,6 +55,7 @@ public class Skill : MonoBehaviour
     [SerializeField] private float moveDuration = 0.3f; // 이동할 때 걸리는 시간
     public Vector3 target;
     private Coroutine moveCoroutine;
+    [SerializeField] public SO_SKillEvent RangeSkill4;
     [SerializeField] public SO_SKillEvent RangeSkill3;
     [SerializeField] public SO_SKillEvent RangeSkill2;
     [SerializeField] public SO_SKillEvent RangeSkill1;
@@ -207,6 +208,63 @@ public class Skill : MonoBehaviour
         Debug.Log(skillType);
     }
 
+    public void StartRangeSkill3(PlayerSkill skillType,float Multi)
+    {
+        StartCoroutine(RangeSkill3Coroutine(skillType, Multi));
+    }
+
+    private IEnumerator RangeSkill3Coroutine(PlayerSkill skillType, float Multi)
+    {
+        Camera mainCamera = Camera.main;
+        if (mainCamera == null) yield break;
+
+        // 카메라의 위치에서 forward 방향으로 레이를 쏩니다.
+        Ray ray = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
+        RaycastHit hit;
+        transform.rotation = mainCamera.transform.rotation;
+        float damage = 0f;
+        Vector3 range = new Vector3(1f, 1f, 1f);
+        float distance = 0f;
+        Vector3 offset = new Vector3(0f, 0f, 0f);
+
+        switch (skillType)
+        {
+            case PlayerSkill.RangeSkillAttack3:
+                damage = (so_Skill._rangedSkill3 * SkillPower)*Multi;
+                range = so_Skill._rangedSkill3Range;
+                distance = so_Skill._rangedSkill3Distance;
+                offset = so_Skill._rangedSkill3OffSet;
+                break;
+            default:
+                Debug.LogWarning($"Unrecognized skill: {skillType}");
+                yield break;
+        }
+
+        for (int i = 0; i < 10; i++)
+        {
+            if (Physics.Raycast(ray, out hit, distance, enemyLayerMask))
+            {
+                Vector3 hitPosition = hit.point;
+                _damageBox.transform.position = hitPosition;
+                _damageBox.EnableSkillDamageBox(damage, range, null, 0, offset);
+            }
+            else
+            {
+                _damageBox.transform.localPosition = Vector3.zero;
+                _damageBox.EnableDamageBox(damage, range, null, 0f, offset);
+                Debug.Log("레이 맞춘 게 없음");
+            }
+
+            Effect2(RangeSkill3);
+            yield return new WaitForSeconds(0.04F);
+        }
+
+        Debug.Log("스킬실행 완료");
+        Debug.Log(skillType);
+    }
+
+
+
     public void InvokeSkillDamage(PlayerSkill skillType)
     {
         Camera mainCamera = Camera.main;
@@ -277,6 +335,102 @@ public class Skill : MonoBehaviour
                 break;
             case PlayerSkill.MeleeSkillAttack4:
                 damage = so_Skill._meleeSkill4 * SkillPower;
+                range = so_Skill._meleeSkill4Range;
+                offset = so_Skill._meleeSkill4OffSet;
+                break;
+
+            default:
+                Debug.LogWarning($"Unrecognized skill: {skillType}");
+                return;
+        }
+
+        if (Physics.Raycast(ray, out hit, distance, enemyLayerMask))
+        {
+            Vector3 hitPosition = hit.point;
+            _damageBox.transform.position = hitPosition;
+            _damageBox.EnableSkillDamageBox(damage, range, null, 0, offset);
+        }
+        else
+        {
+            _damageBox.transform.localPosition = Vector3.zero;
+            _damageBox.EnableDamageBox(damage, range, null, 0f, offset);
+            Debug.Log("레이 맞춘 게 없음");
+        }
+        Debug.Log("스킬실행");
+        Debug.Log(skillType);
+    }
+    public void InvokeSkillDamage(PlayerSkill skillType,float Multi)
+    {
+        Camera mainCamera = Camera.main;
+        if (mainCamera == null) return;
+
+        // 카메라의 위치에서 forward 방향으로 레이를 쏩니다.
+        Ray ray = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
+        RaycastHit hit;
+        transform.rotation = mainCamera.transform.rotation;
+        float damage = 0f;
+        Vector3 range = new Vector3(1f, 1f, 1f);
+        float distance = 0f;
+        Vector3 offset = new Vector3(0f, 0f, 0f);
+        float skillPower = SkillPower * Multi;
+
+
+        switch (skillType)
+        {
+            case PlayerSkill.RangeSkillAttack1:
+                damage = so_Skill._rangedSkill1 * skillPower;
+                range = so_Skill._rangedSkill1Range;
+                distance = so_Skill._rangedSkill1Distance;
+                offset = so_Skill._rangedSkill1OffSet;
+                break;
+
+            case PlayerSkill.RangeSkillAttack2:
+                damage = so_Skill._rangedSkill2 * skillPower;
+                range = so_Skill._rangedSkill2Range;
+                distance = so_Skill._rangedSkill2Distance;
+                offset = so_Skill._rangedSkill2OffSet;
+                break;
+
+            case PlayerSkill.RangeSkillAttack3:
+                damage = so_Skill._rangedSkill3 * skillPower;
+                range = so_Skill._rangedSkill3Range;
+                distance = so_Skill._rangedSkill3Distance;
+                offset = so_Skill._rangedSkill3OffSet;
+                break;
+
+            case PlayerSkill.RangeSkillAttack4:
+                damage = so_Skill._rangedSkill4 * skillPower;
+                range = so_Skill._rangedSkill4Range;
+                distance = so_Skill._rangedSkill4Distance; ;
+                offset = so_Skill._rangedSkill4OffSet;
+                break;
+            case PlayerSkill.MeleeSkillAttack1:
+                damage = so_Skill._meleeSkill1 * skillPower;
+                range = so_Skill._meleeSkill1Range;
+                offset = so_Skill._meleeSkill1OffSet;
+                break;
+            case PlayerSkill.MeleeSkillAttack2:
+                damage = so_Skill._meleeSkill2 * skillPower;
+                range = so_Skill._meleeSkill2Range;
+                offset = so_Skill._meleeSkill2OffSet;
+                break;
+            case PlayerSkill.MeleeSkillAttack3_1:
+                damage = so_Skill._meleeSkill3_1 * skillPower;
+                range = so_Skill._meleeSkill3Range;
+                offset = so_Skill._meleeSkill3OffSet;
+                break;
+            case PlayerSkill.MeleeSkillAttack3_2:
+                damage = so_Skill._meleeSkill3_2 * skillPower;
+                range = so_Skill._meleeSkill3Range;
+                offset = so_Skill._meleeSkill3OffSet;
+                break;
+            case PlayerSkill.MeleeSkillAttack3_3:
+                damage = so_Skill._meleeSkill3_3 * skillPower;
+                range = so_Skill._meleeSkill3Range;
+                offset = so_Skill._meleeSkill3OffSet;
+                break;
+            case PlayerSkill.MeleeSkillAttack4:
+                damage = so_Skill._meleeSkill4 * skillPower;
                 range = so_Skill._meleeSkill4Range;
                 offset = so_Skill._meleeSkill4OffSet;
                 break;

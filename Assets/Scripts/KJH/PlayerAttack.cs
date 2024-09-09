@@ -231,18 +231,33 @@ public class PlayerAttack : MonoBehaviour
 
             if (skillActivationProbabilityValue < skillActivationProbability)
             {
-                PlayerSkill randomSkill1 = (PlayerSkill)chip_Range2.Level_VelueList[level_blueChip_Range2][2];
-                PlayerSkill randomSkill2 = (PlayerSkill)chip_Range2.Level_VelueList[level_blueChip_Range2][3];
-                float skillSelectionValue = Random.Range(0, 2);
+                //PlayerSkill randomSkill1 = (PlayerSkill)chip_Range2.Level_VelueList[level_blueChip_Range2][2];
+                //PlayerSkill randomSkill2 = (PlayerSkill)chip_Range2.Level_VelueList[level_blueChip_Range2][3];
+                PlayerSkill randomSkill1 = PlayerSkill.RangeSkillAttack1;
+                PlayerSkill randomSkill2 = PlayerSkill.RangeSkillAttack2;
+                PlayerSkill randomSkill3 = PlayerSkill.RangeSkillAttack3;
+                PlayerSkill randomSkill4 = PlayerSkill.RangeSkillAttack4;
+                float skillPower = _PlayerMaster._PlayerSkill.SkillPower * chip_Range2.Level_VelueList[level_blueChip_Range2][1]/100f;
+                float skillSelectionValue = Random.Range(((int)chip_Range2.Level_VelueList[level_blueChip_Range2][2]), (int)chip_Range2.Level_VelueList[level_blueChip_Range2][3]+1);
                 if (skillSelectionValue == 0)
                 {
-                    _PlayerMaster._PlayerSkill.InvokeSkillDamage(randomSkill1);
+                    _PlayerMaster._PlayerSkill.InvokeSkillDamage(randomSkill1, chip_Range2.Level_VelueList[level_blueChip_Range2][1] / 100f);
                     _PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._PlayerSkill.RangeSkill1);
                 }
-                else
+                else if (skillSelectionValue == 1)
                 {
-                    _PlayerMaster._PlayerSkill.InvokeSkillDamage(randomSkill2);
+                    _PlayerMaster._PlayerSkill.InvokeSkillDamage(randomSkill2, chip_Range2.Level_VelueList[level_blueChip_Range2][1] / 100f);
                     _PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._PlayerSkill.RangeSkill2);
+                }
+                else if (skillSelectionValue == 2)
+                {
+                    _PlayerMaster._PlayerSkill.StartRangeSkill3(randomSkill3 ,chip_Range2.Level_VelueList[level_blueChip_Range2][1] / 100f);
+                    //_PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._PlayerSkill.RangeSkill3);
+                }
+                else if (skillSelectionValue == 3)
+                {
+                    _PlayerMaster._PlayerSkill.InvokeSkillDamage(randomSkill4, chip_Range2.Level_VelueList[level_blueChip_Range2][1] / 100f);
+                    _PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._PlayerSkill.RangeSkill4);
                 }
             }
         }
