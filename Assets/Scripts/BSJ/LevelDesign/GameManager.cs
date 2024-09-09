@@ -109,6 +109,11 @@ public class GameManager : SceneSingleton<GameManager>
                 _currentQuest.Init(unexpectedquests[_stageSystem.CurrentStageNum]);
                 unexpectedquests[_stageSystem.CurrentStageNum].Init();
             }
+
+            if(_startedStage)
+            { 
+                _PlayerMaster._PlayerInstanteState.SpawnBluechipChest();
+            }
         }
     }
 
@@ -137,6 +142,7 @@ public class GameManager : SceneSingleton<GameManager>
     }
 
     bool _initChapter = false;
+    private bool _startedStage = false;
 
     public void StartGame()
     {
@@ -164,6 +170,8 @@ public class GameManager : SceneSingleton<GameManager>
         SetStageQuests();
         JsonDataManager.GetUserData().SavePlayData_OnSceneEnter(new StageData(randomStage.SceneName, _stageSystem.CurrentStageNum, _rewardType, _stageSystem.CurrentStage));
         LoadSceneAsync(randomStage.SceneName);
+
+        _startedStage = true;
     }
     private T GetRandomItem<T>(T[] array)
     {
@@ -177,6 +185,7 @@ public class GameManager : SceneSingleton<GameManager>
         if (_enemies.Count == 0)
         {
             _stageSystem.Clear();
+            _startedStage = false;
             OnGameClear?.Invoke();
             _currentQuest?.IsCleared();
         }
