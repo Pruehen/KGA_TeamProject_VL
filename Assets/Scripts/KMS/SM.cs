@@ -15,41 +15,68 @@ public class SM : GlobalSingleton<SM>
         InitializeAudioDictionary();
     }
 
-    private void InitializeAudioDictionary()//AWAKE할때 sfxData로부터 오디오클립을 받아옴
+    private void InitializeAudioDictionary() // AWAKE할 때 sfxData로부터 오디오클립을 받아옴
     {
         audioClipDictionary = new Dictionary<string, AudioClip>
-        {
-            { "playerstep", sfxData.playerstep },
-            { "playerHit", sfxData.playerHit },
-            { "playerDead", sfxData.playerDead },
-            { "playerSetBlueChip", sfxData.playerSetBlueChip },
-            { "Absorbeing", sfxData.Absorbeing },
-            { "playerMeleeTransform", sfxData.playerMeleeTransform },
-            { "playerMeleeTransformRelease", sfxData.playerMeleeTransformRelease },
-            { "playerRangeTransform", sfxData.playerRangeTransform },
-            { "playerRangeProjectileHIt", sfxData.playerRangeProjectileHIt },
-            { "playerRangeAttack", sfxData.playerRangeAttack },
-            { "playerRangeAttack4", sfxData.playerRangeAttack4 },
-            { "playerMeleeAttackHit", sfxData.playerMeleeAttackHit },
-            { "playerCharging", sfxData.playerCharging },
-            { "playerCharged", sfxData.playerCharged },
-            { "playerChargedAttack", sfxData.playerChargedAttack },
-            { "playerDash", sfxData.playerDash },
-            { "RangeSkill1", sfxData.RangeSkill1 },
-            { "RangeSkill2", sfxData.RangeSkill2 },
-            { "RangeSkill3", sfxData.RangeSkill3 },
-            { "RangeSkill4", sfxData.RangeSkill4 },
-            { "MeleeSkill1", sfxData.MeleeSkill1 },
-            { "MeleeSkill2_1", sfxData.MeleeSkill2_1 },
-            { "MeleeSkill2_2", sfxData.MeleeSkill2_2 },
-            { "MeleeSkill3", sfxData.MeleeSkill3 },
-            { "MeleeSkill4_1", sfxData.MeleeSkill4_1 },
-            { "MeleeSkill4_2", sfxData.MeleeSkill4_2 },
-            { "NPCStep", sfxData.NPCStep },
-            { "NPCHit", sfxData.NPCHit },
-            { "NPCAttack", sfxData.NPCAttack },
-            { "NPCDeath", sfxData.NPCDeath }
-        };
+    {
+        // Player Sounds
+        { "playerstep", sfxData.playerstep },
+        { "playerHit", sfxData.playerHit },
+        { "playerDead", sfxData.playerDead },
+        { "playerSetBlueChip", sfxData.playerSetBlueChip },
+        { "Absorbeing", sfxData.Absorbeing },
+        { "playerMeleeTransform", sfxData.playerMeleeTransform },
+        { "playerMeleeTransformRelease", sfxData.playerMeleeTransformRelease },
+        { "playerRangeTransform", sfxData.playerRangeTransform },
+        { "playerRangeProjectileHIt", sfxData.playerRangeProjectileHIt },
+        { "playerRangeAttack", sfxData.playerRangeAttack },
+        { "playerRangeAttack4", sfxData.playerRangeAttack4 },
+        { "playerMeleeAttackHit", sfxData.playerMeleeAttackHit },
+        { "playerCharging", sfxData.playerCharging },
+        { "playerCharged", sfxData.playerCharged },
+        { "playerChargedAttack", sfxData.playerChargedAttack },
+        { "playerDash", sfxData.playerDash },
+        { "RangeSkill1", sfxData.RangeSkill1 },
+        { "RangeSkill2", sfxData.RangeSkill2 },
+        { "RangeSkill3", sfxData.RangeSkill3 },
+        { "RangeSkill4", sfxData.RangeSkill4 },
+        { "MeleeSkill1", sfxData.MeleeSkill1 },
+        { "MeleeSkill2_1", sfxData.MeleeSkill2_1 },
+        { "MeleeSkill2_2", sfxData.MeleeSkill2_2 },
+        { "MeleeSkill3", sfxData.MeleeSkill3 },
+        { "MeleeSkill4_1", sfxData.MeleeSkill4_1 },
+        { "MeleeSkill4_2", sfxData.MeleeSkill4_2 },
+
+        // NPC Sounds
+        { "NPCStep", sfxData.NPCStep },
+        { "NPCHit", sfxData.NPCHit },
+        { "NPCAttack", sfxData.NPCAttack },
+        { "NPCDeath", sfxData.NPCDeath },
+
+        // BGM
+        { "lobby", sfxData.lobby },
+        { "gameRoom", sfxData.gameRoom },
+        { "bossRoom", sfxData.bossRoom },
+
+        // Boss Sounds
+        { "boss_Roar1", sfxData.boss_Roar1 },
+        { "boss_Roar2", sfxData.boss_Roar2 },
+        { "boss_Step", sfxData.boss_Step },
+        { "boss_Back_Jump", sfxData.boss_Back_Jump },
+        { "boss_Landing", sfxData.boss_Landing },
+        { "boss_SpikeSummoning", sfxData.boss_SpikeSummoning },
+        { "boss_Spikehit", sfxData.boss_Spikehit },
+        { "boss_SpikeBroken", sfxData.boss_SpikeBroken },
+        { "boss_Charge", sfxData.boss_Charge },
+        { "boss_spike_throw", sfxData.boss_spike_throw },
+        { "boss_MeleeAttack", sfxData.boss_MeleeAttack },
+        { "boss_Death", sfxData.boss_Death },
+
+        // System Sounds
+        { "boxOpen", sfxData.boxOpen },
+        { "StageClear", sfxData.StageClear },
+        { "getBullet", sfxData.getBullet }
+    };
     }
 
 

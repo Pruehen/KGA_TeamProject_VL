@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "SFXData", menuName = "SFX", order = 0)]
@@ -45,6 +46,28 @@ public class SFX : ScriptableObject
     public AudioClip NPCHit;
     public AudioClip NPCAttack;
     public AudioClip NPCDeath;
+
+    [Header("Boss")]
+    public AudioClip boss_Roar1;
+    public AudioClip boss_Roar2;
+    public AudioClip boss_Step;
+    public AudioClip boss_Back_Jump;
+    public AudioClip boss_Landing;
+    public AudioClip boss_SpikeSummoning;
+    public AudioClip boss_Spikehit;
+    public AudioClip boss_SpikeBroken;
+    public AudioClip boss_Charge;
+    public AudioClip boss_spike_throw;
+    public AudioClip boss_MeleeAttack;
+    public AudioClip boss_Death;
+
+
+
+    [Header("System")]
+    public AudioClip boxOpen;
+    public AudioClip StageClear;
+    public AudioClip getBullet;
+
 
     //public Dictionary<string, AudioClip> audioClipDictionary;
 

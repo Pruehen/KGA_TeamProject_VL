@@ -54,6 +54,7 @@ public class BlueChipIcon : MonoBehaviour
                 if (PlayerMaster.Instance._PlayerEquipBlueChip.TryAddBlueChip(_id, _level))
                 {
                     UIManager.Instance.BkBlueChipUi();
+                    _isActive = false;
                     return;
                 }
                 UIManager.Instance.PickBUtton();
