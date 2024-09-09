@@ -110,11 +110,6 @@ public class GameManager : SceneSingleton<GameManager>
                 _currentQuest.Init(unexpectedquests[_stageSystem.CurrentStageNum]);
                 unexpectedquests[_stageSystem.CurrentStageNum].Init();
             }
-
-            if(_startedStage)
-            { 
-                _PlayerMaster._PlayerInstanteState.SpawnBluechipChest();
-            }
         }
     }
 
@@ -150,6 +145,7 @@ public class GameManager : SceneSingleton<GameManager>
         if (_isLoading)
             return;
         _enemies.Clear();
+        _currentQuest = null;
 
         //Load
         if (JsonDataManager.GetUserData().TryGetPlayData(out PlayData playData))
@@ -168,8 +164,8 @@ public class GameManager : SceneSingleton<GameManager>
                 return;
             }
         }
+        _stageSystem.ResetStageSystem();
         _startedStage = true;
-
         //Start New
         _stageSystem.StartChapter();
         SO_Stage randomStage = _stageSystem.GetCurrentRandomStage();
@@ -193,7 +189,10 @@ public class GameManager : SceneSingleton<GameManager>
             _stageSystem.Clear();
             _startedStage = false;
             OnGameClear?.Invoke();
-            _currentQuest?.IsCleared();
+            if(_currentQuest != null && unexpectedquests[_stageSystem.CurrentStageNum] != null)
+            {
+                _currentQuest?.IsCleared();
+            }
         }
     }
 
@@ -206,7 +205,6 @@ public class GameManager : SceneSingleton<GameManager>
         }
         if (unexpectedquests[_stageSystem.CurrentStageNum] == null)
         {
-
             return false;
         }
 
@@ -251,7 +249,6 @@ public class GameManager : SceneSingleton<GameManager>
         _PlayerMaster._PlayerInstanteState.OnDead -= OnDead;
         UserData userData = JsonDataManager.GetUserData();
         userData.TryGetPlayData(out PlayData playData);
-        userData.AddGold(playData.InGame_Gold - userData.Gold);
 
         userData.ClearAndSaveUserData();
         if (_stageSystem.CurrentStage == null)
@@ -259,7 +256,6 @@ public class GameManager : SceneSingleton<GameManager>
             Debug.LogWarning("CurrentStage is Null");
             return;
         }
-        JsonDataManager.GetUserData().SavePlayData_OnSceneEnter(new StageData(_stageSystem.CurrentStage.SceneName, _stageSystem.CurrentStageNum, _rewardType, _stageSystem.CurrentStage));
 
         LoadMainScene();
     }
@@ -267,14 +263,6 @@ public class GameManager : SceneSingleton<GameManager>
     public void EndGame()
     {
         var userData = JsonDataManager.GetUserData();
-        if (userData.TryGetPlayData(out PlayData playData))
-        {
-            userData.AddGold(playData.InGame_Gold - userData.Gold);
-        }
-        else
-        {
-            Debug.LogWarning("�� ���� �÷��̵�����");
-        }
 
         JsonDataManager.GetUserData().SavePlayData_OnSceneEnter(new StageData(_stageSystem.CurrentStage.SceneName, _stageSystem.CurrentStageNum, _rewardType, _stageSystem.CurrentStage));
 

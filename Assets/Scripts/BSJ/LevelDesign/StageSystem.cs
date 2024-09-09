@@ -54,6 +54,12 @@ public class StageSystem
         CurrentStageNum = _currentStageNum % _chapterData.ChapterData.Length;
     }
 
+    public void ResetStageSystem()
+    {
+        _currentStageNum = 0;
+        _chapterData.ResetChapter();
+    }
+
     public void Clear()
     {
         CurrentStage.Cleared = true;
