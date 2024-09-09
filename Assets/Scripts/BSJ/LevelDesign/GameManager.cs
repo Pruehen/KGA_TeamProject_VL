@@ -155,6 +155,7 @@ public class GameManager : SceneSingleton<GameManager>
                     _isFirstStage = true;
                 }
 
+                SM.Instance.SetBGM((int)_stageSystem.CurrentStage.sceneType);
                 LoadSceneAsync(playData.InGame_Stage.StageName);
                 return;
             }
