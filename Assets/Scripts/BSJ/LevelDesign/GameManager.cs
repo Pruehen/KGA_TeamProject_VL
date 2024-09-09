@@ -163,8 +163,8 @@ public class GameManager : SceneSingleton<GameManager>
                 return;
             }
         }
+        _stageSystem.ResetStageSystem();
         _startedStage = true;
-
         //Start New
         _stageSystem.StartChapter();
         SO_Stage randomStage = _stageSystem.GetCurrentRandomStage();
