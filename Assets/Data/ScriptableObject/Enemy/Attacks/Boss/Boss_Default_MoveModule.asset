@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: 7
   Phase: -1
-  AttackRangeType: 2
+  AttackRangeType: -1
   AttackRange: 99999
   CoolDown: 0
   Priority: 99999999
   AttackTime: 0.5
   IsAttackType: 0
   IsImmediate: 0
+  DamageBoxRange: {x: 3.12, y: 2.39, z: 1.38}

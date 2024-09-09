@@ -1,7 +1,19 @@
 using EnumTypes;
 using System;
 using UnityEngine;
-using UnityEngine.AI;
+
+[Serializable]
+public struct DamageBoxData
+{
+    public Vector3 Offset;
+    public Vector3 Range;
+
+    public DamageBoxData(Vector3 offset, Vector3 range)
+    {
+        Offset = offset;
+        Range = range;
+    }
+}
 
 [CreateAssetMenu(fileName = "AttackModuleData", menuName = "Enemy/AttackModule/AttackBase")]
 public class SO_AttackModule : ScriptableObject
@@ -15,10 +27,12 @@ public class SO_AttackModule : ScriptableObject
     public float AttackTime = .5f;
     public bool IsAttackType = true;
     public bool IsImmediate = false;
-
+    public float Damage = 10f;
+    public DamageBoxData DamageBox = new DamageBoxData(Vector3.zero, Vector3.one);
 
     public virtual void StartAction(EnemyBase owner)
     {
+        owner.Animator.SetBool("EndAttackMove", false);
     }
 
     public virtual void UpdateAction(EnemyBase owner, float time)
@@ -29,7 +43,7 @@ public class SO_AttackModule : ScriptableObject
     }
     public virtual void UpdateAttack(EnemyBase owner, int type, float time)
     {
-        if(Time.time >= owner.Attack.CurrentAttack.PrevAttackTime + AttackTime)
+        if (Time.time >= owner.Attack.CurrentAttack.PrevAttackTime + AttackTime)
         {
             owner.Attack.CurrentAttack.EndAttack();
         }
@@ -43,6 +57,10 @@ public class SO_AttackModule : ScriptableObject
         owner.Attack.CurrentAttack.IsUpdateMove = true;
     }
     public virtual void UpdateAttackMove(EnemyBase owner, int type, float time)
+    {
+    }
+
+    public virtual void StartAnim(EnemyBase owner)
     {
     }
 }

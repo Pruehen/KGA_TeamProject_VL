@@ -20,11 +20,11 @@ public class DamageBox : MonoBehaviour
     private Vector3 _halfSize;
 
     [SerializeField]
-    private Vector3 HalfSize
+    private Vector3 HalfExtend
     {
         get
         {
-            return _halfSize != Vector3.zero ? _halfSize : GetSkillRange(playerSkill);
+            return _halfSize != Vector3.zero ? Vector3.Scale(_halfSize,transform.lossyScale) : Vector3.Scale(GetSkillRange(playerSkill), transform.lossyScale);
         }
         set
         {
@@ -152,7 +152,7 @@ public class DamageBox : MonoBehaviour
 
     private void OnEnable()
     {
-        Collider[] result = Physics.OverlapBox(Center, HalfSize, transform.rotation, _targetLayer);
+        Collider[] result = Physics.OverlapBox(Center, HalfExtend, transform.rotation, _targetLayer);
         bool onHit = false;
         foreach (Collider hit in result)
         {
@@ -180,7 +180,7 @@ public class DamageBox : MonoBehaviour
         {
             OnHitCallback?.Invoke();
         }
-        Debug.Log("HalfSize: " + HalfSize);
+        Debug.Log("HalfSize: " + HalfExtend);
     }
 
     private void Update()
@@ -199,9 +199,14 @@ public class DamageBox : MonoBehaviour
             return;
         }
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(Center, HalfSize);
+        Gizmos.DrawWireCube(Center, HalfExtend);
     }
-
+    public void EnableOnly(float damage)
+    {
+        _damage = damage;
+        enabled = true;
+        _enableTimer = 0f;
+    }
     public void EnableDamageBox(float damage, Vector3? range = null, Action onHitCallBack = null, float time = 0f, Vector3? offset = null)
     {
         OnHitCallback = onHitCallBack;
@@ -232,13 +237,13 @@ public class DamageBox : MonoBehaviour
         _enableTimer = time;
     }
 
-    private void SetRange(Vector3 range)
+    public void SetRange(Vector3 range)
     {
-        HalfSize = range;
-        Debug.Log("Range set to: " + HalfSize);
+        HalfExtend = range;
+        Debug.Log("Range set to: " + HalfExtend);
     }
 
-    private void SetOffset(Vector3 offset)
+    public void SetOffset(Vector3 offset)
     {
         Offset = offset;
         Debug.Log("Offset set to: " + Offset);

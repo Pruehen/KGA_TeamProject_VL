@@ -123,10 +123,7 @@ public class PlayerModChangeManager : MonoBehaviour
             EndAbsorptState();
         }
 
-        if (HasBlueChip5_AutoChange() == false)
-        {
-            IsMeleeMode = false;
-        }
+        IsMeleeMode = false;
     }
     public void EnterMeleeMode()
     {

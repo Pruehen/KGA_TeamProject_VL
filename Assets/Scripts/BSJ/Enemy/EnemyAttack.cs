@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class EnemyAttack
 {
-    [SerializeField] private SO_AttackModule[] _modulesSetupData;   
+    [SerializeField] private SO_AttackModule[] _modulesSetupData;
     [SerializeField] private SO_AttackModule _defaultAttackSetupData;
     [SerializeField] private float _rangeTypeThreshold = 15f;
     [SerializeField] private bool _isPriorityAttack = false;
@@ -17,7 +17,6 @@ public class EnemyAttack
     private AttackModule _defaultAttack;
     private DamageBox _attackCollider;
 
-    private float _attackDamage;
     private float _colDamage;
 
     float _attackSpeedMulti = 1f;
@@ -55,12 +54,13 @@ public class EnemyAttack
         }
     }
 
+    public BossDoubleAreaAttack CurrentProjectile { get; internal set; }
+
     public void Init(EnemyBase owner, DamageBox damageBox, SO_EnemyBase _enemyData, Animator animator)
     {
         _owner = owner;
         _animator = animator;
         _attackCollider = damageBox;
-        _attackDamage = _enemyData.AttackDamage;
         AttackSpeedMulti = _enemyData.AttackSpeedMultiply;
 
         _defaultAttack = new AttackModule(_owner, _defaultAttackSetupData);
@@ -126,13 +126,11 @@ public class EnemyAttack
         if (am == null)
         {
             am = _defaultAttack;
+            _defaultAttack.Range = _attackRangeType; // temp logic default attack doen not check IsAttackable() so range is not setted
         }
-        _currentAttack = am;;
+        _currentAttack = am;
 
-        if(CurrentAttack.AttackModuleData.IsAttackType == false)
-        {
-            CurrentAttack.StartAction(_owner);
-        }
+        CurrentAttack.StartAction(_owner);
 
         return am;
     }
@@ -192,12 +190,13 @@ public class EnemyAttack
 
     public void StartAttackAnim()
     {
-        _currentAttack.StartAction(_owner);
 
         if (CurrentAttack.AttackModuleData.IsAttackType == false)
         {
             return;
         }
+
+        CurrentAttack.AttackModuleData.StartAnim(_owner);
 
         _isAnimAttacking = true;
         _animator.SetInteger("AttackId", _currentAttack.AttackModuleData.Id);
@@ -213,12 +212,13 @@ public class EnemyAttack
         _currentAttack.StartAttackMove(_owner, type);
         return;
     }
-    public void EnableDamageBox()
+    public void EnableDamageBox(float damage, Vector3 offset, Vector3 range)
     {
         if (_attackCollider == null)
             return;
-        _attackCollider.EnableDamageBox(_attackDamage);
-        SM.Instance.PlaySound2("NPCAttack", this._firePos.transform.position);
+        _attackCollider.SetRange(range);
+        _attackCollider.SetOffset(offset);
+        _attackCollider.EnableOnly(damage);
 
     }
 

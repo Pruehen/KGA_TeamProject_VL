@@ -50,14 +50,14 @@ MonoBehaviour:
   _damage: 50
   _anticipateTime: 60
   _condition: 1
-  _timer:
-    _limit: 1.5
-    _isStop: 1
   _model_anticipate: {fileID: 3243774512455682595}
   _mat_anticipate: {fileID: 2100000, guid: 31557130cf52c814eb5f901511e35897, type: 2}
   _pos: {x: 0, y: 0, z: 0}
   _inside: 0
   _attackCount: 2
+  _targetLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1001 &4278693348026142750
 PrefabInstance:
   m_ObjectHideFlags: 0

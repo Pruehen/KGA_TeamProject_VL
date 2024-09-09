@@ -5,6 +5,9 @@ public class SO_Boss_Close_Back_JumpAttackModule : SO_AttackModule
 {
     public float JumpAngle = 30f;
     public float JumpForce = 15f;
+
+    public GameObject Prefab_projectile;
+
     public override void StartAttackMove(EnemyBase owner, int type)
     {
         base.StartAttackMove(owner, type);
@@ -29,7 +32,7 @@ public class SO_Boss_Close_Back_JumpAttackModule : SO_AttackModule
     }
     public override void UpdateAttackMove(EnemyBase owner, int type, float deltaTime)
     {
-        base.UpdateAttackMove(owner,type,deltaTime);
+        base.UpdateAttackMove(owner, type, deltaTime);
         EnemyMove move = owner.Move;
 
         if (owner.Attack.CurrentAttack.hasAttacked)
@@ -42,5 +45,16 @@ public class SO_Boss_Close_Back_JumpAttackModule : SO_AttackModule
             owner.Attack.CurrentAttack.hasAttacked = true;
             owner.Animator.SetTrigger("EndAttackMove");
         }
+    }
+
+    public override void StartAttack(EnemyBase owner, int type)
+    {
+        base.StartAttack(owner, type);
+
+        Transform targetTrf = owner.Detector.GetLatestTarget();
+        Vector3 targetPos = targetTrf.position;
+        targetPos.y = 0f;
+        GameObject projectileObject = GameObject.Instantiate(Prefab_projectile,
+            targetPos, Quaternion.identity);
     }
 }

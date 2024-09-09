@@ -18,5 +18,10 @@ MonoBehaviour:
   AttackRange: 20
   CoolDown: 4
   Priority: 70
+  AttackTime: 0.5
+  IsAttackType: 1
+  IsImmediate: 0
+  DamageBoxRange: {x: 0.69, y: 1.15, z: 1.2}
   DashVelocity: 40
   DashTime: 1
+  HommingForce: 10

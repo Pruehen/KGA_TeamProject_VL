@@ -23,7 +23,14 @@ namespace BehaviorDesigner.Runtime.Tasks
         {
             _attack.SetAttackRangeType(_detector.TargetDistance);
             AttackModule curAttack = _attack.GetRandomAvailableAttack(_detector.TargetDistance);
-            _range.Value = curAttack.AttackModuleData.AttackRange;
+            if (curAttack.AttackModuleData.IsImmediate)
+            {
+                _range.Value = 999f;
+            }
+            else
+            {
+                _range.Value = curAttack.AttackModuleData.AttackRange;
+            }
             return TaskStatus.Success;
         }
     }

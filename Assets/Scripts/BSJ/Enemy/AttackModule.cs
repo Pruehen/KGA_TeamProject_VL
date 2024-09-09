@@ -46,6 +46,8 @@ public class AttackModule
     }
     public virtual void DoCurUpdate(float deltaTime)
     {
+        if (this != owner.Attack.CurrentAttack)
+            return;
         if (IsUpdateMove && IsMoveStarted)
             AttackModuleData.UpdateAttackMove(owner,_moveType, deltaTime);
         if (IsAttacking)
@@ -79,6 +81,11 @@ public class AttackModule
     }
     public void StartAttack(EnemyBase owner, int type)
     {
+        if (IsAttacking)
+        {
+            Debug.Log("Already Attacking");
+            return;
+        }
         _attackType = type;
 
         IsAttacking = true;

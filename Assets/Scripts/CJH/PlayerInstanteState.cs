@@ -8,6 +8,7 @@ public class PlayerInstanteState : MonoBehaviour
     Combat combat;
     Combat shield;
 
+
     public float hp { get => combat.GetHp(); private set => combat.ForceChangeHp(value); }
     public float Shield { get => shield.GetHp(); private set => shield.ForceChangeHp(value); }
     public float stamina { get; private set; }
@@ -46,12 +47,12 @@ public class PlayerInstanteState : MonoBehaviour
             }
             else
             {
-                return DefaultAttackSpeed; 
+                return DefaultAttackSpeed;
             }
         }
         else
         {
-            return DefaultAttackSpeed; 
+            return DefaultAttackSpeed;
         }
     }
     public int MeleeToRangeRatio { get => _meleeToRangeRatio; private set => _meleeToRangeRatio = value; }
@@ -81,7 +82,7 @@ public class PlayerInstanteState : MonoBehaviour
         }
     }
 
-    public bool IsDead { get => combat.IsDead();}
+    public bool IsDead { get => combat.IsDead(); }
     float _maxHpBase;
     [SerializeField]
     float maxHpBase
@@ -106,7 +107,8 @@ public class PlayerInstanteState : MonoBehaviour
     public float GetMaxHp() { return maxHpBase * MaxHpMulti; }
 
     float _maxShieldBase;
-    [SerializeField] float maxShieldBase
+    [SerializeField]
+    float maxShieldBase
     {
         get => _maxShieldBase;
         set
@@ -143,7 +145,7 @@ public class PlayerInstanteState : MonoBehaviour
     public float AttackPowerMulti { get; set; } = 1f;
     public float GetAttackPower() { return attackPowerBase * AttackPowerMulti; }
     [SerializeField] Vector3 attackRangeBase = new Vector3(1f, 1f, 1f);
-    public Vector3 attackRangeMulti { get; set; } = new Vector3(1f,1f,1f);
+    public Vector3 attackRangeMulti { get; set; } = new Vector3(1f, 1f, 1f);
     public Vector3 GetAttackRange() { return Vector3.Scale(attackRangeBase, attackRangeMulti); }
     [SerializeField] float skillRangeBase = 1f;
     public float skillRangeMulti { get; set; } = 1f;
@@ -327,7 +329,7 @@ public class PlayerInstanteState : MonoBehaviour
             }
         }
         Vector3 baseRange = GetAttackRange();// * coefficient;
-        Debug.Log(baseRange+"베이스데미지");
+        Debug.Log(baseRange + "베이스데미지");
         return baseRange * rangeGain;
     }
 
@@ -371,6 +373,7 @@ public class PlayerInstanteState : MonoBehaviour
     public Action<bool> OnMeleeModeChanged;
 
     [SerializeField] public SO_Player _playerStatData;
+
     private void Start()
     {
         //UIManager.Instance.UpdateStamina(stamina, MaxStamina);
@@ -388,7 +391,7 @@ public class PlayerInstanteState : MonoBehaviour
 
         Passive_Offensive2_Active_OnUpdate();
 
-        if(_PlayerMaster.IsAbsorptState)
+        if (_PlayerMaster.IsAbsorptState)
         {
             TryStaminaConsumption(_absorbingStaminaConsumRate * Time.deltaTime);
         }
@@ -459,7 +462,7 @@ public class PlayerInstanteState : MonoBehaviour
         UserData userData = JsonDataManager.GetUserData();
         if (userData.TryGetPlayData(out PlayData playData))
         {
-            if(playData.InGame_Hp == -1f)
+            if (playData.InGame_Hp == -1f)
             {
                 Restore();
             }
@@ -470,7 +473,7 @@ public class PlayerInstanteState : MonoBehaviour
                 skillGauge = playData.InGame_SkillGauge;
                 bullets = playData.InGame_Bullet;
                 meleeBullets = playData.InGame_MeleeBullet;
-            }    
+            }
         }
         userData.InitPlayData(userData.Gold);
         UpdateBullet();
@@ -525,7 +528,7 @@ public class PlayerInstanteState : MonoBehaviour
 
     public void Hit(float dmg, out float finalDmg, DamageType damageType = DamageType.Normal)
     {
-        if(combat.IsInvincible || shield.IsInvincible)
+        if (combat.IsInvincible || shield.IsInvincible)
         {
             finalDmg = 0;
             return;
@@ -533,13 +536,13 @@ public class PlayerInstanteState : MonoBehaviour
 
         OnDamaged?.Invoke();
 
-        finalDmg = dmg;
-
         if (passive_Defensive4 != null)
         {
             dmg -= dmg * passive_Defensive4.Value_DamageReductionPercentage * 0.01f;
             passive_Defensive4.DeActive();
         }
+
+        finalDmg = dmg;
 
         if (Shield > 0)
         {
@@ -568,7 +571,7 @@ public class PlayerInstanteState : MonoBehaviour
                 Debug.Log("무적 발동!");
 
             }
-            if(combat.IsInvincible)
+            if (combat.IsInvincible)
             {
                 finalDmg = 0;
             }
@@ -747,6 +750,12 @@ public class PlayerInstanteState : MonoBehaviour
         DefaultAttackSpeed = 1;
 
         Shield = 0f;
+        UpdateHealth();
+        UpdateShild();
+        UpdateBullet();
+        UpdateBullet_Melee();
+        UpdateSkillGauge();
+        UpdateStamina();
     }
     void InitPassive()
     {
@@ -822,6 +831,7 @@ public class PlayerInstanteState : MonoBehaviour
         {
             passive_Utility2 = new Passive_Utility2();
             passive_Utility2.Init(this);
+            passive_Utility2.Active();
         }
         if (playerPassive.ContainPassiveId(PassiveID.Utility3))
         {
@@ -921,10 +931,14 @@ public class PlayerInstanteState : MonoBehaviour
     }
 
     //골드 관련
+
+    private float _goldMulti = 1f;
+    public float GoldMulti { get { return _goldMulti; } set { _goldMulti = value; } }
     public void AddGold(int amount)
     {
         if (JsonDataManager.GetUserData().TryGetPlayData(out PlayData playData))
         {
+            amount = (int)(amount * GoldMulti);
             playData.AddGold_InGame(amount);
             UIManager.Instance.UpdateGoldInfoUI();
         }
@@ -992,5 +1006,27 @@ public class PlayerInstanteState : MonoBehaviour
 
         // 수정된 배열을 다시 SkinnedMeshRenderer에 할당합니다.
         _PlayerMesh.materials = materials;
+    }
+
+    public void HealShield(float v)
+    {
+        shield.ResetDead();
+        shield.Heal(v);
+        UpdateShild();
+    }
+
+    public void SetMaxShield(float v)
+    {
+        shield.SetMaxHp(v);
+        shield.Heal(v);
+        UpdateShild();
+    }
+
+    public void Passive_Utility4_Active()
+    {
+        if (passive_Utility4 != null)
+        {
+            passive_Utility4.Active();
+        }
     }
 }

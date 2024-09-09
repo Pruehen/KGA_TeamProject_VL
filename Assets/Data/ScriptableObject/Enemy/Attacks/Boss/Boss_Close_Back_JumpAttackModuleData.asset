@@ -21,5 +21,9 @@ MonoBehaviour:
   AttackTime: 0.5
   IsAttackType: 1
   IsImmediate: 1
+  Damage: 10
+  DamageBox:
+    Offset: {x: 0, y: 0, z: 0}
+    Range: {x: 3.03, y: 2.5, z: 2.71}
   JumpAngle: 30
   JumpForce: 15

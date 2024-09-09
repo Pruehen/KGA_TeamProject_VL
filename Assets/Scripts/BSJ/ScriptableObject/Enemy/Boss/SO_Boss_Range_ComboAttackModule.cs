@@ -4,26 +4,44 @@ using UnityEngine;
 public class SO_Boss_Range_ComboAttackModule : SO_RangeModule
 {
     public float Interval;
+    public float TotalTime;
+    public float RotateSpeed;
 
     public override void StartAttack(EnemyBase owner, int type)
     {
         //base.StartAttack(owner, type);
+
+        owner.Move.AttackRotate = true;
+        owner.Move.AttackRotateSpeed = RotateSpeed;
     }
     public override void UpdateAttack(EnemyBase owner, int type, float deltaTime)
     {
         base.UpdateAttack(owner, type, deltaTime);
-        //여러번 공격하고싶은데 멤버 변수가 없어서 전에 공격했던 시간을 저장할 곳이 필요하다
         if (Time.time > owner.Attack.CurrentAttack.PrevFireTime + Interval)
         {
             Transform targetTrf = owner.Detector.GetLatestTarget();
             Transform firePos = owner.FirePos;
 
-            ShootProjectile(targetTrf, firePos);
+            ComboShootProjectile(firePos);
             owner.Attack.CurrentAttack.PrevFireTime = Time.time;
         }
+        if (Time.time > owner.Attack.CurrentAttack.PrevAttackTime + TotalTime)
+        {
+            owner.Animator.SetTrigger("EndAttackMove");
+            owner.Move.AttackRotate = false;
+            owner.Move.AttackRotateSpeed = RotateSpeed;
+            owner.Attack.CurrentAttack.EndAttack();
+        }
     }
-    protected void ComboShootProjectile(Transform targetTrf, Transform firePos)
+    protected void ComboShootProjectile(Transform firePos)
     {
-        ShootProjectile(targetTrf, firePos);
+        Vector3 vel = firePos.forward * ProjectileSpeed;
+        GameObject projectileObject = GameObject.Instantiate(Prefab_projectile,
+            firePos.position, firePos.rotation);
+        EnemyProjectile projectile = null;
+        projectileObject.TryGetComponent(out projectile);
+
+        projectile.Fire(vel, ProjectileDamage);
     }
+
 }

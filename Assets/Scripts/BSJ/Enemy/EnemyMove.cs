@@ -1,3 +1,4 @@
+using EnumTypes;
 using System;
 using UnityEngine;
 using UnityEngine.AI;
@@ -24,6 +25,8 @@ public class EnemyMove
 
     public bool IsDashing { get; private set; }
     public bool IsCollided_upNormal { get; private set; }
+    public bool AttackRotate { get; internal set; }
+    public float AttackRotateSpeed { get; internal set; }
 
     private Vector3 _forceMoveTarget;
 
@@ -35,12 +38,37 @@ public class EnemyMove
 
     public bool isHomming = false;
 
+    private float _defaultMoveSpeed;
+
+    public float MoveSpeed
+    {
+        get
+        {
+            return _agent.speed;
+        }
+        set
+        {
+            _agent.speed = value;
+        }
+    }
+
+    public void ResetMoveSpeed()
+    {
+        MoveSpeed = _defaultMoveSpeed;
+    }
+
+
+    Quaternion look;
+    float rotateSpeed = 10f;
+
     public void Init(EnemyBase owner, Transform transform, Rigidbody rigidbody, NavMeshAgent agent)
     {
         _owner = owner;
         this.transform = transform;
         _rigidbody = rigidbody;
         _agent = agent;
+
+        _defaultMoveSpeed = _agent.speed;
     }
     public void DoUpdate(float deltaTime)
     {
@@ -89,6 +117,8 @@ public class EnemyMove
                 isHomming = false;
             }
         }
+
+        UpdateRotation();
     }
 
     public void ResetLaunch()
@@ -215,6 +245,28 @@ public class EnemyMove
         else
         {
             IsForceMove = false;
+        }
+    }
+    protected void UpdateRotation()
+    {
+        Transform target = _owner.Detector.GetLatestTarget();
+        if (_owner.Detector.GetLatestTarget() != null && _owner.AiState == AIState.Chase || isHomming || _owner.Attack.IsAttacking)
+        {
+            Vector3 origPos = transform.position;
+            Vector3 targetPos = target.position;
+            origPos.y = 0;
+            targetPos.y = 0;
+            look = Quaternion.LookRotation(targetPos - origPos, Vector3.up).normalized;
+        }
+        if (AttackRotate)
+        {
+            Rotator.SmoothRotate(transform, look,
+                AttackRotateSpeed, Time.deltaTime);
+        }
+        else
+        {
+            Rotator.SmoothRotate(transform, look,
+                rotateSpeed, Time.deltaTime);
         }
     }
 }

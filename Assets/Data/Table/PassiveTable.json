@@ -25,14 +25,13 @@
     },
     "Offensive3": {
       "Name": "공격3",
-      "Desc": "일반&특수 공격력이 {0}% 증가. 대쉬 길이 {2}%, 대쉬 시간 {3}% 감소 및 스테미나 소모량 {4}% 증가",
+      "Desc": "일반&특수 공격력이 {0, 1}% 증가, 대쉬 시간 {2}% 감소 및 스테미나 소모량 {3}% 증가",
       "IconPath": "Icon/passive/atk/IconPassiveAtk3",
       "IconPath_Dis": "Icon/passive/atk/IconPassiveAtkDis3",
       "Cost": 500,
       "VelueList": [
         30.0,
         30.0,
-        50.0,
         50.0,
         50.0
       ]

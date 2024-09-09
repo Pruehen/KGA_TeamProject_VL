@@ -48,8 +48,12 @@ public class EnemyBase : MonoBehaviour, ITargetable
     [SerializeField] protected GameObject _projectilePrefab;
     public Transform FirePos => _firePos;
 
+    public AIState AiState => _aiState;
+
     protected int _goldDropAmount;
     private bool _isKnocked;
+
+    public DamageBox DamageBox;
 
     protected void Awake()
     {
@@ -111,8 +115,6 @@ public class EnemyBase : MonoBehaviour, ITargetable
             combat.OnKnockback -= OnKnockback;
         }
     }
-    Quaternion look;
-    float rotateSpeed = 10f;
     protected void Update()
     {
         foreach (Combat combat in _combat)
@@ -152,28 +154,20 @@ public class EnemyBase : MonoBehaviour, ITargetable
         if (Move.IsMoving)
         {
             _animator.SetBool("IsMoving", true);
+
+            Vector3 localVelocity = transform.InverseTransformDirection(_navMeshAgent.velocity.normalized);
+
+            _animator.SetFloat("MoveX", localVelocity.x);
+            _animator.SetFloat("MoveY", localVelocity.z);
         }
         else
         {
             _animator.SetBool("IsMoving", false);
+            _animator.SetFloat("MoveX", 0f);
+            _animator.SetFloat("MoveY", 0f);
         }
 
         _currentStateTime += Time.deltaTime;
-
-        UpdateRotation();
-    }
-
-    protected void UpdateRotation()
-    {
-        if (_detector.GetLatestTarget() != null && _aiState == AIState.Chase || Move.isHomming)
-        {
-            Vector3 orig = transform.position;
-            Vector3 target = _detector.GetLatestTarget().position;
-            orig.y = 0;
-            target.y = 0;
-            look = Quaternion.LookRotation(target - orig, Vector3.up).normalized;
-        }
-        Rotator.SmoothRotate(transform, look, rotateSpeed, Time.deltaTime);
     }
 
 
@@ -274,8 +268,8 @@ public class EnemyBase : MonoBehaviour, ITargetable
     {
         if (self == _combat[_combat.Length - 1])
         {
-	        SM.Instance.PlaySound2("NPCDeath", transform.position);
-	        
+            SM.Instance.PlaySound2("NPCDeath", transform.position);
+
             OnDeadWithSelf.Invoke(this);
             _characterCollider.gameObject.layer = LayerMask.NameToLayer("Ragdoll");
 
