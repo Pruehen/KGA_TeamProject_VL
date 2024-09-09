@@ -28,4 +28,12 @@ public class SO_RandomStageList : ScriptableObject
 
         return availables;
     }
+
+    public void ResetStageList()
+    {
+        foreach(SO_Stage stageData in StageData)
+        {
+            stageData.ResetStageData();
+        }
+    }
 }
