@@ -2,6 +2,7 @@ using BehaviorDesigner.Runtime.Tasks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 public class SM : GlobalSingleton<SM>
 {
@@ -9,10 +10,16 @@ public class SM : GlobalSingleton<SM>
     public SFX sfxData; // Assign in the inspector
 
     private Dictionary<string, AudioClip> audioClipDictionary;
+    public AudioSource BGM;
+    public int SCType = 999;
 
     private void Awake()
     {
         InitializeAudioDictionary();
+        if (BGM == null)
+        {
+            BGM = gameObject.AddComponent<AudioSource>(); 
+        }
     }
 
     private void InitializeAudioDictionary() // AWAKE할 때 sfxData로부터 오디오클립을 받아옴
@@ -107,7 +114,7 @@ public class SM : GlobalSingleton<SM>
             Debug.LogWarning($"Sound '{soundName}' not found in SFX data.");
             return null;
         }
-        
+
     }
     private IEnumerator ReturnToPoolAfterPlayback(AudioSource _audioSource)
     {
@@ -129,5 +136,44 @@ public class SM : GlobalSingleton<SM>
         }
         source.clip = clip;
         source.Play();
+    }
+    public void SetBGM(int Name)
+    {
+        Debug.Log("SetBGM"+Name);
+        if(SCType!= Name)
+        switch (Name)
+        {
+            case 0:
+                if (audioClipDictionary.TryGetValue("lobby", out AudioClip lobbyaudioClip))
+                {
+                    BGM.clip = lobbyaudioClip;
+                    BGM.Play();
+                        SCType=Name;
+                    return;
+                }
+                else
+                    return;
+            case 1:
+                if (audioClipDictionary.TryGetValue("gameRoom", out AudioClip normalaudioClip))
+                {
+                    BGM.clip = normalaudioClip;
+                    BGM.Play();
+                        SCType = Name;
+                        return;
+                }
+                else
+
+                    return;
+            case 2:
+                if (audioClipDictionary.TryGetValue("bossRoom", out AudioClip bossaudioClip))
+                {
+                    BGM.clip = bossaudioClip;
+                    BGM.Play();
+                        SCType = Name;
+                        return;
+                }
+                else
+                    return;
+        }
     }
 }

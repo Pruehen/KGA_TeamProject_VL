@@ -990,7 +990,7 @@ public class PlayerInstanteState : MonoBehaviour
 
     public void ShieldMT()
     {
-        Debug.Log(Shield);
+        //Debug.Log(Shield);
 
         // 현재 materials 배열을 가져옵니다.
         Material[] materials = _PlayerMesh.materials;

@@ -745,6 +745,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91ccd60ded7ff854580997d978c4d2a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _blueChipChest: {fileID: 0}
   NextStageObjects: {fileID: 3973591298328088328}
   _enemies: []
   unexpectedquests:
@@ -1373,29 +1374,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3298350357335937332, guid: 9768cac99109e254c8dca79dce0d11e7, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5913817476557595418}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9768cac99109e254c8dca79dce0d11e7, type: 3}
---- !u!1 &2741052849138184552 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3298350357335937332, guid: 9768cac99109e254c8dca79dce0d11e7, type: 3}
-  m_PrefabInstance: {fileID: 850112873815253084}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &5913817476557595418
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2741052849138184552}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71e70d83f5e1e8342905a487d6a58873, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sfxData: {fileID: 11400000, guid: 9dda8abdcd083c546afc1612f439f279, type: 2}
 --- !u!4 &6154827055577763207 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6820248359753985499, guid: 9768cac99109e254c8dca79dce0d11e7, type: 3}

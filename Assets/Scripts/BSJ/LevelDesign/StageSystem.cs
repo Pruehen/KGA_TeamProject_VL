@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.ProBuilder;
 
 [Serializable]
 public class StageSystem
@@ -16,13 +17,17 @@ public class StageSystem
 
     private Action OnChapterStart;
     private Action<int> OnLevelStart;
+    enum Type
+    {   lobby,
+        Normal,
+        Boss
+    }
 
 
     bool _initChapter = false;
     public void LoadChapter(int stageNum, SO_Stage stage)
     {
         StartChapter();
-
         CurrentStageNum = stageNum;
         CurrentStage = stage;
     }

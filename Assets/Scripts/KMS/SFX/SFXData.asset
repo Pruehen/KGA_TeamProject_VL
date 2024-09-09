@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   VFXvolum: 1
   BGMvolum: 1
-  lobby: {fileID: 0}
-  gameRoom: {fileID: 0}
-  bossRoom: {fileID: 0}
+  lobby: {fileID: 8300000, guid: c64f49fbf1bba584ba1ef6c8f58693d6, type: 3}
+  gameRoom: {fileID: 8300000, guid: d90b1e5455baeb3468dafa0c8498b2a6, type: 3}
+  bossRoom: {fileID: 8300000, guid: dc1cb8e002a4b57448249a876d181139, type: 3}
   playerstep: {fileID: 8300000, guid: 398a631f92a5b2e4fbbf36e67e05e653, type: 3}
   playerHit: {fileID: 8300000, guid: 93e2375703cfc9445b94007a531cd9f7, type: 3}
   playerDead: {fileID: 8300000, guid: ab311aab76ae384488143d38eaef60fb, type: 3}
@@ -43,22 +43,22 @@ MonoBehaviour:
   MeleeSkill3: {fileID: 8300000, guid: 1e3312d22540aa14597a1fb4739f2782, type: 3}
   MeleeSkill4_1: {fileID: 8300000, guid: 51e0a672984795b4087c49f005adf8f8, type: 3}
   MeleeSkill4_2: {fileID: 8300000, guid: 1e5f6f74ed448f5408f772e061b487c6, type: 3}
-  NPCStep: {fileID: 8300000, guid: 866ea26328d9b2343b586b735ec33c2f, type: 3}
+  NPCStep: {fileID: 8300000, guid: 95d326dbfdaf17b4f90f9e44f038c50d, type: 3}
   NPCHit: {fileID: 8300000, guid: ab0ec6034559748139b9468598b535d4, type: 3}
   NPCAttack: {fileID: 8300000, guid: 5174415e9879415498f7b0dd794d19c5, type: 3}
   NPCDeath: {fileID: 8300000, guid: 537b742a36b47124db0e867a48b705d2, type: 3}
-  boss_Roar1: {fileID: 0}
-  boss_Roar2: {fileID: 0}
-  boss_Step: {fileID: 0}
-  boss_Back_Jump: {fileID: 0}
-  boss_Landing: {fileID: 0}
-  boss_SpikeSummoning: {fileID: 0}
-  boss_Spikehit: {fileID: 0}
-  boss_SpikeBroken: {fileID: 0}
-  boss_Charge: {fileID: 0}
-  boss_spike_throw: {fileID: 0}
-  boss_MeleeAttack: {fileID: 0}
-  boss_Death: {fileID: 0}
-  boxOpen: {fileID: 0}
-  StageClear: {fileID: 0}
+  boss_Roar1: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
+  boss_Roar2: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
+  boss_Step: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
+  boss_Back_Jump: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
+  boss_Landing: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
+  boss_SpikeSummoning: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
+  boss_Spikehit: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
+  boss_SpikeBroken: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
+  boss_Charge: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
+  boss_spike_throw: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
+  boss_MeleeAttack: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
+  boss_Death: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
+  boxOpen: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
+  StageClear: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
   getBullet: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}

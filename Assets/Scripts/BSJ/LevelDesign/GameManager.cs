@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
+using static SO_Stage;
 
 public enum RewardType
 {
@@ -83,6 +84,8 @@ public class GameManager : SceneSingleton<GameManager>
 
             if (scene.name == "mainGame")
             {
+                SM.Instance.SetBGM(0);
+                Debug.Log("if (scene.name == mainGame)");
                 return;
             }
 
@@ -161,6 +164,7 @@ public class GameManager : SceneSingleton<GameManager>
         //Start New
         _stageSystem.StartChapter();
         SO_Stage randomStage = _stageSystem.GetCurrentRandomStage();
+        SM.Instance.SetBGM((int)randomStage.sceneType);
         SetStageQuests();
         JsonDataManager.GetUserData().SavePlayData_OnSceneEnter(new StageData(randomStage.SceneName, _stageSystem.CurrentStageNum, _rewardType, _stageSystem.CurrentStage));
         LoadSceneAsync(randomStage.SceneName);
@@ -262,6 +266,8 @@ public class GameManager : SceneSingleton<GameManager>
             SetStageQuests();
         }
         JsonDataManager.GetUserData().SavePlayData_OnSceneExit(_PlayerMaster._PlayerInstanteState, _PlayerMaster._PlayerEquipBlueChip);
+        SM.Instance.SetBGM((int)nextStage.sceneType);
+        Debug.Log("SM.Instance.SetBGM((int)nextStage.sceneType);");
         LoadSceneAsync(nextStage.SceneName);
     }
     public void LoadSceneAsync(string sceneName)

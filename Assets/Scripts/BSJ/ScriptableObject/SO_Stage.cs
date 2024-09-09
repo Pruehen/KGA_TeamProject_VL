@@ -9,6 +9,16 @@ public class SO_Stage : ScriptableObject
 
     public bool Cleared;
 
+    [SerializeField]
+    public SceneType sceneType;
+
+    public enum SceneType
+    {
+        Lobby,
+        Normal,
+        Boss
+    }
+
     public void ResetStageData()
     {
         Cleared = false;
