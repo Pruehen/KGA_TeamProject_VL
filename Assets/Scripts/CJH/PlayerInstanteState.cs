@@ -1021,12 +1021,12 @@ public class PlayerInstanteState : MonoBehaviour
         shield.Heal(v);
         UpdateShild();
     }
-    [SerializeField] private GameObject _blueChipChest;
-    public void SpawnBluechipChest()
+
+    public void Passive_Utility4_Active()
     {
-        Vector3 pos = transform.position;
-        pos += transform.forward + transform.right;
-        pos.y = 0f;
-        Instantiate(_blueChipChest, pos, Quaternion.identity);
+        if (passive_Utility4 != null)
+        {
+            passive_Utility4.Active();
+        }
     }
 }
