@@ -1026,6 +1026,7 @@ public class PlayerInstanteState : MonoBehaviour
     {
         Vector3 pos = transform.position;
         pos += transform.forward + transform.right;
+        pos.y = 0f;
         Instantiate(_blueChipChest, pos, Quaternion.identity);
     }
 }
