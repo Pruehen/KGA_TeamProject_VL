@@ -21,6 +21,20 @@ public class PlayerModChangeManager : MonoBehaviour
         {            
             _PlayerMaster.IsMeleeMode = value;
             OnSucceseAbsorpt?.Invoke(value);
+            if(value)
+            {
+                foreach(GameObject gloves in Glove)
+                {
+                    gloves.SetActive(true);
+                }
+            }
+            else
+            {
+                foreach (GameObject gloves in Glove)
+                {
+                    gloves.SetActive(false);
+                }
+            }
         }
     }
     public bool IsAttackState
@@ -76,6 +90,7 @@ public class PlayerModChangeManager : MonoBehaviour
     //모드 변환시 캐릭터 공격 방식을 바꾸기 위해
     public Action<bool> OnSucceseAbsorpt;
 
+    [SerializeField] GameObject[] Glove;
     public void EnterAbsorptState()
     {
         IsAbsorptState = true;
