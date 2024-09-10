@@ -19,6 +19,10 @@ public class DrawAttackArea : Editor
     {
         // draw some Gizmos-like gizmo
         object selected = SelectedManager.SelectedObject;
+        if(selected == null)
+        {
+            return;
+        }
         if (selected is SO_AttackModule am)
         {
             _am = am;
