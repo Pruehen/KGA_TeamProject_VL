@@ -24,6 +24,7 @@ public class NextStageObjects : MonoBehaviour
     }
     private void OnClear()
     {
+        SM.Instance.PlaySound2("StageClear", transform.position);
         GameManager.Instance.OnGameClear -= OnClear;
         foreach ( NextStageDoor nextStageDoor in _nextStageDoors )
         {

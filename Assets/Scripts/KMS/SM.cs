@@ -95,22 +95,29 @@ public class SM : GlobalSingleton<SM>
 
         if (audioClipDictionary.TryGetValue(soundName, out AudioClip audioClip))
         {
-            GameObject sb = ObjectPoolManager.Instance.DequeueObject(audioClip, position);
-            sb.transform.position = position;
+            if (audioClip != null)
+            {
+                GameObject sb = ObjectPoolManager.Instance.DequeueObject(audioClip, position);
+                sb.transform.position = position;
 
-            AudioSource audioSource = sb.GetComponent<AudioSource>();
-            if (audioSource == null)
-            {
-                audioSource = sb.AddComponent<AudioSource>();
-                audioSource = sb.GetComponent<AudioSource>();
+                AudioSource audioSource = sb.GetComponent<AudioSource>();
+                if (audioSource == null)
+                {
+                    audioSource = sb.AddComponent<AudioSource>();
+                    audioSource = sb.GetComponent<AudioSource>();
+                }
+                audioSource.clip = audioClip;
+                audioSource.Play();
+                if (!audioSource.loop)//루프가 켜져있지 않을시 Lenth만큼 재생후 풀에반환함
+                {
+                    StartCoroutine(ReturnToPoolAfterPlayback(audioSource));
+                }
+                return sb;
             }
-            audioSource.clip = audioClip;
-            audioSource.Play();
-            if (!audioSource.loop)//루프가 켜져있지 않을시 Lenth만큼 재생후 풀에반환함
+            else
             {
-                StartCoroutine(ReturnToPoolAfterPlayback(audioSource));
+                return null;
             }
-            return sb;
         }
         else
         {
