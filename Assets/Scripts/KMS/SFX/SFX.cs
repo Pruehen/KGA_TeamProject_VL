@@ -51,6 +51,7 @@ public class SFX : ScriptableObject
     public AudioClip boss_Roar1;
     public AudioClip boss_Roar2;
     public AudioClip boss_Step;
+    public AudioClip boss_run;
     public AudioClip boss_Back_Jump;
     public AudioClip boss_Landing;
     public AudioClip boss_SpikeSummoning;
@@ -59,7 +60,10 @@ public class SFX : ScriptableObject
     public AudioClip boss_Charge;
     public AudioClip boss_spike_throw;
     public AudioClip boss_MeleeAttack;
+    public AudioClip boss_MeleeAttackEnd;
     public AudioClip boss_Death;
+    public AudioClip boss_Ulti;
+    
 
 
 

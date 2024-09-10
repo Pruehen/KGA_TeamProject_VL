@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3128983259576020251}
   - component: {fileID: 5097526872318029956}
+  - component: {fileID: 7048831817267073280}
   m_Layer: 0
   m_Name: NextStageObjects
   m_TagString: Untagged
@@ -54,6 +55,20 @@ MonoBehaviour:
   _rewardChest: {fileID: 7960122349456753051}
   _additionalReward: {fileID: 3887223510677224710}
   _testing: 0
+--- !u!114 &7048831817267073280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 133579042656451625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b83bcd1bc70c19408cb347d2245ade3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SoundName: StageClear
+  SB: {fileID: 0}
 --- !u!1 &3982465947421548135
 GameObject:
   m_ObjectHideFlags: 0
@@ -126,6 +141,7 @@ MonoBehaviour:
   _rewardType: 0
   _currencyIcon: {fileID: 6812884852431662547}
   _blueChipIcon: {fileID: 4592129872728482606}
+  _isOnClear: 1
 --- !u!1 &4592129872728482606
 GameObject:
   m_ObjectHideFlags: 0

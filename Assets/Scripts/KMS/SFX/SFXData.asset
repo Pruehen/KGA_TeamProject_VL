@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   VFXvolum: 1
   BGMvolum: 1
-  lobby: {fileID: 8300000, guid: c64f49fbf1bba584ba1ef6c8f58693d6, type: 3}
+  lobby: {fileID: 8300000, guid: a1cf97be2d22c0a4d95fd3512c682f7f, type: 3}
   gameRoom: {fileID: 8300000, guid: d90b1e5455baeb3468dafa0c8498b2a6, type: 3}
   bossRoom: {fileID: 8300000, guid: dc1cb8e002a4b57448249a876d181139, type: 3}
   playerstep: {fileID: 8300000, guid: 398a631f92a5b2e4fbbf36e67e05e653, type: 3}
@@ -50,6 +50,7 @@ MonoBehaviour:
   boss_Roar1: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
   boss_Roar2: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
   boss_Step: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
+  boss_run: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
   boss_Back_Jump: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
   boss_Landing: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
   boss_SpikeSummoning: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
@@ -58,7 +59,9 @@ MonoBehaviour:
   boss_Charge: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
   boss_spike_throw: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
   boss_MeleeAttack: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
+  boss_MeleeAttackEnd: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
   boss_Death: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
+  boss_Ulti: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
   boxOpen: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
   StageClear: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
   getBullet: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}

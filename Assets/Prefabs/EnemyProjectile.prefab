@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -524000215258736090}
   - component: {fileID: 6902404490007609290}
   - component: {fileID: 5729467294164521049}
+  - component: {fileID: 4252766459413601880}
   m_Layer: 13
   m_Name: EnemyProjectile
   m_TagString: Untagged
@@ -146,3 +147,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28f70035b16874f4888181a586bacea6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4252766459413601880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6126931894786530910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b83bcd1bc70c19408cb347d2245ade3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SoundName: boss_spike_throw
+  SB: {fileID: 0}

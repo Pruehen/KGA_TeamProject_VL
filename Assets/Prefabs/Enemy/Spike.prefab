@@ -148,6 +148,7 @@ GameObject:
   - component: {fileID: 4305603690171935446}
   - component: {fileID: 7356026850849790898}
   - component: {fileID: 9055373503852205144}
+  - component: {fileID: 5630361190605267527}
   m_Layer: 9
   m_Name: SpikeModel
   m_TagString: Untagged
@@ -286,3 +287,17 @@ CapsuleCollider:
   m_Height: 2.0000005
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: -1.64}
+--- !u!114 &5630361190605267527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8375863839724547934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b83bcd1bc70c19408cb347d2245ade3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SoundName: boss_SpikeSummoning
+  SB: {fileID: 0}

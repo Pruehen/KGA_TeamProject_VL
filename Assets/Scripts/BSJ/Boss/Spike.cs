@@ -30,6 +30,7 @@ public class Spike : MonoBehaviour, ITargetable
 
     public bool IsDead()
     {
+        SM.Instance.PlaySound2("boss_SpikeBroken",transform.position);
         return _hp <= 0f;
     }
 
@@ -51,6 +52,7 @@ public class Spike : MonoBehaviour, ITargetable
             if (Time.time >= _damageTimeStamp + _cooldown)
             {
                 rbOther.GetComponent<PlayerMaster>().Hit(_damage, DamageType.NonKnockback);
+                SM.Instance.PlaySound2("boss_Spikehit",transform.position);
             }
         }
     }

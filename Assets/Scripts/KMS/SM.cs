@@ -69,6 +69,7 @@ public class SM : GlobalSingleton<SM>
         { "boss_Roar1", sfxData.boss_Roar1 },
         { "boss_Roar2", sfxData.boss_Roar2 },
         { "boss_Step", sfxData.boss_Step },
+        { "boss_run", sfxData.boss_run },
         { "boss_Back_Jump", sfxData.boss_Back_Jump },
         { "boss_Landing", sfxData.boss_Landing },
         { "boss_SpikeSummoning", sfxData.boss_SpikeSummoning },
@@ -77,6 +78,8 @@ public class SM : GlobalSingleton<SM>
         { "boss_Charge", sfxData.boss_Charge },
         { "boss_spike_throw", sfxData.boss_spike_throw },
         { "boss_MeleeAttack", sfxData.boss_MeleeAttack },
+        { "boss_MeleeAttackEnd", sfxData.boss_MeleeAttackEnd },
+        { "boss_Ulti", sfxData.boss_Ulti },
         { "boss_Death", sfxData.boss_Death },
 
         // System Sounds
