@@ -30,7 +30,7 @@ public class Spike : MonoBehaviour, ITargetable
 
     public bool IsDead()
     {
-        SM.Instance.PlaySound2("boss_SpikeBroken",transform.position);
+        SM.Instance.PlaySound2("boss_SpikeBroken", transform.position);
         return _hp <= 0f;
     }
 
@@ -39,7 +39,7 @@ public class Spike : MonoBehaviour, ITargetable
         Instantiate(_trashPrefab, transform.position, transform.rotation);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionStay(Collision collision)
     {
         Rigidbody rbOther = collision.rigidbody;
         if (rbOther == null)
@@ -51,8 +51,9 @@ public class Spike : MonoBehaviour, ITargetable
         {
             if (Time.time >= _damageTimeStamp + _cooldown)
             {
+                _damageTimeStamp = Time.time;
                 rbOther.GetComponent<PlayerMaster>().Hit(_damage, DamageType.NonKnockback);
-                SM.Instance.PlaySound2("boss_Spikehit",transform.position);
+                SM.Instance.PlaySound2("boss_Spikehit", transform.position);
             }
         }
     }
