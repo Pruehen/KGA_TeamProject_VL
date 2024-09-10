@@ -52,6 +52,9 @@ public class EnemyBase : MonoBehaviour, ITargetable
 
     public AIState AiState => _aiState;
 
+    [SerializeField] private bool _isKnockback_able = true;
+    public bool IsKnockback_able => _isKnockback_able;
+
     protected int _goldDropAmount;
     private bool _isKnocked;
 
@@ -267,6 +270,7 @@ public class EnemyBase : MonoBehaviour, ITargetable
 
     protected void OnKnockback()
     {
+        if(IsKnockback_able)
         _animator.SetTrigger("Hit");
     }
 
