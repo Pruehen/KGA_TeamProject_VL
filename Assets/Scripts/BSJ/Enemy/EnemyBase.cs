@@ -18,6 +18,8 @@ public class EnemyBase : MonoBehaviour, ITargetable
     protected Phase _phase = Phase.First;
     public Action<EnemyBase> OnDeadWithSelf;
 
+    public Combat[] Health => _combat;
+
     public Detector Detector => _detector;
     public EnemyAttack Attack => _enemyAttack;
     public EnemyMove Move => _enemyMove;
@@ -85,6 +87,9 @@ public class EnemyBase : MonoBehaviour, ITargetable
 
         _detector.Init(this, "Player",
             _enemyData.EnemyAlramDistance);
+
+        if( _enemyData.IsBoss)
+            _detector.OnDetect += ActiveBossUi;
 
         _combat = new Combat[_enemyData.Hp.Length];
         for (int i = 0; i < _combat.Length; i++)
@@ -268,7 +273,7 @@ public class EnemyBase : MonoBehaviour, ITargetable
 
         return isDead;
     }
-    protected void OnDamaged(DamageType damageType)
+    protected void OnDamaged(Combat target, DamageType damageType)
     {
     }
 
@@ -278,6 +283,10 @@ public class EnemyBase : MonoBehaviour, ITargetable
         _animator.SetTrigger("Hit");
     }
 
+    private void ActiveBossUi(Detector detector)
+    {
+        UIManager.Instance.BossCombatUi.Init(this);
+    }
 
     #region OnDead
     protected void OnDead(Combat self)

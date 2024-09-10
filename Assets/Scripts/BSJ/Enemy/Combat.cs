@@ -19,8 +19,8 @@ public class Combat
     [SerializeField] private float _prevHitTime = 0f;
 
     public Func<bool> AdditionalDamageableCheck { get; set; }
-    public Action<DamageType> OnDamaged;
-    public Action OnHeal;
+    public Action<Combat, DamageType> OnDamaged;
+    public Action<Combat> OnHeal;
     public Action<Combat> OnDead;
 
 
@@ -140,7 +140,7 @@ public class Combat
         damage = Mathf.Max(0f, damage);
         _hp -= damage;
 
-        OnDamaged?.Invoke(type);
+        OnDamaged?.Invoke(this, type);
 
         Debug.Log($"{damage}");
 
@@ -163,7 +163,7 @@ public class Combat
         }
         if (OnHeal != null)
         {
-            OnHeal.Invoke();
+            OnHeal.Invoke(this);
         }
     }
     public bool IsDead()

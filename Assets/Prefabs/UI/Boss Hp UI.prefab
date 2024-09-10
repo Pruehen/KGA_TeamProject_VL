@@ -239,6 +239,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1974288977396239171}
   - component: {fileID: 290287991529372490}
+  - component: {fileID: 134367675801794812}
   m_Layer: 5
   m_Name: Boss Hp UI
   m_TagString: Untagged
@@ -276,3 +277,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7278576652356109750}
   m_CullTransparentMesh: 1
+--- !u!114 &134367675801794812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7278576652356109750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62750f6f0dbeedc429bfe3448e339ef9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _healthPoint: {fileID: 4443445502087397102}
+  _bossName: {fileID: 483917962618812864}

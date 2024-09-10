@@ -1,13 +1,10 @@
+using EnumTypes;
+using System.Collections.Generic;
 using System.ComponentModel;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using System.Collections.Generic;
-using EnumTypes;
-using System;
-using Unity.VisualScripting;
-using UnityEngine.SceneManagement;
 
 public class UIManager : SceneSingleton<UIManager>
 {
@@ -45,8 +42,11 @@ public class UIManager : SceneSingleton<UIManager>
     [SerializeField] GameObject escImage;
 
     [SerializeField] Text emeraldText;
-        
+
     [SerializeField] List<PassiveUI> PassiveUIList;
+
+    [SerializeField] BossCombatUI bossCombatUi;
+    public BossCombatUI BossCombatUi => bossCombatUi;
 
 
     private void Start()
@@ -99,8 +99,8 @@ public class UIManager : SceneSingleton<UIManager>
                 HoldButtonMove();
             }
             else
-            { 
-               ReturnMainGame();
+            {
+                ReturnMainGame();
 
             }
 
@@ -135,13 +135,14 @@ public class UIManager : SceneSingleton<UIManager>
                         {
                             return;
                         }
-                        else {
+                        else
+                        {
                             Button selectedButton = EventSystem.current.currentSelectedGameObject?.GetComponent<Button>();
                             selectedButton.onClick.Invoke();
                         }
-                      
+
                     }
-                  
+
 
 
                 }
@@ -157,7 +158,7 @@ public class UIManager : SceneSingleton<UIManager>
     }
     void Init_PassiveUIList()
     {
-        if(_PlayerMaster != null)
+        if (_PlayerMaster != null)
         {
             List<PassiveID> usePasiveList = new List<PassiveID>();
 
@@ -175,7 +176,7 @@ public class UIManager : SceneSingleton<UIManager>
 
     public void Interactable(bool chest)
     {
-        if (chest) 
+        if (chest)
         {
             interactive.gameObject.SetActive(true);
         }
@@ -241,7 +242,7 @@ public class UIManager : SceneSingleton<UIManager>
         emeraldText.text = playerEmerald.ToString();
     }
 
-  
+
     //FŰ�� ���� ���Ĩ�� �����ϸ� ȣ���Ǵ� �Լ�
     public void PickBUtton()
     {
@@ -274,7 +275,7 @@ public class UIManager : SceneSingleton<UIManager>
             outGamePassive.SetActive(true);
             pickBlueChip.SetActive(false);
             blueChipUI.GetComponent<BlueChipUIManager>().Init();
-            
+
         }
         else if (holdBlueChip.activeSelf == true && pickBlueChip.activeSelf == false)
         {
@@ -325,7 +326,7 @@ public class UIManager : SceneSingleton<UIManager>
         questAni.SetBool("QuestFail", true);
     }
 
-   
+
     public void QuestReturn()
     {
         AnimatorStateInfo currentState = questAni.GetCurrentAnimatorStateInfo(0);

@@ -12,6 +12,8 @@ public class Detector : MonoBehaviour
 
     public bool isPlayerInRange { get; private set; }
 
+    public Action<Detector> OnDetect;
+
     [SerializeField] private Collider Target
     {         
         get => _target;
@@ -20,7 +22,12 @@ public class Detector : MonoBehaviour
             if(value != null)
             {
                 _lastTarget = _target;
-                _latestTarget = value.transform;
+
+                if(_latestTarget == null)
+                {
+                    _latestTarget = value.transform;
+                    OnDetect(this);
+                }
             }
             _target = value;
         }
@@ -69,7 +76,7 @@ public class Detector : MonoBehaviour
 
         isPlayerInRange = playerCol != null;
 
-        if(isPlayerInRange)
+        if (isPlayerInRange)
         {
             Target = playerCol;
             _lastValidPostion = Target.bounds.center;

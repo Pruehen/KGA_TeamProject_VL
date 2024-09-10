@@ -17,4 +17,6 @@ public class SO_EnemyBase : ScriptableObject
     public float AttackMovableCooldown = 0.6f;
     public float AttackSpeedMultiply = 1f;
     public int DropGoldAmount = 100;
+
+    public bool IsBoss = false;
 }
