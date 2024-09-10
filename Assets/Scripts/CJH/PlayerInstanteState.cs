@@ -1020,7 +1020,6 @@ public class PlayerInstanteState : MonoBehaviour
     public void SetMaxShield(float v)
     {
         shield.SetMaxHp(v);
-        shield.Heal(v);
         UpdateShild();
     }
 

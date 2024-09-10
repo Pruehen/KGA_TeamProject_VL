@@ -35,6 +35,7 @@ public class UIManager : SceneSingleton<UIManager>
     [SerializeField] Animator questAni;
     [SerializeField] Toggle questToggle;
     [SerializeField] Text questTimer;
+    [SerializeField] Animator achievementAni;
 
     PlayerInstanteState _PlayerState;
     PlayerMaster _PlayerMaster;
@@ -88,6 +89,7 @@ public class UIManager : SceneSingleton<UIManager>
     private void Update()
     {
         QuestReturn();
+        AchievementReturn();
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -352,5 +354,21 @@ public class UIManager : SceneSingleton<UIManager>
         // {0:00} - 두 자리로 포맷된 minutes 값
         // {1:00} - 두 자리로 포맷된 seconds 값
         questTimer.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+    }
+
+    //업적
+    public void Achievement()
+    {
+        achievementAni.SetBool("Feat", true);
+    }
+
+    public void AchievementReturn()
+    {
+        AnimatorStateInfo currentState = achievementAni.GetCurrentAnimatorStateInfo(0);
+
+        if (currentState.IsName("Achievement"))
+        {
+            achievementAni.SetBool("Feat", false);
+        }
     }
 }

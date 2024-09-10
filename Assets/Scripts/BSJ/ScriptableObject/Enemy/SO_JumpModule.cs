@@ -15,6 +15,8 @@ public class SO_JumpModule : SO_AttackModule
     {
         base.StartAttack(owner, type);
 
+        owner.Attack.EnableDamageBox(Damage, DamageBox.Offset, DamageBox.Range);
+
         owner.Animator.SetBool("EndAttackMove", false);
     }
     public override void StartAttackMove(EnemyBase owner, int type)
