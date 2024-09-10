@@ -11,6 +11,7 @@ public class EnemyAttack
     [SerializeField] private float _rangeTypeThreshold = 15f;
     [SerializeField] private bool _isPriorityAttack = false;
     [SerializeField] private Transform _firePos;
+    public float RangeTypeThreshold => _rangeTypeThreshold;
 
     private EnemyBase _owner;
     [SerializeField] private AttackModule[] _modules;
@@ -106,6 +107,18 @@ public class EnemyAttack
         else
         {
             _attackRangeType = AttackRangeType.Close;
+        }
+    }
+    public virtual AttackRangeType GetAttackRangeType()
+    {
+        float dist = _owner.Detector.TargetDistance;
+        if (dist > _rangeTypeThreshold)
+        {
+            return AttackRangeType.Far;
+        }
+        else
+        {
+            return AttackRangeType.Close;
         }
     }
     public void SetAttackPhaseType(Phase phase)

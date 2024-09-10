@@ -8,6 +8,8 @@ using UnityEngine.Pool;
 
 public class EnemyBase : MonoBehaviour, ITargetable
 {
+    public Vector3 SpawnedPosition { get; private set; }
+
     [SerializeField] protected SO_EnemyBase _enemyData;
     [SerializeField] protected EnemyAttack _enemyAttack;
     [SerializeField] protected EnemyMove _enemyMove;
@@ -67,6 +69,8 @@ public class EnemyBase : MonoBehaviour, ITargetable
 
     public virtual void Init()
     {
+        SpawnedPosition = transform.position;
+
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _navMeshAgent.updateRotation = false;
 

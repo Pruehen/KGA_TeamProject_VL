@@ -25,9 +25,10 @@ public class BossDoubleAreaAttack : MonoBehaviour
         _mat_anticipate = _model_anticipate.GetComponent<Renderer>().sharedMaterial;
     }
 
-    public void Init(float damage, AttackRangeType condition)
+    public void Init(float damage, float sizeMid, AttackRangeType inside)
     {
-        this._condition = condition;
+        this._condition = inside;
+        _distance_middle = sizeMid;
         _damage = damage;
 
         _model_anticipate.localScale = Vector3.one * _distance_max * 2f;
@@ -36,16 +37,16 @@ public class BossDoubleAreaAttack : MonoBehaviour
 
         _mat_anticipate.SetVector("_Pos", transform.position);
 
-        if (condition == AttackRangeType.Close)
+        if (inside == AttackRangeType.Close)
         {
             _mat_anticipate.SetInt("_Inside", 1);
-            condition = AttackRangeType.Far;
+            inside = AttackRangeType.Far;
         }
         else
         {
             _mat_anticipate.SetInt("_Inside", 0);
             _mat_anticipate.SetFloat("InnerCircle", _distance_middle);
-            condition = AttackRangeType.Close;
+            inside = AttackRangeType.Close;
         }
     }
 
