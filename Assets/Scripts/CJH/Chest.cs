@@ -31,6 +31,7 @@ public class Chest : MonoBehaviour
 
     private void SpawnItem(RewardType rewardType)
     {
+        SM.Instance.PlaySound2("boxOpen", transform.position);
         switch (rewardType)
         {
             case RewardType.Currency:
@@ -54,7 +55,6 @@ public class Chest : MonoBehaviour
     private void SpawnRandomGold(int v1, int v2)
     {
         animator.SetTrigger("Chest");
-        SM.Instance.PlaySound2("boxOpen", transform.position);
         chestCollider.enabled = false;
         int amount = Random.Range(v1, v2 + 1);
         GameManager.Instance._PlayerMaster._PlayerInstanteState.AddGold(amount);
