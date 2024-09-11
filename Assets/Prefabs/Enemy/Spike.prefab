@@ -48,17 +48,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spikeTimer:
     _limit: 1
-    _isStop: 1
+    _isPlaying: 0
   _spike: {fileID: 4305603690171935446}
   _anticipateModel: {fileID: 5247558943191714681}
   _model: {fileID: 6161050314202558766}
   _spawnEffect: {fileID: 7157649362121685754}
   _spikeModelTimer:
     _limit: 0
-    _isStop: 1
+    _isPlaying: 0
   _enqueueTimer:
     _limit: 0
-    _isStop: 1
+    _isPlaying: 0
 --- !u!1 &7051731443675956999
 GameObject:
   m_ObjectHideFlags: 0

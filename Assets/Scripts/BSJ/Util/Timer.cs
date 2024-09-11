@@ -7,7 +7,7 @@ public class Timer
     public Action OnEnd;
     private float _time;
     [SerializeField] private float _limit;
-    [SerializeField] private bool _isPlaying = true;
+    [SerializeField] private bool _isPlaying = false;
     public bool IsPlaying { get { return _isPlaying; } private set { _isPlaying = value; } }
 
 
