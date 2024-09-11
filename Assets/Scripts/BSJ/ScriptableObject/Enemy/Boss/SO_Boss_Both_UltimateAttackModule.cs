@@ -47,7 +47,8 @@ public class SO_Boss_Both_UltimateAttackModule : SO_AttackModule
                 {
                     Vector3 offset = new Vector3(i * gap, 0f, k * gap) - centerOffset;
                     Vector3 pos = owner.transform.position + offset;
-                    SpawnSpike(owner, spike, pos, spikeRandomOffset);
+                    if (Vector3.Distance(pos, owner.transform.position) < areaRadius * .5f)
+                        SpawnSpike(owner, spike, pos, spikeRandomOffset);
                 }
             }
     }
