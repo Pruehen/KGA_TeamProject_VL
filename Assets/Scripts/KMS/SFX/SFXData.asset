@@ -18,17 +18,17 @@ MonoBehaviour:
   gameRoom: {fileID: 8300000, guid: 709e42ebd4d9eaa41b10e00c1a754345, type: 3}
   bossRoom: {fileID: 8300000, guid: daa3262438951b844aab5c5dc5b9ff22, type: 3}
   playerstep: {fileID: 8300000, guid: a9c9f45b97aceb841919d5a53b40f9b2, type: 3}
-  playerHit: {fileID: 8300000, guid: 93e2375703cfc9445b94007a531cd9f7, type: 3}
+  playerHit: {fileID: 8300000, guid: 3560d435761a8f543b752d5cffcb866d, type: 3}
   playerDead: {fileID: 8300000, guid: ab311aab76ae384488143d38eaef60fb, type: 3}
   playerSetBlueChip: {fileID: 8300000, guid: 02aac192005c75946b6450324573ae51, type: 3}
   Absorbeing: {fileID: 8300000, guid: 1af8b87789c86614499d46d087cb2005, type: 3}
-  playerMeleeTransform: {fileID: 8300000, guid: a1c848b994fce0c40a52a6494b9be96a, type: 3}
+  playerMeleeTransform: {fileID: 8300000, guid: 4e7a9f408abdba8459fdccbeaea95215, type: 3}
   playerRangeTransform: {fileID: 8300000, guid: 7b38b1b758f207b48a4a78cd0b7b94fa, type: 3}
   playerMeleeTransformRelease: {fileID: 8300000, guid: 7b38b1b758f207b48a4a78cd0b7b94fa, type: 3}
   playerRangeAttack: {fileID: 8300000, guid: c07199b7b46e71b449b665d21ff16f18, type: 3}
   playerRangeAttack4: {fileID: 8300000, guid: 11e6befd1bff118408a81d7366b389b3, type: 3}
   playerRangeProjectileHIt: {fileID: 8300000, guid: 8b23b175a78d6b5458322e3a6c9905d0, type: 3}
-  playerMeleeAttackHit: {fileID: 8300000, guid: 74198389e177d0948b63ca9a3fb22801, type: 3}
+  playerMeleeAttackHit: {fileID: 8300000, guid: 28406bf68add30e4e89d6cd063fb84e6, type: 3}
   playerCharging: {fileID: 8300000, guid: 304d546b80cae47fb872be812b98b2c8, type: 3}
   playerCharged: {fileID: 8300000, guid: 89001e92ca492453599bb2bc49326e85, type: 3}
   playerChargedAttack: {fileID: 8300000, guid: a91b6eb6aee93de4fa0b41a96fd36c96, type: 3}
@@ -52,7 +52,7 @@ MonoBehaviour:
   boss_Step: {fileID: 8300000, guid: 32f313f06ea560147971a0f08e309447, type: 3}
   boss_run: {fileID: 8300000, guid: 5a7e64978e39005428ff5b39a026155f, type: 3}
   boss_Back_Jump: {fileID: 8300000, guid: 5a7e64978e39005428ff5b39a026155f, type: 3}
-  boss_Landing: {fileID: 8300000, guid: 8f1e6ac2ff66e2645bac9867cb0f5969, type: 3}
+  boss_Landing: {fileID: 0}
   boss_SpikeSummoning: {fileID: 8300000, guid: d0829e3ec0920d64d9050c9b343eb274, type: 3}
   boss_Spikehit: {fileID: 8300000, guid: 8cab3904e5d32df44bf19c60103e1664, type: 3}
   boss_SpikeBroken: {fileID: 8300000, guid: 28406bf68add30e4e89d6cd063fb84e6, type: 3}
