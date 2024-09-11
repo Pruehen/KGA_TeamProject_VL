@@ -170,12 +170,14 @@ public class EnemyBase : MonoBehaviour, ITargetable
             _animator.SetBool("IsMoving", true);
 
             Vector3 localVelocity = transform.InverseTransformDirection(_navMeshAgent.velocity.normalized);
+            _animator.SetFloat("MoveSpeed", _navMeshAgent.velocity.magnitude);
 
             SetStrafeAnimVals(localVelocity);
         }
         else
         {
             _animator.SetBool("IsMoving", false);
+            _animator.SetFloat("MoveSpeed", 0f);
             SetStrafeAnimVals(Vector3.zero);
         }
 
