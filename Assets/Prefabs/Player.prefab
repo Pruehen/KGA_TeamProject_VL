@@ -120,6 +120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 348df6729af512441a7eeed69870c82b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _PlayerAttack: {fileID: 0}
   SkillData: {fileID: 11400000, guid: 697fc365c538ef2438aa6f635eb536b1, type: 2}
   _ItemAbsorber: {fileID: 6544024869024547094}
   _AttackSystem: {fileID: 8909988477445564789}
@@ -136,6 +137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 729d35e4a3c03ad448294084810d3bc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Glove: []
 --- !u!114 &516789563033613623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,7 +177,6 @@ MonoBehaviour:
   executionCount: 0
   moveSpeed: 6
   _playerStatData: {fileID: 11400000, guid: ebc369b68647668448baaa8562d27f32, type: 2}
-  _blueChipChest: {fileID: 2413302034138487427, guid: 0242175b70f29b542808d3806195a38a, type: 3}
 --- !u!114 &6370585067071046547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -336,6 +337,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f80012ddb58f5846a77fcd9de5f9e6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerMaster: {fileID: 0}
   skill: {fileID: 0}
   ChargedR: {fileID: 0}
   ChargedL: {fileID: 0}
@@ -402,6 +404,7 @@ MonoBehaviour:
   player: {fileID: 3370145770967923552}
   moveDuration: 0.3
   target: {x: 0, y: 0, z: 0}
+  RangeSkill4: {fileID: 0}
   RangeSkill3: {fileID: 0}
   RangeSkill2: {fileID: 0}
   RangeSkill1: {fileID: 0}
@@ -500,7 +503,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _targetLayer:
     serializedVersion: 2
-    m_Bits: 4608
+    m_Bits: 37376
   Defaultoffset: {x: 0, y: 0.5, z: 0.5}
   DefaultRange: {x: 1, y: 1, z: 1}
   target: {x: 0, y: 0, z: 0}
