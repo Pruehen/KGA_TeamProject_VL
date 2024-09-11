@@ -8,9 +8,16 @@ public class Audios : MonoBehaviour
 
     [SerializeField] public string SoundName;
     public GameObject SB;
+    public bool spatialBlend=false;
+
     public void OnEnable()
     {
         SB = SM.Instance.PlaySound2(SoundName,transform.position);
+        if (spatialBlend)
+        {
+            AudioSource Audio = SB.GetComponent<AudioSource>();
+            Audio.spatialBlend = 1f;
+        }
     }
     public void OnDisable()
     {
