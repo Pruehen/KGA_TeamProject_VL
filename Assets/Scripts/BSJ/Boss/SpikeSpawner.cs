@@ -35,6 +35,6 @@ public class SpikeSpawner : MonoBehaviour
     private void DoReset()
     {
         _spikeTimer.ResetTimer();
-        gameObject.SetActive(false);
+        ObjectPoolManager.Instance.EnqueueObject(gameObject);
     }
 }

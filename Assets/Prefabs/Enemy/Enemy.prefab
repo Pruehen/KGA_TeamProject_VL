@@ -182,10 +182,12 @@ MonoBehaviour:
     _dead: 0
     InvincibleTimeOnHit: 0.1
     _prevHitTime: 0
+  IsStarafe_able: 0
   hitVFX: {fileID: 11400000, guid: 39b0076763d698e4fa1e149791706c51, type: 2}
   _pooledHitVfxPrefab: {fileID: 0}
   _firePos: {fileID: 300571122579109741}
   _projectilePrefab: {fileID: 0}
+  _isKnockback_able: 1
   DamageBox: {fileID: 4020534697921745680}
 --- !u!54 &6761217911787281492
 Rigidbody:
@@ -445,7 +447,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _targetLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 32832
   Defaultoffset: {x: 0, y: 0.5, z: 0.5}
   DefaultRange: {x: 1, y: 1, z: 1}
   target: {x: 0, y: 0, z: 0}

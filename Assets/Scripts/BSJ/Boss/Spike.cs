@@ -36,7 +36,8 @@ public class Spike : MonoBehaviour, ITargetable
 
     private void SpawnTrash()
     {
-        Instantiate(_trashPrefab, transform.position, transform.rotation);
+        GameObject spike = ObjectPoolManager.Instance.DequeueObject(_trashPrefab, transform.position);
+        spike.transform.rotation = transform.rotation;
     }
 
     private void OnCollisionStay(Collision collision)
@@ -55,6 +56,10 @@ public class Spike : MonoBehaviour, ITargetable
                 rbOther.GetComponent<PlayerMaster>().Hit(_damage, DamageType.NonKnockback);
                 SM.Instance.PlaySound2("boss_Spikehit", transform.position);
             }
+        }
+        else if (rbOther.CompareTag("EnemyBoss"))
+        {
+            Hit(999f);
         }
     }
 }

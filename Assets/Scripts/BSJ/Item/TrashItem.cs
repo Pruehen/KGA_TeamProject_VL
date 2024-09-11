@@ -70,7 +70,7 @@ public class TrashItem : MonoBehaviour
         if (collision.rigidbody.CompareTag("Player"))
         {
             collision.rigidbody.GetComponent<PlayerInstanteState>().AcquireBullets(1);
-            Destroy(gameObject);
+            ObjectPoolManager.Instance.EnqueueObject(gameObject);
         }
     }
     public void PullToCenterAndDestroy(float acquireSpeed)
@@ -83,7 +83,7 @@ public class TrashItem : MonoBehaviour
         Vector3 targetPos = Vector3.zero;
         if (Vector3.Distance(targetPos, transform.localPosition) <= 0.1f)
         {
-            Destroy(transform.gameObject);
+            ObjectPoolManager.Instance.EnqueueObject(gameObject);
         }
         transform.localPosition = Vector3.Lerp(transform.localPosition, targetPos, Time.deltaTime * aquireSpeed);
         Debug.Log("EndOfAbsolsion");

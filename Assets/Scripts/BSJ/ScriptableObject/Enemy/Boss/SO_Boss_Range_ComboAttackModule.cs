@@ -36,8 +36,9 @@ public class SO_Boss_Range_ComboAttackModule : SO_RangeModule
     protected void ComboShootProjectile(Transform firePos)
     {
         Vector3 vel = firePos.forward * ProjectileSpeed;
-        GameObject projectileObject = GameObject.Instantiate(Prefab_projectile,
-            firePos.position, firePos.rotation);
+        GameObject projectileObject = ObjectPoolManager.Instance.DequeueObject(Prefab_projectile);
+        projectileObject.transform.position = firePos.position;
+        projectileObject.transform.rotation = firePos.rotation;
         EnemyProjectile projectile = null;
         projectileObject.TryGetComponent(out projectile);
 
