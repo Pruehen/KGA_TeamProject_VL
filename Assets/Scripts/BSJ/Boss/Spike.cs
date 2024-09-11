@@ -36,7 +36,8 @@ public class Spike : MonoBehaviour, ITargetable
 
     private void SpawnTrash()
     {
-        Instantiate(_trashPrefab, transform.position, transform.rotation);
+        GameObject spike = ObjectPoolManager.Instance.DequeueObject(_trashPrefab, transform.position);
+        spike.transform.rotation = transform.rotation;
     }
 
     private void OnCollisionStay(Collision collision)
