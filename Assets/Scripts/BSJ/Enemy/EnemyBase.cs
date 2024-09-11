@@ -181,13 +181,16 @@ public class EnemyBase : MonoBehaviour, ITargetable
 
         _currentStateTime += Time.deltaTime;
     }
-
+    private Vector3 _smoothVel = Vector3.zero;
+    private float _smoothVelTime = 10f;
     public void SetStrafeAnimVals(Vector3 localVelocity)
     {
+        _smoothVel = Vector3.Lerp(_smoothVel, localVelocity, Time.deltaTime * _smoothVelTime);
+
         if (IsStarafe_able)
         {
-            _animator.SetFloat("MoveX", localVelocity.x);
-            _animator.SetFloat("MoveY", localVelocity.z);
+            _animator.SetFloat("MoveX", _smoothVel.x);
+            _animator.SetFloat("MoveY", _smoothVel.z);
         }
     }
 
