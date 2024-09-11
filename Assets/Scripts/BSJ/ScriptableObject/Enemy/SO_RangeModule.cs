@@ -20,8 +20,9 @@ public class SO_RangeModule : SO_AttackModule
     {
         Vector3 vel = ProjectileCalc.CalculateInitialVelocity(targetTrf
             , firePos, ProjectileSpeed, Vector3.up * 1f);
-        GameObject projectileObject = GameObject.Instantiate(Prefab_projectile,
-            firePos.position, firePos.rotation);
+        GameObject projectileObject = ObjectPoolManager.Instance.DequeueObject(Prefab_projectile);
+        projectileObject.transform.position = firePos.position;
+        projectileObject.transform.rotation = firePos.rotation;
         EnemyProjectile projectile = null;
         projectileObject.TryGetComponent(out projectile);
 

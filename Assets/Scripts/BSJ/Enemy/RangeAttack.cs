@@ -62,8 +62,9 @@ public class RangeAttack : AiAttackAction
         Vector3 enemyToPlayerDir = (-transform.position + targetTrf.position).normalized;
         Vector3 vel = ProjectileCalc.CalculateInitialVelocity(targetTrf
             , _firePos, _projectileSpeed, Vector3.up * 1f);
-        GameObject projectileObject = GameObject.Instantiate(Prefab_projectile,
-            _firePos.position, _firePos.rotation);
+        GameObject projectileObject = ObjectPoolManager.Instance.DequeueObject(Prefab_projectile);
+        projectileObject.transform.position = _firePos.position;
+        projectileObject.transform.rotation = _firePos.rotation;
         EnemyProjectile projectile = null;
         projectileObject.TryGetComponent(out projectile);
 
