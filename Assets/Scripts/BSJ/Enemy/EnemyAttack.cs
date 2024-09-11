@@ -125,8 +125,16 @@ public class EnemyAttack
     {
         _phase = phase;
     }
+    private float AttackSelecteTimeStamp = 0f;
     public AttackModule GetRandomAvailableAttack(float dist)
     {
+        //ToDo 이거 왜 가끔 공격 이후 무빙 속도가 빠른채로 유지돼는지 생각해보기
+        _owner.Move.IsForceMove = false;
+        if (Time.time - AttackSelecteTimeStamp <= .1f)
+        {
+            return CurrentAttack;
+        }
+        AttackSelecteTimeStamp = Time.time;
         AttackModule am = null;
         if (_isPriorityAttack)
         {
@@ -143,6 +151,7 @@ public class EnemyAttack
         }
         _currentAttack = am;
 
+        Debug.LogWarning(am.AttackModuleData.name + Time.time);
         CurrentAttack.StartAction(_owner);
 
         return am;
