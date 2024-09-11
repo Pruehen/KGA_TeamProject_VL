@@ -7,8 +7,8 @@ public class Timer
     public Action OnEnd;
     private float _time;
     [SerializeField] private float _limit;
-    [SerializeField] private bool _isStop = true;
-    public bool IsStop { get { return _isStop; } private set { _isStop = value; } }
+    [SerializeField] private bool _isPlaying = true;
+    public bool IsPlaying { get { return _isPlaying; } private set { _isPlaying = value; } }
 
 
     public void Init(float time, Action endCallback)
@@ -19,27 +19,27 @@ public class Timer
 
     public void DoUpdate(float deltaTime)
     {
-        if (_isStop)
+        if (!IsPlaying)
             return;
 
         _time += deltaTime;
 
         if (_time > _limit)
         {
-            _isStop = true;
+            IsPlaying = false;
             OnEnd?.Invoke();
         }
     }
 
     public void StartTimer()
     {
-        IsStop = false;
+        IsPlaying = true;
         _time = 0f;
     }
 
     public void ResetTimer()
     {
-        IsStop = true;
+        IsPlaying = false;
         _time = 0f;
     }
 }
