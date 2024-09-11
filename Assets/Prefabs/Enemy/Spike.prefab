@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4281373196848227221}
   - component: {fileID: 7465903683288417532}
-  m_Layer: 9
+  m_Layer: 15
   m_Name: Spike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62,7 +62,7 @@ GameObject:
   - component: {fileID: 7018524462431170084}
   - component: {fileID: 1225308187193568341}
   - component: {fileID: 3552124090904878665}
-  m_Layer: 9
+  m_Layer: 15
   m_Name: SpikeAnticipate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,7 +149,7 @@ GameObject:
   - component: {fileID: 7356026850849790898}
   - component: {fileID: 9055373503852205144}
   - component: {fileID: 5630361190605267527}
-  m_Layer: 9
+  m_Layer: 15
   m_Name: SpikeModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -235,7 +235,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cooldown: 1
   _damage: 15
-  _hp: 50
+  _hp: 1
   _trashPrefab: {fileID: 55809143128806568, guid: 1b2cf56a75ce1a843b7f8d425eb3bc48, type: 3}
 --- !u!54 &7356026850849790898
 Rigidbody:
@@ -259,10 +259,10 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!136 &9055373503852205144
 CapsuleCollider:

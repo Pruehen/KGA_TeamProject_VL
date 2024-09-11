@@ -40,7 +40,7 @@ public class EnemyProjectile : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        if(other.rigidbody.CompareTag("Player"))
+        if(other.rigidbody.CompareTag("Player") || other.gameObject.layer == LayerMask.NameToLayer("Spike"))
         {
             other.rigidbody.GetComponent<ITargetable>().Hit(projectileDamage); 
             Enqueue();

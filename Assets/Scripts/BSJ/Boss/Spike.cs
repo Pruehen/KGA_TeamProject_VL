@@ -57,5 +57,9 @@ public class Spike : MonoBehaviour, ITargetable
                 SM.Instance.PlaySound2("boss_Spikehit", transform.position);
             }
         }
+        else if (rbOther.CompareTag("EnemyBoss"))
+        {
+            Hit(999f);
+        }
     }
 }
