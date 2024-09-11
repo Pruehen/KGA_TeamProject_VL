@@ -1,4 +1,5 @@
 using EnumTypes;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Boss_Both_UltimateAttackModule", menuName = "Enemy/AttackModule/Boss_Both_UltimateAttack")]
@@ -24,10 +25,33 @@ public class SO_Boss_Both_UltimateAttackModule : SO_AttackModule
                 BossDoubleAreaAttack areaAttack = projectileObject.GetComponent<BossDoubleAreaAttack>();
                 areaAttack.Init(Damage, owner.Attack.RangeTypeThreshold, IsClose(owner));
                 owner.Attack.CurrentProjectile = areaAttack;
+                
+                SpawnMultipleSpikeInAreaAndStore(owner, Prefab_Spike, MaxArea,
+                SpikeGap, Probability, SpikeRandomOffset,
+                owner.Attack.CurrentSpikeSpawners);
+                
                 break;
             case 1:
                 owner.Attack.CurrentProjectile.Trigger();
-                SpawnMultipleSpikeInArea(owner, Prefab_Spike, MaxArea, SpikeGap, Probability, SpikeRandomOffset);
+                foreach(SpikeSpawner spike in owner.Attack.CurrentSpikeSpawners)
+                {
+                    spike.Trigger();
+                }
+                owner.Attack.CurrentSpikeSpawners.Clear();
+
+
+                SpawnMultipleSpikeInAreaAndStore(owner, Prefab_Spike, MaxArea,
+                SpikeGap, Probability, SpikeRandomOffset,
+                owner.Attack.CurrentSpikeSpawners);
+                break;
+            case 2:
+                owner.Attack.CurrentProjectile.Trigger();
+                foreach(SpikeSpawner spike in owner.Attack.CurrentSpikeSpawners)
+                {
+                    spike.Trigger();
+                }
+                owner.Attack.CurrentProjectile = null;
+                owner.Attack.CurrentSpikeSpawners.Clear();
                 break;
         }
 
@@ -37,8 +61,11 @@ public class SO_Boss_Both_UltimateAttackModule : SO_AttackModule
         owner.transform.position = owner.SpawnedPosition;
     }
 
-    private void SpawnMultipleSpikeInArea(EnemyBase owner, GameObject spike, float areaRadius, float gap, float probability, float spikeRandomOffset)
+    private void SpawnMultipleSpikeInAreaAndStore(EnemyBase owner, GameObject spike, float areaRadius, float gap,
+        float probability, float spikeRandomOffset, List<SpikeSpawner> spikeContainer)
     {
+        List<SpikeSpawner> spikes = new List<SpikeSpawner>();
+
         Vector3 centerOffset = new Vector3(areaRadius * .5f, 0f, areaRadius * .5f);
         for (int i = 0; i < areaRadius / gap; i++)
             for (int k = 0; k < areaRadius / gap; k++)
@@ -48,7 +75,7 @@ public class SO_Boss_Both_UltimateAttackModule : SO_AttackModule
                     Vector3 offset = new Vector3(i * gap, 0f, k * gap) - centerOffset;
                     Vector3 pos = owner.transform.position + offset;
                     if (Vector3.Distance(pos, owner.transform.position) < areaRadius * .5f)
-                        SpawnSpike(owner, spike, pos, spikeRandomOffset);
+                        spikeContainer.Add(SpawnSpike(owner, spike, pos, spikeRandomOffset));
                 }
             }
     }
@@ -58,7 +85,7 @@ public class SO_Boss_Both_UltimateAttackModule : SO_AttackModule
         return owner.Attack.GetAttackRangeType();
     }
 
-    private void SpawnSpike(EnemyBase owner, GameObject spike, Vector3 position, float spikeRandomOffset)
+    private SpikeSpawner SpawnSpike(EnemyBase owner, GameObject spike, Vector3 position, float spikeRandomOffset)
     {
         Vector3 targetPos = position;
         targetPos.y = 0f;
@@ -66,5 +93,11 @@ public class SO_Boss_Both_UltimateAttackModule : SO_AttackModule
         GameObject projectileObject = ObjectPoolManager.Instance.DequeueObject(spike);
         projectileObject.transform.position = targetPos;
         projectileObject.transform.rotation = Quaternion.identity;
+
+
+        SpikeSpawner spikeInst = projectileObject.GetComponent<SpikeSpawner>();
+        spikeInst.Init(false);
+
+        return spikeInst;
     }
 }

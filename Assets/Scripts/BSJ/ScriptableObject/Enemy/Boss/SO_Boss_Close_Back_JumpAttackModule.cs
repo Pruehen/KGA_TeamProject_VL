@@ -58,5 +58,7 @@ public class SO_Boss_Close_Back_JumpAttackModule : SO_AttackModule
         GameObject projectileObject = ObjectPoolManager.Instance.DequeueObject(Prefab_projectile);
         projectileObject.transform.position = targetPos;
         projectileObject.transform.rotation = Quaternion.identity;
+
+        projectileObject.GetComponent<SpikeSpawner>().Init(true);
     }
 }

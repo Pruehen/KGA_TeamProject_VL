@@ -32,7 +32,6 @@ public class SpikeSpawner : MonoBehaviour
         _anticipateParticle.Play();
 
         _spike.gameObject.SetActive(false);
-        _spikeTimer.StartTimer();
         _spikeTimer.OnEnd += EnableSpike;
         _spike.OnDead += DoReset;
     }
@@ -69,5 +68,18 @@ public class SpikeSpawner : MonoBehaviour
     {
         _spawnParticle.Clear();
         ObjectPoolManager.Instance.EnqueueObject(gameObject);
+    }
+
+    public void Trigger()
+    {
+        EnableSpike();
+    }
+
+    public void Init(bool v)
+    {
+        if(v)
+        {
+            _spikeTimer.StartTimer();
+        }
     }
 }

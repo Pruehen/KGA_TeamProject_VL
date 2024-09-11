@@ -17,5 +17,7 @@ public class SO_Boss_Range_SpawnSpikeAttackModule : SO_RangeModule
         GameObject projectileObject = ObjectPoolManager.Instance.DequeueObject(Prefab_projectile);
         projectileObject.transform.position = targetPos;
         projectileObject.transform.rotation = Quaternion.identity;
+
+        projectileObject.GetComponent<SpikeSpawner>().Init(true);
     }
 }

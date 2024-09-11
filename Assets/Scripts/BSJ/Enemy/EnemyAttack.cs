@@ -55,6 +55,8 @@ public class EnemyAttack
         }
     }
 
+    public List<SpikeSpawner> CurrentSpikeSpawners;
+
     public BossDoubleAreaAttack CurrentProjectile { get; internal set; }
 
     public void Init(EnemyBase owner, DamageBox damageBox, SO_EnemyBase _enemyData, Animator animator)
@@ -125,7 +127,7 @@ public class EnemyAttack
     {
         _phase = phase;
     }
-    private float AttackSelecteTimeStamp = 0f;
+    private float AttackSelecteTimeStamp = -1f;
     public AttackModule GetRandomAvailableAttack(float dist)
     {
         //ToDo 이거 왜 가끔 공격 이후 무빙 속도가 빠른채로 유지돼는지 생각해보기
