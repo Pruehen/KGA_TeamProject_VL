@@ -62,7 +62,8 @@ public class SO_Boss_Both_UltimateAttackModule : SO_AttackModule
         Vector3 targetPos = position;
         targetPos.y = 0f;
         targetPos += new Vector3(Random.value * spikeRandomOffset, 0f, Random.value * spikeRandomOffset);
-        GameObject projectileObject = GameObject.Instantiate(spike,
-            targetPos, Quaternion.identity);
+        GameObject projectileObject = ObjectPoolManager.Instance.DequeueObject(spike);
+        projectileObject.transform.position = targetPos;
+        projectileObject.transform.rotation = Quaternion.identity;
     }
 }

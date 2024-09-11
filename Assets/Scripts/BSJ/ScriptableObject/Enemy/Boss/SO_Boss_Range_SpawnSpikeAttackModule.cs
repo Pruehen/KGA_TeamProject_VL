@@ -14,7 +14,8 @@ public class SO_Boss_Range_SpawnSpikeAttackModule : SO_RangeModule
         Transform targetTrf = owner.Detector.GetLatestTarget();
         Vector3 targetPos = targetTrf.position;
         targetPos.y = 0f;
-        GameObject projectileObject = GameObject.Instantiate(Prefab_projectile,
-            targetPos, Quaternion.identity);
+        GameObject projectileObject = ObjectPoolManager.Instance.DequeueObject(Prefab_projectile);
+        projectileObject.transform.position = targetPos;
+        projectileObject.transform.rotation = Quaternion.identity;
     }
 }
