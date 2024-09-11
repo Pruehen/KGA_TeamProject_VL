@@ -133,7 +133,7 @@ public class PlayerMove : MonoBehaviour
             }
 
 
-            _Rigidbody.velocity = _moveVector3;
+            _Rigidbody.velocity = new Vector3(_moveVector3.x, _Rigidbody.velocity.y, _moveVector3.z);
 
             _animator.SetBool("IsMoving", _moveVector3.x != 0f || _moveVector3.z != 0f);
         }
@@ -223,7 +223,8 @@ public class PlayerMove : MonoBehaviour
 
     private void DashMove()
     {
-        _Rigidbody.velocity = _dashDirection * _PlayerMaster._PlayerInstanteState.DashForce;
+        Vector3 dashVelocity = _dashDirection * _PlayerMaster._PlayerInstanteState.DashForce;
+        _Rigidbody.velocity = new Vector3(dashVelocity.x, _Rigidbody.velocity.y, dashVelocity.z);
     }
 
     public bool IsInDashAnimation()
