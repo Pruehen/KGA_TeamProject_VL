@@ -65,7 +65,7 @@ public class SO_Boss_Both_UltimateAttackModule : SO_AttackModule
                 break;
             case 1:
                 owner.transform.position = owner.SpawnedPosition + Vector3.up * 15;
-                owner.Move.Launch(-Vector3.up * 10);
+                owner.Move.Launch(-Vector3.up * 100);
                 break;
         }
     }
