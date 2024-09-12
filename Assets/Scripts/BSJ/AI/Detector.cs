@@ -26,7 +26,7 @@ public class Detector : MonoBehaviour
                 if(_latestTarget == null)
                 {
                     _latestTarget = value.transform;
-                    OnDetect(this);
+                    OnDetect?.Invoke(this);
                 }
             }
             _target = value;
