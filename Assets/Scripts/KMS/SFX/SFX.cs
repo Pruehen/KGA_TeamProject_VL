@@ -48,6 +48,7 @@ public class SFX : ScriptableObject
     public Clips NPCHit;
     public Clips NPCAttack;
     public Clips NPCDeath;
+    public Clips NPCAttackHit;
 
     [Header("Boss")]
     public Clips boss_Roar1;
