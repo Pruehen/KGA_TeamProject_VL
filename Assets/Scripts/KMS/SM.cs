@@ -9,7 +9,7 @@ public class SM : GlobalSingleton<SM>
 
     public SFX sfxData; // Assign in the inspector
 
-    private Dictionary<string, AudioClip> audioClipDictionary;
+    private Dictionary<string, Clips> audioClipDictionary;
     public AudioSource BGM;
     public int SCType = 999;
 
@@ -18,13 +18,13 @@ public class SM : GlobalSingleton<SM>
         InitializeAudioDictionary();
         if (BGM == null)
         {
-            BGM = gameObject.AddComponent<AudioSource>(); 
+            BGM = gameObject.AddComponent<AudioSource>();
         }
     }
 
     private void InitializeAudioDictionary() // AWAKE할 때 sfxData로부터 오디오클립을 받아옴
     {
-        audioClipDictionary = new Dictionary<string, AudioClip>
+        audioClipDictionary = new Dictionary<string, Clips>
     {
         // Player Sounds
         { "playerstep", sfxData.playerstep },
@@ -93,11 +93,11 @@ public class SM : GlobalSingleton<SM>
     public GameObject PlaySound2(string soundName, Vector3 position)
     {
 
-        if (audioClipDictionary.TryGetValue(soundName, out AudioClip audioClip))
+        if (audioClipDictionary.TryGetValue(soundName, out Clips audioClip))
         {
             if (audioClip != null)
             {
-                GameObject sb = ObjectPoolManager.Instance.DequeueObject(audioClip, position);
+                GameObject sb = ObjectPoolManager.Instance.DequeueObject(audioClip.clip, position);
                 sb.transform.position = position;
 
                 AudioSource audioSource = sb.GetComponent<AudioSource>();
@@ -106,7 +106,9 @@ public class SM : GlobalSingleton<SM>
                     audioSource = sb.AddComponent<AudioSource>();
                     audioSource = sb.GetComponent<AudioSource>();
                 }
-                audioSource.clip = audioClip;
+                audioSource.clip = audioClip.clip;
+                audioSource.volume = audioClip.SFXVolum;
+                audioSource.spatialBlend = audioClip.spatialBlend;
                 audioSource.Play();
                 if (!audioSource.loop)//루프가 켜져있지 않을시 Lenth만큼 재생후 풀에반환함
                 {
@@ -149,41 +151,44 @@ public class SM : GlobalSingleton<SM>
     }
     public void SetBGM(int Name)
     {
-        Debug.Log("SetBGM"+Name);
-        if(SCType!= Name)
-        switch (Name)
-        {
-            case 0:
-                if (audioClipDictionary.TryGetValue("lobby", out AudioClip lobbyaudioClip))
-                {
-                    BGM.clip = lobbyaudioClip;
-                    BGM.Play();
-                        SCType=Name;
-                    return;
-                }
-                else
-                    return;
-            case 1:
-                if (audioClipDictionary.TryGetValue("gameRoom", out AudioClip normalaudioClip))
-                {
-                    BGM.clip = normalaudioClip;
-                    BGM.Play();
+        Debug.Log("SetBGM" + Name);
+        if (SCType != Name)
+            switch (Name)
+            {
+                case 0:
+                    if (audioClipDictionary.TryGetValue("lobby", out Clips lobbyaudioClip))
+                    {
+                        BGM.clip = lobbyaudioClip.clip;
+                        BGM.volume = lobbyaudioClip.SFXVolum;
+                        BGM.Play();
                         SCType = Name;
                         return;
-                }
-                else
+                    }
+                    else
+                        return;
+                case 1:
+                    if (audioClipDictionary.TryGetValue("gameRoom", out Clips normalaudioClip))
+                    {
+                        BGM.clip = normalaudioClip.clip;
+                        BGM.volume = normalaudioClip.SFXVolum;
+                        BGM.Play();
+                        SCType = Name;
+                        return;
+                    }
+                    else
 
-                    return;
-            case 2:
-                if (audioClipDictionary.TryGetValue("bossRoom", out AudioClip bossaudioClip))
-                {
-                    BGM.clip = bossaudioClip;
-                    BGM.Play();
+                        return;
+                case 2:
+                    if (audioClipDictionary.TryGetValue("bossRoom", out Clips bossaudioClip))
+                    {
+                        BGM.clip = bossaudioClip.clip;
+                        BGM.volume = bossaudioClip.SFXVolum;
+                        BGM.Play();
                         SCType = Name;
                         return;
-                }
-                else
-                    return;
-        }
+                    }
+                    else
+                        return;
+            }
     }
 }
