@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -180,6 +181,12 @@ public class GameManager : SceneSingleton<GameManager>
         _enemies.Remove(enemy);
         if (_enemies.Count == 0)
         {
+            if(_stageSystem.ChapterLength - 1 == _stageSystem.CurrentStageNum)
+            {
+                StartCoroutine(GameClear());
+                return;
+            }
+
             _stageSystem.Clear();
             OnGameClear?.Invoke();
             if(_currentQuest != null && unexpectedquests[_stageSystem.CurrentStageNum] != null)
@@ -187,6 +194,13 @@ public class GameManager : SceneSingleton<GameManager>
                 _currentQuest?.IsCleared();
             }
         }
+    }
+
+    private IEnumerator GameClear()
+    {
+        yield return new WaitForSeconds(3f);
+        ClearAndSave();
+        LoadMainScene();
     }
 
     public bool IsCurrentUnexpectedQuestCleared()
@@ -214,6 +228,10 @@ public class GameManager : SceneSingleton<GameManager>
 
         _PlayerMaster._PlayerInstanteState.OnDead += OnDead;
     }
+    public void OnPlayerDead()
+    {
+        StartCoroutine(GameClear());
+    }
     private void RegisterEnemies()
     {
         foreach (var enemy in _enemies)
@@ -235,6 +253,12 @@ public class GameManager : SceneSingleton<GameManager>
         }
     }
     private void OnDead(Combat self)
+    {
+        ClearAndSave();
+        LoadMainScene();
+    }
+
+    private void ClearAndSave()
     {
         _PlayerMaster._PlayerInstanteState.OnDead -= OnDead;
         UserData userData = JsonDataManager.GetUserData();
