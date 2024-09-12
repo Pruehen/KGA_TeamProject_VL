@@ -68,7 +68,16 @@ public class Spike : MonoBehaviour, ITargetable
                 SM.Instance.PlaySound2("boss_Spikehit", transform.position);
             }
         }
-        else if (rbOther.CompareTag("EnemyBoss"))
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Rigidbody rbOther = other.attachedRigidbody;
+        if (rbOther == null)
+        {
+            return;
+        }
+        if (rbOther.CompareTag("EnemyBoss"))
         {
             Hit(999f);
         }
