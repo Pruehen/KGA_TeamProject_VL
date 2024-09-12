@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -117,7 +118,7 @@ public class GameManager : SceneSingleton<GameManager>
     {
         SO_RandomQuestSetData randomQuestSet = _randomQuestsData;
         int count = 0;
-        unexpectedquests = new SO_Quest[_stageSystem.ChapterLength];
+        unexpectedquests = new SO_Quest[_stageSystem.ChapterLength - 1];
         for (int i = 0; i < unexpectedquests.Length; i++)
         {
             SO_Quest r = randomQuestSet.TryGetRandomQuest();
@@ -180,6 +181,12 @@ public class GameManager : SceneSingleton<GameManager>
         _enemies.Remove(enemy);
         if (_enemies.Count == 0)
         {
+            if(_stageSystem.ChapterLength - 1 == _stageSystem.CurrentStageNum)
+            {
+                StartCoroutine(GameClear());
+                return;
+            }
+
             _stageSystem.Clear();
             OnGameClear?.Invoke();
             if(_currentQuest != null && unexpectedquests[_stageSystem.CurrentStageNum] != null)
@@ -187,6 +194,13 @@ public class GameManager : SceneSingleton<GameManager>
                 _currentQuest?.IsCleared();
             }
         }
+    }
+
+    private IEnumerator GameClear()
+    {
+        yield return new WaitForSeconds(3f);
+        ClearAndSave();
+        LoadMainScene();
     }
 
     public bool IsCurrentUnexpectedQuestCleared()
@@ -214,6 +228,10 @@ public class GameManager : SceneSingleton<GameManager>
 
         _PlayerMaster._PlayerInstanteState.OnDead += OnDead;
     }
+    public void OnPlayerDead()
+    {
+        StartCoroutine(GameClear());
+    }
     private void RegisterEnemies()
     {
         foreach (var enemy in _enemies)
@@ -236,6 +254,12 @@ public class GameManager : SceneSingleton<GameManager>
     }
     private void OnDead(Combat self)
     {
+        ClearAndSave();
+        LoadMainScene();
+    }
+
+    private void ClearAndSave()
+    {
         _PlayerMaster._PlayerInstanteState.OnDead -= OnDead;
         UserData userData = JsonDataManager.GetUserData();
         userData.TryGetPlayData(out PlayData playData);
@@ -246,8 +270,6 @@ public class GameManager : SceneSingleton<GameManager>
             Debug.LogWarning("CurrentStage is Null");
             return;
         }
-
-        LoadMainScene();
     }
     public void EndGame()
     {
@@ -300,5 +322,10 @@ public class GameManager : SceneSingleton<GameManager>
         pos += trf.forward + trf.right;
         pos.y = 0f;
         Instantiate(_blueChipChest, pos, Quaternion.identity);
+    }
+
+    public void TPToDoor()
+    {
+        _PlayerMaster.transform.position = NextStageObjects.transform.position + -NextStageObjects.transform.forward;
     }
 }

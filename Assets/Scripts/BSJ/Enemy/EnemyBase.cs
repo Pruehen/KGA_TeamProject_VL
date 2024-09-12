@@ -317,6 +317,11 @@ public class EnemyBase : MonoBehaviour, ITargetable
             StartCoroutine(DelayedDisable());
 
             DropGold();
+
+            if(_enemyData.IsBoss)
+            {
+                UIManager.Instance.Achievement();
+            }
         }
         _phase = (Phase)((int)_phase << 1);
         Attack.SetAttackPhaseType(_phase);

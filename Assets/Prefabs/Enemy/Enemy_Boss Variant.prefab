@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9092729765996925979}
-  - component: {fileID: 2881151416669145298}
+  - component: {fileID: 4465464401966271273}
   m_Layer: 17
   m_Name: SpikeDestroyer
   m_TagString: Untagged
@@ -32,8 +32,8 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7770245145223217770}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &2881151416669145298
-SphereCollider:
+--- !u!136 &4465464401966271273
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -50,9 +50,11 @@ SphereCollider:
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.77
-  m_Center: {x: 0, y: 1.43, z: 0}
+  serializedVersion: 2
+  m_Radius: 0.75
+  m_Height: 3.52
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.45, z: 0}
 --- !u!1 &5687719814187740163
 GameObject:
   m_ObjectHideFlags: 0

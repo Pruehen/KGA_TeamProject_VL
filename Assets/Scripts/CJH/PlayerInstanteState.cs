@@ -596,6 +596,9 @@ public class PlayerInstanteState : MonoBehaviour
     {
         Debug.Log("플레이어 사망");
         OnDead?.Invoke(self);
+
+        GameManager.Instance.OnPlayerDead();
+
         Destroy(this.gameObject);
     }
 
@@ -931,6 +934,10 @@ public class PlayerInstanteState : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F9))
         {
             GameManager.Instance.KillAll();
+        }
+        if (Input.GetKeyDown(KeyCode.F10))
+        {
+            GameManager.Instance.TPToDoor();
         }
     }
 
