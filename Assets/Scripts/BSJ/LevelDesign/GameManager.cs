@@ -270,8 +270,6 @@ public class GameManager : SceneSingleton<GameManager>
             Debug.LogWarning("CurrentStage is Null");
             return;
         }
-
-        LoadMainScene();
     }
     public void EndGame()
     {
@@ -324,5 +322,10 @@ public class GameManager : SceneSingleton<GameManager>
         pos += trf.forward + trf.right;
         pos.y = 0f;
         Instantiate(_blueChipChest, pos, Quaternion.identity);
+    }
+
+    public void TPToDoor()
+    {
+        _PlayerMaster.transform.position = NextStageObjects.transform.position + -NextStageObjects.transform.forward;
     }
 }

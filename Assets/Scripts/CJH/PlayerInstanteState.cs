@@ -935,6 +935,10 @@ public class PlayerInstanteState : MonoBehaviour
         {
             GameManager.Instance.KillAll();
         }
+        if (Input.GetKeyDown(KeyCode.F10))
+        {
+            GameManager.Instance.TPToDoor();
+        }
     }
 
     //골드 관련
