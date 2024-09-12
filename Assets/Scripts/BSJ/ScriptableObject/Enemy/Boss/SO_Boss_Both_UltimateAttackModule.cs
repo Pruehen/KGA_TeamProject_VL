@@ -58,14 +58,21 @@ public class SO_Boss_Both_UltimateAttackModule : SO_AttackModule
     }
     public override void StartAttackMove(EnemyBase owner, int type)
     {
-        owner.transform.position = owner.SpawnedPosition;
+        switch (type)
+        {
+            case 0:
+                owner.Move.Launch(Vector3.up * 100);
+                break;
+            case 1:
+                owner.transform.position = owner.SpawnedPosition + Vector3.up * 15;
+                owner.Move.Launch(-Vector3.up * 10);
+                break;
+        }
     }
 
     private void SpawnMultipleSpikeInAreaAndStore(EnemyBase owner, GameObject spike, float areaRadius, float gap,
         float probability, float spikeRandomOffset, List<SpikeSpawner> spikeContainer)
     {
-        List<SpikeSpawner> spikes = new List<SpikeSpawner>();
-
         Vector3 centerOffset = new Vector3(areaRadius * .5f, 0f, areaRadius * .5f);
         for (int i = 0; i < areaRadius / gap; i++)
             for (int k = 0; k < areaRadius / gap; k++)
