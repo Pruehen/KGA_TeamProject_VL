@@ -14,12 +14,15 @@ public class SO_Boss_Both_UltimateAttackModule : SO_AttackModule
 
     public override void StartAttack(EnemyBase owner, int type)
     {
+
         switch (type)
         {
             case 0:
                 Transform targetTrf = owner.transform;
                 Vector3 targetPos = targetTrf.position;
                 targetPos.y = 0f;
+                owner.StartVFX("Boss_Teleport_End1");
+                owner.StartVFX("Boss_Teleport_End2");
                 GameObject projectileObject = GameObject.Instantiate(Prefab_areaAttack,
                     targetPos, Quaternion.identity);
                 BossDoubleAreaAttack areaAttack = projectileObject.GetComponent<BossDoubleAreaAttack>();
@@ -58,6 +61,7 @@ public class SO_Boss_Both_UltimateAttackModule : SO_AttackModule
     }
     public override void StartAttackMove(EnemyBase owner, int type)
     {
+        owner.StartVFX("Boss_Teleport");
         switch (type)
         {
             case 0:

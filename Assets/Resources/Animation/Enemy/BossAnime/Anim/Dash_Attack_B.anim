@@ -64875,6 +64875,13 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
+  - time: 0.06666667
+    functionName: StartVFX
+    data: Bose_DashAttack_Jump
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 0.26666668
     functionName: StartSFX
     data: boss_MeleeAttack
@@ -64885,6 +64892,13 @@ AnimationClip:
   - time: 0.33333334
     functionName: StartAttackModulAttack
     data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.33333334
+    functionName: StartVFX
+    data: Bose_DashAttack
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0

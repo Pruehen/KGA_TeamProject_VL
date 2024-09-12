@@ -570,7 +570,6 @@ public class Skill : MonoBehaviour
     }
     public void Effect2(SO_SKillEvent skill)
     {
-
         GameObject VFX = ObjectPoolManager.Instance.DequeueObject(skill.preFab);
 
         Vector3 position = Vector3.zero;

@@ -45,10 +45,7 @@ public class EnemyBase : MonoBehaviour, ITargetable
     public bool IsStarafe_able = false;
 
 
-    protected IObjectPool<GameObject> _pooledHitVfx;
     [SerializeField] protected SO_SKillEvent hitVFX;
-    [SerializeField] protected GameObject _pooledHitVfxPrefab;
-
 
     [SerializeField] protected Transform _firePos;
     [SerializeField] protected GameObject _projectilePrefab;
@@ -77,9 +74,6 @@ public class EnemyBase : MonoBehaviour, ITargetable
         _navMeshAgent.updateRotation = false;
 
         _characterCollider = GetComponentInChildren<Collider>();
-
-        _pooledHitVfx = new ObjectPool<GameObject>(CreatePool, OnGetPool,
-            OnReleasePool, OnDestroyPool, true, 100, 200);
 
         _rigidbody = GetComponent<Rigidbody>();
         _behaviorTree = GetComponent<BehaviorTree>();
@@ -280,8 +274,7 @@ public class EnemyBase : MonoBehaviour, ITargetable
     }
     protected void OnDamaged(Combat target, DamageType damageType)
     {
-        SM.Instance.PlaySound2("NPCAttackHit",transform.position);
-        Debug.Log("NPCAttackHit");
+        
     }
 
     protected void OnKnockback()
@@ -432,31 +425,71 @@ public class EnemyBase : MonoBehaviour, ITargetable
     }
     #endregion
 
+    [SerializeField] Transform hand_L;
+    [SerializeField] Transform hand_R;
+    [SerializeField] Transform Foot;
+    public void StartVFX(string VFXName)
+    {
+        SO_SKillEvent.PlayerPos vfxPosition = VFXManager.Instance.SetPos(VFXName);
 
-    #region VFXPool
+        Transform targetTransform = null;
 
-    public GameObject CreatePool()
-    {
-        return Instantiate(_pooledHitVfxPrefab);
-    }
-    public void OnGetPool(GameObject vfx)
-    {
-        vfx.SetActive(true);
-        StartCoroutine(DelayedRealease(vfx));
-    }
-    public void OnReleasePool(GameObject vfx)
-    {
-        vfx.SetActive(false);
-    }
-    public void OnDestroyPool(GameObject vfx)
-    {
-        Destroy(gameObject);
-    }
-    protected IEnumerator DelayedRealease(GameObject vfx)
-    {
-        yield return new WaitForSeconds(2f);
-        _pooledHitVfx.Release(vfx);
-    }
+        // Enum 값에 따라 위치를 할당
+        switch (vfxPosition)
+        {
+            case SO_SKillEvent.PlayerPos.Hand_L:
+                targetTransform = hand_L;
+                break;
 
-    #endregion
+            case SO_SKillEvent.PlayerPos.Hand_R:
+                targetTransform = hand_R;
+                break;
+
+            case SO_SKillEvent.PlayerPos.Foot:
+                targetTransform = Foot;
+                break;
+            case SO_SKillEvent.PlayerPos.FirePos:
+                targetTransform = _firePos;
+                break;
+
+            default:
+                targetTransform = transform; // 기본값으로 현재 오브젝트의 Transform
+                break;
+        }
+
+        // 선택한 위치로 VFX 실행
+        VFXManager.Instance.Effect(VFXName, targetTransform);
+    }
+    public void StartRotateVFX(string VFXName)
+    {
+        SO_SKillEvent.PlayerPos vfxPosition = VFXManager.Instance.SetPos(VFXName);
+
+        Transform targetTransform = null;
+
+        // Enum 값에 따라 위치를 할당
+        switch (vfxPosition)
+        {
+            case SO_SKillEvent.PlayerPos.Hand_L:
+                targetTransform = hand_L;
+                break;
+
+            case SO_SKillEvent.PlayerPos.Hand_R:
+                targetTransform = hand_R;
+                break;
+
+            case SO_SKillEvent.PlayerPos.Foot:
+                targetTransform = Foot;
+                break;
+            case SO_SKillEvent.PlayerPos.FirePos:
+                targetTransform = _firePos;
+                break;
+
+            default:
+                targetTransform = transform; // 기본값으로 현재 오브젝트의 Transform
+                break;
+        }
+
+        // 선택한 위치로 VFX 실행
+        VFXManager.Instance.Effect(VFXName, targetTransform, transform);
+    }
 }

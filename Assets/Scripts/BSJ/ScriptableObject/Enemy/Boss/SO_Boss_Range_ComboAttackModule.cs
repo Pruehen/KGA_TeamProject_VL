@@ -21,7 +21,7 @@ public class SO_Boss_Range_ComboAttackModule : SO_RangeModule
         {
             Transform targetTrf = owner.Detector.GetLatestTarget();
             Transform firePos = owner.FirePos;
-
+            owner.StartVFX("Bose_Spike_Multi_Hand");
             ComboShootProjectile(firePos);
             owner.Attack.CurrentAttack.PrevFireTime = Time.time;
         }
@@ -37,6 +37,7 @@ public class SO_Boss_Range_ComboAttackModule : SO_RangeModule
     {
         Vector3 vel = firePos.forward * ProjectileSpeed;
         GameObject projectileObject = ObjectPoolManager.Instance.DequeueObject(Prefab_projectile);
+
         projectileObject.transform.position = firePos.position;
         projectileObject.transform.rotation = firePos.rotation;
         EnemyProjectile projectile = null;

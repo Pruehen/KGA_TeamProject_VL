@@ -12,9 +12,11 @@ public class SO_SKillEvent : ScriptableObject
         Hand_L,
         Hand_R,
         Foot,
-        Target
+        Target,
+        FirePos
     }
     public PlayerPos playerPos;
     public Vector3 offSet= new Vector3(0f,0f,0f);
     public Vector3 rotation;
+    public bool Tracking=false;
 }
