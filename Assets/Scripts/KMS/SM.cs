@@ -59,6 +59,7 @@ public class SM : GlobalSingleton<SM>
         { "NPCStep", sfxData.NPCStep },
         { "NPCHit", sfxData.NPCHit },
         { "NPCAttack", sfxData.NPCAttack },
+        { "NPCAttackHit", sfxData.NPCAttackHit },
         { "NPCDeath", sfxData.NPCDeath },
 
         // BGM
