@@ -280,6 +280,8 @@ public class EnemyBase : MonoBehaviour, ITargetable
     }
     protected void OnDamaged(Combat target, DamageType damageType)
     {
+        SM.Instance.PlaySound2("NPCAttackHit",transform.position);
+        Debug.Log("NPCAttackHit");
     }
 
     protected void OnKnockback()

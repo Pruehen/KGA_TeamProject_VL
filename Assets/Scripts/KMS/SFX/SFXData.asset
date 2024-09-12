@@ -16,7 +16,8 @@ MonoBehaviour:
   BGMvolum: 1
   lobby: {fileID: 11400000, guid: 5f5ff2bf1f46f1a488e51674c5adb02e, type: 2}
   gameRoom: {fileID: 11400000, guid: dc816aa742cb058458c1694ddd7083b7, type: 2}
-  bossRoom: {fileID: 11400000, guid: bff037ffddc1d2b4281bb89c7ad58efc, type: 2}
+  bossRoom1: {fileID: 11400000, guid: bff037ffddc1d2b4281bb89c7ad58efc, type: 2}
+  bossRoom2: {fileID: 11400000, guid: bff037ffddc1d2b4281bb89c7ad58efc, type: 2}
   playerstep: {fileID: 11400000, guid: da35c165d62a83842a86e9f6929a944a, type: 2}
   playerHit: {fileID: 11400000, guid: 67e24154d1565a14091a5e05d8ab3882, type: 2}
   playerDead: {fileID: 11400000, guid: 5747b45ee7d588d47bb3edc8960df059, type: 2}
@@ -28,6 +29,7 @@ MonoBehaviour:
   playerRangeAttack: {fileID: 11400000, guid: 907566ef8b60a4a439116bfc54dca1ee, type: 2}
   playerRangeAttack4: {fileID: 11400000, guid: 3e4431033e1fee4499365f4a035122f7, type: 2}
   playerRangeProjectileHIt: {fileID: 11400000, guid: 679cf17edac89d64992cf78df03275f3, type: 2}
+  playerMeleeAttack: {fileID: 0}
   playerMeleeAttackHit: {fileID: 11400000, guid: b4ead25869635a8499496412adc943ae, type: 2}
   playerCharging: {fileID: 11400000, guid: cf1e82e3d2cee7148b450456384c8593, type: 2}
   playerCharged: {fileID: 11400000, guid: 7af31fe42f664f0448e8e3f52942eecd, type: 2}
@@ -47,8 +49,9 @@ MonoBehaviour:
   NPCHit: {fileID: 11400000, guid: 3c9212a03d4c5834aa6b17bd1fdb1430, type: 2}
   NPCAttack: {fileID: 11400000, guid: 9316cd2e8df59fa4c9040ff067bb542d, type: 2}
   NPCDeath: {fileID: 11400000, guid: dd6a89da3b75211479c32ae293791d1a, type: 2}
+  NPCAttackHit: {fileID: 0}
   boss_Roar1: {fileID: 11400000, guid: f8055f760c0c45541b135dd517e16638, type: 2}
-  boss_Roar2: {fileID: 0}
+  boss_Roar2: {fileID: 11400000, guid: 219b063fc148ca84d829defcc60d56cd, type: 2}
   boss_Step: {fileID: 11400000, guid: f6a3dcc0a5ea6864b8223529467b423a, type: 2}
   boss_run: {fileID: 11400000, guid: 44c8084658a8763448f4fc78f7ecce2b, type: 2}
   boss_Back_Jump: {fileID: 11400000, guid: 215de2934278ff846b7a8967dcfa289e, type: 2}
