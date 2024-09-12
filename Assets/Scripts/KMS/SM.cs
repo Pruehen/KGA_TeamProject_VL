@@ -38,6 +38,7 @@ public class SM : GlobalSingleton<SM>
         { "playerRangeProjectileHIt", sfxData.playerRangeProjectileHIt },
         { "playerRangeAttack", sfxData.playerRangeAttack },
         { "playerRangeAttack4", sfxData.playerRangeAttack4 },
+        { "playerMeleeAttack", sfxData.playerMeleeAttack },
         { "playerMeleeAttackHit", sfxData.playerMeleeAttackHit },
         { "playerCharging", sfxData.playerCharging },
         { "playerCharged", sfxData.playerCharged },
@@ -63,7 +64,8 @@ public class SM : GlobalSingleton<SM>
         // BGM
         { "lobby", sfxData.lobby },
         { "gameRoom", sfxData.gameRoom },
-        { "bossRoom", sfxData.bossRoom },
+        { "bossRoom1", sfxData.bossRoom1 },
+        { "bossRoom2", sfxData.bossRoom2 },
 
         // Boss Sounds
         { "boss_Roar1", sfxData.boss_Roar1 },

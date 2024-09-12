@@ -656,6 +656,8 @@ public class PlayerInstanteState : MonoBehaviour
         int cost = (blueChip7Level > 0) ? (int)JsonDataManager.GetBlueChipData(BlueChipID.Generic2).Level_VelueList[blueChip7Level][2] : 1;
 
         meleeBullets -= cost;
+        SM.Instance.PlaySound2("playerMeleeAttackHit", transform.position);
+        Debug.Log("근접탄소모");
         if (meleeBullets < 0)
             meleeBullets = 0;
         UpdateBullet_Melee();

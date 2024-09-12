@@ -11,7 +11,8 @@ public class SFX : ScriptableObject
     [Header("BGM")]
     public Clips lobby;
     public Clips gameRoom;
-    public Clips bossRoom;
+    public Clips bossRoom1;
+    public Clips bossRoom2;
 
     [Header("Player")]
     public Clips playerstep;
@@ -25,6 +26,7 @@ public class SFX : ScriptableObject
     public Clips playerRangeAttack;
     public Clips playerRangeAttack4;
     public Clips playerRangeProjectileHIt;
+    public Clips playerMeleeAttack;
     public Clips playerMeleeAttackHit;
     public Clips playerCharging;
     public Clips playerCharged;
