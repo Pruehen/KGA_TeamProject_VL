@@ -6,71 +6,71 @@ using UnityEngine;
 public class SFX : ScriptableObject
 {
     [Header("Volume")]
-    public float VFXvolum = 1f;
+    public float SFXvolum = 1f;
     public float BGMvolum = 1f;
     [Header("BGM")]
-    public AudioClip lobby;
-    public AudioClip gameRoom;
-    public AudioClip bossRoom;
+    public Clips lobby;
+    public Clips gameRoom;
+    public Clips bossRoom;
 
     [Header("Player")]
-    public AudioClip playerstep;
-    public AudioClip playerHit;
-    public AudioClip playerDead;
-    public AudioClip playerSetBlueChip;
-    public AudioClip Absorbeing;
-    public AudioClip playerMeleeTransform;
-    public AudioClip playerRangeTransform;
-    public AudioClip playerMeleeTransformRelease;
-    public AudioClip playerRangeAttack;
-    public AudioClip playerRangeAttack4;
-    public AudioClip playerRangeProjectileHIt;
-    public AudioClip playerMeleeAttackHit;
-    public AudioClip playerCharging;
-    public AudioClip playerCharged;
-    public AudioClip playerChargedAttack;
-    public AudioClip playerDash;
-    public AudioClip RangeSkill1;
-    public AudioClip RangeSkill2;
-    public AudioClip RangeSkill3;
-    public AudioClip RangeSkill4;
-    public AudioClip MeleeSkill1;
-    public AudioClip MeleeSkill2_1;
-    public AudioClip MeleeSkill2_2;
-    public AudioClip MeleeSkill3;
-    public AudioClip MeleeSkill4_1;
-    public AudioClip MeleeSkill4_2;
+    public Clips playerstep;
+    public Clips playerHit;
+    public Clips playerDead;
+    public Clips playerSetBlueChip;
+    public Clips Absorbeing;
+    public Clips playerMeleeTransform;
+    public Clips playerRangeTransform;
+    public Clips playerMeleeTransformRelease;
+    public Clips playerRangeAttack;
+    public Clips playerRangeAttack4;
+    public Clips playerRangeProjectileHIt;
+    public Clips playerMeleeAttackHit;
+    public Clips playerCharging;
+    public Clips playerCharged;
+    public Clips playerChargedAttack;
+    public Clips playerDash;
+    public Clips RangeSkill1;
+    public Clips RangeSkill2;
+    public Clips RangeSkill3;
+    public Clips RangeSkill4;
+    public Clips MeleeSkill1;
+    public Clips MeleeSkill2_1;
+    public Clips MeleeSkill2_2;
+    public Clips MeleeSkill3;
+    public Clips MeleeSkill4_1;
+    public Clips MeleeSkill4_2;
 
     [Header("NPC")]
-    public AudioClip NPCStep;
-    public AudioClip NPCHit;
-    public AudioClip NPCAttack;
-    public AudioClip NPCDeath;
+    public Clips NPCStep;
+    public Clips NPCHit;
+    public Clips NPCAttack;
+    public Clips NPCDeath;
 
     [Header("Boss")]
-    public AudioClip boss_Roar1;
-    public AudioClip boss_Roar2;
-    public AudioClip boss_Step;
-    public AudioClip boss_run;
-    public AudioClip boss_Back_Jump;
-    public AudioClip boss_Landing;
-    public AudioClip boss_SpikeSummoning;
-    public AudioClip boss_Spikehit;
-    public AudioClip boss_SpikeBroken;
-    public AudioClip boss_Charge;
-    public AudioClip boss_spike_throw;
-    public AudioClip boss_MeleeAttack;
-    public AudioClip boss_MeleeAttackEnd;
-    public AudioClip boss_Death;
-    public AudioClip boss_Ulti;
+    public Clips boss_Roar1;
+    public Clips boss_Roar2;
+    public Clips boss_Step;
+    public Clips boss_run;
+    public Clips boss_Back_Jump;
+    public Clips boss_Landing;
+    public Clips boss_SpikeSummoning;
+    public Clips boss_Spikehit;
+    public Clips boss_SpikeBroken;
+    public Clips boss_Charge;
+    public Clips boss_spike_throw;
+    public Clips boss_MeleeAttack;
+    public Clips boss_MeleeAttackEnd;
+    public Clips boss_Death;
+    public Clips boss_Ulti;
     
 
 
 
     [Header("System")]
-    public AudioClip boxOpen;
-    public AudioClip StageClear;
-    public AudioClip getBullet;
+    public Clips boxOpen;
+    public Clips StageClear;
+    public Clips getBullet;
 
 
     //public Dictionary<string, AudioClip> audioClipDictionary;

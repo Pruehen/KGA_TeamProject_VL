@@ -149,7 +149,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timer:
     _limit: 8
-    _isStop: 1
+    _isPlaying: 0
+  limitTime: 8
 --- !u!114 &4252766459413601880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,3 +165,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SoundName: boss_spike_throw
   SB: {fileID: 0}
+  spatialBlend: 0
