@@ -1648,7 +1648,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 212364774213865296, guid: 2973452c7d0d6604b8bbd729f13a9fd9, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2204814327690119298, guid: 2973452c7d0d6604b8bbd729f13a9fd9, type: 3}
       propertyPath: _enemyMove.IsLaunching
@@ -1657,15 +1657,15 @@ PrefabInstance:
     - target: {fileID: 2204814327690119298, guid: 2973452c7d0d6604b8bbd729f13a9fd9, type: 3}
       propertyPath: _enemyAttack._defaultAttackSetupData
       value: 
-      objectReference: {fileID: 11400000, guid: 070e8dd6c616ec64fb9b39031d1f2d83, type: 2}
+      objectReference: {fileID: 11400000, guid: 0bf2338ca853c14459aec4b20772927f, type: 2}
     - target: {fileID: 2204814327690119298, guid: 2973452c7d0d6604b8bbd729f13a9fd9, type: 3}
       propertyPath: _enemyAttack._modulesSetupData.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2204814327690119298, guid: 2973452c7d0d6604b8bbd729f13a9fd9, type: 3}
       propertyPath: _enemyAttack._modulesSetupData.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 070e8dd6c616ec64fb9b39031d1f2d83, type: 2}
+      objectReference: {fileID: 11400000, guid: 126d0c42470287441bac0bd370420a2a, type: 2}
     - target: {fileID: 2204814327690119298, guid: 2973452c7d0d6604b8bbd729f13a9fd9, type: 3}
       propertyPath: _enemyAttack._modulesSetupData.Array.data[1]
       value: 
@@ -1704,15 +1704,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7770245145223217770, guid: 2973452c7d0d6604b8bbd729f13a9fd9, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 7770245145223217770, guid: 2973452c7d0d6604b8bbd729f13a9fd9, type: 3}
       propertyPath: m_LocalScale.y
-      value: 2
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 7770245145223217770, guid: 2973452c7d0d6604b8bbd729f13a9fd9, type: 3}
       propertyPath: m_LocalScale.z
-      value: 2
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 7770245145223217770, guid: 2973452c7d0d6604b8bbd729f13a9fd9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1773,7 +1773,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 212364774213865296, guid: 2973452c7d0d6604b8bbd729f13a9fd9, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7770245145223217770, guid: 2973452c7d0d6604b8bbd729f13a9fd9, type: 3}
       propertyPath: m_LocalScale.x
