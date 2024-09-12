@@ -6,6 +6,6 @@ using UnityEngine;
 public class Clips : ScriptableObject
 {
     public AudioClip clip;
-    [Range(0,1)]public float VFXVolum = 1f;
+    [Range(0,1)]public float SFXVolum = 1f;
     [Range(0, 1)] public float spatialBlend = 1f;
 }
