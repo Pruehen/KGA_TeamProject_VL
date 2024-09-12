@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80e42a495e809a44d9ca2be693f4eba5, type: 3}
   m_Name: SFXData
   m_EditorClassIdentifier: 
-  VFXvolum: 1
+  SFXvolum: 1
   BGMvolum: 1
-  lobby: {fileID: 8300000, guid: f088a2b34d07bbb4a862ac7aa19c8606, type: 3}
-  gameRoom: {fileID: 8300000, guid: 709e42ebd4d9eaa41b10e00c1a754345, type: 3}
-  bossRoom: {fileID: 8300000, guid: 20f6d4317973dce4d9c54a72e3bfecab, type: 3}
-  playerstep: {fileID: 8300000, guid: a9c9f45b97aceb841919d5a53b40f9b2, type: 3}
-  playerHit: {fileID: 8300000, guid: 3560d435761a8f543b752d5cffcb866d, type: 3}
-  playerDead: {fileID: 8300000, guid: ab311aab76ae384488143d38eaef60fb, type: 3}
-  playerSetBlueChip: {fileID: 8300000, guid: 02aac192005c75946b6450324573ae51, type: 3}
-  Absorbeing: {fileID: 8300000, guid: 1af8b87789c86614499d46d087cb2005, type: 3}
-  playerMeleeTransform: {fileID: 8300000, guid: a1c848b994fce0c40a52a6494b9be96a, type: 3}
+  lobby: {fileID: 11400000, guid: 5f5ff2bf1f46f1a488e51674c5adb02e, type: 2}
+  gameRoom: {fileID: 11400000, guid: dc816aa742cb058458c1694ddd7083b7, type: 2}
+  bossRoom: {fileID: 11400000, guid: bff037ffddc1d2b4281bb89c7ad58efc, type: 2}
+  playerstep: {fileID: 11400000, guid: da35c165d62a83842a86e9f6929a944a, type: 2}
+  playerHit: {fileID: 11400000, guid: 67e24154d1565a14091a5e05d8ab3882, type: 2}
+  playerDead: {fileID: 11400000, guid: 5747b45ee7d588d47bb3edc8960df059, type: 2}
+  playerSetBlueChip: {fileID: 11400000, guid: beaeab54b7b969a46968adf6e3a3d527, type: 2}
+  Absorbeing: {fileID: 11400000, guid: 403b535984dd3f645bf7f23b2bc082b0, type: 2}
+  playerMeleeTransform: {fileID: 8300000, guid: 4e7a9f408abdba8459fdccbeaea95215, type: 3}
   playerRangeTransform: {fileID: 8300000, guid: 7b38b1b758f207b48a4a78cd0b7b94fa, type: 3}
   playerMeleeTransformRelease: {fileID: 8300000, guid: 7b38b1b758f207b48a4a78cd0b7b94fa, type: 3}
   playerRangeAttack: {fileID: 8300000, guid: c07199b7b46e71b449b665d21ff16f18, type: 3}
@@ -36,7 +36,7 @@ MonoBehaviour:
   RangeSkill1: {fileID: 8300000, guid: 89001e92ca492453599bb2bc49326e85, type: 3}
   RangeSkill2: {fileID: 8300000, guid: c401d00c96b512e488d2e3bf5d111509, type: 3}
   RangeSkill3: {fileID: 8300000, guid: e5ecc98ff40556543b77c8c2aa090822, type: 3}
-  RangeSkill4: {fileID: 8300000, guid: 23e979cf73e276349b14a637e2b9e325, type: 3}
+  RangeSkill4: {fileID: 8300000, guid: 3443057aff9fa4a49b2e0b7b147f6704, type: 3}
   MeleeSkill1: {fileID: 8300000, guid: cdfae31f0b58546d3ac1015effc38f01, type: 3}
   MeleeSkill2_1: {fileID: 8300000, guid: 501b52c7a3e1fa34d9c8bccdd7c74a00, type: 3}
   MeleeSkill2_2: {fileID: 8300000, guid: 7497fae7a527f564db14fe043adff21c, type: 3}
@@ -50,12 +50,12 @@ MonoBehaviour:
   boss_Roar1: {fileID: 8300000, guid: 98bf60a3299a80b428f0ffc41d07019b, type: 3}
   boss_Roar2: {fileID: 8300000, guid: c91fcf414acc0344cb03b13996f1bf3b, type: 3}
   boss_Step: {fileID: 8300000, guid: 32f313f06ea560147971a0f08e309447, type: 3}
-  boss_run: {fileID: 8300000, guid: a6d695adcda1a9b41aa59fd247829b26, type: 3}
+  boss_run: {fileID: 8300000, guid: 5a7e64978e39005428ff5b39a026155f, type: 3}
   boss_Back_Jump: {fileID: 8300000, guid: 5a7e64978e39005428ff5b39a026155f, type: 3}
-  boss_Landing: {fileID: 8300000, guid: 8f1e6ac2ff66e2645bac9867cb0f5969, type: 3}
+  boss_Landing: {fileID: 8300000, guid: 8b23b175a78d6b5458322e3a6c9905d0, type: 3}
   boss_SpikeSummoning: {fileID: 8300000, guid: d0829e3ec0920d64d9050c9b343eb274, type: 3}
   boss_Spikehit: {fileID: 8300000, guid: 8cab3904e5d32df44bf19c60103e1664, type: 3}
-  boss_SpikeBroken: {fileID: 8300000, guid: e5ecc98ff40556543b77c8c2aa090822, type: 3}
+  boss_SpikeBroken: {fileID: 8300000, guid: 28406bf68add30e4e89d6cd063fb84e6, type: 3}
   boss_Charge: {fileID: 8300000, guid: 5170e1fc4f1b1da41afeb163cd414012, type: 3}
   boss_spike_throw: {fileID: 8300000, guid: 04bc3d71434cbf547ad10fd842a08c23, type: 3}
   boss_MeleeAttack: {fileID: 8300000, guid: bcef8f0decb630c428c6ce26110018e8, type: 3}
