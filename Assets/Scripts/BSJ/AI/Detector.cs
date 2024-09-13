@@ -70,6 +70,10 @@ public class Detector : MonoBehaviour
     {
         Collider[] overlap = Physics.OverlapSphere(transform.position, _detectionRadius, _targetLayer);
 
+        if(overlap.Length == 0)
+        {
+            return;
+        }
         //check overlap contains player taged
 
         Collider playerCol = overlap.FirstOrDefault((col) => col.CompareTag("Player"));

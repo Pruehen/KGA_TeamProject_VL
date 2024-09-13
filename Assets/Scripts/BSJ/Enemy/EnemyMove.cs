@@ -9,7 +9,7 @@ public class EnemyMove
     private EnemyBase _owner;
     public bool IsLaunching;
     public float LaunchedTime;
-    public bool IsGrounded;
+    public bool IsGrounded = true;
     public bool IsLanded;
     public bool IsMoving;
 
