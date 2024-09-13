@@ -54,18 +54,15 @@ public class GameManager : SceneSingleton<GameManager>
     }
     private void Update()
     {
+        if(_isLoading)
+        {
+            return;
+        }
         if (SceneManager.GetActiveScene().name == "mainGame")
         {
             return;
         }
-        if (_stageSystem.CurrentStageNum >= unexpectedquests.Length)
-        {
-            return;
-        }
-        if (unexpectedquests[_stageSystem.CurrentStageNum] != null)
-        {
-            _currentQuest.DoUpdateQuest();
-        }
+        UpdateCurrentQuest();
     }
     public void SetRewordType(RewardType rewordType)
     {
@@ -109,12 +106,32 @@ public class GameManager : SceneSingleton<GameManager>
                 Assert.IsNotNull(_PlayerMaster);
 
             NextStageObjects.Init(_rewardType);
-            if (unexpectedquests[_stageSystem.CurrentStageNum] != null)
-            {
-                _currentQuest = new Quest();
-                _currentQuest.Init(unexpectedquests[_stageSystem.CurrentStageNum]);
-                unexpectedquests[_stageSystem.CurrentStageNum].Init();
-            }
+
+            InitCurrentQuest();
+        }
+    }
+    private void InitCurrentQuest()
+    {
+        if (_stageSystem.CurrentStageNum >= unexpectedquests.Length)
+        {
+            return;
+        }
+        if (unexpectedquests[_stageSystem.CurrentStageNum] != null)
+        {
+            _currentQuest = new Quest();
+            _currentQuest.Init(unexpectedquests[_stageSystem.CurrentStageNum]);
+            unexpectedquests[_stageSystem.CurrentStageNum].Init();
+        }
+    }
+    private void UpdateCurrentQuest()
+    {
+        if (_stageSystem.CurrentStageNum >= unexpectedquests.Length)
+        {
+            return;
+        }
+        if (unexpectedquests[_stageSystem.CurrentStageNum] != null)
+        {
+            _currentQuest.DoUpdateQuest();
         }
     }
     private void SetStageQuests()
