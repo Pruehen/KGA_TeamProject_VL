@@ -32,6 +32,7 @@ Transform:
   m_Children:
   - {fileID: 7018524462431170084}
   - {fileID: 1803115577621163311}
+  - {fileID: 3872252635139924665}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7465903683288417532
@@ -91,6 +92,57 @@ Transform:
   - {fileID: 5251101790891238709}
   m_Father: {fileID: 4281373196848227221}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8231293140392710468
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3872252635139924665}
+  - component: {fileID: 5146535276446101129}
+  m_Layer: 0
+  m_Name: DynamicItemGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3872252635139924665
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8231293140392710468}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.6666665, y: 1.6666665, z: 1.6666665}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4281373196848227221}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5146535276446101129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8231293140392710468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92d70bf7830f98f4989aafe22fd7457d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  items:
+  - {fileID: 2768271386576366519, guid: 0d057d71955d8494b81d74e1659c906f, type: 3}
+  - {fileID: 2295145892323900991, guid: 7bd1656e3e0a5c4438c6d513d9032d97, type: 3}
+  - {fileID: 5440435901423153057, guid: 399f528086f88a941a0fb2e957c55587, type: 3}
+  - {fileID: 6859344379268465617, guid: a4da3dd3ab953cb4bba5385062af5277, type: 3}
+  _randomRange: 2
+  _count: 2
 --- !u!1 &8375863839724547934
 GameObject:
   m_ObjectHideFlags: 0
@@ -144,6 +196,7 @@ MonoBehaviour:
   _damage: 15
   _hp: 1
   _trashPrefab: {fileID: 55809143128806568, guid: 1b2cf56a75ce1a843b7f8d425eb3bc48, type: 3}
+  _dynamicItemSpawn: {fileID: 5146535276446101129}
 --- !u!54 &7356026850849790898
 Rigidbody:
   m_ObjectHideFlags: 0

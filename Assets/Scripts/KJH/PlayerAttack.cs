@@ -11,7 +11,6 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] Transform projectile_InitPos;
     [SerializeField] float projectionSpeed_Forward = 15;
     [SerializeField] float projectionSpeed_Up = 3;
-    [SerializeField] float attack_CoolTime = 0.7f;
 
     [SerializeField] SO_SKillEvent EnterMelee;
     [SerializeField] SO_SKillEvent EnterRangeR;
@@ -48,7 +47,6 @@ public class PlayerAttack : MonoBehaviour
         }
     }
     [SerializeField] PlayerAttackKind _currentAttackKind = PlayerAttackKind.RangeNormalAttack;
-    [SerializeField] int _initialAttackComboIndex = 0;
     int _currentAttackCount;
 
     public float attack_ChargeTime { get => _AttackSystem.CloseAttack.ChargeTime; set => _AttackSystem.CloseAttack.ChargeTime = value; }

@@ -20,9 +20,6 @@ public class DashFire : MonoBehaviour
     [SerializeField] public Vector3 DefaultRange = new Vector3(1f, 1f, 1f);
     private Coroutine _DisableBoxCoroutine;
 
-
-    private float _enableTimer = 0f;
-
     public Action OnHitCallback;
     public Vector3 target;
     [SerializeField]

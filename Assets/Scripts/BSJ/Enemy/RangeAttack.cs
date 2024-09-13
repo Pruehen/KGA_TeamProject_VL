@@ -17,7 +17,6 @@ public class RangeAttack : AiAttackAction
     private float initialDistance;
     [SerializeField] private Transform _firePos;
     [SerializeField] private GameObject Prefab_projectile;
-    [SerializeField] private float _aimRotateSpeed = 10f;
     [SerializeField] private float _projectileSpeed = 45f;
     [SerializeField] private float _projectileDamage = 3f;
 

@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "SFXData", menuName = "SFX", order = 0)]
@@ -66,7 +64,7 @@ public class SFX : ScriptableObject
     public Clips boss_MeleeAttackEnd;
     public Clips boss_Death;
     public Clips boss_Ulti;
-    
+
 
 
 

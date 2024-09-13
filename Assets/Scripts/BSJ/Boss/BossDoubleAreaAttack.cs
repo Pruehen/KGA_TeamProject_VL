@@ -8,7 +8,6 @@ public class BossDoubleAreaAttack : MonoBehaviour
     [SerializeField] float _distance_middle = 15f;
     [SerializeField] float _distance_max = 15f;
     [SerializeField] float _damage = 60f;
-    [SerializeField] float _anticipateTime = 60f;
     [SerializeField] AttackRangeType _condition = AttackRangeType.Close;
     [SerializeField] Transform _model_anticipate;
     [SerializeField] Material _mat_anticipate;

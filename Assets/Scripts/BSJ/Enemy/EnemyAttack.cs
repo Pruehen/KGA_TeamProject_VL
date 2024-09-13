@@ -153,7 +153,6 @@ public class EnemyAttack
         }
         _currentAttack = am;
 
-        Debug.LogWarning(am.AttackModuleData.name + Time.time);
         CurrentAttack.StartAction(_owner);
 
         return am;

@@ -95,7 +95,7 @@ public class GameManager : SceneSingleton<GameManager>
                 _init = true;
             }
 
-            _PlayerMaster = FindAnyObjectByType<PlayerMaster>();
+            _PlayerMaster = PlayerMaster.Instance;
             NextStageObjects = FindAnyObjectByType<NextStageObjects>();
 
             if (_PlayerMaster == null)
@@ -226,6 +226,10 @@ public class GameManager : SceneSingleton<GameManager>
 
         RegisterEnemies();
 
+        if(_PlayerMaster == null)
+        {
+            _PlayerMaster = PlayerMaster.Instance;
+        }
         _PlayerMaster._PlayerInstanteState.OnDead += OnDead;
     }
     public void OnPlayerDead()
