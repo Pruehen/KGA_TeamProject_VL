@@ -1374,7 +1374,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Charge end L 0
-  m_Speed: 1
+  m_Speed: 2
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -6784393505719126476}
@@ -2907,6 +2907,9 @@ AnimatorStateMachine:
   - {fileID: -6755710815924938450}
   - {fileID: -8278142610876065834}
   m_StateMachineTransitions:
+  - first: {fileID: -5498408451649166101}
+    second:
+    - {fileID: 2955986183890288476}
   - first: {fileID: -7342942975251263468}
     second:
     - {fileID: -5645499326680116813}
@@ -2914,9 +2917,6 @@ AnimatorStateMachine:
     second:
     - {fileID: -721746386139479975}
     - {fileID: 8475861784832773711}
-  - first: {fileID: -5498408451649166101}
-    second:
-    - {fileID: 2955986183890288476}
   m_StateMachineBehaviours:
   - {fileID: 5779486756275598601}
   - {fileID: 508408657649604924}
@@ -3853,7 +3853,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Charge end R 1
-  m_Speed: 1
+  m_Speed: 2
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -7410516839462821669}
