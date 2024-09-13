@@ -54,7 +54,7 @@ public class GameManager : SceneSingleton<GameManager>
     }
     private void Update()
     {
-        if(_isLoading)
+        if (_isLoading)
         {
             return;
         }
@@ -353,6 +353,6 @@ public class GameManager : SceneSingleton<GameManager>
 
     public void TPToDoor()
     {
-        _PlayerMaster.transform.position = NextStageObjects.transform.position + -NextStageObjects.transform.forward;
+        _PlayerMaster.transform.position = NextStageObjects.transform.position - (NextStageObjects.transform.forward * 3f);
     }
 }
