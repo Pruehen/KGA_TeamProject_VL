@@ -43,12 +43,11 @@ public class VFXManager : GlobalSingleton<VFXManager>
             {
                 GameObject VFX = ObjectPoolManager.Instance.DequeueObject(SFX.preFab);
                 //Vector3 position = Vector3.zero;
-
+                Quaternion finalRotation = Quaternion.Euler(SFX.rotation);
+                VFX.transform.rotation = finalRotation;
                 Vector3 finalPosition = transform.position + transform.TransformDirection(SFX.offSet);
                 VFX.transform.position = finalPosition;
                 //Quaternion playerRotation = transform.rotation;
-                Quaternion finalRotation = Quaternion.Euler(SFX.rotation);
-                VFX.transform.rotation = finalRotation;
                 VFX.transform.localScale = Vector3.one * SFX.size;
 
                 // 파티클 자동 반환 스크립트 추가
