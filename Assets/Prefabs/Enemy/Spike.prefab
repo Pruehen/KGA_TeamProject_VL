@@ -208,7 +208,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SoundName: boss_SpikeSummoning
   SB: {fileID: 0}
-  spatialBlend: 1
 --- !u!1001 &5273887880586314969
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -217,6 +216,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1803115577621163311}
     m_Modifications:
+    - target: {fileID: 2943415329188384889, guid: 5d43f28a9e0a3074899df1e46ad643ed, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2943415329188384889, guid: 5d43f28a9e0a3074899df1e46ad643ed, type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2943415329188384889, guid: 5d43f28a9e0a3074899df1e46ad643ed, type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3054998803427212835, guid: 5d43f28a9e0a3074899df1e46ad643ed, type: 3}
       propertyPath: m_Name
       value: BoneSpikeSpawn
@@ -5190,9 +5201,33 @@ PrefabInstance:
       propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2929340344269041469, guid: 3c068166ba32fc046937f03b3376d1b7, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2929340344269041469, guid: 3c068166ba32fc046937f03b3376d1b7, type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2929340344269041469, guid: 3c068166ba32fc046937f03b3376d1b7, type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2929358784690894033, guid: 3c068166ba32fc046937f03b3376d1b7, type: 3}
       propertyPath: playOnAwake
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2929358784690894033, guid: 3c068166ba32fc046937f03b3376d1b7, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2929358784690894033, guid: 3c068166ba32fc046937f03b3376d1b7, type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2929358784690894033, guid: 3c068166ba32fc046937f03b3376d1b7, type: 3}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2943415329188384889, guid: 3c068166ba32fc046937f03b3376d1b7, type: 3}
       propertyPath: playOnAwake

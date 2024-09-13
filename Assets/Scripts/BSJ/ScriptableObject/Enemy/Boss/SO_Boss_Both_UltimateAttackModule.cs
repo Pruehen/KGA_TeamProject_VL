@@ -28,20 +28,21 @@ public class SO_Boss_Both_UltimateAttackModule : SO_AttackModule
                 BossDoubleAreaAttack areaAttack = projectileObject.GetComponent<BossDoubleAreaAttack>();
                 areaAttack.Init(Damage, owner.Attack.RangeTypeThreshold, IsClose(owner));
                 owner.Attack.CurrentProjectile = areaAttack;
-                
+
+                SpikeManager.Instance.DestroyAllSpike();
+
                 SpawnMultipleSpikeInAreaAndStore(owner, Prefab_Spike, MaxArea,
                 SpikeGap, Probability, SpikeRandomOffset,
                 owner.Attack.CurrentSpikeSpawners);
-                
+
                 break;
             case 1:
                 owner.Attack.CurrentProjectile.Trigger();
-                foreach(SpikeSpawner spike in owner.Attack.CurrentSpikeSpawners)
+                foreach (SpikeSpawner spike in owner.Attack.CurrentSpikeSpawners)
                 {
                     spike.Trigger();
                 }
                 owner.Attack.CurrentSpikeSpawners.Clear();
-
 
                 SpawnMultipleSpikeInAreaAndStore(owner, Prefab_Spike, MaxArea,
                 SpikeGap, Probability, SpikeRandomOffset,
@@ -49,7 +50,7 @@ public class SO_Boss_Both_UltimateAttackModule : SO_AttackModule
                 break;
             case 2:
                 owner.Attack.CurrentProjectile.Trigger();
-                foreach(SpikeSpawner spike in owner.Attack.CurrentSpikeSpawners)
+                foreach (SpikeSpawner spike in owner.Attack.CurrentSpikeSpawners)
                 {
                     spike.Trigger();
                 }
@@ -86,7 +87,11 @@ public class SO_Boss_Both_UltimateAttackModule : SO_AttackModule
                     Vector3 offset = new Vector3(i * gap, 0f, k * gap) - centerOffset;
                     Vector3 pos = owner.transform.position + offset;
                     if (Vector3.Distance(pos, owner.transform.position) < areaRadius * .5f)
-                        spikeContainer.Add(SpawnSpike(owner, spike, pos, spikeRandomOffset));
+                    {
+                        SpikeSpawner curSpike = SpawnSpike(owner, spike, pos, spikeRandomOffset);
+                        spikeContainer.Add(curSpike);
+                        SpikeManager.Instance.Spikes.Add(curSpike);
+                    }
                 }
             }
     }
