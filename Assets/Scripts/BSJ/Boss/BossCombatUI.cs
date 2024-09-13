@@ -1,5 +1,4 @@
 using EnumTypes;
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,7 +16,9 @@ public class BossCombatUI : MonoBehaviour
         gameObject.SetActive(true);
         _healthPoint.fillAmount = target.Health[0].GetHpRatio();
 
-        for (int i = 0; i < target.Health.Length; i ++)
+        _bossName.text = target.EnemyData.Name;
+
+        for (int i = 0; i < target.Health.Length; i++)
         {
             target.Health[i].OnDamaged += UpdateHealth;
             target.Health[i].OnHeal += UpdateHealth;

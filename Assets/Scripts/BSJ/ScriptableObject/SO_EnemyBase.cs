@@ -19,4 +19,6 @@ public class SO_EnemyBase : ScriptableObject
     public int DropGoldAmount = 100;
 
     public bool IsBoss = false;
+
+    public string Name;
 }

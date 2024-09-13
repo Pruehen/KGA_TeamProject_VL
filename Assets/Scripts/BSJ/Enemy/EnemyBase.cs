@@ -18,6 +18,8 @@ public class EnemyBase : MonoBehaviour, ITargetable
     protected Phase _phase = Phase.First;
     public Action<EnemyBase> OnDeadWithSelf;
 
+    public SO_EnemyBase EnemyData => _enemyData;
+
     public Combat[] Health => _combat;
 
     public Detector Detector => _detector;
