@@ -283,6 +283,9 @@ public class GameManager : SceneSingleton<GameManager>
     {
         if (_isLoading)
             return;
+        
+        _isFirstStage = false;
+
         SO_Stage nextStage = _stageSystem.GetNextRandomStage();
         if (_stageSystem.CurrentStageNum == 0)
         {

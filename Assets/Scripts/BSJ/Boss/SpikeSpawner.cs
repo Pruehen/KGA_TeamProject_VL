@@ -23,8 +23,8 @@ public class SpikeSpawner : MonoBehaviour
         _modelParticle = _model.GetComponent<ParticleSystem>();
         _spawnParticle = _spawnEffect.GetComponent<ParticleSystem>();
 
-        _spikeModelTimer.Init(.3f, PauseModel);
-        _enqueueTimer.Init(3f, Enqueue);
+        _spikeModelTimer.Init(.25f, PauseModel);
+        _enqueueTimer.Init(1f, Enqueue);
     }
     private void OnEnable()
     {
@@ -67,6 +67,8 @@ public class SpikeSpawner : MonoBehaviour
     private void Enqueue()
     {
         _spawnParticle.Clear();
+        _modelParticle.Clear();
+        _anticipateParticle.Clear();
         ObjectPoolManager.Instance.EnqueueObject(gameObject);
     }
 
@@ -81,5 +83,10 @@ public class SpikeSpawner : MonoBehaviour
         {
             _spikeTimer.StartTimer();
         }
+    }
+
+    public void DestroySpike()
+    {
+        DoReset();
     }
 }
