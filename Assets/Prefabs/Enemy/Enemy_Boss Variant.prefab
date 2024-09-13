@@ -100,7 +100,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _poolPrefab: {fileID: 1101607739824409205, guid: 64bad1d29f2bdfa4fa72a32c68c5fa75, type: 3}
-  _count: 2500
+  _trashPrefab:
+  - {fileID: 6859344379268465617, guid: a4da3dd3ab953cb4bba5385062af5277, type: 3}
+  - {fileID: 5440435901423153057, guid: 399f528086f88a941a0fb2e957c55587, type: 3}
+  - {fileID: 2295145892323900991, guid: 7bd1656e3e0a5c4438c6d513d9032d97, type: 3}
+  - {fileID: 2768271386576366519, guid: 0d057d71955d8494b81d74e1659c906f, type: 3}
+  _spikeCount: 2000
+  _trashCount: 1000
 --- !u!1001 &6302082150532475575
 PrefabInstance:
   m_ObjectHideFlags: 0

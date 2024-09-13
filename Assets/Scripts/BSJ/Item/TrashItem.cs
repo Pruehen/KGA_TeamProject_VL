@@ -70,8 +70,13 @@ public class TrashItem : MonoBehaviour
         if (collision.rigidbody.CompareTag("Player"))
         {
             collision.rigidbody.GetComponent<PlayerInstanteState>().AcquireBullets(1);
-            ObjectPoolManager.Instance.EnqueueObject(gameObject);
+            Enqueue();
         }
+    }
+
+    public void Enqueue()
+    {
+        ObjectPoolManager.Instance.EnqueueObject(gameObject);
     }
     public void PullToCenterAndDestroy(float acquireSpeed)
     {

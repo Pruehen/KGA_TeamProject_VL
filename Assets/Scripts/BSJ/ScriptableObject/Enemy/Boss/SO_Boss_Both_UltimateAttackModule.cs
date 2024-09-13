@@ -30,6 +30,7 @@ public class SO_Boss_Both_UltimateAttackModule : SO_AttackModule
                 owner.Attack.CurrentProjectile = areaAttack;
 
                 SpikeManager.Instance.DestroyAllSpike();
+                SpikeManager.Instance.DestroyAllTrash();
 
                 SpawnMultipleSpikeInAreaAndStore(owner, Prefab_Spike, MaxArea,
                 SpikeGap, Probability, SpikeRandomOffset,

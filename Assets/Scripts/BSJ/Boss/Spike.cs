@@ -9,6 +9,7 @@ public class Spike : MonoBehaviour, ITargetable
     [SerializeField] private float _damage;
     [SerializeField] private float _hp;
     [SerializeField] private GameObject _trashPrefab;
+    [SerializeField] private DynamicItemGen _dynamicItemSpawn;
     private float _damageTimeStamp;
 
     private Collider _collision;
@@ -47,8 +48,7 @@ public class Spike : MonoBehaviour, ITargetable
     private void SpawnTrash()
     {
         SM.Instance.PlaySound2("boss_SpikeBroken", transform.position);
-        GameObject spike = ObjectPoolManager.Instance.DequeueObject(_trashPrefab, transform.position);
-        spike.transform.rotation = transform.rotation;
+        _dynamicItemSpawn.SpawnItem();
     }
 
     private void OnCollisionStay(Collision collision)
