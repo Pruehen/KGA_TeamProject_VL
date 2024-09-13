@@ -9,9 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f876e55b1c201514b9e250406e75a301, type: 3}
-  m_Name: GameRoom
+  m_Script: {fileID: 11500000, guid: c6e432be37e6cbd438e16f3616aa1364, type: 3}
+  m_Name: Bose_MeleeAttack
   m_EditorClassIdentifier: 
-  clip: {fileID: 8300000, guid: 709e42ebd4d9eaa41b10e00c1a754345, type: 3}
-  SFXVolum: 0.1
-  spatialBlend: 0
+  preFab: {fileID: 171468, guid: 9bb3c2595cddc25468a1fccc3b563ae4, type: 3}
+  size: 4
+  playerPos: 2
+  offSet: {x: 0, y: 0.15, z: 0}
+  rotation: {x: 0, y: 0, z: 0}
+  Tracking: 0
