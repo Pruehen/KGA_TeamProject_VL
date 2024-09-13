@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
-using static SO_Stage;
 
 public enum RewardType
 {
@@ -56,6 +55,10 @@ public class GameManager : SceneSingleton<GameManager>
     private void Update()
     {
         if (SceneManager.GetActiveScene().name == "mainGame")
+        {
+            return;
+        }
+        if (_stageSystem.CurrentStageNum >= unexpectedquests.Length)
         {
             return;
         }
@@ -181,7 +184,7 @@ public class GameManager : SceneSingleton<GameManager>
         _enemies.Remove(enemy);
         if (_enemies.Count == 0)
         {
-            if(_stageSystem.ChapterLength - 1 == _stageSystem.CurrentStageNum)
+            if (_stageSystem.ChapterLength - 1 == _stageSystem.CurrentStageNum)
             {
                 StartCoroutine(GameClear());
                 return;
@@ -189,7 +192,7 @@ public class GameManager : SceneSingleton<GameManager>
 
             _stageSystem.Clear();
             OnGameClear?.Invoke();
-            if(_currentQuest != null && unexpectedquests[_stageSystem.CurrentStageNum] != null)
+            if (_currentQuest != null && unexpectedquests[_stageSystem.CurrentStageNum] != null)
             {
                 _currentQuest?.IsCleared();
             }
@@ -226,7 +229,7 @@ public class GameManager : SceneSingleton<GameManager>
 
         RegisterEnemies();
 
-        if(_PlayerMaster == null)
+        if (_PlayerMaster == null)
         {
             _PlayerMaster = PlayerMaster.Instance;
         }
@@ -287,7 +290,7 @@ public class GameManager : SceneSingleton<GameManager>
     {
         if (_isLoading)
             return;
-        
+
         _isFirstStage = false;
 
         SO_Stage nextStage = _stageSystem.GetNextRandomStage();
