@@ -22,8 +22,6 @@ public class PassiveUIManager : SceneSingleton<PassiveUIManager>
 
     [SerializeField] Text outgameGold;
 
-    [SerializeField] int TestEmerald = 10000;
-
    
 
     private void Awake()

@@ -14,7 +14,6 @@ public class MainSceneUIManager : SceneSingleton<MainSceneUIManager>
     Text[] slotText;
 
     SaveFillSlot _selectSlotTemp;
-    bool sceneLode = false;
 
     private void Awake()
     {
