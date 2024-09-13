@@ -6,6 +6,7 @@ public class SO_Boss_Range_RushAttackModule : SO_AttackModule
     public float DashVelocity = 15f;
     public float DashTime = 1f;
     public float HommingForce = 10f;
+    public float RushRotateSpeed = 100f;
 
     public override void StartAttackMove(EnemyBase owner, int type)
     {
@@ -22,6 +23,9 @@ public class SO_Boss_Range_RushAttackModule : SO_AttackModule
         Vector3 vel = dir.normalized * DashVelocity;
 
         owner.Move.StartHommoingGroundedDash(vel,targetTrf,HommingForce);
+
+        owner.Move.AttackRotate = true;
+        owner.Move.AttackRotateSpeed = RushRotateSpeed;
     }
     public override void UpdateAttackMove(EnemyBase owner, int type, float deltaTime)
     {
@@ -43,6 +47,7 @@ public class SO_Boss_Range_RushAttackModule : SO_AttackModule
             owner.Animator.SetTrigger("EndAttackMove");
             owner.Move.ResetDash();
             owner.Attack.CurrentAttack.IsUpdateMove = false;
+            owner.Move.AttackRotate = false;
         }
 
         if(Time.time > owner.Attack.CurrentAttack.PrevMoveTime + DashTime)
@@ -50,6 +55,7 @@ public class SO_Boss_Range_RushAttackModule : SO_AttackModule
             owner.Animator.SetTrigger("EndAttackMove");
             owner.Move.ResetDash();
             owner.Attack.CurrentAttack.IsUpdateMove = false;
+            owner.Move.AttackRotate = false;
         }
     }
 
