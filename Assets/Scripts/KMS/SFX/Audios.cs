@@ -21,8 +21,11 @@ public class Audios : MonoBehaviour
     }
     public void OnDisable()
     {
-        if(SB != null)
-        ObjectPoolManager.Instance.EnqueueObject(SB);
+        if (SB != null)
+            if (ObjectPoolManager.Instance != null)
+            {
+                ObjectPoolManager.Instance.EnqueueObject(SB);
+            }
     }
 
 

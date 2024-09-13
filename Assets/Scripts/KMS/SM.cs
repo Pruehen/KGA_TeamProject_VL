@@ -131,7 +131,12 @@ public class SM : GlobalSingleton<SM>
     private IEnumerator ReturnToPoolAfterPlayback(AudioSource _audioSource)
     {
         yield return new WaitForSeconds(_audioSource.clip.length);
-        ObjectPoolManager.Instance.EnqueueObject(_audioSource.transform.gameObject);
+        if (_audioSource != null&& ObjectPoolManager.Instance != null)
+        {
+
+                ObjectPoolManager.Instance.EnqueueObject(_audioSource.transform.gameObject);
+        }
+        
     }
     public void PlaySoundAtPosition(AudioClip clip, Vector3 position)
     {
