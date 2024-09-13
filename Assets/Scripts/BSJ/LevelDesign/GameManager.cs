@@ -54,6 +54,10 @@ public class GameManager : SceneSingleton<GameManager>
     }
     private void Update()
     {
+        if(_isLoading)
+        {
+            return;
+        }
         if (SceneManager.GetActiveScene().name == "mainGame")
         {
             return;
