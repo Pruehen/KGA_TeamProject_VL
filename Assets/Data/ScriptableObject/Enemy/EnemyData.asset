@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EnemyData
   m_EditorClassIdentifier: 
   Hp:
-  - 100
+  - 150
   EnemyAlramDistance: 10
   AttackDamage: 20
   AttackRange: 2
@@ -21,3 +21,5 @@ MonoBehaviour:
   AttackMovableCooldown: 0.6
   AttackSpeedMultiply: 1
   DropGoldAmount: 100
+  IsBoss: 0
+  Name: 

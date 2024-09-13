@@ -84,7 +84,8 @@ public class EnemyBase : MonoBehaviour, ITargetable
         _detector.Init(this, "Player",
             _enemyData.EnemyAlramDistance);
 
-        if( _enemyData.IsBoss)
+        _detector.OnDetect += ActiveBehaviourTree;
+        if ( _enemyData.IsBoss)
             _detector.OnDetect += ActiveBossUi;
 
         _combat = new Combat[_enemyData.Hp.Length];
@@ -116,6 +117,12 @@ public class EnemyBase : MonoBehaviour, ITargetable
         _behaviorTree.SetVariable("DetectRange", detectRange);
         _behaviorTree.SetVariable("EnemyAlramLimitTime", enemyAlramLimitTime);
     }
+
+    private void ActiveBehaviourTree(Detector detector)
+    {
+        _behaviorTree.enabled = true;
+    }
+
     protected void OnDestroy()
     {
         foreach (Combat combat in _combat)
@@ -127,13 +134,17 @@ public class EnemyBase : MonoBehaviour, ITargetable
     }
     protected void Update()
     {
+        if(Detector.GetLatestTarget() == null)
+        {
+            return;
+        }
+
         foreach (Combat combat in _combat)
         {
             combat.DoUpdate(Time.deltaTime);
         }
         _enemyAttack.DoUpdate(Time.deltaTime);
         _enemyMove.DoUpdate(Time.deltaTime);
-
         if (_aiState == AIState.Dead)
         {
             if (Mathf.Abs(_rigidbody.velocity.y) < .1f)

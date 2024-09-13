@@ -145,10 +145,11 @@ MonoBehaviour:
     _isPriorityAttack: 0
     _firePos: {fileID: 300571122579109741}
     _modules: []
+    CurrentSpikeSpawners: []
   _enemyMove:
     IsLaunching: 0
     LaunchedTime: 0
-    IsGrounded: 0
+    IsGrounded: 1
     IsLanded: 0
     IsMoving: 0
     IsLaunchEnd: 0
@@ -184,11 +185,13 @@ MonoBehaviour:
     _prevHitTime: 0
   IsStarafe_able: 0
   hitVFX: {fileID: 11400000, guid: 39b0076763d698e4fa1e149791706c51, type: 2}
-  _pooledHitVfxPrefab: {fileID: 0}
   _firePos: {fileID: 300571122579109741}
   _projectilePrefab: {fileID: 0}
   _isKnockback_able: 1
   DamageBox: {fileID: 4020534697921745680}
+  hand_L: {fileID: 0}
+  hand_R: {fileID: 0}
+  Foot: {fileID: 0}
 --- !u!54 &6761217911787281492
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -249,7 +252,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: ce65fa103f0e84b4289374b2a4bf93f8, type: 3}
   m_Controller: {fileID: 9100000, guid: 30f1ebec8dd56814cadf29e98d363402, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -266,7 +269,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6162902244653245927}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8d7b55c7ecdb49a4a89fa5e6f9022861, type: 3}
   m_Name: 
