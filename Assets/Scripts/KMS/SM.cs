@@ -184,7 +184,7 @@ public class SM : GlobalSingleton<SM>
 
                         return;
                 case 2:
-                    if (audioClipDictionary.TryGetValue("bossRoom", out Clips bossaudioClip))
+                    if (audioClipDictionary.TryGetValue("bossRoom1", out Clips bossaudioClip))
                     {
                         BGM.clip = bossaudioClip.clip;
                         BGM.volume = bossaudioClip.SFXVolum;
