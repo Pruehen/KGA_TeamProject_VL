@@ -105,8 +105,8 @@ MonoBehaviour:
   - {fileID: 5440435901423153057, guid: 399f528086f88a941a0fb2e957c55587, type: 3}
   - {fileID: 2295145892323900991, guid: 7bd1656e3e0a5c4438c6d513d9032d97, type: 3}
   - {fileID: 2768271386576366519, guid: 0d057d71955d8494b81d74e1659c906f, type: 3}
-  _spikeCount: 2000
-  _trashCount: 1000
+  _spikeCount: 700
+  _trashCount: 300
 --- !u!1001 &6302082150532475575
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -257,11 +257,11 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 1902bac7274e2444ea47436bb28461c2, type: 2}
     - target: {fileID: 5842450011511315219, guid: 1f653ff91d0b36747a9d76975d91a295, type: 3}
       propertyPath: gizmoViewMode
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5842450011511315219, guid: 1f653ff91d0b36747a9d76975d91a295, type: 3}
       propertyPath: showBehaviorDesignerGizmo
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5842450011511315219, guid: 1f653ff91d0b36747a9d76975d91a295, type: 3}
       propertyPath: mBehaviorSource.mTaskData.JSONSerialization
