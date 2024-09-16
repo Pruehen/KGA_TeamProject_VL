@@ -473,6 +473,7 @@ public class PlayerInstanteState : MonoBehaviour
                 skillGauge = playData.InGame_SkillGauge;
                 bullets = playData.InGame_Bullet;
                 meleeBullets = playData.InGame_MeleeBullet;
+                _PlayerMaster.ModManager.TransformOnly(playData.InGame_IsMelee);
             }
         }
         userData.InitPlayData(userData.Gold);

@@ -363,10 +363,11 @@ public class PlayData
     [JsonProperty] public float InGame_SkillGauge { get; private set; }
     [JsonProperty] public int InGame_Bullet { get; private set; }
     [JsonProperty] public int InGame_MeleeBullet { get; private set; }
+    [JsonProperty] public bool InGame_IsMelee { get; private set; }
     [JsonProperty] public bool InGame_StageStarted { get; private set; }
 
 [JsonConstructor]
-    public PlayData(int InGame_Gold, Dictionary<BlueChipID, int> InGame_BlueChip_Level, StageData InGame_Stage, float inGame_Hp, float inGame_SkillGauge, int inGame_Bullet, int inGame_MeleeBullet)
+    public PlayData(int InGame_Gold, Dictionary<BlueChipID, int> InGame_BlueChip_Level, StageData InGame_Stage, float inGame_Hp, float inGame_SkillGauge, int inGame_Bullet, int inGame_MeleeBullet, bool inGame_IsMelee)
     {
         this.InGame_Gold = InGame_Gold;
         this.InGame_BlueChip_Level = InGame_BlueChip_Level;
@@ -375,6 +376,7 @@ public class PlayData
         InGame_SkillGauge = inGame_SkillGauge;
         InGame_Bullet = inGame_Bullet;
         InGame_MeleeBullet = inGame_MeleeBullet;
+        InGame_IsMelee = inGame_IsMelee;
     }
 
     public PlayData()
@@ -394,6 +396,7 @@ public class PlayData
         InGame_SkillGauge = state.skillGauge;
         InGame_Bullet = state.bullets;
         InGame_MeleeBullet = state.meleeBullets;
+        InGame_IsMelee = state.IsMeleeMode;
         JsonDataManager.GetUserData().AddGold(InGame_Gold - JsonDataManager.GetUserData().Gold);
     }
     public void SavePlayData_OnSceneEnter(StageData newStage)//씬 입장 시 호출

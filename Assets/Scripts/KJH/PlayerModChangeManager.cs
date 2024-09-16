@@ -163,6 +163,29 @@ public class PlayerModChangeManager : MonoBehaviour
             }
         }
     }
+    public void TransformOnly(bool isMelee)
+    {
+        if (isMelee)
+        {
+            foreach (GameObject gloves in Glove)
+            {
+                gloves.SetActive(true);
+            }
+        }
+        else
+        {
+            foreach (GameObject gloves in Glove)
+            {
+                gloves.SetActive(false);
+            }
+        }
+        if (_PlayerMaster.IsMeleeMode == isMelee)
+        {
+            return;
+        }
+        _PlayerMaster.IsMeleeMode = isMelee;
+        _PlayerMaster._PlayerAttack.ChangeAttackStateOnly(isMelee);
+    }
 
     public void EndAbsorptState()
     {

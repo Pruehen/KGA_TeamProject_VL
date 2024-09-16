@@ -14,6 +14,7 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     PlayerMove _PlayerMove;
     public PlayerAttack _PlayerAttack;
     PlayerModChangeManager _PlayerModChangeManager;
+    public PlayerModChangeManager ModManager => _PlayerModChangeManager;
     public SO_Skill SkillData;
     [SerializeField] ItemAbsorber _ItemAbsorber;
     [SerializeField] public AttackSystem _AttackSystem;

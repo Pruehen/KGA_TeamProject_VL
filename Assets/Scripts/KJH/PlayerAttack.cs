@@ -112,6 +112,21 @@ public class PlayerAttack : MonoBehaviour
             //_AttackSystem.ModTransform();
         }
     }
+    public void ChangeAttackStateOnly(bool isMelee)
+    {
+        if (isMelee)
+        {
+            CurrentAttackKind = PlayerAttackKind.MeleeNormalAttack;
+            _currentAttackMod = PlayerAttackKind.MeleeNormalAttack;
+            EnterMeleeVFX();
+        }
+        else
+        {
+            CurrentAttackKind = PlayerAttackKind.RangeNormalAttack;
+            _currentAttackMod = PlayerAttackKind.RangeNormalAttack;
+            EnterRangeVFX();
+        }
+    }
 
     public void EnterRangeVFX()
     {
