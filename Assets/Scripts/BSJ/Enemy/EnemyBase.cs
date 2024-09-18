@@ -177,14 +177,12 @@ public class EnemyBase : MonoBehaviour, ITargetable
             _animator.SetBool("IsMoving", true);
 
             Vector3 localVelocity = transform.InverseTransformDirection(_navMeshAgent.velocity.normalized);
-            _animator.SetFloat("MoveSpeed", _navMeshAgent.velocity.magnitude);
 
             SetStrafeAnimVals(localVelocity);
         }
         else
         {
             _animator.SetBool("IsMoving", false);
-            _animator.SetFloat("MoveSpeed", 0f);
             SetStrafeAnimVals(Vector3.zero);
         }
 
@@ -198,6 +196,8 @@ public class EnemyBase : MonoBehaviour, ITargetable
 
         if (IsStarafe_able)
         {
+            float moveSpeed = Move.IsMoving ? _navMeshAgent.velocity.magnitude : 0f;
+            _animator.SetFloat("MoveSpeed", moveSpeed);
             _animator.SetFloat("MoveX", _smoothVel.x);
             _animator.SetFloat("MoveY", _smoothVel.z);
         }

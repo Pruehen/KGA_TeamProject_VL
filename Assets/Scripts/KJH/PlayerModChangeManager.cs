@@ -2,223 +2,161 @@ using System;
 using System.ComponentModel;
 using UnityEngine;
 
-public class PlayerModChangeManager : MonoBehaviour
+[Serializable]
+public class PlayerModChangeManager
 {
+    Transform transform;
     PlayerMaster _PlayerMaster;
+    PlayerAttackSystem _AttackSystem;
+    Animator _animator;
 
-    public bool IsAbsorptState
-    {
-        get { return _PlayerMaster.IsAbsorptState; }
-        set
-        {            
-            _PlayerMaster.IsAbsorptState = value;
-        }
-    }
-    public bool IsMeleeMode
-    {
-        get { return _PlayerMaster.IsMeleeMode; }
-        set
-        {            
-            _PlayerMaster.IsMeleeMode = value;
-            OnSucceseAbsorpt?.Invoke(value);
-            if(value)
-            {
-                foreach(GameObject gloves in Glove)
-                {
-                    gloves.SetActive(true);
-                }
-            }
-            else
-            {
-                foreach (GameObject gloves in Glove)
-                {
-                    gloves.SetActive(false);
-                }
-            }
-        }
-    }
-    public bool IsAttackState
-    {
-        get { return _PlayerMaster.IsAttackState; }
-    }
-     public bool isDashing
-    {
-        get { return _PlayerMaster.isDashing; }
-    }
+    public bool IsAbsorbing;
+    public bool IsMeleeMode;
 
-    private void Awake()
+    public Action OnEnterAbsorb;
+    public Action OnActiveAbsorb;
+    public Func<int> OnSucceseRange;
+    public Func<int> OnSucceseMelee;
+    public Action OnEndAbsorptState;
+    public Action<bool> OnModChanged;
+    public Action OnResetMod;
+
+    float autoChangeDelayTime = 0;
+
+
+    [SerializeField] GameObject[] Glove;
+
+    public void Init(Transform transform)
     {
-        _PlayerMaster = GetComponent<PlayerMaster>();
+        this.transform = transform;
+        _PlayerMaster = transform.GetComponent<PlayerMaster>();
+        _AttackSystem = transform.GetComponent<PlayerAttackSystem>();
+        _animator = transform.GetComponent<Animator>();
         InputManager.Instance.PropertyChanged += OnInputPropertyChanged;
     }
     void OnInputPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)
         {
-            case nameof(InputManager.Instance.IsLControlBtnClick):                
-                if (InputManager.Instance.IsLControlBtnClick == true && IsAbsorptState == false&&IsAttackState==false&& isDashing==false)
+            case nameof(InputManager.Instance.IsLControlBtnClick):
+                if (HasBlueChip5_AutoChange())
+                    break;
+                if (InputManager.Instance.IsLControlBtnClick == false && IsAbsorbing == true && _PlayerMaster.IsDashing == false)
                 {
-                    EnterAbsorptState();
-                }
-                if (InputManager.Instance.IsLControlBtnClick == false && IsAbsorptState == true&& IsAttackState==false && isDashing == false)
-                {
-
-                    IsAbsorptState = false;
-                    //EndAbsorptState();
                     EnterRangeMode();
+                    break;
+                }
+                if (AnimatorHelper.IsTagedAnimPlaying(_animator, 0, "Absorb"))
+                    break;
+                if (AnimatorHelper.IsTagedAnimPlaying(_animator, 0, "Move") || AnimatorHelper.IsTagedAnimPlaying(_animator, 0, "Idle"))
+                {
+                    if (InputManager.Instance.IsLControlBtnClick == true && IsAbsorbing == false && _PlayerMaster.IsDashing == false)
+                    {
+                        StartAbsorbing();
+                    }
                 }
                 break;
 
-            case nameof(InputManager.Instance.IsLMouseBtnClick):                
-                if (InputManager.Instance.IsLControlBtnClick == true && IsAbsorptState == true && IsAttackState == false && isDashing == false)
+            case nameof(InputManager.Instance.IsLMouseBtnClick):
+                if (InputManager.Instance.IsLControlBtnClick == true && IsAbsorbing == true && _PlayerMaster.IsDashing == false)
                 {
-                    if (IsAbsorptState)
-                    {
-                        //_PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._AttackSystem.endAbsorbing);
-                    }
                     EnterMeleeMode();
                 }
                 break;
         }
     }
 
-    public Action OnEnterAbsorptState;
-    public Func<int> OnSucceseAbsorptState;
-    public Func<int> OnSucceseAbsorptState_EntryMelee;
-    public Action OnEndAbsorptState;
-
-    //모드 변환시 캐릭터 공격 방식을 바꾸기 위해
-    public Action<bool> OnSucceseAbsorpt;
-
-    [SerializeField] GameObject[] Glove;
-    public void EnterAbsorptState()
+    public void StartAbsorbing()
     {
-        IsAbsorptState = true;
-        OnEnterAbsorptState.Invoke();
-        Debug.Log($"흡수 모드 진입");
+        OnEnterAbsorb?.Invoke();
+    }
 
+    public void ActiveAbsorb()
+    {
+        IsAbsorbing = true;
+        OnActiveAbsorb?.Invoke();
+    }
+
+    public void TryAbsorptFail()
+    {
+        IsAbsorbing = false;
+        OnEndAbsorptState?.Invoke();
     }
     public void EnterRangeMode()
     {
         PlayerInstanteState state = _PlayerMaster._PlayerInstanteState;
+
+        IsAbsorbing = false;
+
+        int value = OnSucceseRange.Invoke();
+
+        state.BulletClear_Melee();
         state.AcquireBullets(state.meleeBullets * state.MeleeToRangeRatio);
-        //
-        _PlayerMaster._PlayerInstanteState.BulletClear_Melee();
 
-        IsAbsorptState = false;
-
-        int value = OnSucceseAbsorptState.Invoke();
-
-        _PlayerMaster._PlayerInstanteState.AcquireBullets(value);
-        Debug.Log($"{value}개 흡수");
-        ObjectPoolManager.Instance.AllDestroyObject(_PlayerMaster._AttackSystem.startAbsorbing.preFab);
-        if (value <= 0)
+        state.AcquireBullets(value);
+        if (value > 0)
         {
-            EndAbsorptState();
-
+            _PlayerMaster._PlayerSkill.Effect2(_AttackSystem.endAbsorbing);
         }
-        else
-        {
-            _PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._AttackSystem.endAbsorbing);
-            EndAbsorptState();
-        }
-
         IsMeleeMode = false;
+        OnModChanged?.Invoke(IsMeleeMode);
+
+        OnEndAbsorptState?.Invoke();
     }
     public void EnterMeleeMode()
     {
-        ObjectPoolManager.Instance.AllDestroyObject(_PlayerMaster._AttackSystem.startAbsorbing.preFab);
-
-        //_PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._AttackSystem.endAbsorbing);
         PlayerInstanteState state = _PlayerMaster._PlayerInstanteState;
 
-        IsAbsorptState = false;
-        if (HasBlueChip5_AutoChange() == true)
-        {
-            int value = OnSucceseAbsorptState.Invoke();
+        IsAbsorbing = false;
 
+        int value = OnSucceseMelee.Invoke();
+
+        if (value > 1)
+        {
+            state.AcquireBullets_Melee(value);
+            IsMeleeMode = true;
+        }
+        else
+        {
             state.AcquireBullets(value);
-            Debug.Log($"{value}개 흡수");
-            if (value <= 0)
-            {
-                //_PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._AttackSystem.endAbsorbing);
-                EndAbsorptState();
-            }
-        }
-        else
-        {
-            int value = OnSucceseAbsorptState_EntryMelee.Invoke();
-
-            if (value > 1)
-            {
-                //_PlayerMaster._PlayerSkill.Effect2(_PlayerMaster._AttackSystem.endAbsorbing);
-                Debug.Log($"{value}개 흡수, 근접 모드 변환");
-                state.AcquireBullets_Melee(value);
-                IsMeleeMode = true;                
-            }
-            else
-            {
-                state.AcquireBullets(value);
-                EndAbsorptState();
-            }
-        }
-    }
-    public void TransformOnly(bool isMelee)
-    {
-        if (isMelee)
-        {
-            foreach (GameObject gloves in Glove)
-            {
-                gloves.SetActive(true);
-            }
-        }
-        else
-        {
-            foreach (GameObject gloves in Glove)
-            {
-                gloves.SetActive(false);
-            }
-        }
-        if (_PlayerMaster.IsMeleeMode == isMelee)
-        {
-            return;
-        }
-        _PlayerMaster.IsMeleeMode = isMelee;
-        _PlayerMaster._PlayerAttack.ChangeAttackStateOnly(isMelee);
-    }
-
-    public void EndAbsorptState()
-    {
-
-        IsAbsorptState = false;
-        if (HasBlueChip5_AutoChange() == false)
-        {
             IsMeleeMode = false;
         }
+        OnModChanged?.Invoke(IsMeleeMode);
+        OnEndAbsorptState?.Invoke();
+    }
+    public void ChangeModOnly(bool isMelee)
+    {
+        PlayerInstanteState state = _PlayerMaster._PlayerInstanteState;
 
-        OnEndAbsorptState.Invoke();
+        IsAbsorbing = false;
+        IsMeleeMode = isMelee;
+        OnModChanged?.Invoke(IsMeleeMode);
+        ResetMod();
     }
 
-    bool HasBlueChip5_AutoChange()
+    public void DoUpdate()
     {
-        return _PlayerMaster.GetBlueChipLevel(EnumTypes.BlueChipID.Hybrid2) > 0;
-    }
-
-    float autoChangeDelayTime = 0;
-    private void Update()
-    {
-        if(HasBlueChip5_AutoChange())
+        if (HasBlueChip5_AutoChange())
         {
             autoChangeDelayTime += Time.deltaTime;
             float autoChangeDelay = JsonDataManager.GetBlueChipData(EnumTypes.BlueChipID.Hybrid2).Level_VelueList[1][0];
 
-            if(autoChangeDelay < autoChangeDelayTime)
+            if (autoChangeDelay < autoChangeDelayTime)
             {
-                Debug.Log("자동 모드 변환");
                 autoChangeDelayTime = 0;
-                IsMeleeMode = !IsMeleeMode;
+                ChangeModOnly(!IsMeleeMode);
             }
         }
+    }
+    public bool HasBlueChip5_AutoChange()
+    {
+        return _PlayerMaster.GetBlueChipLevel(EnumTypes.BlueChipID.Hybrid2) > 0;
+    }
+
+    public void ResetMod()
+    {
+        IsAbsorbing = false;
+        OnResetMod?.Invoke();
     }
 }
 

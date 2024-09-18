@@ -14,7 +14,7 @@ public class PlayerMove : MonoBehaviour
     Vector3 _moveVector3;
     Vector3 _lookTargetPos;
 
-    AttackSystem _attackSystem;
+    PlayerAttackSystem _attackSystem;
 
     Animator _animator;
     PlayerInstanteState _playerInstanteState;
@@ -22,8 +22,8 @@ public class PlayerMove : MonoBehaviour
 
     private void Start()
     {
-        _attackSystem = GetComponent<AttackSystem>();
-        _animator = GetComponent<Animator>();
+        TryGetComponent(out _attackSystem);
+        TryGetComponent(out _animator);
     }
 
     bool _isMoving = true;
@@ -122,7 +122,7 @@ public class PlayerMove : MonoBehaviour
             }
             return;
         }
-        if (_isMoving && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove && _isGrounded)
+        if (_isMoving && !_PlayerMaster.Mod.IsAbsorbing && !_attackSystem.IsAttacking && _isGrounded)
         {
             _moveVector3 = new Vector3(_moveVector3_Origin.x, 0, _moveVector3_Origin.z);
 
@@ -153,13 +153,13 @@ public class PlayerMove : MonoBehaviour
 
     void Rotate_OnFixedUpdate()
     {
-        if (_PlayerMaster.IsMeleeMode && _isDashing && _PlayerMaster.IsAttackState)
+        if (_PlayerMaster.IsMelee && _isDashing && _PlayerMaster.IsAttacking)
         {
             RotateToVelocity();
         }
-        else if (_PlayerMaster.IsAttackState)
+        else if (_PlayerMaster.IsAttacking)
         {
-            if (_attackSystem.CloseAttack.IsCharging)
+            if (_attackSystem.IsCharging)
                 return;
             _lookTargetPos.y = 0f;
 
@@ -169,7 +169,7 @@ public class PlayerMove : MonoBehaviour
         else //if (_isMoving)
         {
             // 캐릭터를 이동 방향으로 회전
-            if (_moveVector3 != Vector3.zero && !_PlayerMaster.IsAbsorptState && !_attackSystem.AttackLockMove)
+            if (_moveVector3 != Vector3.zero && !_PlayerMaster.IsAbsorbing && !_attackSystem.IsAttacking)
             {
                 RotateToVelocity();
             }
@@ -199,14 +199,12 @@ public class PlayerMove : MonoBehaviour
 
     public void Dash()
     {
-        PlayerMaster.Instance.TryAbsorptFail();
+        _PlayerMaster.Mod.TryAbsorptFail();
         if (_PlayerMaster._PlayerInstanteState.TryStaminaConsumption(_PlayerMaster._PlayerInstanteState.DashCost))
         {
             _PlayerMaster._PlayerInstanteState.SetInvincible(_PlayerMaster._PlayerInstanteState.DashTime);
             OnlyDash();
             _PlayerMaster._PlayerInstanteState.SetEvade(_PlayerMaster._PlayerInstanteState.DashTime);// 애니메이터에서 대시 애니메이션에서 탈출시 해제
-            _attackSystem.ReleaseLockMove();
-            _attackSystem.ResetEndAttack();
             _animator.SetTrigger("Dash");
             Debug.Log("Dash");
         }

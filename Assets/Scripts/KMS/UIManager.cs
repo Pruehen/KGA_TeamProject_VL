@@ -49,7 +49,7 @@ public class UIManager : SceneSingleton<UIManager>
     public BossCombatUI BossCombatUi => bossCombatUi;
 
 
-    private void Start()
+    public void Init()
     {
         blueChipUI.SetActive(false);
         Init_PassiveUIList();
@@ -61,8 +61,8 @@ public class UIManager : SceneSingleton<UIManager>
             _PlayerState.StaminaRatioChanged += OnStaminaChanged;
             _PlayerState.BulletChanged += OnBulletChanged;
             _PlayerState.MeleeBulletChanged += OnMeleeBulletChanged;
-            _PlayerState.OnMeleeModeChanged += OnMeleeModeChanged;
             _PlayerState.SkillGaugeRatioChanged += OnSkillRatioChanged;
+            _PlayerMaster.Mod.OnModChanged += OnMeleeModeChanged;
         }
 
         Command_Refresh_View();
@@ -81,8 +81,8 @@ public class UIManager : SceneSingleton<UIManager>
             _PlayerState.HealthRatioChanged -= OnHealthRatioChanged;
             _PlayerState.BulletChanged -= OnBulletChanged;
             _PlayerState.StaminaRatioChanged -= OnStaminaChanged;
-            _PlayerState.MeleeBulletChanged -= OnMeleeBulletChanged;
             _PlayerState.SkillGaugeRatioChanged -= OnSkillRatioChanged;
+            _PlayerMaster.Mod.OnModChanged -= OnMeleeModeChanged;
         }
     }
 

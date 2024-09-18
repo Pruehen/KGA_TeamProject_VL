@@ -10,7 +10,7 @@ public class QuestNoModChange : SO_Quest
         base.Init();
         isModChanged = false;
 
-        PlayerMaster.Instance._PlayerInstanteState.OnMeleeModeChanged += OnModChanged;
+        PlayerMaster.Instance.Mod.OnModChanged += OnModChanged;
 
         UIManager.Instance.DrawQuestStartUi(Name, Discription);
     }
@@ -40,6 +40,6 @@ public class QuestNoModChange : SO_Quest
 
     public override void OnEnd()
     {
-        PlayerMaster.Instance._PlayerInstanteState.OnMeleeModeChanged -= OnModChanged;
+        PlayerMaster.Instance.Mod.OnModChanged -= OnModChanged;
     }
 }

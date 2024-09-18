@@ -1,7 +1,7 @@
 using EnumTypes;
+using System;
 using System.Collections;
 using UnityEngine;
-using static SO_SKillEvent;
 
 
 public class Skill : MonoBehaviour
@@ -644,4 +644,14 @@ public class Skill : MonoBehaviour
         SM.Instance.PlaySound2(SFX, transform.position);
     }
 
+    public void StartSkill()
+    {
+        float skillGauge = _master._PlayerInstanteState.skillGauge;
+        if (skillGauge < 100f)
+        {
+            return;
+        }
+        _animator.SetFloat(_animFloatSkillGauge, skillGauge);
+        _animator.SetTrigger(_animTriggerSkill);
+    }
 }

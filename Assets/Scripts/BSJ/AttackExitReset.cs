@@ -5,7 +5,7 @@ using UnityEngine;
 public class AttackExitReset : StateMachineBehaviour
 {
     int attackHash;
-    PlayerAttack _playerAttack;
+    PlayerAttackSystem _playerAttack;
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {

@@ -15,7 +15,6 @@ public class PlayerInstanteState : MonoBehaviour
     public int bullets { get; private set; }
     public int meleeBullets { get; private set; }
     public float skillGauge { get; private set; }
-    public bool IsAbsorptState { get; set; }
     public float DefaultAttackSpeed { get => attackSpeed; private set => attackSpeed = value; }
     public float AttackSpeed()
     {
@@ -70,16 +69,7 @@ public class PlayerInstanteState : MonoBehaviour
     bool _isMeleeMode;
     public bool IsMeleeMode
     {
-        get { return _isMeleeMode; }
-        set
-        {
-            if (_isMeleeMode != value)
-            {
-                _isMeleeMode = value;
-                OnMeleeModeChanged?.Invoke(_isMeleeMode);
-                OnMeleeModeChange();
-            }
-        }
+        get => _PlayerMaster.PlayerAttack.IsMelee;
     }
 
     public bool IsDead { get => combat.IsDead(); }
@@ -155,7 +145,7 @@ public class PlayerInstanteState : MonoBehaviour
     public float GetSkillPower() { return skillPowerBase * SkillPowerMulti; }
     public float DmgMulti { get; set; } = 1f;
 
-    public float ChargeTime { get => _PlayerMaster.ChargeTime; set => _PlayerMaster.ChargeTime = value; }
+    public float ChargeTime { get; set; } = 1f;
 
     [SerializeField] public float _dashTime = .5f;
     [SerializeField] public float _dashForce = 3f;
@@ -247,9 +237,9 @@ public class PlayerInstanteState : MonoBehaviour
             passive_Defensive4.Active();
         }
     }
-    public void OnMeleeModeChange()
+    public void OnMeleeModeChange(bool isMelee)
     {
-        if (passive_Defensive5 != null && IsMeleeMode == false)
+        if (passive_Defensive5 != null && isMelee == false)
         {
             passive_Defensive5.Active();
         }
@@ -257,11 +247,11 @@ public class PlayerInstanteState : MonoBehaviour
 
     float _holdTime_Passive_Defensive3 = 0;//체력3 패시브에서 사용
 
-    public float GetDmg(PlayerAttackKind type, bool isLastAttack = false)
+    public float GetDmg(PlayerAttackModule attack, bool isLastAttack = false)
     {
-        float baseDmg = GetAttackPower() * GetDamageMultiByAttakcType(type, isLastAttack);// * coefficient;
+        float baseDmg = GetAttackPower() * GetDamageMultiByAttakcType(attack);// * coefficient;
         float dmgGain = DmgMulti;
-        if (type == PlayerAttackKind.MeleeChargedAttack)//차지 공격일 경우
+        if (attack is PlayerMeleeAttack melee && melee.IsCharging)//차지 공격일 경우
         {
             int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Melee1);
             if (level > 0)
@@ -269,9 +259,7 @@ public class PlayerInstanteState : MonoBehaviour
                 baseDmg += ((hp + Shield) * JsonDataManager.GetBlueChipData(BlueChipID.Melee1).Level_VelueList[level][0]) * 0.01f;
             }
         }
-
-        if (type == PlayerAttackKind.MeleeNormalAttack || type == PlayerAttackKind.MeleeDashAttack || type == PlayerAttackKind.MeleeChargedAttack ||
-            type == PlayerAttackKind.RangeDashAttack || type == PlayerAttackKind.RangeNormalAttack)//평타, 대시공격, 차지공격일 경우
+        else//평타, 대시공격, 차지공격일 경우
         {
             if (_PlayerMaster._PlayerBuff.blueChip4_Buff_NextHitAddDmg.TryDequeue(out float addDmgGain))
             {
@@ -284,7 +272,7 @@ public class PlayerInstanteState : MonoBehaviour
         int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Generic2);
         if (blueChip7Level > 0)
         {
-            if (type == PlayerAttackKind.MeleeNormalAttack || type == PlayerAttackKind.MeleeDashAttack || type == PlayerAttackKind.MeleeChargedAttack)//근접 공격일 경우
+            if (attack is PlayerMeleeAttack)//근접 공격일 경우
             {
                 if (meleeBullets > 0)
                 {
@@ -292,7 +280,7 @@ public class PlayerInstanteState : MonoBehaviour
                     dmgGain += addDmg;
                 }
             }
-            else if (type == PlayerAttackKind.RangeDashAttack || type == PlayerAttackKind.RangeNormalAttack)//원거리 공격일 경우
+            else//원거리 공격일 경우
             {
                 if (bullets > 0)
                 {
@@ -310,12 +298,13 @@ public class PlayerInstanteState : MonoBehaviour
         }
         return finalDmg;
     }
-    public Vector3 GetRange(PlayerAttackKind type, int combo)
+    public Vector3 GetRange(PlayerAttackModule attack)
     {
         attackRangeBase = _PlayerMaster.SkillData.MeleedefaultAttackRange;
 
         float rangeGain = 1f;
-        if (type == PlayerAttackKind.MeleeChargedAttack || type == PlayerAttackKind.RangeNormalAttack)//차지 공격일 경우
+
+        if (attack is PlayerMeleeAttack melee && melee.IsCharging)
         {
             attackRangeBase = _PlayerMaster.SkillData.MeleeChargedAttackRange;
             int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Melee1);
@@ -328,8 +317,7 @@ public class PlayerInstanteState : MonoBehaviour
                 rangeGain = 1f;
             }
         }
-        Vector3 baseRange = GetAttackRange();// * coefficient;
-        Debug.Log(baseRange + "베이스데미지");
+        Vector3 baseRange = GetAttackRange();
         return baseRange * rangeGain;
     }
 
@@ -370,7 +358,6 @@ public class PlayerInstanteState : MonoBehaviour
     public Action<int, int> BulletChanged;
     public Action<int, int> MeleeBulletChanged;
     public Action<float> SkillGaugeRatioChanged;
-    public Action<bool> OnMeleeModeChanged;
 
     [SerializeField] public SO_Player _playerStatData;
 
@@ -391,7 +378,7 @@ public class PlayerInstanteState : MonoBehaviour
 
         Passive_Offensive2_Active_OnUpdate();
 
-        if (_PlayerMaster.IsAbsorptState)
+        if (_PlayerMaster.IsAbsorbing)
         {
             TryStaminaConsumption(_absorbingStaminaConsumRate * Time.deltaTime);
         }
@@ -453,6 +440,9 @@ public class PlayerInstanteState : MonoBehaviour
         DashCost = _playerStatData.dashCost;
 
 
+        _PlayerMaster.Mod.OnModChanged += OnMeleeModeChange;
+
+
         InitPassive();
         Restore();
     }
@@ -473,7 +463,7 @@ public class PlayerInstanteState : MonoBehaviour
                 skillGauge = playData.InGame_SkillGauge;
                 bullets = playData.InGame_Bullet;
                 meleeBullets = playData.InGame_MeleeBullet;
-                _PlayerMaster.ModManager.TransformOnly(playData.InGame_IsMelee);
+                _PlayerMaster.Mod.ChangeModOnly(playData.InGame_IsMelee);
             }
         }
         userData.InitPlayData(userData.Gold);
@@ -633,6 +623,11 @@ public class PlayerInstanteState : MonoBehaviour
     //탄환 소모
     public void BulletConsumption()
     {
+        if (_PlayerMaster.GetBlueChipLevel(EnumTypes.BlueChipID.Hybrid2) > 0)
+        {
+            return;
+        }
+
         int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Generic2);
         int cost = (blueChip7Level > 0) ? (int)JsonDataManager.GetBlueChipData(BlueChipID.Generic2).Level_VelueList[blueChip7Level][0] : 1;
 
@@ -656,6 +651,10 @@ public class PlayerInstanteState : MonoBehaviour
     //근접탄 소모
     public void BulletConsumption_Melee()
     {
+        if (_PlayerMaster.GetBlueChipLevel(EnumTypes.BlueChipID.Hybrid2) > 0)
+        {
+            return;
+        }
         int blueChip7Level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Generic2);
         int cost = (blueChip7Level > 0) ? (int)JsonDataManager.GetBlueChipData(BlueChipID.Generic2).Level_VelueList[blueChip7Level][2] : 1;
 
@@ -673,36 +672,66 @@ public class PlayerInstanteState : MonoBehaviour
         UpdateBullet_Melee();
     }
 
-    private float GetSkillGainOnHit(PlayerAttackKind attackKind, bool enhanced = false, bool isLastAttack = false)
+    private float GetSkillGainOnHit(PlayerAttackModule currentAttack)
     {
-        if (attackKind == PlayerAttackKind.MeleeNormalAttack) return _playerStatData.statGaugeGainMelee1;
-        if (attackKind == PlayerAttackKind.MeleeChargedAttack) return _playerStatData.statGaugeGainMelee2;
-        if (attackKind == PlayerAttackKind.MeleeDashAttack) return _playerStatData.statGaugeGainMelee3;
-
-        if (attackKind == PlayerAttackKind.RangeNormalAttack && !isLastAttack) return _playerStatData.statGaugeGainRanged1;
-        else if (attackKind == PlayerAttackKind.RangeNormalAttack && isLastAttack) return _playerStatData.statGaugeGainRanged2;
-        else if (attackKind == PlayerAttackKind.RangeDashAttack) return _playerStatData.statGaugeGainRanged3;
+        if (currentAttack is PlayerRangeAttack range)
+        {
+            if (range.IsDashAttack) return _playerStatData.statGaugeGainRanged3;
+            if (range.IsLastAttack) return _playerStatData.statGaugeGainRanged2;
+            return _playerStatData.statGaugeGainRanged1;
+        }
+        else if (currentAttack is PlayerMeleeAttack melee)
+        {
+            if (melee.IsDashAttack) return _playerStatData.statGaugeGainMelee3;
+            if (melee.IsCharged) return _playerStatData.statGaugeGainMelee2;
+            return _playerStatData.statGaugeGainMelee1;
+        }
         return 0f;
     }
-    private float GetDamageMultiByAttakcType(PlayerAttackKind attackKind, bool isLastAttack = false)
+    private float GetSkillGainOnHit(bool isMelee, bool isCharge, bool isDash, bool isLastAttack)
+    {
+
+        if (!isMelee)
+        {
+            if (isDash) return _playerStatData.statGaugeGainRanged3;
+            if (isLastAttack) return _playerStatData.statGaugeGainRanged2;
+            return _playerStatData.statGaugeGainRanged1;
+        }
+        else if (isMelee)
+        {
+            if (isDash) return _playerStatData.statGaugeGainMelee3;
+            if (isCharge) return _playerStatData.statGaugeGainMelee2;
+            return _playerStatData.statGaugeGainMelee1;
+        }
+        return 0f;
+    }
+    private float GetDamageMultiByAttakcType(PlayerAttackModule attack)
     {
         bool enhanced = bullets > 0;
-        if (enhanced)
+
+        if (attack is PlayerMeleeAttack melee)
         {
-            if (attackKind == PlayerAttackKind.RangeNormalAttack && !isLastAttack) return _playerStatData.atkRanged111;
-            else if (attackKind == PlayerAttackKind.RangeNormalAttack && isLastAttack) return _playerStatData.atkRanged112;
-            else if (attackKind == PlayerAttackKind.RangeDashAttack) return _playerStatData.atkRanged113;
+
+            if (melee.IsDashAttack) return _playerStatData.atkMelee121;
+            if (melee.IsCharging) return _playerStatData.atkMelee101;
+            return _playerStatData.atkMelee111;
         }
-        else
+        if (attack is PlayerRangeAttack range)
         {
-            if (attackKind == PlayerAttackKind.RangeNormalAttack && !isLastAttack) return _playerStatData.atkRanged101;
-            else if (attackKind == PlayerAttackKind.RangeNormalAttack && isLastAttack) return _playerStatData.atkRanged102;
-            else if (attackKind == PlayerAttackKind.RangeDashAttack) return _playerStatData.atkRanged103;
+            if (enhanced)
+            {
+                if (range.IsDashAttack) return _playerStatData.atkRanged113;
+                if (range.IsLastAttack) return _playerStatData.atkRanged112;
+                return _playerStatData.atkRanged111;
+            }
+            else
+            {
+                if (range.IsDashAttack) return _playerStatData.atkRanged103;
+                if (range.IsLastAttack) return _playerStatData.atkRanged102;
+                return _playerStatData.atkRanged101;
+            }
         }
 
-        if (attackKind == PlayerAttackKind.MeleeNormalAttack) return _playerStatData.atkMelee101;
-        if (attackKind == PlayerAttackKind.MeleeChargedAttack) return _playerStatData.atkMelee111;
-        if (attackKind == PlayerAttackKind.MeleeDashAttack) return _playerStatData.atkMelee121;
 
         return 1f;
     }
@@ -719,17 +748,13 @@ public class PlayerInstanteState : MonoBehaviour
         UpdateSkillGauge();
         Debug.Log($"SkillGauge recover {value}");
     }
-    public void SkillGaugeRecovery(PlayerAttackKind attackMod, PlayerAttackKind attackKind, bool isLastAttack)
+    public void SkillGaugeRecovery(PlayerAttackModule attack)
     {
-        if (attackMod == PlayerAttackKind.RangeNormalAttack)
-        {
-            bool hasBullet = bullets > 0;
-            SkillGaugeRecovery(GetSkillGainOnHit(attackKind, hasBullet, isLastAttack));
-        }
-        else
-        {
-            SkillGaugeRecovery(GetSkillGainOnHit(attackKind));
-        }
+        SkillGaugeRecovery(GetSkillGainOnHit(attack));
+    }
+    public void SkillGaugeRecovery(bool isDash, bool isLastAttack)
+    {
+        SkillGaugeRecovery(GetSkillGainOnHit(false, false, isDash, isLastAttack));
     }
 
     public void UseSkillGauge(float value)

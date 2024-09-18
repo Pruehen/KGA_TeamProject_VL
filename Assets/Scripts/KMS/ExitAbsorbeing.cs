@@ -6,10 +6,9 @@ public class ExitAbsorbeing : StateMachineBehaviour
 {
 
 
-    [SerializeField] AttackSystem _playerAttack;
+    [SerializeField] PlayerAttackSystem _playerAttack;
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        _playerAttack.LockMove();
         Debug.Log("Exit");
     }
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

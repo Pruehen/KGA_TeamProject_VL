@@ -6,14 +6,14 @@ public class Projectile : MonoBehaviour
 {
     float _dmg;    
     Rigidbody _Rigidbody;
-    Action<PlayerAttackKind, PlayerAttackKind, int> onHit;
-    PlayerAttackKind _attackMod;
-    PlayerAttackKind _attackKind;
+    Action<bool,bool> onHit;
+    bool _isDashAttack;
+    bool _isLastAttack;
     int _attackCount;
 
     public void Init(float dmg, Vector3 initPos, Vector3 projectionVector,
-        PlayerAttackKind attackMod, PlayerAttackKind attackKind, int attackCount,
-        Action<PlayerAttackKind, PlayerAttackKind,int> onHitCallBack)
+        bool isDashAttack, bool isLastAttack, int attackCount,
+        Action<bool, bool> onHitCallBack)
     {
         _dmg = dmg;
 
@@ -33,8 +33,8 @@ public class Projectile : MonoBehaviour
         Vector3 randomTorque = randomAxis * UnityEngine.Random.Range(0, 10f);
         _Rigidbody.AddTorque(randomTorque);
 
-        _attackMod = attackMod;
-        _attackKind = attackKind;
+        _isDashAttack = isDashAttack;
+        _isLastAttack = isLastAttack;
         _attackCount = attackCount;
 
         onHit = onHitCallBack;
@@ -49,7 +49,7 @@ public class Projectile : MonoBehaviour
         }
         if (collision.rigidbody.TryGetComponent(out ITargetable targetable))
         {
-            onHit?.Invoke(_attackMod,_attackKind,_attackCount);
+            onHit?.Invoke(_isDashAttack,_isLastAttack);
             targetable.Hit(_dmg);
         }
 

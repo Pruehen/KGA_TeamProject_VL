@@ -52,7 +52,12 @@ public class ItemAbsorber : MonoBehaviour
         _collider = GetComponent<CapsuleCollider>();
         SetRadius(0f);
         SetHeight(Height);
-        _PlayerMaster.Register_PlayerModChangeManager(StartAbsorb, AcquireOnlyRevolve, AcquireAll, DropAbsorbingItems);
+
+        _PlayerMaster.Mod.OnActiveAbsorb += StartAbsorb;
+        _PlayerMaster.Mod.OnSucceseRange += AcquireAll;
+        _PlayerMaster.Mod.OnSucceseMelee += AcquireOnlyRevolve;
+        _PlayerMaster.Mod.OnEndAbsorptState += DropAbsorbingItems;
+
         _isInit = true;
     }
     private float absorbTimeStamp = 0f;

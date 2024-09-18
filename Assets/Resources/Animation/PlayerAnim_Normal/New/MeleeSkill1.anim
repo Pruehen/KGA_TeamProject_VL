@@ -69031,13 +69031,6 @@ AnimationClip:
   m_HasMotionFloatCurves: 1
   m_Events:
   - time: 0
-    functionName: LockMove
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0
     functionName: OnUseSkillGauge
     data: 
     objectReferenceParameter: {fileID: 0}
@@ -69057,11 +69050,4 @@ AnimationClip:
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 4
-    messageOptions: 0
-  - time: 1
-    functionName: ReleaseLockMove
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
     messageOptions: 0
