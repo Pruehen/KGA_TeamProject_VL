@@ -68,12 +68,12 @@ public class PlayerModChangeManager
 
     public void StartAbsorbing()
     {
+        IsAbsorbing = true;
         OnEnterAbsorb?.Invoke();
     }
 
     public void ActiveAbsorb()
     {
-        IsAbsorbing = true;
         OnActiveAbsorb?.Invoke();
     }
 

@@ -224,7 +224,7 @@ public class PlayerAttackSystem : MonoBehaviour
             GameObject _DashFire = ObjectPoolManager.Instance.DequeueObject(DashFires);
             DashFire DF = _DashFire.GetComponent<DashFire>();
             //if (CurrentAttackKind == PlayerAttackKind.RangeNormalAttack)
-            if (_currentAttack is PlayerRangeAttack range && range.IsNormalAttack && level_blueChip_Generic1 < 5)
+            if (_currentAttack is PlayerRangeAttack range && level_blueChip_Generic1 < 5)
             {
                 DF.transform.position = transform.position;
                 DF.transform.rotation = transform.rotation;
