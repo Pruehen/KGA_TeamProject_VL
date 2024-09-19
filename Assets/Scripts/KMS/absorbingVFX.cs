@@ -13,12 +13,13 @@ public class absorbingVFX : MonoBehaviour
 
     private void Awake()
     {
-        currntSize = startSize; // currntSize를 startSize로 초기화
-        transform.localScale = Vector3.one * currntSize; // 초기 scale 설정
+      
     }
 
     private void OnEnable()
     {
+        currntSize = startSize; // currntSize를 startSize로 초기화
+        transform.localScale = Vector3.one * currntSize; // 초기 scale 설정
         StartCoroutine(ScaleUp());
     }
 
