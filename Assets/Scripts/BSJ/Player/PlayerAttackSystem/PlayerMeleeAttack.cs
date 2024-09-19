@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerMeleeAttack : PlayerAttackModule
 {
     public PlayerMaster _PlayerMaster;
+
+    PlayerAttackSystem _PlayerAttackSystem;
     InputManager _InputManager;
     Animator _animator;
 
@@ -52,6 +54,8 @@ public class PlayerMeleeAttack : PlayerAttackModule
     {
         transform.TryGetComponent(out _PlayerMaster);
         transform.TryGetComponent(out _animator);
+        transform.TryGetComponent(out _PlayerAttackSystem);
+        _PlayerAttackSystem.PlayerMod.OnModChanged += ResetMelee;
     }
 
 
@@ -78,6 +82,11 @@ public class PlayerMeleeAttack : PlayerAttackModule
         _isChargeVfxOn = false;
         _isCharging = true;
         _isLeftHand = isLeftHand;
+    }
+    private void ResetMelee(bool isMelee)
+    {
+        if (isMelee)
+            ResetAttack();
     }
     public void ChargeEnd()
     {

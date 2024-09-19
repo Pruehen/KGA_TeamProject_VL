@@ -203,9 +203,6 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 1
-    m_ConditionEvent: IsMelee
-    m_EventTreshold: 1
   - m_ConditionMode: 2
     m_ConditionEvent: IsCharged
     m_EventTreshold: 0
@@ -271,9 +268,6 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsMelee
-    m_EventTreshold: 0
-  - m_ConditionMode: 1
     m_ConditionEvent: IsCharged
     m_EventTreshold: 0
   - m_ConditionMode: 2
@@ -333,7 +327,7 @@ AnimatorStateTransition:
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: IsMelee
-    m_EventTreshold: 1
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -1886438218690711584}
   m_Solo: 0
@@ -528,7 +522,7 @@ AnimatorStateTransition:
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: IsMelee
-    m_EventTreshold: 1
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -3072005019357601290}
   m_Solo: 0
@@ -687,9 +681,6 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 1
-    m_ConditionEvent: IsMelee
-    m_EventTreshold: 1
   - m_ConditionMode: 1
     m_ConditionEvent: IsCharged
     m_EventTreshold: 0
@@ -1307,9 +1298,6 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 1
-    m_ConditionEvent: IsMelee
-    m_EventTreshold: 1
   - m_ConditionMode: 2
     m_ConditionEvent: IsCharged
     m_EventTreshold: 0
@@ -2331,7 +2319,7 @@ AnimatorStateTransition:
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: IsMelee
-    m_EventTreshold: 1
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -3072005019357601290}
   m_Solo: 0
@@ -2907,6 +2895,8 @@ AnimatorStateMachine:
   - {fileID: -6755710815924938450}
   - {fileID: -8278142610876065834}
   m_StateMachineTransitions:
+  - first: {fileID: -7656474929277789329}
+    second: []
   - first: {fileID: -3322892290510066300}
     second:
     - {fileID: -721746386139479975}
@@ -2914,8 +2904,6 @@ AnimatorStateMachine:
   - first: {fileID: -5498408451649166101}
     second:
     - {fileID: 2955986183890288476}
-  - first: {fileID: -7656474929277789329}
-    second: []
   - first: {fileID: -7342942975251263468}
     second:
     - {fileID: -5645499326680116813}
@@ -3436,7 +3424,7 @@ AnimatorStateTransition:
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: IsMelee
-    m_EventTreshold: 1
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -1886438218690711584}
   m_Solo: 0
