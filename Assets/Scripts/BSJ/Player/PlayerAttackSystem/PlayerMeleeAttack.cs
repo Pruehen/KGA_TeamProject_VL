@@ -9,7 +9,9 @@ public class PlayerMeleeAttack : PlayerAttackModule
     Animator _animator;
 
     bool _isCharging;
+    bool _isLeftHand;
     bool _isCharged;
+    bool _isChargeVfxOn;
 
     private float _chargeTime = 1.5f;
     private float _currentChargeTime = 0f;
@@ -23,8 +25,19 @@ public class PlayerMeleeAttack : PlayerAttackModule
     {
         if (_isCharging)
         {
+            if (IsCharged)
+            {
+                return;
+            }
             _currentChargeTime += Time.deltaTime;
 
+            //Todo Set Ratio By AttackSpeed if needed
+            if (!_isChargeVfxOn && _currentChargeTime > (0.2f))
+            {
+                _isChargeVfxOn = true;
+                ChargeStartVFX(_isLeftHand);
+                Debug.Log("IsVFXON");
+            }
             if (!_isCharged && _currentChargeTime >= _chargeTime)
             {
                 _isCharged = true;
@@ -45,26 +58,27 @@ public class PlayerMeleeAttack : PlayerAttackModule
     public override void StartAttack()
     {
         _animator.SetTrigger("Attack");
-
         _animator.SetFloat("AttackSpeed", _PlayerMaster._PlayerInstanteState.AttackSpeed());
+        _currentChargeTime = 0f;
     }
     public override void ReleaseAttack()
     {
     }
     public override void ResetAttack()
     {
+        _currentChargeTime = 0f;
         _isCharging = false;
         _isCharged = false;
         _animator.SetBool("IsCharged", false);
-        _currentChargeTime = 0f;
         ChargeEndVFX();
     }
     public void ChargeStart(bool isLeftHand)//애니메이션 이벤트 MeleeAttack
     {
         _currentChargeTime = 0f;
         _isCharged = false;
+        _isChargeVfxOn = false;
         _isCharging = true;
-        ChargeStartVFX(isLeftHand);
+        _isLeftHand = isLeftHand;
     }
     public void ChargeEnd()
     {

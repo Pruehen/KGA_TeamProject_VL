@@ -13,7 +13,7 @@ public class DamageBox : MonoBehaviour
 
     private float _enableTimer = 0f;
 
-    public Action OnHitCallback;
+    public Action<int> OnHitCallback;
     public Vector3 target;
     [SerializeField] PlayerSkill playerSkill;
     [SerializeField] private SO_Skill skillData;
@@ -154,6 +154,7 @@ public class DamageBox : MonoBehaviour
     {
         Collider[] result = Physics.OverlapBox(Center, HalfExtend, transform.rotation, _targetLayer);
         bool onHit = false;
+        int hitCount = 0;
         foreach (Collider hit in result)
         {
             if (hit.attachedRigidbody == null)
@@ -175,10 +176,11 @@ public class DamageBox : MonoBehaviour
             }
             combat.Hit(_damage);
             onHit = true;
+            hitCount++;
         }
         if (onHit)
         {
-            OnHitCallback?.Invoke();
+            OnHitCallback?.Invoke(hitCount);
         }
         Debug.Log("HalfSize: " + HalfExtend);
     }
@@ -207,7 +209,7 @@ public class DamageBox : MonoBehaviour
         enabled = true;
         _enableTimer = 0f;
     }
-    public void EnableDamageBox(float damage, Vector3? range = null, Action onHitCallBack = null, float time = 0f, Vector3? offset = null)
+    public void EnableDamageBox(float damage, Vector3? range = null, Action<int> onHitCallBack = null, float time = 0f, Vector3? offset = null)
     {
         OnHitCallback = onHitCallBack;
         _damage = damage;
@@ -222,7 +224,7 @@ public class DamageBox : MonoBehaviour
         _enableTimer = time;
     }
 
-    public void EnableSkillDamageBox(float damage, Vector3? range = null, Action onHitCallBack = null, float time = 0f, Vector3? offset = null)
+    public void EnableSkillDamageBox(float damage, Vector3? range = null, Action<int> onHitCallBack = null, float time = 0f, Vector3? offset = null)
     {
         OnHitCallback = onHitCallBack;
         _damage = damage;

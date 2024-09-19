@@ -78,6 +78,9 @@ public class PlayerRangeAttack : PlayerAttackModule
 
     public override void StartAttack()
     {
+        int blueChip2Level = _PlayerMaster.GetBlueChipLevel(EnumTypes.BlueChipID.Range1);
+        initialAttackComboIndex = (blueChip2Level > 0) ? (int)JsonDataManager.GetBlueChipData(EnumTypes.BlueChipID.Range1).Level_VelueList[blueChip2Level][0] : 0;
+
         _animator.SetTrigger("Attack");
 
         _animator.SetInteger("AttackComboInitialIndex", initialAttackComboIndex);
@@ -89,6 +92,7 @@ public class PlayerRangeAttack : PlayerAttackModule
 
     public override void ResetAttack()
     {
+        _currentAttackCount = 0;
     }
 
     private void OnRangeHit(bool isDashAttack, bool isLastAttack)

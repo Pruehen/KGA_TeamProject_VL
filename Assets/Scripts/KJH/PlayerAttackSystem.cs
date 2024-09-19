@@ -53,7 +53,6 @@ public class PlayerAttackSystem : MonoBehaviour
         _closeSkill.Init(_animator);
         _PlayerMaster = GetComponent<PlayerMaster>();
 
-        PlayerMod = new PlayerModChangeManager();
         PlayerMod.Init(transform);
 
         PlayerMod.OnModChanged += ChangeAttackState;
@@ -175,10 +174,10 @@ public class PlayerAttackSystem : MonoBehaviour
         _animator.SetBool("IsCharged", false);
     }
 
-    private void OnMeleeHit()
+    private void OnMeleeHit(int hitCount)
     {
         PlayerInstanteState stat = _PlayerMaster._PlayerInstanteState;
-        stat.SkillGaugeRecovery(_currentAttack);
+        stat.SkillGaugeRecovery(_currentAttack, hitCount);
         _PlayerMaster.OnMeleeHit();
     }
 

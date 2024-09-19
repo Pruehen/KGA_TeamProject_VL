@@ -98,6 +98,7 @@ public class PlayerModChangeManager
         {
             _PlayerMaster._PlayerSkill.Effect2(_AttackSystem.endAbsorbing);
         }
+        ActiveGlove(false);
         IsMeleeMode = false;
         OnModChanged?.Invoke(IsMeleeMode);
 
@@ -121,6 +122,7 @@ public class PlayerModChangeManager
             state.AcquireBullets(value);
             IsMeleeMode = false;
         }
+        ActiveGlove(true);
         OnModChanged?.Invoke(IsMeleeMode);
         OnEndAbsorptState?.Invoke();
     }
@@ -130,6 +132,7 @@ public class PlayerModChangeManager
 
         IsAbsorbing = false;
         IsMeleeMode = isMelee;
+        ActiveGlove(isMelee);
         OnModChanged?.Invoke(IsMeleeMode);
         ResetMod();
     }
@@ -157,6 +160,25 @@ public class PlayerModChangeManager
     {
         IsAbsorbing = false;
         OnResetMod?.Invoke();
+    }
+
+
+    public void ActiveGlove(bool condition)
+    {
+        if (condition)
+        {
+            foreach (GameObject gloves in Glove)
+            {
+                gloves.SetActive(true);
+            }
+        }
+        else
+        {
+            foreach (GameObject gloves in Glove)
+            {
+                gloves.SetActive(false);
+            }
+        }
     }
 }
 

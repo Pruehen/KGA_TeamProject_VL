@@ -25,7 +25,6 @@ public class PlayerInstanteState : MonoBehaviour
 
             if (skillGauge >= 400)
             {
-
                 percentageIncrease = JsonDataManager.GetBlueChipData(BlueChipID.Generic3).Level_VelueList[level][3] / 100f;
                 return DefaultAttackSpeed * (1 + percentageIncrease);
             }
@@ -251,7 +250,7 @@ public class PlayerInstanteState : MonoBehaviour
     {
         float baseDmg = GetAttackPower() * GetDamageMultiByAttakcType(attack);// * coefficient;
         float dmgGain = DmgMulti;
-        if (attack is PlayerMeleeAttack melee && melee.IsCharging)//차지 공격일 경우
+        if (attack is PlayerMeleeAttack melee && melee.IsCharged)//차지 공격일 경우
         {
             int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Melee1);
             if (level > 0)
@@ -304,7 +303,7 @@ public class PlayerInstanteState : MonoBehaviour
 
         float rangeGain = 1f;
 
-        if (attack is PlayerMeleeAttack melee && melee.IsCharging)
+        if (attack is PlayerMeleeAttack melee && melee.IsCharged)
         {
             attackRangeBase = _PlayerMaster.SkillData.MeleeChargedAttackRange;
             int level = _PlayerMaster.GetBlueChipLevel(BlueChipID.Melee1);
@@ -713,8 +712,8 @@ public class PlayerInstanteState : MonoBehaviour
         {
 
             if (melee.IsDashAttack) return _playerStatData.atkMelee121;
-            if (melee.IsCharging) return _playerStatData.atkMelee101;
-            return _playerStatData.atkMelee111;
+            if (melee.IsCharged) return _playerStatData.atkMelee111;
+            return _playerStatData.atkMelee101;
         }
         if (attack is PlayerRangeAttack range)
         {
@@ -748,9 +747,9 @@ public class PlayerInstanteState : MonoBehaviour
         UpdateSkillGauge();
         Debug.Log($"SkillGauge recover {value}");
     }
-    public void SkillGaugeRecovery(PlayerAttackModule attack)
+    public void SkillGaugeRecovery(PlayerAttackModule attack, int count = 1)
     {
-        SkillGaugeRecovery(GetSkillGainOnHit(attack));
+        SkillGaugeRecovery(GetSkillGainOnHit(attack) * count);
     }
     public void SkillGaugeRecovery(bool isDash, bool isLastAttack)
     {
