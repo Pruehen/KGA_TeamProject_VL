@@ -90,8 +90,8 @@ public class PlayerModChangeManager
         IsAbsorbing = false;
         int value = OnSucceseRange.Invoke();
 
-        state.BulletClear_Melee();
         state.AcquireBullets(state.meleeBullets * state.MeleeToRangeRatio);
+        state.BulletClear_Melee();
 
         state.AcquireBullets(value);
         if (value > 0)

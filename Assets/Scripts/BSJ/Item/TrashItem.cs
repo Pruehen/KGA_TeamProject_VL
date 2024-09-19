@@ -91,7 +91,6 @@ public class TrashItem : MonoBehaviour
             ObjectPoolManager.Instance.EnqueueObject(gameObject);
         }
         transform.localPosition = Vector3.Lerp(transform.localPosition, targetPos, Time.deltaTime * aquireSpeed);
-        Debug.Log("EndOfAbsolsion");
     }
 
     float _revolveRadius;
