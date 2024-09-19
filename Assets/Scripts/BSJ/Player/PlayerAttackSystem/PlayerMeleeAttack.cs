@@ -17,8 +17,8 @@ public class PlayerMeleeAttack : PlayerAttackModule
     private float _currentChargeTime = 0f;
     public bool IsCharging { get => _isCharging; set => _isCharging = value; }
     public float ChargeTime { get => _chargeTime; set => _chargeTime = value; }
-    public bool IsDashAttack { get; internal set; }
-    public bool IsCharged { get; internal set; }
+    public bool IsDashAttack => AnimatorHelper.IsAnimationPlaying(_animator, 0, "Base Layer.Attack.Dash Melee");
+    public bool IsCharged => _isCharged;
 
     [SerializeField] Skill skill;
     public override void DoUpdate()
@@ -68,7 +68,6 @@ public class PlayerMeleeAttack : PlayerAttackModule
     {
         _currentChargeTime = 0f;
         _isCharging = false;
-        _isCharged = false;
         _animator.SetBool("IsCharged", false);
         ChargeEndVFX();
     }
