@@ -24,6 +24,7 @@ public class Audios : MonoBehaviour
         if (SB != null)
             if (ObjectPoolManager.Instance != null)
             {
+                StopAllCoroutines();
                 ObjectPoolManager.Instance.EnqueueObject(SB);
             }
     }

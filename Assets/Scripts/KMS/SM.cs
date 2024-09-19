@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 public class SM : GlobalSingleton<SM>
 {
@@ -9,6 +10,8 @@ public class SM : GlobalSingleton<SM>
     private Dictionary<string, Clips> audioClipDictionary;
     public AudioSource BGM;
     public int SCType = 999;
+
+    private Coroutine _loopControl;
 
     private void Awake()
     {
@@ -88,11 +91,8 @@ public class SM : GlobalSingleton<SM>
         { "getBullet", sfxData.getBullet }
     };
     }
-
-
     public GameObject PlaySound2(string soundName, Vector3 position)
     {
-
         if (audioClipDictionary.TryGetValue(soundName, out Clips audioClip))
         {
             if (audioClip != null)
@@ -100,19 +100,15 @@ public class SM : GlobalSingleton<SM>
                 GameObject sb = ObjectPoolManager.Instance.DequeueObject(audioClip.clip, position);
                 sb.transform.position = position;
 
-                AudioSource audioSource = sb.GetComponent<AudioSource>();
-                if (audioSource == null)
-                {
-                    audioSource = sb.AddComponent<AudioSource>();
-                    audioSource = sb.GetComponent<AudioSource>();
-                }
+                AudioSystem audioSystem = sb.GetComponent<AudioSystem>();
+                AudioSource audioSource = audioSystem.AudioSource;
                 audioSource.clip = audioClip.clip;
                 audioSource.volume = audioClip.SFXVolum;
                 audioSource.spatialBlend = audioClip.spatialBlend;
                 audioSource.Play();
-                if (!audioSource.loop)//루프가 켜져있지 않을시 Lenth만큼 재생후 풀에반환함
+                if (!audioSource.loop)//루프가 켜져있지 않을시 Length만큼 재생후 풀에반환함
                 {
-                    StartCoroutine(ReturnToPoolAfterPlayback(audioSource));
+                    audioSystem.StartCoroutine(ReturnToPoolAfterPlayback(audioSource));
                 }
                 return sb;
             }
@@ -133,7 +129,6 @@ public class SM : GlobalSingleton<SM>
         yield return new WaitForSeconds(_audioSource.clip.length);
         if (_audioSource != null&& ObjectPoolManager.Instance != null)
         {
-
                 ObjectPoolManager.Instance.EnqueueObject(_audioSource.transform.gameObject);
         }
         

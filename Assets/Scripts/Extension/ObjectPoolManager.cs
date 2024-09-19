@@ -112,6 +112,7 @@ public class ObjectPoolManager : SceneSingleton<ObjectPoolManager>
             GameObject item = new GameObject(itemType);
             item.transform.SetParent(objectPools[itemType].transform);
             AudioSource audioSource = item.AddComponent<AudioSource>();
+            AudioSystem audioSystem = item.AddComponent<AudioSystem>();
             audioSource.clip = audioClip;
             objectPools[itemType].queue.EnqueuePool(item);
             objectPools[itemType].count++;
