@@ -88,10 +88,6 @@ public class PlayerModChangeManager
         PlayerInstanteState state = _PlayerMaster._PlayerInstanteState;
 
         IsAbsorbing = false;
-        if(IsMeleeMode)
-        {
-            _AttackSystem.EnterRangeVFX();
-        }
         int value = OnSucceseRange.Invoke();
 
         state.BulletClear_Melee();

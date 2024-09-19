@@ -57,6 +57,7 @@ public class PlayerAttackSystem : MonoBehaviour
 
         PlayerMod.OnModChanged += ChangeAttackState;
         PlayerMod.OnModChangedVfx += ActiveMeleeTransformEffectAndAnim;
+        PlayerMod.OnModChangedVfx += ActiveRangeVfx;
 
         PlayerMod.OnEnterAbsorb += StartAbsorbingAnimAndVsfx;
         PlayerMod.OnEndAbsorptState += DeactiveAbsortVfxAndAnim;
@@ -65,7 +66,6 @@ public class PlayerAttackSystem : MonoBehaviour
         _currentAttack = _rangeAttack;
 
     }
-
     void OnInputPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)
@@ -85,7 +85,6 @@ public class PlayerAttackSystem : MonoBehaviour
                 break;
         }
     }
-
     public void ChangeAttackState(bool isMelee)
     {
         if (isMelee)
@@ -99,7 +98,6 @@ public class PlayerAttackSystem : MonoBehaviour
         }
         _animator.SetBool("IsMelee", isMelee);
     }
-
     public void ActiveMeleeTransformEffectAndAnim(bool isMelee)
     {
         if (!isMelee)
@@ -107,24 +105,25 @@ public class PlayerAttackSystem : MonoBehaviour
         _animator.SetTrigger("Transform");
         EnterMeleeVFX();
     }
+    public void ActiveRangeVfx(bool isMelee)
+    {
+        if (isMelee)
+            return;
+        EnterRangeVFX();
+    }
     public void ChangeAttackStateOnly(bool isMelee)
     {
         if (isMelee)
         {
             _currentAttack = _meleeAttack;
             EnterMeleeVFX();
-
-            Debug.Log("ismeleemod");
         }
         else
         {
             _currentAttack = _rangeAttack;
             EnterRangeVFX();
-            Debug.Log("EnterRange");
         }
     }
-
-
     public void EnterRangeVFX()
     {
         _PlayerMaster._PlayerSkill.Effect2(EnterRangeL);
@@ -132,11 +131,8 @@ public class PlayerAttackSystem : MonoBehaviour
     }
     public void EnterMeleeVFX()
     {
-        Debug.Log("dd");
         _PlayerMaster._PlayerSkill.Effect2(EnterMelee);
     }
-
-
     private void Update()
     {
         PlayerMod.DoUpdate();
@@ -162,14 +158,12 @@ public class PlayerAttackSystem : MonoBehaviour
         Vector3 range = _PlayerMaster._PlayerInstanteState.GetRange(_currentAttack);
         _damageBox.EnableDamageBox(dmg, range, OnMeleeHit);
     }
-
     public void ResetAttack()
     {
         PlayerMod.ResetMod();
         _rangeAttack.ResetAttack();
         _meleeAttack.ResetAttack();
     }
-
     private void Callback_IsCharged()
     {
         _animator.SetBool("IsCharged", true);
@@ -178,15 +172,12 @@ public class PlayerAttackSystem : MonoBehaviour
     {
         _animator.SetBool("IsCharged", false);
     }
-
     private void OnMeleeHit(int hitCount)
     {
         PlayerInstanteState stat = _PlayerMaster._PlayerInstanteState;
         stat.SkillGaugeRecovery(_currentAttack, hitCount);
         _PlayerMaster.OnMeleeHit();
     }
-
-
     private void SetSuperArmorOnAnim()
     {
         _PlayerMaster._PlayerInstanteState.SetSuperArmor(99999999f);
@@ -252,7 +243,6 @@ public class PlayerAttackSystem : MonoBehaviour
             }
         }
     }
-
     private void StartAbsorbingAnimAndVsfx()
     {
         _animator.SetTrigger("Absorbeing");

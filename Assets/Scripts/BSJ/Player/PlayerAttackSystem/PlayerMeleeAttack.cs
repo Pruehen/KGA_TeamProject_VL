@@ -49,7 +49,6 @@ public class PlayerMeleeAttack : PlayerAttackModule
             }
         }
     }
-
     public void Init(Transform transform)
     {
         transform.TryGetComponent(out _PlayerMaster);
@@ -57,8 +56,6 @@ public class PlayerMeleeAttack : PlayerAttackModule
         transform.TryGetComponent(out _PlayerAttackSystem);
         _PlayerAttackSystem.PlayerMod.OnModChanged += ResetMelee;
     }
-
-
     public override void StartAttack()
     {
         _animator.SetTrigger("Attack");

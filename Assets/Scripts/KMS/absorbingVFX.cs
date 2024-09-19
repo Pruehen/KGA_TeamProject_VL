@@ -11,23 +11,16 @@ public class absorbingVFX : MonoBehaviour
     public float speed = 1.5f; // 변화 속도
     private float currntSize;
 
-    private void Awake()
-    {
-      
-    }
-
     private void OnEnable()
     {
         currntSize = startSize; // currntSize를 startSize로 초기화
         transform.localScale = Vector3.one * currntSize; // 초기 scale 설정
         StartCoroutine(ScaleUp());
     }
-
     private void OnDisable()
     {
         StopCoroutine(ScaleUp());
     }
-
     IEnumerator ScaleUp()
     {
         float elapsedTime = 0f;
