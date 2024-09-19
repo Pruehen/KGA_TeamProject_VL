@@ -21,7 +21,6 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
     [SerializeField] SO_SKillEvent hit;
 
     public PlayerModChangeManager Mod => PlayerAttack.PlayerMod;
-    internal bool isDashing;
 
     public int GetBlueChipLevel(BlueChipID iD)
     {

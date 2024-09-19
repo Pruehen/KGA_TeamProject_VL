@@ -19,7 +19,7 @@ public class PlayerMeleeAttack : PlayerAttackModule
     private float _currentChargeTime = 0f;
     public bool IsCharging { get => _isCharging; set => _isCharging = value; }
     public float ChargeTime { get => _chargeTime; set => _chargeTime = value; }
-    public bool IsDashAttack => AnimatorHelper.IsAnimationPlaying(_animator, 0, "Base Layer.Attack.Dash Melee");
+    public bool IsDashAttack => AnimatorHelper.IsAnimCur(_animator, 0, "Base Layer.Attack.Dash Melee");
     public bool IsCharged => _isCharged;
 
     [SerializeField] Skill skill;

@@ -59,17 +59,17 @@ public class AnimatorHelper : MonoBehaviour
     ////}
 
     //current state next state 는 따로다
-    public static bool IsAnimationPlaying(Animator animator, int layer, string fullPath)
+    public static bool IsAnimCur(Animator animator, int layer, string fullPath)
     {
         return animator.GetCurrentAnimatorStateInfo(layer).fullPathHash == Animator.StringToHash(fullPath);
     }
-    public static bool IsAnimationPlaying_Tag(Animator animator, int layer, string tag)
+    public static bool IsAnimCur_Tag(Animator animator, int layer, string tag)
     {
         return animator.GetCurrentAnimatorStateInfo(layer).tagHash == Animator.StringToHash(tag);
     }
 
     //알고싶은 애니메이션이 현재 트랜지션되어 입장하고있는시점부터 나가기 시작하는시점까지 True
-    public static bool IsOnlyAnimationPlaying(Animator animator, int layer, string fullPath)
+    public static bool IsAnimPureCurOrNext(Animator animator, int layer, string fullPath)
     {
         int target = Animator.StringToHash(fullPath);
         int cur = animator.GetCurrentAnimatorStateInfo(layer).fullPathHash;
@@ -84,7 +84,7 @@ public class AnimatorHelper : MonoBehaviour
         }
         return false;
     }
-    public static bool IsTagedAnimPlaying(Animator animator, int layer, string tag)
+    public static bool IsTagedAnimCurOrNext(Animator animator, int layer, string tag)
     {
         bool iscurr= animator.GetCurrentAnimatorStateInfo(layer).IsTag(tag);
         bool isnext= animator.GetNextAnimatorStateInfo(layer).IsTag(tag);

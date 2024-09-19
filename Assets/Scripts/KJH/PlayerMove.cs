@@ -71,7 +71,7 @@ public class PlayerMove : MonoBehaviour
     {
 
         CheckGounded_OnFixedUpdate();
-        bool isKnockbackstate = AnimatorHelper.IsOnlyAnimationPlaying(_animator, 0, "Base Layer.Hit");
+        bool isKnockbackstate = AnimatorHelper.IsAnimPureCurOrNext(_animator, 0, "Base Layer.Hit");
         if (isKnockbackstate)
         {
             Vector3 vel = _Rigidbody.velocity;
@@ -227,6 +227,6 @@ public class PlayerMove : MonoBehaviour
 
     public bool IsInDashAnimation()
     {
-        return AnimatorHelper.IsOnlyAnimationPlaying(_animator, 0, "Base Layer.Dash");
+        return AnimatorHelper.IsAnimCur(_animator, 0, "Base Layer.Dash");
     }
 }

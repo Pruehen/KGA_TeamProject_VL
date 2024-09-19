@@ -33,7 +33,7 @@ public class PlayerAttackSystem : MonoBehaviour
 
     bool prevAttackPressed = false;
 
-    public bool IsAnimAttack => AnimatorHelper.IsAnimationPlaying_Tag(_animator, 0, "Attack");
+    public bool IsAnimAttack => AnimatorHelper.IsAnimCur_Tag(_animator, 0, "Attack");
     public bool IsCharging => _meleeAttack.IsCharging;
     public bool IsAttacking => IsAnimAttack;
 
@@ -192,13 +192,13 @@ public class PlayerAttackSystem : MonoBehaviour
     }
     private void ResetInvincibleOnAnim()
     {
-        if (_PlayerMaster.isDashing)
+        if (_PlayerMaster.IsDashing)
             return;
         _PlayerMaster._PlayerInstanteState.ResetInvincible();
     }
     private void ResetEvadeOnAnim()
     {
-        if (_PlayerMaster.isDashing)
+        if (_PlayerMaster.IsDashing)
             return;
         _PlayerMaster._PlayerInstanteState.ResetEvade();
     }

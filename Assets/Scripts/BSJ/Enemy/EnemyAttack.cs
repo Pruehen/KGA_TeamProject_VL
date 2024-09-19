@@ -86,7 +86,7 @@ public class EnemyAttack
         {
             _currentAttack.DoCurUpdate(deltaTime);
         }
-        if (AnimatorHelper.IsAnimationPlaying_Tag(_animator, 0, "Attack"))
+        if (AnimatorHelper.IsAnimCur_Tag(_animator, 0, "Attack"))
         {
             _isAttackAnim = true;
         }

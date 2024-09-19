@@ -54,8 +54,8 @@ public class PlayerRangeAttack : PlayerAttackModule
     {
         get
         {
-            bool ran = AnimatorHelper.IsOnlyAnimationPlaying(_animator, 0, "Base Layer.Attack.Dash Melee");
-            bool mel = AnimatorHelper.IsOnlyAnimationPlaying(_animator, 0, "Base Layer.Attack.Dash Range");
+            bool ran = AnimatorHelper.IsAnimPureCurOrNext(_animator, 0, "Base Layer.Attack.Dash Melee");
+            bool mel = AnimatorHelper.IsAnimPureCurOrNext(_animator, 0, "Base Layer.Attack.Dash Range");
             return ran || mel;
         }
     }

@@ -154,7 +154,7 @@ public class EnemyBase : MonoBehaviour, ITargetable
             return;
         }
 
-        if (AnimatorHelper.IsOnlyAnimationPlaying(_animator, 0, "Base Layer.Hit"))
+        if (AnimatorHelper.IsAnimPureCurOrNext(_animator, 0, "Base Layer.Hit"))
         {
             _isKnocked = true;
         }

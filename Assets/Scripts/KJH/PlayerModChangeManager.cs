@@ -47,9 +47,9 @@ public class PlayerModChangeManager
                     EnterRangeMode();
                     break;
                 }
-                if (AnimatorHelper.IsTagedAnimPlaying(_animator, 0, "Absorb"))
+                if (AnimatorHelper.IsTagedAnimCurOrNext(_animator, 0, "Absorb"))
                     break;
-                if (AnimatorHelper.IsTagedAnimPlaying(_animator, 0, "Move") || AnimatorHelper.IsTagedAnimPlaying(_animator, 0, "Idle"))
+                if (AnimatorHelper.IsTagedAnimCurOrNext(_animator, 0, "Move") || AnimatorHelper.IsTagedAnimCurOrNext(_animator, 0, "Idle"))
                 {
                     if (InputManager.Instance.IsLControlBtnClick == true && IsAbsorbing == false && _PlayerMaster.IsDashing == false)
                     {
