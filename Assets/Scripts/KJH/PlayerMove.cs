@@ -113,8 +113,7 @@ public class PlayerMove : MonoBehaviour
             DashMove();
             if (Time.time - _dashTimeStamp >= _PlayerMaster._PlayerInstanteState.DashTime)
             {
-                if (IsInDashAnimation())
-                    _animator.SetTrigger("DashEnd");
+                _animator.SetTrigger("DashEnd");
                 _PlayerMaster._PlayerInstanteState.ResetInvincible();
                 _PlayerMaster._PlayerInstanteState.ResetEvade();// 애니메이터에서 대시 애니메이션에서 탈출시 해제
                 _isMoving = true;
@@ -206,6 +205,8 @@ public class PlayerMove : MonoBehaviour
             OnlyDash();
             _PlayerMaster._PlayerInstanteState.SetEvade(_PlayerMaster._PlayerInstanteState.DashTime);// 애니메이터에서 대시 애니메이션에서 탈출시 해제
             _animator.SetTrigger("Dash");
+            _animator.SetBool("Hit", false);
+            _animator.SetBool("DashEnd", false);
             Debug.Log("Dash");
         }
         else
