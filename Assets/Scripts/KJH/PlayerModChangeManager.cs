@@ -19,6 +19,7 @@ public class PlayerModChangeManager
     public Func<int> OnSucceseMelee;
     public Action OnEndAbsorptState;
     public Action<bool> OnModChanged;
+    public Action<bool> OnModChangedVfx;
     public Action OnResetMod;
 
     float autoChangeDelayTime = 0;
@@ -87,10 +88,7 @@ public class PlayerModChangeManager
         PlayerInstanteState state = _PlayerMaster._PlayerInstanteState;
 
         IsAbsorbing = false;
-        if(IsMeleeMode)
-        {
-            _AttackSystem.EnterRangeVFX();
-        }
+
         int value = OnSucceseRange.Invoke();
 
         state.BulletClear_Melee();
@@ -104,6 +102,7 @@ public class PlayerModChangeManager
         ActiveGlove(false);
         IsMeleeMode = false;
         OnModChanged?.Invoke(IsMeleeMode);
+        OnModChangedVfx?.Invoke(IsMeleeMode);
 
         OnEndAbsorptState?.Invoke();
     }
@@ -119,24 +118,29 @@ public class PlayerModChangeManager
         {
             state.AcquireBullets_Melee(value);
             IsMeleeMode = true;
-            ActiveGlove(true);
         }
         else
         {
             state.AcquireBullets(value);
             IsMeleeMode = false;
         }
+        ActiveGlove(IsMeleeMode);
         OnModChanged?.Invoke(IsMeleeMode);
+        OnModChangedVfx?.Invoke(IsMeleeMode);
         OnEndAbsorptState?.Invoke();
     }
-    public void ChangeModOnly(bool isMelee)
+    public void ChangeModOnly(bool isMelee, bool isInit = false)
     {
         PlayerInstanteState state = _PlayerMaster._PlayerInstanteState;
-        Debug.Log("ModChange");
+
         IsAbsorbing = false;
         IsMeleeMode = isMelee;
-        //ActiveGlove(isMelee);
+        ActiveGlove(isMelee);
         OnModChanged?.Invoke(IsMeleeMode);
+        
+        if(!isInit)
+            OnModChangedVfx?.Invoke(IsMeleeMode);
+        
         ResetMod();
     }
 

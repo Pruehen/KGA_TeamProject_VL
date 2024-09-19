@@ -56,7 +56,7 @@ public class PlayerAttackSystem : MonoBehaviour
         PlayerMod.Init(transform);
 
         PlayerMod.OnModChanged += ChangeAttackState;
-        PlayerMod.OnModChanged += ActiveMeleeTransformEffectAndAnim;
+        PlayerMod.OnModChangedVfx += ActiveMeleeTransformEffectAndAnim;
 
         PlayerMod.OnEnterAbsorb += StartAbsorbingAnimAndVsfx;
         PlayerMod.OnEndAbsorptState += DeactiveAbsortVfxAndAnim;
@@ -86,7 +86,7 @@ public class PlayerAttackSystem : MonoBehaviour
         }
     }
 
-    private void ChangeAttackState(bool isMelee)
+    public void ChangeAttackState(bool isMelee)
     {
         if (isMelee)
         {

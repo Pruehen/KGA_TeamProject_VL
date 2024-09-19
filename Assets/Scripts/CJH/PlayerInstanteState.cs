@@ -236,7 +236,7 @@ public class PlayerInstanteState : MonoBehaviour
             passive_Defensive4.Active();
         }
     }
-    public void OnMeleeModeChange(bool isMelee)
+    public void OnMelee_ActivePassive5(bool isMelee)
     {
         if (passive_Defensive5 != null && isMelee == false)
         {
@@ -439,7 +439,7 @@ public class PlayerInstanteState : MonoBehaviour
         DashCost = _playerStatData.dashCost;
 
 
-        _PlayerMaster.Mod.OnModChanged += OnMeleeModeChange;
+        _PlayerMaster.Mod.OnModChanged += OnMelee_ActivePassive5;
 
 
         InitPassive();
@@ -462,7 +462,7 @@ public class PlayerInstanteState : MonoBehaviour
                 skillGauge = playData.InGame_SkillGauge;
                 bullets = playData.InGame_Bullet;
                 meleeBullets = playData.InGame_MeleeBullet;
-                _PlayerMaster.Mod.ChangeModOnly(playData.InGame_IsMelee);
+                _PlayerMaster.Mod.ChangeModOnly(playData.InGame_IsMelee, true);
             }
         }
         userData.InitPlayData(userData.Gold);
