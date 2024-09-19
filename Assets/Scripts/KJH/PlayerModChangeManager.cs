@@ -124,7 +124,7 @@ public class PlayerModChangeManager
             state.AcquireBullets(value);
             IsMeleeMode = false;
         }
-        ActiveGlove(true);
+        ActiveGlove(IsMeleeMode);
         OnModChanged?.Invoke(IsMeleeMode);
         OnModChangedVfx?.Invoke(IsMeleeMode);
         OnEndAbsorptState?.Invoke();
