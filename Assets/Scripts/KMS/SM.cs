@@ -17,6 +17,7 @@ public class SM : GlobalSingleton<SM>
         {
             BGM = gameObject.AddComponent<AudioSource>();
         }
+        CreatPool();
     }
 
     private void InitializeAudioDictionary() // AWAKE할 때 sfxData로부터 오디오클립을 받아옴
@@ -93,6 +94,7 @@ public class SM : GlobalSingleton<SM>
     public GameObject PlaySound2(string soundName, Vector3 position)
     {
 
+
         if (audioClipDictionary.TryGetValue(soundName, out Clips audioClip))
         {
             if (audioClip != null)
@@ -131,12 +133,12 @@ public class SM : GlobalSingleton<SM>
     private IEnumerator ReturnToPoolAfterPlayback(AudioSource _audioSource)
     {
         yield return new WaitForSeconds(_audioSource.clip.length);
-        if (_audioSource != null&& ObjectPoolManager.Instance != null)
+        if (_audioSource != null && ObjectPoolManager.Instance != null)
         {
 
-                ObjectPoolManager.Instance.EnqueueObject(_audioSource.transform.gameObject);
+            ObjectPoolManager.Instance.EnqueueObject(_audioSource.transform.gameObject);
         }
-        
+
     }
     public void PlaySoundAtPosition(AudioClip clip, Vector3 position)
     {
@@ -195,5 +197,16 @@ public class SM : GlobalSingleton<SM>
                     else
                         return;
             }
+    }
+    public void CreatPool()
+    {
+        foreach (KeyValuePair<string, Clips> entry in audioClipDictionary)
+        {
+            Clips audioClip = entry.Value;
+            if (audioClip != null && audioClip.clip != null)
+            {
+                ObjectPoolManager.Instance.CreatePool(audioClip.clip,5);
+            }
+        }
     }
 }
