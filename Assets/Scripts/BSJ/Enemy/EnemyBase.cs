@@ -143,8 +143,6 @@ public class EnemyBase : MonoBehaviour, ITargetable
         {
             combat.DoUpdate(Time.deltaTime);
         }
-        _enemyAttack.DoUpdate(Time.deltaTime);
-        _enemyMove.DoUpdate(Time.deltaTime);
         if (_aiState == AIState.Dead)
         {
             if (Mathf.Abs(_rigidbody.velocity.y) < .1f)
@@ -153,6 +151,8 @@ public class EnemyBase : MonoBehaviour, ITargetable
             }
             return;
         }
+        _enemyAttack.DoUpdate(Time.deltaTime);
+        _enemyMove.DoUpdate(Time.deltaTime);
 
         if (AnimatorHelper.IsAnimPureCurOrNext(_animator, 0, "Base Layer.Hit"))
         {
@@ -316,6 +316,7 @@ public class EnemyBase : MonoBehaviour, ITargetable
                 _characterEnvCollider.gameObject.layer = LayerMask.NameToLayer("Ragdoll");
             }
 
+            _navMeshAgent.updateRotation = false;
             _rigidbody.freezeRotation = true;
             SetEnableRigidbody(true);
 
