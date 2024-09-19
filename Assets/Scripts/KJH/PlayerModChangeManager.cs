@@ -87,7 +87,10 @@ public class PlayerModChangeManager
         PlayerInstanteState state = _PlayerMaster._PlayerInstanteState;
 
         IsAbsorbing = false;
-
+        if(IsMeleeMode)
+        {
+            _AttackSystem.EnterRangeVFX();
+        }
         int value = OnSucceseRange.Invoke();
 
         state.BulletClear_Melee();
@@ -116,23 +119,23 @@ public class PlayerModChangeManager
         {
             state.AcquireBullets_Melee(value);
             IsMeleeMode = true;
+            ActiveGlove(true);
         }
         else
         {
             state.AcquireBullets(value);
             IsMeleeMode = false;
         }
-        ActiveGlove(true);
         OnModChanged?.Invoke(IsMeleeMode);
         OnEndAbsorptState?.Invoke();
     }
     public void ChangeModOnly(bool isMelee)
     {
         PlayerInstanteState state = _PlayerMaster._PlayerInstanteState;
-
+        Debug.Log("ModChange");
         IsAbsorbing = false;
         IsMeleeMode = isMelee;
-        ActiveGlove(isMelee);
+        //ActiveGlove(isMelee);
         OnModChanged?.Invoke(IsMeleeMode);
         ResetMod();
     }

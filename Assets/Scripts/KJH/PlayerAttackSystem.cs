@@ -95,6 +95,7 @@ public class PlayerAttackSystem : MonoBehaviour
         else
         {
             _currentAttack = _rangeAttack;
+
         }
         _animator.SetBool("IsMelee", isMelee);
     }
@@ -112,11 +113,14 @@ public class PlayerAttackSystem : MonoBehaviour
         {
             _currentAttack = _meleeAttack;
             EnterMeleeVFX();
+
+            Debug.Log("ismeleemod");
         }
         else
         {
             _currentAttack = _rangeAttack;
             EnterRangeVFX();
+            Debug.Log("EnterRange");
         }
     }
 
@@ -128,6 +132,7 @@ public class PlayerAttackSystem : MonoBehaviour
     }
     public void EnterMeleeVFX()
     {
+        Debug.Log("dd");
         _PlayerMaster._PlayerSkill.Effect2(EnterMelee);
     }
 
