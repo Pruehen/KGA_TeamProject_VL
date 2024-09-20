@@ -457,17 +457,21 @@ public class PlayerInstanteState : MonoBehaviour
             }
             else
             {
-                combat.ForceChangeHp(playData.InGame_Hp);
 
                 skillGauge = playData.InGame_SkillGauge;
                 bullets = playData.InGame_Bullet;
                 meleeBullets = playData.InGame_MeleeBullet;
                 _PlayerMaster.Mod.ChangeModOnly(playData.InGame_IsMelee, true);
+
+                combat.ForceChangeHp(playData.InGame_Hp);
+                shield.ForceChangeHp(playData.InGame_Shield);
             }
         }
         userData.InitPlayData(userData.Gold);
         UpdateBullet();
         UpdateBullet_Melee();
+        UpdateHealth();
+        UpdateShild();
     }
 
     //스태미나 소모 
