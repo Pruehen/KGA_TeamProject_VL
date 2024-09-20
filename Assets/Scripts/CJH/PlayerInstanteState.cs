@@ -644,9 +644,9 @@ public class PlayerInstanteState : MonoBehaviour
     {
         meleeBullets += _bullets / MeleeToRangeRatio;
         SM.Instance.PlaySound2("getBullet", transform.position);
-        if (meleeBullets > maxBullets)
+        if (meleeBullets > maxMeleeBullets)
         {
-            meleeBullets = maxBullets;
+            meleeBullets = maxMeleeBullets;
         }
         UpdateBullet_Melee();
     }
