@@ -98,12 +98,15 @@ public class PlayerModChangeManager
         {
             _PlayerMaster._PlayerSkill.Effect2(_AttackSystem.endAbsorbing);
         }
-        IsMeleeMode = false;
-        ActiveGlove(IsMeleeMode);
-        OnModChanged?.Invoke(IsMeleeMode);
-        OnModChangedVfx?.Invoke(IsMeleeMode);
-
+        if (IsMeleeMode)
+        {
+            IsMeleeMode = false;
+            ActiveGlove(IsMeleeMode);
+            OnModChanged?.Invoke(IsMeleeMode);
+            OnModChangedVfx?.Invoke(IsMeleeMode);
+        }
         OnEndAbsorptState?.Invoke();
+            
     }
     public void EnterMeleeMode()
     {
@@ -123,9 +126,12 @@ public class PlayerModChangeManager
             state.AcquireBullets(value);
             IsMeleeMode = false;
         }
-        ActiveGlove(IsMeleeMode);
-        OnModChanged?.Invoke(IsMeleeMode);
-        OnModChangedVfx?.Invoke(IsMeleeMode);
+        if (IsMeleeMode)
+        {
+            ActiveGlove(IsMeleeMode);
+            OnModChanged?.Invoke(IsMeleeMode);
+            OnModChangedVfx?.Invoke(IsMeleeMode);
+        }
         OnEndAbsorptState?.Invoke();
     }
     public void ChangeModOnly(bool isMelee, bool isInit = false)
