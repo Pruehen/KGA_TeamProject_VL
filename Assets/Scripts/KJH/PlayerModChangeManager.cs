@@ -135,8 +135,9 @@ public class PlayerModChangeManager
         IsAbsorbing = false;
         IsMeleeMode = isMelee;
         OnModChanged?.Invoke(IsMeleeMode);
-        
-        if(!isInit)
+        ActiveGlove(IsMeleeMode);
+
+        if (!isInit)
             OnModChangedVfx?.Invoke(IsMeleeMode);
         
         ResetMod();
