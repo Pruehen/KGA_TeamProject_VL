@@ -99,6 +99,8 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
 
         UIManager.Instance.SetPlayerMaster(this);
 
+        ItemAbsorber.Init(_PlayerInstanteState._playerStatData);
+
         PlayerAttack = GetComponent<PlayerAttackSystem>();
         PlayerAttack.Init();
 
@@ -108,8 +110,6 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
         _PlayerInstanteState.Init();
 
         UIManager.Instance.Init();
-
-        ItemAbsorber.Init(_PlayerInstanteState._playerStatData);
 
         Mod.OnModChanged += Execute_BlueChip1_OnModeChange;
         Mod.OnModChanged += Execute_BlueChip4_OnModeChange;

@@ -53,7 +53,6 @@ public class PlayerAttackSystem : MonoBehaviour
         _closeSkill.Init(_animator);
         _PlayerMaster = GetComponent<PlayerMaster>();
 
-        PlayerMod.Init(transform);
 
         PlayerMod.OnModChanged += ChangeAttackState;
         PlayerMod.OnModChangedVfx += ActiveMeleeTransformEffectAndAnim;
@@ -62,6 +61,8 @@ public class PlayerAttackSystem : MonoBehaviour
         PlayerMod.OnEnterAbsorb += StartAbsorbingAnimAndVsfx;
         PlayerMod.OnEndAbsorptState += DeactiveAbsortVfxAndAnim;
         PlayerMod.OnResetMod += ResetMod;
+        
+        PlayerMod.Init(transform);
 
         _currentAttack = _rangeAttack;
 
