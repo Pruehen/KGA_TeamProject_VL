@@ -371,7 +371,7 @@ public class EnemyBase : MonoBehaviour, ITargetable
         {
             return;
         }
-        _detector._detectionRadius = 9999f;
+        _detector.ActiveForceAlarm();
         SharedFloat detectRange = new SharedFloat();
         detectRange.Value = 9999f;
         _behaviorTree.SetVariable("DetectRange", detectRange);

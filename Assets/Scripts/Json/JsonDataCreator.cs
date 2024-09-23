@@ -360,19 +360,21 @@ public class PlayData
     [JsonProperty] public StageData InGame_Stage { get; private set; }
     [JsonProperty] public SO_Quest[] InGame_Quest { get; private set; }
     [JsonProperty] public float InGame_Hp { get; private set; }
+    [JsonProperty] public float InGame_Shield { get; private set; }
     [JsonProperty] public float InGame_SkillGauge { get; private set; }
     [JsonProperty] public int InGame_Bullet { get; private set; }
     [JsonProperty] public int InGame_MeleeBullet { get; private set; }
     [JsonProperty] public bool InGame_IsMelee { get; private set; }
     [JsonProperty] public bool InGame_StageStarted { get; private set; }
 
-[JsonConstructor]
-    public PlayData(int InGame_Gold, Dictionary<BlueChipID, int> InGame_BlueChip_Level, StageData InGame_Stage, float inGame_Hp, float inGame_SkillGauge, int inGame_Bullet, int inGame_MeleeBullet, bool inGame_IsMelee)
+    [JsonConstructor]
+    public PlayData(int InGame_Gold, Dictionary<BlueChipID, int> InGame_BlueChip_Level, StageData InGame_Stage, float inGame_Hp, float inGame_Shield, float inGame_SkillGauge, int inGame_Bullet, int inGame_MeleeBullet, bool inGame_IsMelee)
     {
         this.InGame_Gold = InGame_Gold;
         this.InGame_BlueChip_Level = InGame_BlueChip_Level;
         this.InGame_Stage = InGame_Stage;
         InGame_Hp = inGame_Hp;
+        InGame_Shield = inGame_Shield;
         InGame_SkillGauge = inGame_SkillGauge;
         InGame_Bullet = inGame_Bullet;
         InGame_MeleeBullet = inGame_MeleeBullet;
@@ -393,6 +395,7 @@ public class PlayData
             InGame_BlueChip_Level.Add(item.Key, item.Value.Level);
         }
         InGame_Hp = state.hp;
+        InGame_Shield = state.Shield;
         InGame_SkillGauge = state.skillGauge;
         InGame_Bullet = state.bullets;
         InGame_MeleeBullet = state.meleeBullets;
@@ -422,6 +425,7 @@ public class PlayData
         PlayerInstanteState state = PlayerMaster.Instance._PlayerInstanteState;
         state.Restore();
         InGame_Hp = state.GetMaxHp();
+        InGame_Hp = state.GetMaxShield();
         InGame_SkillGauge = 0f;
         InGame_MeleeBullet = state.meleeBullets;
         InGame_Bullet = state.bullets;

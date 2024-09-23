@@ -6,7 +6,8 @@ public class Detector : MonoBehaviour
 {
     [SerializeField] private EnemyBase _owner;
     private string _targetTag;
-    public float _detectionRadius;
+    private float _detectionRadius;
+    public bool IsForceAlramed { get; private set; }
 
     private Vector3 _lastValidPostion;
 
@@ -14,16 +15,17 @@ public class Detector : MonoBehaviour
 
     public Action<Detector> OnDetect;
 
-    [SerializeField] private Collider Target
-    {         
+    [SerializeField]
+    private Collider Target
+    {
         get => _target;
         set
         {
-            if(value != null)
+            if (value != null)
             {
                 _lastTarget = _target;
 
-                if(_latestTarget == null)
+                if (_latestTarget == null)
                 {
                     _latestTarget = value.transform;
                     OnDetect?.Invoke(this);
@@ -42,7 +44,7 @@ public class Detector : MonoBehaviour
 
     [SerializeField] private LayerMask _targetLayer;
     [SerializeField] private LayerMask _groundLayer;
-    public void Init(EnemyBase owner ,string targetTag, float detectionRadius)
+    public void Init(EnemyBase owner, string targetTag, float detectionRadius)
     {
         _owner = owner;
         _targetTag = targetTag;
@@ -59,7 +61,7 @@ public class Detector : MonoBehaviour
 
     public Transform GetTarget()
     {
-        if(Target == null)
+        if (Target == null)
         {
             return null;
         }
@@ -70,7 +72,7 @@ public class Detector : MonoBehaviour
     {
         Collider[] overlap = Physics.OverlapSphere(transform.position, _detectionRadius, _targetLayer);
 
-        if(overlap.Length == 0)
+        if (overlap.Length == 0)
         {
             return;
         }
@@ -92,7 +94,7 @@ public class Detector : MonoBehaviour
     }
     public bool IsTargetVisible()
     {
-        if(Target == null)
+        if (Target == null)
         {
             return false;
         }
@@ -104,7 +106,7 @@ public class Detector : MonoBehaviour
     {
         Vector3 center = transform.position;
         Vector3 targetCenter = target.bounds.center;
-        if (Physics.Raycast(center, 
+        if (Physics.Raycast(center,
             targetCenter - (center),
             out RaycastHit hit, _detectionRadius, _groundLayer | _targetLayer))
         {
@@ -127,7 +129,7 @@ public class Detector : MonoBehaviour
 
     public Transform GetLastTarget()
     {
-        if(_lastTarget == null)
+        if (_lastTarget == null)
         {
             return null;
         }
@@ -163,5 +165,11 @@ public class Detector : MonoBehaviour
     public bool IsTargetNear(float range)
     {
         return !IsTargetFar(range);
+    }
+
+    public void ActiveForceAlarm()
+    {
+        _detectionRadius = 9999f;
+        IsForceAlramed = true;
     }
 }
