@@ -81,6 +81,8 @@ public class VFXManager : GlobalSingleton<VFXManager>
             }
         }
     }
+
+
     public SO_SKillEvent.PlayerPos SetPos(string VFXName)
     {
         if(VFXDictionary.TryGetValue(VFXName,out SO_SKillEvent VFX))
@@ -91,6 +93,17 @@ public class VFXManager : GlobalSingleton<VFXManager>
             }
         }
         return SO_SKillEvent.PlayerPos.Foot;
+    }
+    public void CreatPool()
+    {
+        foreach (KeyValuePair<string, SO_SKillEvent> VFX in VFXDictionary)
+        {
+            SO_SKillEvent VFXS = VFX.Value;
+            if (VFXS != null && VFXS.preFab != null)
+            {
+                ObjectPoolManager.Instance.CreatePool(VFXS.preFab, 5);
+            }
+        }
     }
 
 }

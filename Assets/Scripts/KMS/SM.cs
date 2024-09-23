@@ -20,9 +20,10 @@ public class SM : GlobalSingleton<SM>
         {
             BGM = gameObject.AddComponent<AudioSource>();
         }
+        CreatPool();
     }
 
-    private void InitializeAudioDictionary() // AWAKEÇÒ ¶§ sfxData·ÎºÎÅÍ ¿Àµð¿ÀÅ¬¸³À» ¹Þ¾Æ¿È
+    private void InitializeAudioDictionary() // AWAKEï¿½ï¿½ ï¿½ï¿½ sfxDataï¿½Îºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¿ï¿½
     {
         audioClipDictionary = new Dictionary<string, Clips>
     {
@@ -93,6 +94,8 @@ public class SM : GlobalSingleton<SM>
     }
     public GameObject PlaySound2(string soundName, Vector3 position)
     {
+
+
         if (audioClipDictionary.TryGetValue(soundName, out Clips audioClip))
         {
             if (audioClip != null)
@@ -106,7 +109,7 @@ public class SM : GlobalSingleton<SM>
                 audioSource.volume = audioClip.SFXVolum;
                 audioSource.spatialBlend = audioClip.spatialBlend;
                 audioSource.Play();
-                if (!audioSource.loop)//·çÇÁ°¡ ÄÑÁ®ÀÖÁö ¾ÊÀ»½Ã Length¸¸Å­ Àç»ýÈÄ Ç®¿¡¹ÝÈ¯ÇÔ
+                if (!audioSource.loop)//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Lengthï¿½ï¿½Å­ ï¿½ï¿½ï¿½ï¿½ï¿½ Ç®ï¿½ï¿½ï¿½ï¿½È¯ï¿½ï¿½
                 {
                     audioSystem.StartCoroutine(ReturnToPoolAfterPlayback(audioSource));
                 }
@@ -127,11 +130,11 @@ public class SM : GlobalSingleton<SM>
     private IEnumerator ReturnToPoolAfterPlayback(AudioSource _audioSource)
     {
         yield return new WaitForSeconds(_audioSource.clip.length);
-        if (_audioSource != null&& ObjectPoolManager.Instance != null)
+        if (_audioSource != null && ObjectPoolManager.Instance != null)
         {
                 ObjectPoolManager.Instance.EnqueueObject(_audioSource.transform.gameObject);
         }
-        
+
     }
     public void PlaySoundAtPosition(AudioClip clip, Vector3 position)
     {
@@ -140,7 +143,7 @@ public class SM : GlobalSingleton<SM>
 
     public void PlaySoundAttachedToObject(AudioClip clip, GameObject target)
     {
-        // target¿¡ AudioSource°¡ ¾ø´Ù¸é Ãß°¡ÇÏ°í, ÇØ´ç AudioSource·Î Àç»ý.
+        // targetï¿½ï¿½ AudioSourceï¿½ï¿½ ï¿½ï¿½ï¿½Ù¸ï¿½ ï¿½ß°ï¿½ï¿½Ï°ï¿½, ï¿½Ø´ï¿½ AudioSourceï¿½ï¿½ ï¿½ï¿½ï¿½.
         AudioSource source = target.GetComponent<AudioSource>();
         if (source == null)
         {
@@ -190,5 +193,16 @@ public class SM : GlobalSingleton<SM>
                     else
                         return;
             }
+    }
+    public void CreatPool()
+    {
+        foreach (KeyValuePair<string, Clips> entry in audioClipDictionary)
+        {
+            Clips audioClip = entry.Value;
+            if (audioClip != null && audioClip.clip != null)
+            {
+                ObjectPoolManager.Instance.CreatePool(audioClip.clip,5);
+            }
+        }
     }
 }
