@@ -486,6 +486,7 @@ public class UserDataList
             Debug.Log("技捞宏颇老 积己");
             UseIndex = index;
             dic.Add(index, new UserData(index));
+            UserData.Save();
         }
     }
     public static string FilePath()
