@@ -47,6 +47,10 @@ public class PlayerModChangeManager
                     EnterRangeMode();
                     break;
                 }
+                else if (InputManager.Instance.IsLControlBtnClick == false)
+                {
+                    TryAbsorptFail();
+                }
                 if (AnimatorHelper.IsTagedAnimCurOrNext(_animator, 0, "Absorb"))
                     break;
                 if (AnimatorHelper.IsTagedAnimCurOrNext(_animator, 0, "Move") || AnimatorHelper.IsTagedAnimCurOrNext(_animator, 0, "Idle"))
@@ -75,7 +79,10 @@ public class PlayerModChangeManager
 
     public void ActiveAbsorb()
     {
-        OnActiveAbsorb?.Invoke();
+        if(IsAbsorbing)
+        {
+            OnActiveAbsorb?.Invoke();
+        }
     }
 
     public void TryAbsorptFail()

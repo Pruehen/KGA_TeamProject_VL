@@ -209,8 +209,8 @@ public class PlayerAttackSystem : MonoBehaviour
     public void BlueChipFire()
     {
         int level_blueChip_Generic1 = _PlayerMaster.GetBlueChipLevel(BlueChipID.Generic1);
-        if (level_blueChip_Generic1 > 0)//ºí·çÄ¨ÀÌ 1·¹º§ ÀÌ»óÀÏ°æ¿ì
-                                        //0 °£°Ý,1µ¥¹ÌÁö,2Áö¼Ó½Ã°£,3Æø¹ßÇÇÇØ,4¹üÀ§
+        if (level_blueChip_Generic1 > 0)//ï¿½ï¿½ï¿½ï¿½Ä¨ï¿½ï¿½ 1ï¿½ï¿½ï¿½ï¿½ ï¿½Ì»ï¿½ï¿½Ï°ï¿½ï¿½
+                                        //0 ï¿½ï¿½ï¿½ï¿½,1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,2ï¿½ï¿½ï¿½Ó½Ã°ï¿½,3ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,4ï¿½ï¿½ï¿½ï¿½
         {
             BlueChip chip_Generic1 = JsonDataManager.GetBlueChipData(BlueChipID.Generic1);
             float interval = chip_Generic1.Level_VelueList[level_blueChip_Generic1][0];
@@ -247,6 +247,7 @@ public class PlayerAttackSystem : MonoBehaviour
     private void StartAbsorbingAnimAndVsfx()
     {
         _animator.SetTrigger("Absorbeing");
+        _animator.SetBool("AbsorbeingEnd", false);
         _closeSkill.Effect2(startAbsorbing);
         SM.Instance.PlaySound2("Absorbeing", transform.position);
     }
