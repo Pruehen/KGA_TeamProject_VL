@@ -1,3 +1,4 @@
+using System.Collections;
 using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -14,7 +15,7 @@ public class MainSceneUIManager : SceneSingleton<MainSceneUIManager>
     Text[] slotText;
 
     SaveFillSlot _selectSlotTemp;
-
+    
     private void Awake()
     {
 
@@ -29,11 +30,8 @@ public class MainSceneUIManager : SceneSingleton<MainSceneUIManager>
         }
 
         InputManager.Instance.IsInteractiveBtnClick = false;
-        EventSystem.current.SetSelectedGameObject(startButton.gameObject);
         InputManager.Instance.PropertyChanged += OnInputPropertyChanged;
-
     }
-
     private void Update()
     {
         for (int i = 0; i < selectSlot.Length; i++)
@@ -109,7 +107,8 @@ public class MainSceneUIManager : SceneSingleton<MainSceneUIManager>
         switch (e.PropertyName)
         {
             case nameof(InputManager.Instance.IsInteractiveBtnClick):
-
+                if(InputManager.Instance.IsInteractiveBtnClick)
+                    break;
                 Button selectedButton = EventSystem.current.currentSelectedGameObject?.GetComponent<Button>();
                 if (selectedButton != null && selectedButton.interactable)
                 {
