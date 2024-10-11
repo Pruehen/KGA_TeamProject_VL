@@ -45,8 +45,12 @@ public class SO_AttackModule : ScriptableObject
     {
         if (Time.time >= owner.Attack.CurrentAttack.PrevAttackTime + AttackTime)
         {
-            owner.Attack.CurrentAttack.EndAttack();
+            EndAttack(owner);
         }
+    }
+    public virtual void EndAttack(EnemyBase owner)
+    {
+        owner.Attack.CurrentAttack.EndAttack();
     }
     public virtual void StartAttackMove(EnemyBase owner, int type)
     {

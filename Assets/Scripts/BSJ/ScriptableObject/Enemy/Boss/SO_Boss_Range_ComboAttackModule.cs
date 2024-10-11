@@ -16,7 +16,6 @@ public class SO_Boss_Range_ComboAttackModule : SO_RangeModule
     }
     public override void UpdateAttack(EnemyBase owner, int type, float deltaTime)
     {
-        base.UpdateAttack(owner, type, deltaTime);
         if (Time.time > owner.Attack.CurrentAttack.PrevFireTime + Interval)
         {
             Transform targetTrf = owner.Detector.GetLatestTarget();
@@ -27,10 +26,7 @@ public class SO_Boss_Range_ComboAttackModule : SO_RangeModule
         }
         if (Time.time > owner.Attack.CurrentAttack.PrevAttackTime + TotalTime)
         {
-            owner.Animator.SetTrigger("EndAttackMove");
-            owner.Move.AttackRotate = false;
-            owner.Move.AttackRotateSpeed = RotateSpeed;
-            owner.Attack.CurrentAttack.EndAttack();
+            EndAttack(owner);
         }
     }
     protected void ComboShootProjectile(Transform firePos)
@@ -45,5 +41,11 @@ public class SO_Boss_Range_ComboAttackModule : SO_RangeModule
 
         projectile.Fire(vel, ProjectileDamage);
     }
-
+    public override void EndAttack(EnemyBase owner)
+    {
+        base.EndAttack(owner);
+        owner.Animator.SetTrigger("EndAttackMove");
+        owner.Move.AttackRotate = false;
+        owner.Move.AttackRotateSpeed = RotateSpeed;
+    }
 }
