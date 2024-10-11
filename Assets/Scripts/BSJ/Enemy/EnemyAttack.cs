@@ -128,15 +128,10 @@ public class EnemyAttack
         _phase = phase;
     }
     private float AttackSelecteTimeStamp = -1f;
-    public AttackModule GetRandomAvailableAttack(float dist)
+    public AttackModule GetAvailableAttack(float dist)
     {
-        //ToDo 이거 왜 가끔 공격 이후 무빙 속도가 빠른채로 유지돼는지 생각해보기
-        _owner.Move.IsForceMove = false;
-        if (Time.time - AttackSelecteTimeStamp <= .1f)
-        {
-            return CurrentAttack;
-        }
         AttackSelecteTimeStamp = Time.time;
+
         AttackModule am = null;
         if (_isPriorityAttack)
         {
@@ -146,10 +141,11 @@ public class EnemyAttack
         {
             am = TryGetRandomAvailableAttack(dist);
         }
+
         if (am == null)
         {
             am = _defaultAttack;
-            _defaultAttack.Range = _attackRangeType; // temp logic default attack doen not check IsAttackable() so range is not setted
+            _defaultAttack.RangeType = _attackRangeType; // temp logic default attack do not check IsAttackable() so range is not setted
         }
         _currentAttack = am;
 
@@ -158,25 +154,29 @@ public class EnemyAttack
         return am;
     }
 
+
     private AttackModule TryGetPriorityAttack()
     {
-        List<AttackModule> availableAttacks = new List<AttackModule>();
+        List<AttackModule> availableAttacks = new List<AttackModule>(); //가능한 공격을 담는 리스트
 
-        foreach (AttackModule attack in _modules)
+        foreach (AttackModule attack in _modules) // 쿨타임이 아닌 공격 가능한 공격들을 리스트에 추가
         {
             if (attack.IsAttackable(_attackRangeType, _phase))
             {
                 availableAttacks.Add(attack);
             }
         }
-        if (availableAttacks.Count == 0)
+        if (availableAttacks.Count == 0) // 가능한 공격이 없으면 null 반환
         {
             return null;
         }
 
-        availableAttacks.Sort((l, r) => { return l.AttackModuleData.Priority.CompareTo(r.AttackModuleData.Priority); });
+        availableAttacks.Sort((l, r) => // 우선순위에 따라 정렬
+        {
+            return l.AttackModuleData.Priority.CompareTo(r.AttackModuleData.Priority);
+        });
 
-        List<AttackModule> samePriority = new List<AttackModule>();
+        List<AttackModule> samePriority = new List<AttackModule>(); // 우선순위가 같은 공격들을 담는 리스트
         int p = availableAttacks[0].AttackModuleData.Priority;
         foreach (AttackModule attack in availableAttacks)
         {
@@ -186,7 +186,8 @@ public class EnemyAttack
             }
         }
 
-        _currentAttack = samePriority[UnityEngine.Random.Range(0, samePriority.Count)];
+        _currentAttack = samePriority[UnityEngine.Random.Range(0, samePriority.Count)]; 
+        // 우선순위가 같은 공격들 중 랜덤으로 하나 선택
         return _currentAttack;
     }
     private AttackModule TryGetRandomAvailableAttack(float dist)

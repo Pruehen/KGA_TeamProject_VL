@@ -11,7 +11,7 @@ public class AttackModule
     public bool Available { get { return _available; } private set { _available = value; } }
 
     public bool Inited { get; internal set; }
-    public AttackRangeType Range { get; internal set; }
+    public AttackRangeType RangeType { get; internal set; }
     public float PrevAttackTime { get; internal set; }
     public bool IsAttacking { get; private set; }
     public float PrevFireTime { get; internal set; } = 0f;
@@ -65,7 +65,7 @@ public class AttackModule
         }
         if ((attackRangeType & AttackModuleData.AttackRangeType) != 0 && Available && ((AttackModuleData.Phase & phase) != 0))
         {
-            Range = attackRangeType;
+            RangeType = attackRangeType;
             return true;
         }
         return false;
