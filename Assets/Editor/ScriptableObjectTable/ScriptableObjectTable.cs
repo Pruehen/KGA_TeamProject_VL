@@ -29,6 +29,10 @@ public class ScriptableObjectTable : EditorWindow
 
     private Dictionary<Type, bool> typeCache = new Dictionary<Type, bool>();
     private HashSet<Type> processedTypes = new HashSet<Type>();
+    private ScriptableObject selectedObject;
+    private int hoverColumnIndex = -1;
+
+    private const float RESIZE_HANDLE_WIDTH = 10f; // Increased from 5f to 10f
 
     [MenuItem("Tools/Scriptable Object Table")]
     public static void ShowWindow()
@@ -111,6 +115,7 @@ public class ScriptableObjectTable : EditorWindow
         for (int i = 0; i < propertyPaths.Count + 1; i++)
         {
             Rect cellRect = EditorGUILayout.GetControlRect(GUILayout.Width(columnWidths[i]));
+            Rect resizeHandleRect = new Rect(cellRect.xMax - (RESIZE_HANDLE_WIDTH * .5f), cellRect.y, RESIZE_HANDLE_WIDTH, cellRect.height);
             
             if (DrawSortableHeader(cellRect, i == 0 ? "Name" : propertyPaths[i - 1], i))
             {
@@ -119,16 +124,37 @@ public class ScriptableObjectTable : EditorWindow
 
             if (i < propertyPaths.Count)
             {
-                DrawResizeHandle(cellRect, i);
+                DrawResizeHandle(resizeHandleRect, i);
             }
         }
 
         EditorGUILayout.EndHorizontal();
+
+        // Handle resize events
+        HandleColumnResize();
     }
 
     private void DrawInstanceRow(ScriptableObject instance)
     {
-        EditorGUILayout.BeginHorizontal();
+        Rect rowRect = EditorGUILayout.BeginHorizontal(GUILayout.Height(EditorGUIUtility.singleLineHeight));
+        
+          // Check if this row is clicked
+        if (Event.current.type == EventType.MouseDown && rowRect.Contains(Event.current.mousePosition))
+        {
+            selectedObject = instance;
+            Repaint();
+        }
+
+        // Draw background for selected object
+        if (instance == selectedObject)
+        {
+            EditorGUI.DrawRect(rowRect, new Color(0.3f, 0.5f, 0.7f, 0.3f));
+        }
+        // Draw alternating row colors
+        else
+        {
+            EditorGUI.DrawRect(rowRect, new Color(0.5f, 0.5f, 0.5f, 0.1f));
+        }
 
         // Instance name
         EditorGUILayout.ObjectField(instance, selectedType, false, GUILayout.Width(columnWidths[0]));
@@ -282,13 +308,26 @@ public class ScriptableObjectTable : EditorWindow
 
     private void DrawResizeHandle(Rect cellRect, int columnIndex)
     {
-        Rect resizeHandleRect = new Rect(cellRect.xMax - 5f, cellRect.y, 10f, cellRect.height);
-        EditorGUIUtility.AddCursorRect(resizeHandleRect, MouseCursor.ResizeHorizontal);
-
-        if (Event.current.type == EventType.MouseDown && resizeHandleRect.Contains(Event.current.mousePosition))
+        Rect resizeHandleRect = new Rect(cellRect.xMax - (RESIZE_HANDLE_WIDTH * .5f), cellRect.y, RESIZE_HANDLE_WIDTH, cellRect.height);
+        
+        // Check if mouse is over the resize handle
+        if (resizeHandleRect.Contains(Event.current.mousePosition))
         {
-            isResizing = true;
-            resizingColumnIndex = columnIndex;
+            hoverColumnIndex = columnIndex;
+            EditorGUIUtility.AddCursorRect(resizeHandleRect, MouseCursor.ResizeHorizontal);
+            
+            if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
+            {
+                isResizing = true;
+                resizingColumnIndex = columnIndex;
+                Event.current.Use();
+            }
+        }
+        
+        // Draw a visible handle when hovered
+        if (hoverColumnIndex == columnIndex)
+        {
+            EditorGUI.DrawRect(new Rect(cellRect.xMax - 1f, cellRect.y, 2f, cellRect.height), Color.gray);
         }
     }
 
@@ -300,14 +339,21 @@ public class ScriptableObjectTable : EditorWindow
             {
                 isResizing = false;
                 resizingColumnIndex = -1;
+                Event.current.Use();
             }
             else if (Event.current.type == EventType.MouseDrag)
             {
                 float mouseDelta = Event.current.delta.x;
                 columnWidths[resizingColumnIndex] = Mathf.Max(columnWidths[resizingColumnIndex] + mouseDelta, minColumnWidth);
                 columnWidths[resizingColumnIndex + 1] = Mathf.Max(columnWidths[resizingColumnIndex + 1] - mouseDelta, minColumnWidth);
-                Repaint();
+                Event.current.Use();
             }
+            Repaint();
+        }
+        else if (Event.current.type == EventType.MouseMove)
+        {
+            hoverColumnIndex = -1;
+            Repaint();
         }
     }
 
