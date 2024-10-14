@@ -26,16 +26,11 @@ public class AttackModule
     private int _moveType;
     private int _attackType;
 
-    public AttackModule(EnemyBase enemyBase, SO_AttackModule attackModuleData)
-    {
-        owner = enemyBase;
-        AttackModuleData = attackModuleData;
-        Inited = true;
-    }
-
-    public virtual void Init(EnemyBase owner)
+    public virtual void Init(EnemyBase owner, SO_AttackModule attackModuleData)
     {
         this.owner = owner;
+        AttackModuleData = attackModuleData;
+        Inited = true;
         _timer = new Timer();
         _timer.Init(AttackModuleData.CoolDown, OnCoolEnd);
     }

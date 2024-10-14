@@ -34,10 +34,8 @@ public class SO_AttackModule : ScriptableObject
     {
         owner.Animator.SetBool("EndAttackMove", false);
     }
-
     public virtual void UpdateAction(EnemyBase owner, float time)
     { }
-
     public virtual void StartAttack(EnemyBase owner, int type)
     {
     }
@@ -63,7 +61,6 @@ public class SO_AttackModule : ScriptableObject
     public virtual void UpdateAttackMove(EnemyBase owner, int type, float time)
     {
     }
-
     public virtual void StartAnim(EnemyBase owner)
     {
     }

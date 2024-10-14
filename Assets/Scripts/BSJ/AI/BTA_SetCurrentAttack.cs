@@ -22,7 +22,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         public override TaskStatus OnUpdate()
         {
             _attack.SetAttackRangeType(_detector.TargetDistance);
-            AttackModule curAttack = _attack.GetAvailableAttack(_detector.TargetDistance);
+            AttackModule curAttack = _attack.SetCurrentAttack(_detector.TargetDistance);
             if (curAttack.AttackModuleData.IsImmediate)
             {
                 _range.Value = 999f;
