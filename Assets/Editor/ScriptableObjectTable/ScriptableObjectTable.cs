@@ -27,6 +27,9 @@ public class ScriptableObjectTable : EditorWindow
     private List<ScriptableObject> originalOrder;
     private List<string> propertyPaths = new List<string>();
 
+    private Dictionary<Type, bool> typeCache = new Dictionary<Type, bool>();
+    private HashSet<Type> processedTypes = new HashSet<Type>();
+
     [MenuItem("Tools/Scriptable Object Table")]
     public static void ShowWindow()
     {
@@ -96,7 +99,7 @@ public class ScriptableObjectTable : EditorWindow
             }
             else
             {
-                EditorGUILayout.LabelField("No instances found.");
+                EditorGUILayout.LabelField($"No instances found for {selectedType.Name} or its derived types.");
             }
         }
     }
@@ -135,14 +138,15 @@ public class ScriptableObjectTable : EditorWindow
         for (int i = 0; i < propertyPaths.Count; i++)
         {
             SerializedProperty property = serializedObject.FindProperty(propertyPaths[i]);
-            if (property != null)
+            if (property != null && !IsHeaderProperty(property))
             {
                 Rect cellRect = EditorGUILayout.GetControlRect(GUILayout.Width(columnWidths[i + 1]));
                 DrawPropertyField(cellRect, property);
             }
             else
             {
-                EditorGUILayout.LabelField("N/A", GUILayout.Width(columnWidths[i + 1]));
+                // Draw an empty space for headers
+                GUILayout.Space(columnWidths[i + 1]);
             }
         }
 
@@ -323,39 +327,73 @@ public class ScriptableObjectTable : EditorWindow
 
     private void RefreshInstances()
     {
-        instances.Clear();
-        if (selectedType != null && typeof(ScriptableObject).IsAssignableFrom(selectedType))
+        if (selectedType != null)
         {
-            string[] guids = AssetDatabase.FindAssets($"t:{selectedType.Name}");
-            foreach (string guid in guids)
-            {
-                string path = AssetDatabase.GUIDToAssetPath(guid);
-                ScriptableObject obj = AssetDatabase.LoadAssetAtPath<ScriptableObject>(path);
-                if (obj != null && selectedType.IsAssignableFrom(obj.GetType()))
-                {
-                    instances.Add(obj);
-                }
-            }
+            instances = AssetDatabase.FindAssets($"t:{selectedType.Name}")
+                .Select(guid => AssetDatabase.LoadAssetAtPath<ScriptableObject>(AssetDatabase.GUIDToAssetPath(guid)))
+                .Where(asset => asset != null && selectedType.IsAssignableFrom(asset.GetType()))
+                .ToList();
+            
+            propertyPaths.Clear();
         }
-        originalOrder = new List<ScriptableObject>(instances);
+        else
+        {
+            instances.Clear();
+            propertyPaths.Clear();
+        }
     }
 
     private Type[] GetAllScriptableObjectDerivedTypes()
     {
-        return AppDomain.CurrentDomain.GetAssemblies()
+        typeCache.Clear();
+        processedTypes.Clear();
+
+        var allTypes = AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(assembly => assembly.GetTypes())
-            .Where(type => typeof(ScriptableObject).IsAssignableFrom(type) 
-                        && !type.IsAbstract 
-                        && type != typeof(ScriptableObject)
-                        && type.GetCustomAttributes(typeof(CreateAssetMenuAttribute), false).Length > 0)
-            .ToArray();
+            .Where(type => typeof(ScriptableObject).IsAssignableFrom(type) && !type.IsAbstract)
+            .ToList();
+
+        foreach (var type in allTypes)
+        {
+            HasInstantiableDescendants(type, allTypes);
+        }
+
+        return allTypes.Where(type => typeCache[type]).ToArray();
+    }
+
+    private bool HasInstantiableDescendants(Type type, List<Type> allTypes)
+    {
+        if (typeCache.TryGetValue(type, out bool result))
+        {
+            return result;
+        }
+
+        if (processedTypes.Contains(type))
+        {
+            return false;
+        }
+
+        processedTypes.Add(type);
+
+        if (type.GetCustomAttribute<CreateAssetMenuAttribute>() != null)
+        {
+            typeCache[type] = true;
+            return true;
+        }
+
+        bool hasInstantiableDescendants = allTypes
+            .Where(t => t != type && type.IsAssignableFrom(t))
+            .Any(t => HasInstantiableDescendants(t, allTypes));
+
+        typeCache[type] = hasInstantiableDescendants;
+        return hasInstantiableDescendants;
     }
 
     private List<ScriptableObject> SortInstances(List<ScriptableObject> instances)
     {
-        if (sortColumnIndex == -1 || currentSortOrder == SortOrder.Original)
+        if (instances.Count == 0 || sortColumnIndex == -1 || currentSortOrder == SortOrder.Original)
         {
-            return originalOrder ?? instances;
+            return instances;
         }
 
         return instances.OrderBy(instance =>
@@ -364,17 +402,20 @@ public class ScriptableObjectTable : EditorWindow
             {
                 return instance.name;
             }
-            else
+            else if (sortColumnIndex - 1 < propertyPaths.Count)
             {
                 SerializedObject serializedObject = new SerializedObject(instance);
                 SerializedProperty property = serializedObject.FindProperty(propertyPaths[sortColumnIndex - 1]);
-                return GetPropertyValue(property);
+                return property != null ? GetPropertyValue(property) : null;
             }
+            return null;
         }, currentSortOrder == SortOrder.Ascending ? Comparer<object>.Default : Comparer<object>.Create((a, b) => Comparer<object>.Default.Compare(b, a))).ToList();
     }
 
     private object GetPropertyValue(SerializedProperty property)
     {
+        if (property == null) return null;
+
         switch (property.propertyType)
         {
             case SerializedPropertyType.Integer:
@@ -388,7 +429,7 @@ public class ScriptableObjectTable : EditorWindow
             case SerializedPropertyType.ObjectReference:
                 return property.objectReferenceValue ? property.objectReferenceValue.name : "";
             case SerializedPropertyType.Enum:
-                return property.enumDisplayNames[property.enumValueIndex];
+                return property.enumValueIndex;
             // Add more cases for other property types as needed
             default:
                 return property.displayName;
@@ -452,5 +493,39 @@ public class ScriptableObjectTable : EditorWindow
             }
             enterChildren = false;
         }
+    }
+
+     private bool IsHeaderProperty(SerializedProperty property)
+    {
+        var field = GetFieldInfoFromProperty(property);
+        return field != null && Attribute.IsDefined(field, typeof(HeaderAttribute));
+    }
+
+    private FieldInfo GetFieldInfoFromProperty(SerializedProperty property)
+    {
+        var parentType = property.serializedObject.targetObject.GetType();
+        var fieldInfo = parentType.GetField(property.propertyPath, 
+            BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+        if (fieldInfo == null && property.propertyPath.Contains("."))
+        {
+            var paths = property.propertyPath.Split('.');
+            for (int i = 0; i < paths.Length - 1; i++)
+            {
+                var path = string.Join(".", paths.Take(i + 1));
+                var parentField = parentType.GetField(path, 
+                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                
+                if (parentField != null)
+                {
+                    parentType = parentField.FieldType;
+                }
+            }
+
+            fieldInfo = parentType.GetField(paths.Last(), 
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        }
+
+        return fieldInfo;
     }
 }
