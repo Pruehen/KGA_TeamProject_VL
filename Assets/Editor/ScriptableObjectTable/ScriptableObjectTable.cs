@@ -32,7 +32,8 @@ public class ScriptableObjectTable : EditorWindow
     private ScriptableObject selectedObject;
     private int hoverColumnIndex = -1;
 
-    private const float RESIZE_HANDLE_WIDTH = 10f; // Increased from 5f to 10f
+    private const float RESIZE_HANDLE_WIDTH = 30f; // Increased from 5f to 10f
+    private const float COLUMN_GAP = 10f; // Increased from 5f to 10f
 
     [MenuItem("Tools/Scriptable Object Table")]
     public static void ShowWindow()
@@ -114,6 +115,12 @@ public class ScriptableObjectTable : EditorWindow
         
         for (int i = 0; i < propertyPaths.Count + 1; i++)
         {
+            // Add gap before each column except the first one
+            if( i > 0 )
+            {
+                GUILayout.Space(COLUMN_GAP);
+            }
+            
             Rect cellRect = EditorGUILayout.GetControlRect(GUILayout.Width(columnWidths[i]));
             Rect resizeHandleRect = new Rect(cellRect.xMax - (RESIZE_HANDLE_WIDTH * .5f), cellRect.y, RESIZE_HANDLE_WIDTH, cellRect.height);
             
@@ -163,6 +170,9 @@ public class ScriptableObjectTable : EditorWindow
         SerializedObject serializedObject = new SerializedObject(instance);
         for (int i = 0; i < propertyPaths.Count; i++)
         {
+            // Add gap before each column
+            GUILayout.Space(COLUMN_GAP);
+
             SerializedProperty property = serializedObject.FindProperty(propertyPaths[i]);
             if (property != null && !IsHeaderProperty(property))
             {
