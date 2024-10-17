@@ -251,10 +251,6 @@ public class GameManager : SceneSingleton<GameManager>
         }
         _PlayerMaster._PlayerInstanteState.OnDead += OnDead;
     }
-    public void OnPlayerDead()
-    {
-        StartCoroutine(GameClear());
-    }
     private void RegisterEnemies()
     {
         foreach (var enemy in _enemies)
@@ -282,12 +278,27 @@ public class GameManager : SceneSingleton<GameManager>
     private IEnumerator OnDeadCoroutine()
     {
         yield return new WaitForSeconds(3f);
-        ClearAndSave();
-        LoadSceneAsync("ResultScene", SceneManager.GetActiveScene(), LoadSceneMode.Additive, (ao, prevScene) =>
+
+        AsyncOperation ao = LoadSceneAsync("ResultScene", SceneManager.GetActiveScene(), LoadSceneMode.Additive, (ao2, prevScene) =>
         {
-            ao.allowSceneActivation = true;
+            ClearAndSave();
             StartCoroutine(UnloadPrevScene(prevScene));
         });
+        if (ao == null)
+        {
+            yield break;
+        }
+        bool isAlmostDone = false;
+        while (true)
+        {
+            isAlmostDone = ao.progress >= 0.9f;
+            if (isAlmostDone)
+            {
+                break;
+            }
+            yield return null;
+        }
+        ao.allowSceneActivation = true;
     }
     private IEnumerator UnloadPrevScene(Scene prevScene)
     {
@@ -333,11 +344,11 @@ public class GameManager : SceneSingleton<GameManager>
         Debug.Log("SM.Instance.SetBGM((int)nextStage.sceneType);");
         LoadSceneAsync(nextStage.SceneName, SceneManager.GetActiveScene());
     }
-    public void LoadSceneAsync(string sceneName, Scene activeScene, LoadSceneMode mode = LoadSceneMode.Single, Action<AsyncOperation, Scene> onComplete = null)
+    public AsyncOperation LoadSceneAsync(string sceneName, Scene activeScene, LoadSceneMode mode = LoadSceneMode.Single, Action<AsyncOperation, Scene> onComplete = null)
     {
         if (_isLoading)
         {
-            return;
+            return null;
         }
         _isLoading = true;
         AsyncOperation ao = SceneManager.LoadSceneAsync(sceneName, mode);
@@ -346,6 +357,7 @@ public class GameManager : SceneSingleton<GameManager>
             ao.allowSceneActivation = false;
             ao.completed += (ao) => onComplete(ao, activeScene);
         }
+        return ao;
     }
     public void LoadMainScene()
     {

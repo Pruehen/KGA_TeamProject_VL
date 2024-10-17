@@ -590,10 +590,6 @@ public class PlayerInstanteState : MonoBehaviour
     {
         Debug.Log("플레이어 사망");
         OnDead?.Invoke(self);
-
-        GameManager.Instance.OnPlayerDead();
-
-        Destroy(this.gameObject);
     }
 
     public void ChangeHp(float value)
