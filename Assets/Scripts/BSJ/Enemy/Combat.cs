@@ -142,8 +142,6 @@ public class Combat
 
         OnDamaged?.Invoke(this, type);
 
-        Debug.Log($"{damage}");
-
         if (_hp <= 0f)
         {
             _dead = true;

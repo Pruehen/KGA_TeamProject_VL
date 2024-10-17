@@ -85,7 +85,6 @@ public class AttackModule
 
         IsAttacking = true;
         PrevAttackTime = Time.time;
-        Debug.Log(Time.time);
         AttackModuleData.StartAttack(owner, type);
     }
     public void StartAttackMove(EnemyBase owner, int type)
