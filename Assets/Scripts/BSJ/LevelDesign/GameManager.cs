@@ -71,7 +71,6 @@ public class GameManager : SceneSingleton<GameManager>
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         _isLoading = false;
-        Debug.Log("�� �ε��");
         if (FindObjectsOfType<GameManager>().Length >= 2)
         {
             if (!_unique)
@@ -177,7 +176,7 @@ public class GameManager : SceneSingleton<GameManager>
                 }
 
                 SM.Instance.SetBGM((int)_stageSystem.CurrentStage.sceneType);
-                LoadSceneAsync(playData.InGame_Stage.StageName);
+                LoadSceneAsync(playData.InGame_Stage.StageName, SceneManager.GetActiveScene());
                 return;
             }
         }
@@ -189,7 +188,7 @@ public class GameManager : SceneSingleton<GameManager>
         SM.Instance.SetBGM((int)randomStage.sceneType);
         SetStageQuests();
         JsonDataManager.GetUserData().SavePlayData_OnSceneEnter(new StageData(randomStage.SceneName, _stageSystem.CurrentStageNum, _rewardType, _stageSystem.CurrentStage));
-        LoadSceneAsync(randomStage.SceneName);
+        LoadSceneAsync(randomStage.SceneName, SceneManager.GetActiveScene());
     }
     private T GetRandomItem<T>(T[] array)
     {
@@ -278,8 +277,22 @@ public class GameManager : SceneSingleton<GameManager>
     }
     private void OnDead(Combat self)
     {
+        StartCoroutine(OnDeadCoroutine());
+    }
+    private IEnumerator OnDeadCoroutine()
+    {
+        yield return new WaitForSeconds(3f);
         ClearAndSave();
-        LoadMainScene();
+        LoadSceneAsync("ResultScene", SceneManager.GetActiveScene(), LoadSceneMode.Additive, (ao, prevScene) =>
+        {
+            ao.allowSceneActivation = true;
+            StartCoroutine(UnloadPrevScene(prevScene));
+        });
+    }
+    private IEnumerator UnloadPrevScene(Scene prevScene)
+    {
+        yield return new WaitForSeconds(3f);
+        SceneManager.UnloadSceneAsync(prevScene);
     }
 
     private void ClearAndSave()
@@ -318,21 +331,25 @@ public class GameManager : SceneSingleton<GameManager>
         JsonDataManager.GetUserData().SavePlayData_OnSceneExit(_PlayerMaster._PlayerInstanteState, _PlayerMaster._PlayerEquipBlueChip);
         SM.Instance.SetBGM((int)nextStage.sceneType);
         Debug.Log("SM.Instance.SetBGM((int)nextStage.sceneType);");
-        LoadSceneAsync(nextStage.SceneName);
+        LoadSceneAsync(nextStage.SceneName, SceneManager.GetActiveScene());
     }
-    public void LoadSceneAsync(string sceneName)
+    public void LoadSceneAsync(string sceneName, Scene activeScene, LoadSceneMode mode = LoadSceneMode.Single, Action<AsyncOperation, Scene> onComplete = null)
     {
         if (_isLoading)
         {
             return;
         }
         _isLoading = true;
-        AsyncOperation ao = SceneManager.LoadSceneAsync(sceneName);
-        ao.allowSceneActivation = true;
+        AsyncOperation ao = SceneManager.LoadSceneAsync(sceneName, mode);
+        if(onComplete != null)
+        {
+            ao.allowSceneActivation = false;
+            ao.completed += (ao) => onComplete(ao, activeScene);
+        }
     }
     public void LoadMainScene()
     {
-        LoadSceneAsync("mainGame");
+        LoadSceneAsync("mainGame", SceneManager.GetActiveScene(), LoadSceneMode.Additive);
     }
     public void KillAll()
     {
