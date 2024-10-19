@@ -47,6 +47,10 @@ public class SaveFillSlot : MonoBehaviour
 
     public void SlotSelect_OnClick()
     {
+        if(GameManager.Instance.IsLoading)
+        {
+            return;
+        }
         Btn_Back.gameObject.SetActive(true);
         Btn_Lode.gameObject.SetActive(true);
         Btn_Delete.gameObject.SetActive(true);

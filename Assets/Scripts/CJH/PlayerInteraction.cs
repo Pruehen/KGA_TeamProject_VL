@@ -13,6 +13,10 @@ public class PlayerInteraction : MonoBehaviour
     {
         InputManager.Instance.PropertyChanged += OnInputPropertyChanged;
     }
+    private void OnDestroy()
+    {
+        InputManager.Instance.PropertyChanged -= OnInputPropertyChanged;
+    }
     void OnInputPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)

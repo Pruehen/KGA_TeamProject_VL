@@ -67,6 +67,20 @@ public class PlayerAttackSystem : MonoBehaviour
         _currentAttack = _rangeAttack;
 
     }
+    private void OnDestroy()
+    {
+        _InputManager.PropertyChanged -= OnInputPropertyChanged;
+        PlayerMod.OnDestroy();
+
+        
+        PlayerMod.OnModChanged -= ChangeAttackState;
+        PlayerMod.OnModChangedVfx -= ActiveMeleeTransformEffectAndAnim;
+        PlayerMod.OnModChangedVfx -= ActiveRangeVfx;
+
+        PlayerMod.OnEnterAbsorb -= StartAbsorbingAnimAndVsfx;
+        PlayerMod.OnEndAbsorptState -= DeactiveAbsortVfxAndAnim;
+        PlayerMod.OnResetMod -= ResetMod;
+    }
     void OnInputPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)
@@ -136,6 +150,10 @@ public class PlayerAttackSystem : MonoBehaviour
     }
     private void Update()
     {
+        if(_PlayerMaster.IsDead())
+        {
+            return;
+        }
         PlayerMod.DoUpdate();
         _currentAttack.DoUpdate();
         if (attackPressed && !prevAttackPressed)

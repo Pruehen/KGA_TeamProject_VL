@@ -66,9 +66,17 @@ public class PlayerMove : MonoBehaviour
         _PlayerCameraMove = PlayerCameraMove.Instance;
         _playerInstanteState = GetComponent<PlayerInstanteState>();
     }
+    private void OnDestroy()
+    {
+        _InputManager.PropertyChanged -= OnInputPropertyChanged;
+    }
 
     public void FixedUpdate()
     {
+        if(_PlayerMaster.IsDead())
+        {
+            return;
+        }
 
         CheckGounded_OnFixedUpdate();
         bool isKnockbackstate = AnimatorHelper.IsAnimPureCurOrNext(_animator, 0, "Base Layer.Hit");

@@ -3,12 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
+using Zenject.SpaceFighter;
 
 public enum RewardType
 {
     BlueChip,
     Currency,
+}
+
+public enum ResultSceneType
+{
+    Clear,
+    Dead,
 }
 
 public class GameManager : SceneSingleton<GameManager>
@@ -33,7 +42,25 @@ public class GameManager : SceneSingleton<GameManager>
 
     [SerializeField] private SO_RandomQuestSetData _randomQuestsData;
 
+    public ResultSceneType ResultSceneType {get; private set;}
+
     private bool _isLoading = false;
+    public bool IsLoading {
+        set
+        {
+            _isLoading = value;
+        } 
+        get
+        {
+            return _isLoading;
+        }
+    }
+
+    private IEnumerator SetEventSystemEnable(bool value)
+    {
+        yield return null;
+        yield return null;
+    }
     private bool _isFirstStage;
 
     private void Awake()
@@ -70,7 +97,12 @@ public class GameManager : SceneSingleton<GameManager>
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        _isLoading = false;
+        _blockSceneChange = false;
+        SceneManager.SetActiveScene(scene);
+        if(mode == LoadSceneMode.Single)
+        {
+            IsLoading = false;
+        }
         if (FindObjectsOfType<GameManager>().Length >= 2)
         {
             if (!_unique)
@@ -78,14 +110,17 @@ public class GameManager : SceneSingleton<GameManager>
                 return;
             }
         }
-        if (mode == LoadSceneMode.Single)
+        if (mode == LoadSceneMode.Single || mode == LoadSceneMode.Additive)
         {
             _unique = true;
 
+            if (scene.name == "ResultScene")
+            {
+                return;
+            }
             if (scene.name == "mainGame")
             {
                 SM.Instance.SetBGM(0);
-                Debug.Log("if (scene.name == mainGame)");
                 return;
             }
 
@@ -155,41 +190,7 @@ public class GameManager : SceneSingleton<GameManager>
 
         JsonDataManager.GetUserData().SavePlayData_Quest(unexpectedquests);
     }
-    public void StartGame()
-    {
-        if (_isLoading)
-            return;
-        _enemies.Clear();
-        _currentQuest = null;
 
-        //Load
-        if (JsonDataManager.GetUserData().TryGetPlayData(out PlayData playData))
-        {
-            if (playData.InGame_Stage != null)
-            {
-                _stageSystem.LoadChapter(playData.InGame_Stage.StageNum, playData.InGame_Stage.Stage);
-                unexpectedquests = playData.InGame_Quest;
-
-                if (playData.InGame_Stage.StageNum == 0)
-                {
-                    _isFirstStage = true;
-                }
-
-                SM.Instance.SetBGM((int)_stageSystem.CurrentStage.sceneType);
-                LoadSceneAsync(playData.InGame_Stage.StageName, SceneManager.GetActiveScene());
-                return;
-            }
-        }
-        _isFirstStage = true;
-        _stageSystem.ResetStageSystem();
-        //Start New
-        _stageSystem.StartChapter();
-        SO_Stage randomStage = _stageSystem.GetCurrentRandomStage();
-        SM.Instance.SetBGM((int)randomStage.sceneType);
-        SetStageQuests();
-        JsonDataManager.GetUserData().SavePlayData_OnSceneEnter(new StageData(randomStage.SceneName, _stageSystem.CurrentStageNum, _rewardType, _stageSystem.CurrentStage));
-        LoadSceneAsync(randomStage.SceneName, SceneManager.GetActiveScene());
-    }
     private T GetRandomItem<T>(T[] array)
     {
         int r = UnityEngine.Random.Range(0, array.Length);
@@ -202,7 +203,7 @@ public class GameManager : SceneSingleton<GameManager>
         {
             if (_stageSystem.ChapterLength - 1 == _stageSystem.CurrentStageNum)
             {
-                StartCoroutine(GameClear());
+                GameClear();
                 return;
             }
 
@@ -213,13 +214,6 @@ public class GameManager : SceneSingleton<GameManager>
                 _currentQuest?.IsCleared();
             }
         }
-    }
-
-    private IEnumerator GameClear()
-    {
-        yield return new WaitForSeconds(3f);
-        ClearAndSave();
-        LoadMainScene();
     }
 
     public bool IsCurrentUnexpectedQuestCleared()
@@ -271,19 +265,110 @@ public class GameManager : SceneSingleton<GameManager>
             enemy.OnDeadWithSelf += OnEnemyDead;
         }
     }
-    private void OnDead(Combat self)
-    {
-        StartCoroutine(OnDeadCoroutine());
-    }
-    private IEnumerator OnDeadCoroutine()
-    {
-        yield return new WaitForSeconds(3f);
 
-        AsyncOperation ao = LoadSceneAsync("ResultScene", SceneManager.GetActiveScene(), LoadSceneMode.Additive, (ao2, prevScene) =>
+
+
+
+    private bool _blockSceneChange = false;
+    public void StartGame()
+    {
+        if (_blockSceneChange)
+        {
+            return;
+        }
+        _blockSceneChange = true;
+        if (_isLoading)
+            return;
+        _enemies.Clear();
+        _currentQuest = null;
+        EarnedCurrency = 0;
+
+        //Load
+        if (JsonDataManager.GetUserData().TryGetPlayData(out PlayData playData))
+        {
+            if (playData.InGame_Stage != null)
+            {
+                _stageSystem.LoadChapter(playData.InGame_Stage.StageNum, playData.InGame_Stage.Stage);
+                unexpectedquests = playData.InGame_Quest;
+
+
+                if (playData.InGame_Stage.StageNum == 0)
+                {
+                    _isFirstStage = true;
+                }
+                SM.Instance.SetBGM((int)_stageSystem.CurrentStage.sceneType);
+                LoadSceneAsync(playData.InGame_Stage.StageName, SceneManager.GetActiveScene(), LoadSceneMode.Additive, (ao, prevScene) =>
+                {
+                    StartCoroutine(UnloadPrevScene(prevScene));
+                });
+                return;
+            }
+        }
+
+
+        _isFirstStage = true;
+        _stageSystem.ResetStageSystem();
+        //Start New
+        _stageSystem.StartChapter();
+        SO_Stage randomStage = _stageSystem.GetCurrentRandomStage();
+        SM.Instance.SetBGM((int)randomStage.sceneType);
+        SetStageQuests();
+        JsonDataManager.GetUserData().SavePlayData_OnSceneEnter(new StageData(randomStage.SceneName, _stageSystem.CurrentStageNum, _rewardType, _stageSystem.CurrentStage));
+        LoadSceneAsync(randomStage.SceneName, SceneManager.GetActiveScene());
+    }
+
+    private void GameClear()
+    {
+        if(_blockSceneChange)
+        {
+            return;
+        }
+        _blockSceneChange = true;
+        ResultSceneType = ResultSceneType.Clear;
+        DelayLoadScene("ResultScene", 3f, () =>
         {
             ClearAndSave();
-            StartCoroutine(UnloadPrevScene(prevScene));
         });
+    }
+    private void OnDead(Combat self)
+    {
+        if(_blockSceneChange)
+        {
+            return;
+        }
+        _blockSceneChange = true;
+        ResultSceneType = ResultSceneType.Dead;
+        DelayLoadScene("ResultScene", 3f, () =>
+        {
+            ClearAndSave();
+        });
+    }
+    public void EndGame()
+    {
+        if(_blockSceneChange)
+        {
+            return;
+        }
+        _blockSceneChange = true;
+
+        var userData = JsonDataManager.GetUserData();
+        JsonDataManager.GetUserData().SavePlayData_OnSceneEnter(new StageData(_stageSystem.CurrentStage.SceneName, _stageSystem.CurrentStageNum, _rewardType, _stageSystem.CurrentStage));
+        LoadSceneAsync("mainGame", SceneManager.GetActiveScene());
+    }
+    public void LoadMainScene()
+    {
+        if(_blockSceneChange)
+        {
+            return;
+        }
+        _blockSceneChange = true;
+        LoadSceneAsync("mainGame", SceneManager.GetActiveScene());
+    }
+
+
+
+    private IEnumerator CheckAddtiveLoadingend(AsyncOperation ao, Scene prevScene, LoadSceneMode mode, Action<AsyncOperation, Scene> onComplete)
+    {
         if (ao == null)
         {
             yield break;
@@ -302,10 +387,22 @@ public class GameManager : SceneSingleton<GameManager>
     }
     private IEnumerator UnloadPrevScene(Scene prevScene)
     {
-        yield return new WaitForSeconds(3f);
-        SceneManager.UnloadSceneAsync(prevScene);
+        float unloadTime = 1.5f;
+        GameObject[] rootObjects = prevScene.GetRootGameObjects();
+        foreach (var obj in rootObjects)
+        {
+            if(obj.TryGetComponent(out FaderSceneMainUi sceneUiFader))
+            {
+                sceneUiFader.OnSceneUnloaded(unloadTime - .5f);
+            }
+        }
+        yield return new WaitForSeconds(unloadTime);
+        AsyncOperation ao = SceneManager.UnloadSceneAsync(prevScene);
+        ao.completed += (ao) =>
+        {
+            IsLoading = false;
+        };
     }
-
     private void ClearAndSave()
     {
         _PlayerMaster._PlayerInstanteState.OnDead -= OnDead;
@@ -318,14 +415,6 @@ public class GameManager : SceneSingleton<GameManager>
             Debug.LogWarning("CurrentStage is Null");
             return;
         }
-    }
-    public void EndGame()
-    {
-        var userData = JsonDataManager.GetUserData();
-
-        JsonDataManager.GetUserData().SavePlayData_OnSceneEnter(new StageData(_stageSystem.CurrentStage.SceneName, _stageSystem.CurrentStageNum, _rewardType, _stageSystem.CurrentStage));
-
-        LoadMainScene();
     }
     public void LoadNextStage()
     {
@@ -350,19 +439,37 @@ public class GameManager : SceneSingleton<GameManager>
         {
             return null;
         }
-        _isLoading = true;
+        IsLoading = true;
         AsyncOperation ao = SceneManager.LoadSceneAsync(sceneName, mode);
         if(onComplete != null)
         {
             ao.allowSceneActivation = false;
             ao.completed += (ao) => onComplete(ao, activeScene);
         }
+        StartCoroutine(CheckAddtiveLoadingend(ao, SceneManager.GetActiveScene(), mode, onComplete));
         return ao;
     }
-    public void LoadMainScene()
+    public void DelayLoadScene(string sceneName, float delay = 0f, Action delayEnd = null)
     {
-        LoadSceneAsync("mainGame", SceneManager.GetActiveScene(), LoadSceneMode.Additive);
+        StartCoroutine(DelayLoadSceneCoroutine(sceneName, delay, delayEnd));
     }
+    private IEnumerator DelayLoadSceneCoroutine(string sceneName, float delay = 0f, Action delayEnd = null)
+    {
+        yield return new WaitForSeconds(delay);
+        delayEnd?.Invoke();
+        LoadSceneAsync(sceneName, SceneManager.GetActiveScene(), LoadSceneMode.Additive, (ao2, prevScene) =>
+        {
+            StartCoroutine(UnloadPrevScene(prevScene));
+        });
+    }
+
+
+    public int EarnedCurrency {get; set;}
+
+
+
+
+
     public void KillAll()
     {
         List<EnemyBase> enemyList = new List<EnemyBase>(_enemies);

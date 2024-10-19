@@ -35,6 +35,10 @@ public class PlayerModChangeManager
         _animator = transform.GetComponent<Animator>();
         InputManager.Instance.PropertyChanged += OnInputPropertyChanged;
     }
+    public void OnDestroy()
+    {
+        InputManager.Instance.PropertyChanged -= OnInputPropertyChanged;
+    }
     void OnInputPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)

@@ -1,9 +1,8 @@
-using System.Collections;
-using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
+using System.Linq;
+using System.Collections.Generic;
 
 public class MainSceneUIManager : SceneSingleton<MainSceneUIManager>
 {
@@ -28,12 +27,18 @@ public class MainSceneUIManager : SceneSingleton<MainSceneUIManager>
         {
             slotText[i] = selectSlot[i].GetComponentInChildren<Text>();
         }
-
-        InputManager.Instance.IsInteractiveBtnClick = false;
-        InputManager.Instance.PropertyChanged += OnInputPropertyChanged;
+    }
+    private void Start()
+    {
+        if(EventSystem.current.currentInputModule == null)
+        {
+            return;
+        }
+        EventSystem.current.currentInputModule.enabled = false;
+        EventSystem.current.currentInputModule.enabled = true;
     }
     private void Update()
-    {
+    {   
         for (int i = 0; i < selectSlot.Length; i++)
         {
             if (EventSystem.current.currentSelectedGameObject == selectSlot[i].gameObject)
@@ -99,28 +104,6 @@ public class MainSceneUIManager : SceneSingleton<MainSceneUIManager>
         EventSystem.current.SetSelectedGameObject(startButton.gameObject);
         startPanel.SetActive(true);
         passiveUI.SetActive(false);
-    }
-
-    //인풋 F키
-    void OnInputPropertyChanged(object sender, PropertyChangedEventArgs e)
-    {
-        switch (e.PropertyName)
-        {
-            case nameof(InputManager.Instance.IsInteractiveBtnClick):
-                if(InputManager.Instance.IsInteractiveBtnClick)
-                    break;
-                Button selectedButton = EventSystem.current.currentSelectedGameObject?.GetComponent<Button>();
-                if (selectedButton != null && selectedButton.interactable)
-                {
-                    selectedButton.onClick.Invoke();
-                    Debug.Log("Button clicked: " + selectedButton.name);
-
-                    // 버튼 클릭 이후 IsInteractiveBtnClick을 false로 설정하여 중복 호출 방지
-                    InputManager.Instance.IsInteractiveBtnClick = false;
-                }
-
-                break;
-        }
     }
 
     public void OnExitButton()
