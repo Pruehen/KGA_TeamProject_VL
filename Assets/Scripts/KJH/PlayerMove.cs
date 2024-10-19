@@ -206,6 +206,10 @@ public class PlayerMove : MonoBehaviour
 
     public void Dash()
     {
+        if(_PlayerMaster.IsDead())
+        {
+            return;
+        }
         _PlayerMaster.Mod.TryAbsorptFail();
         if (_PlayerMaster._PlayerInstanteState.TryStaminaConsumption(_PlayerMaster._PlayerInstanteState.DashCost))
         {
