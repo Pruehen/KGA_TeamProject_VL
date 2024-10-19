@@ -85,7 +85,7 @@ public class GameManager : SceneSingleton<GameManager>
         {
             return;
         }
-        if (SceneManager.GetActiveScene().name == "mainGame")
+        if (SceneManager.GetActiveScene().name == "mainGame" || SceneManager.GetActiveScene().name == "ResultScene")
         {
             return;
         }

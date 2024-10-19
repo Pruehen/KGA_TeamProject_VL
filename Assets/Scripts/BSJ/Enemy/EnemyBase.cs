@@ -121,6 +121,7 @@ public class EnemyBase : MonoBehaviour, ITargetable
     private void ActiveBehaviourTree(Detector detector)
     {
         _behaviorTree.enabled = true;
+        _behaviorTree.EnableBehavior();
     }
 
     protected void OnDestroy()
@@ -131,6 +132,7 @@ public class EnemyBase : MonoBehaviour, ITargetable
             combat.OnDamaged -= OnDamaged;
             combat.OnKnockback -= OnKnockback;
         }
+        _behaviorTree.DisableBehavior();
     }
     protected void Update()
     {
@@ -324,6 +326,7 @@ public class EnemyBase : MonoBehaviour, ITargetable
             _animator.SetTrigger("Dead");
             _animator.SetBool("IsDead", true);
             _behaviorTree.DisableBehavior();
+            _behaviorTree.enabled = false;
 
             PlayerMaster.Instance._PlayerInstanteState.OnEnemyDestroy();
 
