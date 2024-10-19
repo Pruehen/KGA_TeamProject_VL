@@ -9,6 +9,10 @@ public class InputTest : MonoBehaviour
         inputManager = InputManager.Instance;
         inputManager.PropertyChanged += OnPropertyChanged;
     }
+    private void OnDestroy()
+    {
+        inputManager.PropertyChanged -= OnPropertyChanged;
+    }
 
     void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
     {

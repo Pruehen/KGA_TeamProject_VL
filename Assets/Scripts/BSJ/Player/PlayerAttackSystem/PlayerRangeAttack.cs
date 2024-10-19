@@ -103,7 +103,7 @@ public class PlayerRangeAttack : PlayerAttackModule
 
     public void ShootProjectile()
     {
-        if (_animator.IsInTransition(0))
+        if (_animator.IsInTransition(0) && !_animator.GetNextAnimatorStateInfo(0).IsTag("Attack"))
         {
             return;
         }

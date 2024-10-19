@@ -50,6 +50,10 @@ namespace BehaviorDesigner.Runtime.Tasks
         public override void OnEnd()
         {
             base.OnEnd();
+            if(_agent == null || !_agent.isOnNavMesh)
+            {
+                return;
+            }
             _agent.isStopped = true;
         }
 

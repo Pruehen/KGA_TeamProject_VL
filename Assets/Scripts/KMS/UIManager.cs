@@ -76,6 +76,7 @@ public class UIManager : SceneSingleton<UIManager>
 
     private void OnDestroy()
     {
+        InputManager.Instance.PropertyChanged -= OnInputPropertyChanged;
         if (_PlayerState != null)
         {
             _PlayerState.HealthRatioChanged -= OnHealthRatioChanged;

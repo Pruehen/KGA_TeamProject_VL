@@ -58,6 +58,7 @@ public class PlayerInstanteState : MonoBehaviour
 
     [SerializeField] private float _absorbingStaminaConsumRate = 300f;
     [SerializeField] SkinnedMeshRenderer _PlayerMesh;
+    [SerializeField] Animator _PlayerAnimator;
     [SerializeField] Material _ShieldMaterial;
 
 
@@ -404,6 +405,7 @@ public class PlayerInstanteState : MonoBehaviour
     public void Init()
     {
         _PlayerMaster = GetComponent<PlayerMaster>();
+        _PlayerAnimator = GetComponent<Animator>();
 
         combat = new Combat();
         shield = new Combat();
@@ -461,6 +463,14 @@ public class PlayerInstanteState : MonoBehaviour
                 skillGauge = playData.InGame_SkillGauge;
                 bullets = playData.InGame_Bullet;
                 meleeBullets = playData.InGame_MeleeBullet;
+                if(meleeBullets == -1)
+                {
+                    meleeBullets = 0;
+                }
+                if(bullets == -1)
+                {
+                    bullets = maxBullets / 3;
+                }
                 _PlayerMaster.Mod.ChangeModOnly(playData.InGame_IsMelee, true);
 
                 combat.ForceChangeHp(playData.InGame_Hp);
@@ -589,11 +599,8 @@ public class PlayerInstanteState : MonoBehaviour
     void HandleOnDead(Combat self)
     {
         Debug.Log("플레이어 사망");
+        _PlayerAnimator.SetTrigger("Die");
         OnDead?.Invoke(self);
-
-        GameManager.Instance.OnPlayerDead();
-
-        Destroy(this.gameObject);
     }
 
     public void ChangeHp(float value)
@@ -979,6 +986,7 @@ public class PlayerInstanteState : MonoBehaviour
         if (JsonDataManager.GetUserData().TryGetPlayData(out PlayData playData))
         {
             amount = (int)(amount * GoldMulti);
+            GameManager.Instance.EarnedCurrency += amount;
             playData.AddGold_InGame(amount);
             UIManager.Instance.UpdateGoldInfoUI();
         }

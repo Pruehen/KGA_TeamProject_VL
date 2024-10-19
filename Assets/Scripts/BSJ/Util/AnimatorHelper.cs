@@ -65,7 +65,8 @@ public class AnimatorHelper : MonoBehaviour
     }
     public static bool IsAnimCur_Tag(Animator animator, int layer, string tag)
     {
-        return animator.GetCurrentAnimatorStateInfo(layer).tagHash == Animator.StringToHash(tag);
+        return animator.GetCurrentAnimatorStateInfo(layer).tagHash == Animator.StringToHash(tag) ||
+        animator.GetNextAnimatorStateInfo(layer).tagHash == Animator.StringToHash(tag);
     }
 
     //알고싶은 애니메이션이 현재 트랜지션되어 입장하고있는시점부터 나가기 시작하는시점까지 True

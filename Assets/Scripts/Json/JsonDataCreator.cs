@@ -419,6 +419,10 @@ public class PlayData
     {
         InGame_Gold += amount;
     }
+    public int GetGold_InGame()
+    {
+        return InGame_Gold;
+    }
 
     public void Clear()
     {
@@ -427,8 +431,9 @@ public class PlayData
         InGame_Hp = state.GetMaxHp();
         InGame_Hp = state.GetMaxShield();
         InGame_SkillGauge = 0f;
-        InGame_MeleeBullet = state.meleeBullets;
-        InGame_Bullet = state.bullets;
+        InGame_MeleeBullet = -1;
+        InGame_Bullet = -1;
+        InGame_IsMelee = false;
         InGame_Stage = null;
         InGame_StageStarted = false;
 

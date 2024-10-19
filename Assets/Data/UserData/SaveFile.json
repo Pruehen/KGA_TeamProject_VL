@@ -2,13 +2,17 @@
   "dic": {
     "0": {
       "SaveDataIndex": 0,
-      "SaveTime": "2024-09-09T15:36:15.8549775+09:00",
+      "SaveTime": "2024-09-24T16:57:21.7551536+09:00",
       "PlayTime": 0,
-      "Gold": 124500,
+      "Gold": 8900,
       "Count_Try": 0,
       "Count_Clear": 0,
-      "UnlockPassiveHashSet": [],
-      "UsePassiveHashSet": [],
+      "UnlockPassiveHashSet": [
+        0
+      ],
+      "UsePassiveHashSet": [
+        0
+      ],
       "IsClearAchievementsKey": [],
       "SlotIndex_SlotUnlock_Dic": {
         "0": true,
@@ -19,82 +23,30 @@
         "5": false
       },
       "PlayData": {
-        "InGame_Gold": 124500,
+        "InGame_Gold": 0,
         "InGame_BlueChip_Level": {},
         "InGame_Stage": null,
         "InGame_Quest": [
           null,
           null,
           {
+            "LimitTime": 600.0,
             "Difficurty": 0,
-            "Name": "히히 발사",
-            "Discription": "원거리 모드로만 맵을 클리어 하세요!",
-            "IsQuestEnd": false,
-            "name": "QuestNoModChangeData",
+            "Name": "날 막을자 더 없나?",
+            "Discription": "10분안에 맵의 모든 적을 처치하세요!",
+            "IsQuestEnd": true,
+            "name": "QuestClearInTimeData",
             "hideFlags": 0
           },
-          null,
           null
         ],
         "InGame_Hp": 100.0,
+        "InGame_Shield": 0.0,
         "InGame_SkillGauge": 0.0,
         "InGame_Bullet": 16,
         "InGame_MeleeBullet": 0,
+        "InGame_IsMelee": false,
         "InGame_StageStarted": false
-      }
-    },
-    "1": {
-      "SaveDataIndex": 1,
-      "SaveTime": "2024-09-09T17:44:43.2336766+09:00",
-      "PlayTime": 0,
-      "Gold": 1000,
-      "Count_Try": 0,
-      "Count_Clear": 0,
-      "UnlockPassiveHashSet": [],
-      "UsePassiveHashSet": [],
-      "IsClearAchievementsKey": [],
-      "SlotIndex_SlotUnlock_Dic": {
-        "0": true,
-        "2": true,
-        "4": true,
-        "1": false,
-        "3": false,
-        "5": false
-      },
-      "PlayData": {
-        "InGame_Gold": 1000,
-        "InGame_BlueChip_Level": {},
-        "InGame_Stage": {
-          "StageName": "LevelScene Block 2",
-          "Stage": {
-            "SceneName": "LevelScene Block 2",
-            "Cleared": false,
-            "sceneType": 1,
-            "name": "Stage_Block1_2",
-            "hideFlags": 0
-          },
-          "StageNum": 0,
-          "RewardType": 0
-        },
-        "InGame_Quest": [
-          null,
-          null,
-          null,
-          null,
-          {
-            "Difficurty": 0,
-            "Name": "아무일도 없었다",
-            "Discription": "맵을 노히트로 클리어 하세요!",
-            "IsQuestEnd": false,
-            "name": "QuestNonHitData",
-            "hideFlags": 0
-          }
-        ],
-        "InGame_Hp": -1.0,
-        "InGame_SkillGauge": 0.0,
-        "InGame_Bullet": 0,
-        "InGame_MeleeBullet": 0,
-        "InGame_StageStarted": true
       }
     }
   },

@@ -133,6 +133,10 @@ public class PlayerMaster : SceneSingleton<PlayerMaster>, ITargetable
 
     public void Hit(float dmg, DamageType damageType = DamageType.Normal)
     {
+        if(IsDead())
+        {
+            return;
+        }
         _PlayerInstanteState.Hit(dmg, out float finalDmg, damageType);
         Mod.TryAbsorptFail();
 

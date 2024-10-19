@@ -11,7 +11,7 @@ public class AttackModule
     public bool Available { get { return _available; } private set { _available = value; } }
 
     public bool Inited { get; internal set; }
-    public AttackRangeType Range { get; internal set; }
+    public AttackRangeType RangeType { get; internal set; }
     public float PrevAttackTime { get; internal set; }
     public bool IsAttacking { get; private set; }
     public float PrevFireTime { get; internal set; } = 0f;
@@ -26,16 +26,11 @@ public class AttackModule
     private int _moveType;
     private int _attackType;
 
-    public AttackModule(EnemyBase enemyBase, SO_AttackModule attackModuleData)
-    {
-        owner = enemyBase;
-        AttackModuleData = attackModuleData;
-        Inited = true;
-    }
-
-    public virtual void Init(EnemyBase owner)
+    public virtual void Init(EnemyBase owner, SO_AttackModule attackModuleData)
     {
         this.owner = owner;
+        AttackModuleData = attackModuleData;
+        Inited = true;
         _timer = new Timer();
         _timer.Init(AttackModuleData.CoolDown, OnCoolEnd);
     }
@@ -65,7 +60,7 @@ public class AttackModule
         }
         if ((attackRangeType & AttackModuleData.AttackRangeType) != 0 && Available && ((AttackModuleData.Phase & phase) != 0))
         {
-            Range = attackRangeType;
+            RangeType = attackRangeType;
             return true;
         }
         return false;
@@ -90,7 +85,6 @@ public class AttackModule
 
         IsAttacking = true;
         PrevAttackTime = Time.time;
-        Debug.Log(Time.time);
         AttackModuleData.StartAttack(owner, type);
     }
     public void StartAttackMove(EnemyBase owner, int type)

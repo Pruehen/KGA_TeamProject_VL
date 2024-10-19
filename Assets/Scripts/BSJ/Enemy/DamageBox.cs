@@ -182,7 +182,6 @@ public class DamageBox : MonoBehaviour
         {
             OnHitCallback?.Invoke(hitCount);
         }
-        Debug.Log("HalfSize: " + HalfExtend);
     }
 
     private void Update()
@@ -242,13 +241,11 @@ public class DamageBox : MonoBehaviour
     public void SetRange(Vector3 range)
     {
         HalfExtend = range;
-        Debug.Log("Range set to: " + HalfExtend);
     }
 
     public void SetOffset(Vector3 offset)
     {
         Offset = offset;
-        Debug.Log("Offset set to: " + Offset);
     }
 
     private void OnDestroy()

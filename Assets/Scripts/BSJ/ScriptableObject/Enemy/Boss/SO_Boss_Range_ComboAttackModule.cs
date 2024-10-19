@@ -4,7 +4,6 @@ using UnityEngine;
 public class SO_Boss_Range_ComboAttackModule : SO_RangeModule
 {
     public float Interval;
-    public float TotalTime;
     public float RotateSpeed;
 
     public override void StartAttack(EnemyBase owner, int type)
@@ -25,13 +24,6 @@ public class SO_Boss_Range_ComboAttackModule : SO_RangeModule
             ComboShootProjectile(firePos);
             owner.Attack.CurrentAttack.PrevFireTime = Time.time;
         }
-        if (Time.time > owner.Attack.CurrentAttack.PrevAttackTime + TotalTime)
-        {
-            owner.Animator.SetTrigger("EndAttackMove");
-            owner.Move.AttackRotate = false;
-            owner.Move.AttackRotateSpeed = RotateSpeed;
-            owner.Attack.CurrentAttack.EndAttack();
-        }
     }
     protected void ComboShootProjectile(Transform firePos)
     {
@@ -45,5 +37,11 @@ public class SO_Boss_Range_ComboAttackModule : SO_RangeModule
 
         projectile.Fire(vel, ProjectileDamage);
     }
-
+    public override void EndAttack(EnemyBase owner)
+    {
+        base.EndAttack(owner);
+        owner.Animator.SetTrigger("EndAttackMove");
+        owner.Move.AttackRotate = false;
+        owner.Move.AttackRotateSpeed = RotateSpeed;
+    }
 }
