@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using TMPro;
 
 public class NetPlayer : NetworkBehaviour
 {
@@ -14,13 +15,16 @@ public class NetPlayer : NetworkBehaviour
     public Animator Animator_Player;
 
     [Header("Movement")]
+    public Transform Mesh;
     public float _rotationSpeed = 100.0f;
 
     [Header("Interaction")]
-    public KeyCode _atkKey = KeyCode.Space;
+    public KeyCode _atkKey = KeyCode.F;
 
     [SerializeField] Rigidbody RigidBody_Player;
-    [SerializeField] Camera Camera_Player;
+    [SerializeField] Transform Transform_CameraParent;
+    [SerializeField] Transform Transform_Camera;
+    [SerializeField] float _cameraDistance = 4.0f;
 
     [Header("ChatMesh")]
     [SerializeField] Transform Transform_ChatRoot;
@@ -28,6 +32,7 @@ public class NetPlayer : NetworkBehaviour
 
     [Header("SpawnFieldObj")]
     [SerializeField] Transform Transform_SpawnObj;
+    [SerializeField] LayerMask collisionLayers;
 
     private float _moveSpeed = 5.0f;
     private float _mouseSensitivity = 100.0f;
@@ -38,11 +43,17 @@ public class NetPlayer : NetworkBehaviour
 
     private void Start()
     {
-        Camera_Player.gameObject.SetActive(false);
+        Transform_CameraParent.gameObject.SetActive(false);
 
         //Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;
-
+        var gObj = GameObject.Find("InputField_Chat");
+        Debug.Log($"InputField null: {gObj == null}");
+        if(gObj != null)
+        {
+            InputField_Chat = gObj.GetComponent<TMP_InputField>();
+        }
+        Debug.Log($"InputField: {InputField_Chat.name}");
         StartCoroutine(CoDelayBindRpc());
     }
 
@@ -59,10 +70,10 @@ public class NetPlayer : NetworkBehaviour
                 MetaNetworkManager = metaManager;
                 if (this.isLocalPlayer)
                 {
-                    Camera_Player.name = "LocalPlayerCamera";
+                    Transform_CameraParent.name = "LocalPlayerCamera";
                     MetaNetworkManager.BindLocalPlayerNetId(this.netId);
                     MetaNetworkManager.BindLocalPlayer(this);
-                    Camera_Player.gameObject.SetActive(true);
+                    Transform_CameraParent.gameObject.SetActive(true);
                 }
                 
                 MetaNetworkManager.BindRpcAnimStateChangedCallback(OnRpcAnimStateChanged);
@@ -110,10 +121,31 @@ public class NetPlayer : NetworkBehaviour
         }
     }
 
+    [SerializeField] TMP_InputField InputField_Chat;
     private void Update()
     {
         if(CheckIsFocusedOnUpdate() == false)
         {
+            return;
+        }
+        if(Input.GetKeyDown(KeyCode.Return))
+        {
+            string curStateName = "Run";
+            if(IsAnimStateChanged(curStateName, false))
+            {
+                CheckAndCancelAnimState("Sit");
+                CheckAndCancelAnimState("InteractLoop");
+                MetaNetworkManager?.RequestChangeAnimState(curStateName, false);
+            }
+            MetaNetworkManager.OnClick_ChatInputField();
+        }
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            GameManager.Instance.LoadMainScene();
+        }
+        if(InputField_Chat.isFocused)
+        {
+            
             return;
         }
 
@@ -162,14 +194,35 @@ public class NetPlayer : NetworkBehaviour
         float mouseY = Input.GetAxis("Mouse Y") * _mouseSensitivity * Time.deltaTime;
 
         _cameraRotationX -= mouseY;
-        _cameraRotationX = Mathf.Clamp(_cameraRotationX, -90f, 90f);
+        _cameraRotationX = Mathf.Clamp(_cameraRotationX, -15f, 60f);
 
-        Camera_Player.transform.localRotation = Quaternion.Euler(_cameraRotationX, 0f, 0f);
+        Transform_CameraParent.localRotation = Quaternion.Euler(_cameraRotationX, 0f, 0f);
         transform.Rotate(Vector3.up * mouseX);
+
+        // Camera Collision
+        if(Physics.Raycast(Transform_CameraParent.position, -Transform_CameraParent.forward, out RaycastHit hit, _cameraDistance, collisionLayers))
+        {
+            Transform_Camera.position = Transform_CameraParent.position - (Transform_CameraParent.forward * (hit.distance - 0.1f));
+        }
+        else
+        {
+            Transform_Camera.position = Transform_CameraParent.position - (Transform_CameraParent.forward * _cameraDistance);
+        }
 
         // Root Anim - false
         this.transform.Translate(Vector3.right * (moveHorizontal * _moveSpeed * Time.deltaTime));
         this.transform.Translate(Vector3.forward * (moveVertical * _moveSpeed * Time.deltaTime));
+
+        // Rotate Player
+        if(moveHorizontal != 0 || moveVertical != 0)
+        {
+            Vector3 localMovement = Transform_CameraParent.transform.TransformDirection(movement);
+            localMovement.y = 0;
+            localMovement = localMovement.normalized;
+
+            Quaternion targetRotation = Quaternion.LookRotation(localMovement, Vector3.up);
+            Mesh.transform.rotation = Quaternion.Slerp(Mesh.transform.rotation, targetRotation, 1f - Mathf.Exp(-_rotationSpeed * Time.deltaTime));
+        }
     }
 
 }
