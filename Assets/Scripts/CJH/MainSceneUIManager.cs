@@ -7,6 +7,7 @@ using System.Collections.Generic;
 public class MainSceneUIManager : SceneSingleton<MainSceneUIManager>
 {
     [SerializeField] GameObject startPanel;
+    [SerializeField] GameObject metaVersePanel;
     [SerializeField] GameObject passiveUI;
     [SerializeField] GameObject overwriteStartPanel;
     [SerializeField] Button startButton;
@@ -20,6 +21,7 @@ public class MainSceneUIManager : SceneSingleton<MainSceneUIManager>
 
         startPanel.SetActive(true);
         passiveUI.SetActive(false);
+        metaVersePanel.SetActive(false);
         overwriteStartPanel.SetActive(false);
 
         slotText = new Text[selectSlot.Length];
@@ -39,6 +41,16 @@ public class MainSceneUIManager : SceneSingleton<MainSceneUIManager>
     }
     private void Update()
     {   
+        Debug.Log(EventSystem.current.currentSelectedGameObject == null ? "null" : EventSystem.current.currentSelectedGameObject.name);
+        if(EventSystem.current.currentSelectedGameObject == null || !EventSystem.current.currentSelectedGameObject.activeInHierarchy)
+        {
+            Button btn = FindObjectOfType<Button>();
+            if(btn != null)
+            {
+                EventSystem.current.SetSelectedGameObject(btn.gameObject);
+            }
+        }
+
         for (int i = 0; i < selectSlot.Length; i++)
         {
             if (EventSystem.current.currentSelectedGameObject == selectSlot[i].gameObject)
@@ -105,6 +117,12 @@ public class MainSceneUIManager : SceneSingleton<MainSceneUIManager>
         startPanel.SetActive(true);
         passiveUI.SetActive(false);
     }
+    public void OnClickReturnMainScene()
+    {
+        EventSystem.current.SetSelectedGameObject(startButton.gameObject);
+        startPanel.SetActive(true);
+        metaVersePanel.SetActive(false);
+    }
 
     public void OnExitButton()
     {
@@ -126,5 +144,34 @@ public class MainSceneUIManager : SceneSingleton<MainSceneUIManager>
             }
 
         }
+    }
+
+
+    [SerializeField] InputField Input_PlayerName;
+
+    public void OnClick_MetaVerseButton()
+    {
+        if (startPanel.activeSelf == true)
+        {
+
+            startPanel.SetActive(false);
+            metaVersePanel.SetActive(true);
+        }
+    }
+
+    public void OnClick_MetaVerseStartButton()
+    {
+        GameManager.Instance.IsMetaVerseServer = true;
+        GameManager.Instance.MetaVersePlayerName = Input_PlayerName.text;
+
+        GameManager.Instance.LoadScene("MetaScene");
+    }
+
+    public void OnClick_MetaVerseJoinButton()
+    {
+        GameManager.Instance.IsMetaVerseServer = false;
+        GameManager.Instance.MetaVersePlayerName = Input_PlayerName.text;
+
+        GameManager.Instance.LoadScene("MetaScene");
     }
 }

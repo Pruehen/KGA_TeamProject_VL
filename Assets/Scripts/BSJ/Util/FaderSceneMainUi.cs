@@ -13,6 +13,7 @@ public class FaderSceneMainUi : MonoBehaviour
     }
     public void OnSceneUnloaded(float unloadTime)
     {
+        _target.GetComponent<Canvas>().sortingOrder = 100;
         Fader.FadeOut(_target, this, unloadTime);
     }
 }
