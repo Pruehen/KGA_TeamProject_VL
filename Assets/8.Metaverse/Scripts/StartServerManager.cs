@@ -18,6 +18,8 @@ public class StartServerManager : MonoBehaviour
             return;
         }
 
+        IsStartAsServer = GameManager.Instance.IsMetaVerseServer;
+
         if (IsStartAsServer)
         {
             TryStartServer();
@@ -30,7 +32,7 @@ public class StartServerManager : MonoBehaviour
 
     private void TryStartServer()
     {
-        NetManager.StartServer();
+        NetManager.StartHost();
     }
 
     private void LateUpdate()
@@ -44,7 +46,7 @@ public class StartServerManager : MonoBehaviour
         {
             if (Obj_LoadingPopup.activeSelf)
             {
-                Obj_LoadingPopup.gameObject.SetActive(false);
+                StartCoroutine(DelayedSetActive(Obj_LoadingPopup, false));
             }
 
             return;
@@ -62,6 +64,12 @@ public class StartServerManager : MonoBehaviour
     private void OnMetaStartClient()
     {
         Obj_LoadingPopup.gameObject.SetActive(!NetManager.GetNetworkClientConnected());
+    }
+
+    private IEnumerator DelayedSetActive(GameObject obj, bool active)
+    {
+        yield return new WaitForSeconds(2f);
+        obj.gameObject.SetActive(active);
     }
 
 }
