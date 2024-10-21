@@ -1913,6 +1913,10 @@ PrefabInstance:
       propertyPath: m_MoveAction
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 7643360185063018639, guid: 6737dbcf5912f344893453d6bc4f9e90, type: 3}
+      propertyPath: m_SubmitAction
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7348,7 +7352,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3375590128011782120, guid: 5a275e5c996cbcc4da8dcff9440b46e1, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -180
+      value: -179.99998
       objectReference: {fileID: 0}
     - target: {fileID: 3581339926487800703, guid: 5a275e5c996cbcc4da8dcff9440b46e1, type: 3}
       propertyPath: ChatManager
