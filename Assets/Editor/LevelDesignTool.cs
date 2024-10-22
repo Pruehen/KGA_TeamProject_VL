@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Linq;
 using System; // Add this line
@@ -165,6 +166,14 @@ public static class LevelDesignTool
         if (GUILayout.Button("Create Radial Wall"))
         {
             CreateRadialWall();
+        }
+
+        GUILayout.Space(10);
+        GUILayout.Label("Scene Management", EditorStyles.boldLabel);
+
+        if (GUILayout.Button("Activate All GameObjects"))
+        {
+            ActivateAllGameObjects();
         }
     }
 
@@ -660,6 +669,49 @@ public static class LevelDesignTool
         segment.transform.LookAt(parent.position);
 
         Undo.RegisterCreatedObjectUndo(segment, "Create Wall Segment");
+    }
+
+    private static void ActivateAllGameObjects()
+    {
+        List<GameObject> allObjects = new List<GameObject>();
+
+        // Get the active scene
+        Scene activeScene = SceneManager.GetActiveScene();
+
+        // Get all root GameObjects in the active scene
+        GameObject[] rootObjects = activeScene.GetRootGameObjects();
+        foreach (GameObject root in rootObjects)
+        {
+            // Add the root object
+            allObjects.Add(root);
+            // Add all children (including inactive ones)
+            allObjects.AddRange(GetAllChildrenRecursive(root));
+        }
+
+        Undo.RecordObjects(allObjects.ToArray(), "Activate All GameObjects");
+
+        int activatedCount = 0;
+        foreach (GameObject obj in allObjects)
+        {
+            if (!obj.activeSelf)
+            {
+                obj.SetActive(true);
+                activatedCount++;
+            }
+        }
+
+        Debug.Log($"Activated {activatedCount} previously inactive GameObjects out of {allObjects.Count} total GameObjects in the active scene.");
+    }
+
+    private static List<GameObject> GetAllChildrenRecursive(GameObject obj)
+    {
+        List<GameObject> children = new List<GameObject>();
+        foreach (Transform child in obj.transform)
+        {
+            children.Add(child.gameObject);
+            children.AddRange(GetAllChildrenRecursive(child.gameObject));
+        }
+        return children;
     }
 }
 
