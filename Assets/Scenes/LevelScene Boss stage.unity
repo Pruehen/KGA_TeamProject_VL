@@ -23,7 +23,7 @@ RenderSettings:
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
-  m_AmbientIntensity: 1
+  m_AmbientIntensity: 2.51
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 2100000, guid: dd3db0746b775684ea3d2cdd808d7671, type: 2}
@@ -10872,7 +10872,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7925912643191098799, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.03224575
+      value: 0.032245718
       objectReference: {fileID: 0}
     - target: {fileID: 7925912643191098799, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
       propertyPath: m_LocalRotation.y
@@ -10880,7 +10880,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7925912643191098799, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.033373564
+      value: 0.03337353
       objectReference: {fileID: 0}
     - target: {fileID: 9158254484381865285, guid: 50b97b2c525fa0c498a323dee8f7b746, type: 3}
       propertyPath: m_XAxis.Value
@@ -24227,7 +24227,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1454616997}
   - component: {fileID: 1454616996}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: NavMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
