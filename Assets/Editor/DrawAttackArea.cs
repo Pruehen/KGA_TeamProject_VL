@@ -29,6 +29,10 @@ public class DrawAttackArea : Editor
         }
         if (selected is GameObject go )
         {
+            if(go == null)
+            {
+                return;
+            }
             if(go.TryGetComponent(out EnemyBase eb))
             {
                 _eb = eb;

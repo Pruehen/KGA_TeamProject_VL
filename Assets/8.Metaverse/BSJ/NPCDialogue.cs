@@ -17,23 +17,23 @@ public class NPCDialogue : MonoBehaviour
     {
         dialogueLines = dialogueData.Split("\\n");
     }
-
     private void OnTriggerStay(Collider other)
     {
-        if(other.attachedRigidbody == null)
+        if (other.CompareTag("Player"))
         {
-            return;
-        }
-        NetPlayer netPlayer = other.attachedRigidbody.GetComponent<NetPlayer>();
-        if (netPlayer == null)
-        {
-            return;
-        }
-        if (netPlayer.isLocalPlayer)
-        {
-            if (!isDisplayingDialogue && Input.GetKeyDown(KeyCode.F))
+            if(other.attachedRigidbody == null)
             {
-                StartDialogue();
+                return;
+            }
+            NetPlayer netPlayer = other.attachedRigidbody.GetComponent<NetPlayer>();
+            if (netPlayer == null)
+            {
+                return;
+            }
+            if (netPlayer.isLocalPlayer)
+            {
+                netPlayer.SetNPC(this);
+                netPlayer.IsNearNPC = true;
             }
         }
     }
@@ -41,6 +41,16 @@ public class NPCDialogue : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            if(other.attachedRigidbody == null)
+            {
+                return;
+            }
+            NetPlayer netPlayer = other.attachedRigidbody.GetComponent<NetPlayer>();
+            if (netPlayer == null)
+            {
+                return;
+            }
+            netPlayer.IsNearNPC = false;
             dialoguePanel.SetActive(false);
             isDisplayingDialogue = false;
             currentLine = 0;
@@ -56,7 +66,7 @@ public class NPCDialogue : MonoBehaviour
         }
     }
 
-    private void StartDialogue()
+    public void StartDialogue()
     {
         if(isDisplayingDialogue)
         {

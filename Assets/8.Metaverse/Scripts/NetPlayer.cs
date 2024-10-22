@@ -38,8 +38,17 @@ public class NetPlayer : NetworkBehaviour
     private float _mouseSensitivity = 100.0f;
     private float _cameraRotationX = 0.0f;
     private Transform _chatRoot;
+    public bool IsNearNPC = false;
+    public NPCDialogue NpcDialogue;
+
+    public void SetNPC(NPCDialogue npcDialogue)
+    {
+        NpcDialogue = npcDialogue;
+    }
 
     public Transform GetSpawnObjTransform() { return Transform_SpawnObj; }
+
+
 
     private void Start()
     {
@@ -222,6 +231,19 @@ public class NetPlayer : NetworkBehaviour
 
             Quaternion targetRotation = Quaternion.LookRotation(localMovement, Vector3.up);
             Mesh.transform.rotation = Quaternion.Slerp(Mesh.transform.rotation, targetRotation, 1f - Mathf.Exp(-_rotationSpeed * Time.deltaTime));
+        }
+
+        // Interact
+        if(Input.GetKeyDown(KeyCode.F))
+        {
+            if(IsNearNPC)
+            {
+                NpcDialogue.StartDialogue();
+            }
+            else
+            {
+                MetaNetworkManager.RequestSpawnFieldObject();
+            }
         }
     }
 
