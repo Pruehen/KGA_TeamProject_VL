@@ -5,7 +5,7 @@ public class UniqueType : MonoBehaviour
 {
     public MonoBehaviour component;
 
-    void Start()
+    void Awake()
     {
         if(component == null)
         {

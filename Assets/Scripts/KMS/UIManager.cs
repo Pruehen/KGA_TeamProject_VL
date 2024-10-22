@@ -130,7 +130,11 @@ public class UIManager : SceneSingleton<UIManager>
             case nameof(InputManager.Instance.IsInteractiveBtnClick):
                 if (InputManager.Instance.IsInteractiveBtnClick == true)
                 {
-                    if (EventSystem.current.currentSelectedGameObject?.GetComponent<Button>())
+                    if (EventSystem.current.currentSelectedGameObject == null)
+                    {
+                        return;
+                    }
+                    if (EventSystem.current.currentSelectedGameObject.GetComponent<Button>())
                     {
                         if (checkUI.activeSelf == false && holdBlueChip.activeSelf == true && pickBlueChip.activeSelf == false)
                         {
