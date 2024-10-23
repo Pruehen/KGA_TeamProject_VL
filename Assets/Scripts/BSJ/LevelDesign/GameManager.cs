@@ -97,7 +97,7 @@ public class GameManager : SceneSingleton<GameManager>
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        _blockSceneChange = false;
+        BlockSceneChange = false;
         SceneManager.SetActiveScene(scene);
         if(mode == LoadSceneMode.Single)
         {
@@ -269,14 +269,14 @@ public class GameManager : SceneSingleton<GameManager>
 
 
 
-    private bool _blockSceneChange = false;
+    public bool BlockSceneChange {get; set;} = false;
     public void StartGame()
     {
-        if (_blockSceneChange)
+        if (BlockSceneChange)
         {
             return;
         }
-        _blockSceneChange = true;
+        BlockSceneChange = true;
         if (_isLoading)
             return;
         _enemies.Clear();
@@ -319,11 +319,11 @@ public class GameManager : SceneSingleton<GameManager>
 
     private void GameClear()
     {
-        if(_blockSceneChange)
+        if(BlockSceneChange)
         {
             return;
         }
-        _blockSceneChange = true;
+        BlockSceneChange = true;
         ResultSceneType = ResultSceneType.Clear;
         DelayLoadScene("ResultScene", 3f, () =>
         {
@@ -332,11 +332,11 @@ public class GameManager : SceneSingleton<GameManager>
     }
     private void OnDead(Combat self)
     {
-        if(_blockSceneChange)
+        if(BlockSceneChange)
         {
             return;
         }
-        _blockSceneChange = true;
+        BlockSceneChange = true;
         ResultSceneType = ResultSceneType.Dead;
         DelayLoadScene("ResultScene", 3f, () =>
         {
@@ -345,11 +345,11 @@ public class GameManager : SceneSingleton<GameManager>
     }
     public void EndGame()
     {
-        if(_blockSceneChange)
+        if(BlockSceneChange)
         {
             return;
         }
-        _blockSceneChange = true;
+        BlockSceneChange = true;
 
         var userData = JsonDataManager.GetUserData();
         JsonDataManager.GetUserData().SavePlayData_OnSceneEnter(new StageData(_stageSystem.CurrentStage.SceneName, _stageSystem.CurrentStageNum, _rewardType, _stageSystem.CurrentStage));
@@ -357,11 +357,11 @@ public class GameManager : SceneSingleton<GameManager>
     }
     public void LoadMainScene()
     {
-        if(_blockSceneChange)
+        if(BlockSceneChange)
         {
             return;
         }
-        _blockSceneChange = true;
+        BlockSceneChange = true;
         LoadSceneAsync("mainGame", SceneManager.GetActiveScene());
     }
 
@@ -401,6 +401,7 @@ public class GameManager : SceneSingleton<GameManager>
         ao.completed += (ao) =>
         {
             IsLoading = false;
+            BlockSceneChange = false;
         };
     }
     private void ClearAndSave()
