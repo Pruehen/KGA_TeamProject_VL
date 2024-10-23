@@ -87,7 +87,8 @@ public class GameManager : SceneSingleton<GameManager>
         {
             return;
         }
-        if (SceneManager.GetActiveScene().name == "mainGame" || SceneManager.GetActiveScene().name == "ResultScene")
+        string sceneName = SceneManager.GetActiveScene().name;
+        if (sceneName == "mainGame" || sceneName == "ResultScene"|| sceneName == "MetaScene")
         {
             return;
         }
@@ -116,7 +117,7 @@ public class GameManager : SceneSingleton<GameManager>
         {
             _unique = true;
 
-            if (scene.name == "ResultScene")
+            if (scene.name == "ResultScene" || scene.name == "MetaScene")
             {
                 return;
             }
@@ -125,6 +126,7 @@ public class GameManager : SceneSingleton<GameManager>
                 SM.Instance.SetBGM(0);
                 return;
             }
+            
 
             if (_init == false)
             {
@@ -307,7 +309,6 @@ public class GameManager : SceneSingleton<GameManager>
             }
         }
 
-
         _isFirstStage = true;
         _stageSystem.ResetStageSystem();
         //Start New
@@ -317,6 +318,16 @@ public class GameManager : SceneSingleton<GameManager>
         SetStageQuests();
         JsonDataManager.GetUserData().SavePlayData_OnSceneEnter(new StageData(randomStage.SceneName, _stageSystem.CurrentStageNum, _rewardType, _stageSystem.CurrentStage));
         LoadSceneAsync(randomStage.SceneName, SceneManager.GetActiveScene());
+    }
+
+    public void LoadScene(string sceneName)
+    {
+        if (_blockSceneChange)
+        {
+            return;
+        }
+        _blockSceneChange = true;
+        DelayLoadScene(sceneName, 0f);
     }
 
     private void GameClear()
@@ -498,4 +509,10 @@ public class GameManager : SceneSingleton<GameManager>
     {
         _PlayerMaster.transform.position = NextStageObjects.transform.position - (NextStageObjects.transform.forward * 3f);
     }
+
+
+
+
+    public string MetaVersePlayerName {get; set;}
+    public bool IsMetaVerseServer {get; set;} = true;
 }
