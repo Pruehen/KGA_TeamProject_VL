@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public class InputManager : SceneSingleton<InputManager>
 {   
     Vector2 _moveVector2_Left_WASD;
-    Vector2 _moveVector2_Right_Mouse;
+    Vector2 _rotateVector2_Mouse;
 
     bool _isLMouseBtnClick;
     bool _isRMouseBtnClick;
@@ -28,15 +28,15 @@ public class InputManager : SceneSingleton<InputManager>
         }
     }
 
-    public Vector2 MoveVector2_Right_Mouse
+    public Vector2 RotateVector2_Rotate
     {
-        get { return _moveVector2_Right_Mouse; }
+        get { return _rotateVector2_Mouse; }
         set
         {
-            if (_moveVector2_Right_Mouse != value)
+            if (_rotateVector2_Mouse != value)
             {
-                _moveVector2_Right_Mouse = value;
-                OnPropertyChanged(nameof(MoveVector2_Right_Mouse));
+                _rotateVector2_Mouse = value;
+                OnPropertyChanged(nameof(RotateVector2_Rotate));
             }
         }
     }
@@ -159,7 +159,7 @@ public class InputManager : SceneSingleton<InputManager>
 
     void OnRotate(InputValue value)//마우스 좌표
     {
-        MoveVector2_Right_Mouse = value.Get<Vector2>();
+        RotateVector2_Rotate = value.Get<Vector2>();
     }
 
     void OnDash(InputValue value)//스페이스 버튼 클릭

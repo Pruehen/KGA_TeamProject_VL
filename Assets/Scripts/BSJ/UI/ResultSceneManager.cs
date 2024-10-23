@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 public class ResultSceneManager : MonoBehaviour
 {
     [SerializeField] GameObject _startButton;
-    [SerializeField] InputManager _inputManager;
     [SerializeField] Text _resultTitle;
     [SerializeField] Text _resultCurrency;
     
@@ -42,7 +41,7 @@ public class ResultSceneManager : MonoBehaviour
     }
 
     private void Update() {
-        Vector2 moveVector2 = _inputManager.MoveVector2_Left_WASD;
+        Vector2 moveVector2 = InputManager.Instance.MoveVector2_Left_WASD;
         if (moveVector2.magnitude != 0f)
         {
             EventSystem.current.SetSelectedGameObject(_startButton);

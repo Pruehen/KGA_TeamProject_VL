@@ -15,17 +15,22 @@ public class DmgText : MonoBehaviour
 
         activeTime = 0;
         text.text = dmg.ToString("0");
+        transform.position = _originPos + Vector3.up * 1f;
     }
 
     private void Update()
     {
-        rect.SetUIPos_WorldToScreenPos(_originPos);
         _originPos += new Vector3(0, 2, 0) * Time.deltaTime;
+        transform.position = _originPos;
         activeTime += Time.deltaTime;
 
         if(activeTime > 1)
         {
             ObjectPoolManager.Instance.EnqueueObject(this.gameObject);
         }
+
+        transform.LookAt(Camera.main.transform);
+        transform.Rotate(Vector3.up, 180);
+        
     }
 }

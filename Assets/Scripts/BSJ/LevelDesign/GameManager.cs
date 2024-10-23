@@ -7,6 +7,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
 using Zenject.SpaceFighter;
+using Unity.XR.CoreUtils;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public enum RewardType
 {
@@ -441,6 +443,10 @@ public class GameManager : SceneSingleton<GameManager>
             return null;
         }
         IsLoading = true;
+
+        Destroy(GameObject.FindObjectOfType<XROrigin>().gameObject);
+        Destroy(GameObject.FindObjectOfType<XRInteractionManager>().gameObject);
+
         AsyncOperation ao = SceneManager.LoadSceneAsync(sceneName, mode);
         if(onComplete != null)
         {

@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using Cinemachine;
 public class PlayerCameraMove : SceneSingleton<PlayerCameraMove>
 {
     [Range(1f, 1000f)] public float mouseSpeed = 200f;
@@ -10,42 +10,35 @@ public class PlayerCameraMove : SceneSingleton<PlayerCameraMove>
 
     Vector3 startLocalPosition;
 
-
     public LayerMask camraCollition;
+
+    public CinemachineFreeLook freeLookCamera;
 
     private void Awake()
     {
         startLocalPosition = transform.localPosition; 
     }
-
-    public void LateUpdate()
+    private void Start()
     {
-        //transform.rotation = Quaternion.identity;
-        //this.transform.localPosition = new Vector3(0, transform.localPosition.y, -camRange);
+        if (freeLookCamera != null)
+        {
+            freeLookCamera.m_XAxis.m_InputAxisName = "";
+            freeLookCamera.m_YAxis.m_InputAxisName = "";
+        }
+    }
 
-        //float mouseX = Input.GetAxis("Mouse X") * mouseSpeed * Time.deltaTime;
+    private void Update()
+    {
+        UpdateCameraInput(InputManager.Instance.RotateVector2_Rotate.x, InputManager.Instance.RotateVector2_Rotate.y);
+    }
 
-        //transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-
-        //camAxis.Rotate(Vector3.up * mouseX);
-
-       // //플레이어부터 카메라까지의 방향
-       //Vector3 rayDir = transform.position - camAxis.position;
-
-
-       // Debug.DrawRay(camAxis.position, rayDir.normalized);
-
-       // if (Physics.Raycast(camAxis.position, rayDir, out RaycastHit hit, camRange, camraCollition))
-       // {
-       //     Vector3 point = hit.point - rayDir.normalized;
-       //     transform.position = point;
-       //     Debug.Log(rayDir);
-       // }
-       // else
-       // {
-       //     transform.localPosition = Vector3.Lerp(transform.localPosition, startLocalPosition, Time.deltaTime * 10);
-       // }
-      
+    public void UpdateCameraInput(float xAxisValue, float yAxisValue)
+    {
+        if (freeLookCamera != null)
+        {
+            freeLookCamera.m_XAxis.m_InputAxisValue = xAxisValue;
+            freeLookCamera.m_YAxis.m_InputAxisValue = yAxisValue;
+        }
     }
       
     public Transform CamAxisTransform()

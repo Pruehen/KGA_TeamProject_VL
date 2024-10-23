@@ -299,6 +299,7 @@ public class UIManager : SceneSingleton<UIManager>
         questName.text = name;
         questInfo.text = discription;
         Debug.Log("Name :" + questName.text + "Info :" + questInfo.text);
+        questAni.gameObject.SetActive(true);
 
     }
 
@@ -365,6 +366,7 @@ public class UIManager : SceneSingleton<UIManager>
     //업적
     public void Achievement()
     {
+        achievementAni.gameObject.SetActive(true);
         achievementAni.SetBool("Feat", true);
     }
 
