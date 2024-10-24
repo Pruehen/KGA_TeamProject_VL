@@ -11,7 +11,7 @@ public class RayCameraCollision : MonoBehaviour
     [SerializeField] float _offsetFromWall = 0.3f;
     [SerializeField] Transform _repositionCameraTarget;
 
-    void Update()
+    void FixedUpdate()
     {
         float _cameraDistance = Vector3.Distance(_cameraParent.position, _originalCameraTarget.position);
         Debug.DrawRay(_cameraParent.position, -_camera.forward * _cameraDistance, Color.red);
