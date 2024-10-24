@@ -1,40 +1,47 @@
-using Newtonsoft.Json;
+ using Newtonsoft.Json;
 using UnityEngine;
 using System.IO;
-using System;
 using System.Threading.Tasks;
 using EnumTypes;
 
 public static class JsonDataManager
 {
+    
+    private static string GetFilePath(string fileName)
+    {
+        return Path.Combine(Application.persistentDataPath, fileName);
+    }
+    
     public static JsonCache jsonCache = new JsonCache();
     public static T DataTableListLoad<T>(string saveDataFileName) where T : class, new()
     {
-        string filePath = Application.dataPath + saveDataFileName;
+        return LoadJson<T>(saveDataFileName);
 
-        if (!File.Exists(filePath))
-            return new T();
+        // string filePath = Application.dataPath + saveDataFileName;
 
-        string fileData = File.ReadAllText(filePath);
-        T data;
+        // if (!File.Exists(filePath))
+        //     return new T();
 
-        try
-        {
-            data = JsonConvert.DeserializeObject<T>(fileData);
-            if (data == null)
-            {
-                data = new T();
-                Debug.Log("<color=#00FF00>새 저장 데이터 생성</color>");
-            }
+        // string fileData = File.ReadAllText(filePath);
+        // T data;
 
-            Debug.Log($"<color=#00FF00>데이터 불러오기 완료</color> : {typeof(T).Name}");
-            return data;
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"<color=#FF0000>데이터 불러오기 실패</color> : {e.Message}");
-            return new T();
-        }
+        // try
+        // {
+        //     data = JsonConvert.DeserializeObject<T>(fileData);
+        //     if (data == null)
+        //     {
+        //         data = new T();
+        //         Debug.Log("<color=#00FF00>새 저장 데이터 생성</color>");
+        //     }
+
+        //     Debug.Log($"<color=#00FF00>데이터 불러오기 완료</color> : {typeof(T).Name}");
+        //     return data;
+        // }
+        // catch (Exception e)
+        // {
+        //     Debug.LogError($"<color=#FF0000>데이터 불러오기 실패</color> : {e.Message}");
+        //     return new T();
+        // }
     }
     public static void DataSaveCommand<T>(T jsonCacheData, string saveDataFileName)
     {
@@ -50,7 +57,7 @@ public static class JsonDataManager
     }
     static async Task DataSaveAsync<T>(T jsonCacheData, string saveDataFileName)
     {
-        string filePath = Application.dataPath + saveDataFileName;
+        string filePath = GetFilePath(saveDataFileName);
 
         string data = JsonConvert.SerializeObject(jsonCacheData, Formatting.Indented);
 
@@ -87,6 +94,97 @@ public static class JsonDataManager
     {
         jsonCache.UserDataCache.SetUserDataIndex(index);        
     }
+    public static void SetupInitialData(string fileName, string defaultData)
+    {
+        string filePath = GetFilePath(fileName);
+
+        try
+        {
+            File.WriteAllText(filePath, defaultData);
+            Debug.Log($"Data saved successfully to {filePath}");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Failed to save data to {filePath}. Error: {e.Message}");
+        }
+    }
+
+    public static async Task SaveJsonAsync(string jsonData, string fileName)
+    {
+        string filePath = GetFilePath(fileName);
+
+        try
+        {
+            await File.WriteAllTextAsync(filePath, jsonData);
+            Debug.Log($"Data saved successfully to {filePath}");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Failed to save data to {filePath}. Error: {e.Message}");
+        }
+    }
+
+    public static T LoadJson<T>(string fileName) where T : new()
+    {
+        string filePath = GetFilePath(fileName);
+
+        if (!File.Exists(filePath))
+        {
+            Debug.LogWarning($"File not found at {filePath}. Returning default value.");
+            return new T();
+        }
+
+        try
+        {
+            string json = File.ReadAllText(filePath);
+            Debug.Log($"File loaded successfully from {filePath}");
+            Debug.Log($"File data: {json}");
+            if(string.IsNullOrWhiteSpace(json))
+            {
+                Debug.LogWarning($"File is empty at {filePath}. Returning default value.");
+                GameManager.Instance.SetupInitialUserData();
+                return new T();
+            }
+            T data = JsonConvert.DeserializeObject<T>(json);
+            if(data == null)
+            {
+                Debug.LogWarning($"File is empty at {filePath}. Returning default value.");
+                GameManager.Instance.SetupInitialUserData();
+                return new T();
+            }
+            return data;
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Failed to load data from {filePath}. Error: {e.Message}");
+            return new T();
+        }
+    }
+
+    public static bool DeleteJson(string fileName)
+    {
+        string filePath = GetFilePath(fileName);
+
+        if (File.Exists(filePath))
+        {
+            try
+            {
+                File.Delete(filePath);
+                Debug.Log($"File deleted successfully: {filePath}");
+                return true;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Failed to delete file at {filePath}. Error: {e.Message}");
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"File not found at {filePath}. Nothing to delete.");
+        }
+
+        return false;
+    }
 }
 
 public class JsonCache
@@ -98,7 +196,7 @@ public class JsonCache
         {
             if (_blueChipTableCache == null)
             {
-                _blueChipTableCache = JsonDataManager.DataTableListLoad<BlueChipTable>(BlueChipTable.FilePath());
+                _blueChipTableCache = JsonDataManager.DataTableListLoad<BlueChipTable>(GameManager.BLUECHIP_DATA_FILE);
             }
             return _blueChipTableCache;
         }
@@ -111,7 +209,14 @@ public class JsonCache
         {
             if (_passiveTableCache == null)
             {
-                _passiveTableCache = JsonDataManager.DataTableListLoad<PassiveTable>(PassiveTable.FilePath());
+                _passiveTableCache = JsonDataManager.DataTableListLoad<PassiveTable>(GameManager.PASSIVE_DATA_FILE);
+            }
+            foreach(var passive in _passiveTableCache.dic)
+            {
+                Debug.Log($"Passive: {passive.Key} {passive.Value.Name}");
+                Debug.Log($"Desc: {passive.Value.Desc}");
+                Debug.Log($"IconPath: {passive.Value.IconPath}");
+                Debug.Log($"IconPath_Dis: {passive.Value.IconPath_Dis}");
             }
             return _passiveTableCache;
         }
@@ -124,7 +229,7 @@ public class JsonCache
         {
             if (_userDataCache == null)
             {
-                _userDataCache = JsonDataManager.DataTableListLoad<UserDataList>(UserDataList.FilePath());
+                _userDataCache = JsonDataManager.DataTableListLoad<UserDataList>(GameManager.USER_DATA_FILE);
             }
             return _userDataCache;
         }
@@ -139,8 +244,8 @@ public class JsonCache
 
     public void Save()
     {
-        JsonDataManager.DataSaveCommand(_blueChipTableCache, BlueChipTable.FilePath());
-        JsonDataManager.DataSaveCommand(_passiveTableCache, PassiveTable.FilePath());
-        JsonDataManager.DataSaveCommand(_userDataCache, UserDataList.FilePath());
+        JsonDataManager.DataSaveCommand(_blueChipTableCache, GameManager.BLUECHIP_DATA_FILE);
+        JsonDataManager.DataSaveCommand(_passiveTableCache, GameManager.PASSIVE_DATA_FILE);
+        JsonDataManager.DataSaveCommand(_userDataCache, GameManager.USER_DATA_FILE);
     }
 }

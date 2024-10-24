@@ -1,0 +1,94 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ececdf24962462a45bcf665b39c0f21f, type: 3}
+  m_Name: BluechiptData
+  m_EditorClassIdentifier: 
+  text: "{   \"dic\": {     \"Melee1\": {       \"Name\": \"\uC2E0\uAC80\uD569\uC77C\",      
+    \"Desc\": \"\uCC28\uC9D5 \uACF5\uACA9\uC774 \uD604\uC7AC \uBCF4\uC720\uD55C \uCCB4\uB825\uACFC
+    \uC274\uB4DC \uCD1D\uD569\uC758 {0}%\uC758 \uCD94\uAC00 \uB370\uBBF8\uC9C0\uB97C
+    \uC785\uD788\uBA70, \uCC28\uC9D5 \uACF5\uACA9\uC758 \uBC94\uC704\uAC00 {1}\uBC30
+    \uC99D\uAC00.\",       \"IconName\": \"IconBluechipMelee1\",       \"Level_VelueList\":
+    {         \"1\": [           2.0,           1.2         ],         \"2\": [          
+    4.0,           1.3         ],         \"3\": [           6.0,           1.5        
+    ],         \"4\": [           8.0,           1.7         ],         \"5\": [          
+    10.0,           2.0         ]       }     },     \"Melee2\": {       \"Name\":
+    \"\uAE08\uAC15\uBD88\uAD34\",       \"Desc\": \"\uADFC\uAC70\uB9AC \uBAA8\uB4DC\uB85C
+    \uC804\uD658\uD560 \uC2DC, \uBCF4\uD638\uB9C9 {0} \uD68D\uB4DD (\uCD5C\uB300
+    {1}). \uADFC\uAC70\uB9AC \uACF5\uACA9 \uC801\uC911 \uC2DC \uBCF4\uD638\uB9C9
+    {2} \uD68C\uBCF5. \uC6D0\uAC70\uB9AC \uBAA8\uB4DC\uB85C \uC804\uD658\uD560 \uC2DC
+    \uBCF4\uD638\uB9C9 \uC81C\uAC70.\",       \"IconName\": \"IconBluechipMelee2\",      
+    \"Level_VelueList\": {         \"1\": [           20.0,           50.0,          
+    12.0         ],         \"2\": [           20.0,           50.0,           14.0        
+    ],         \"3\": [           20.0,           50.0,           16.0         ],        
+    \"4\": [           20.0,           50.0,           18.0         ],         \"5\":
+    [           20.0,           50.0,           20.0         ]       }     },    
+    \"Range1\": {       \"Name\": \"\uC0AC\uBA74\uCD08\uAC00\",       \"Desc\": \"\uC6D0\uAC70\uB9AC
+    \uACF5\uACA9\uC758 \uCF64\uBCF4 \uD69F\uC218\uAC00 {0}\uD68C \uAC10\uC18C\",      
+    \"IconName\": \"IconBluechipRange1\",       \"Level_VelueList\": {         \"1\":
+    [           1.0         ],         \"2\": [           2.0         ],        
+    \"3\": [           3.0         ]       }     },     \"Range2\": {       \"Name\":
+    \"\uD654\uB8E1\uC810\uC815\",       \"Desc\": \"\uC6D0\uAC70\uB9AC \uB9C8\uC9C0\uB9C9
+    \uACF5\uACA9 \uC2DC, {0}%\uC758 \uD655\uB960\uB85C {1}% \uC704\uB825\uC758 \uBB34\uC791\uC704
+    \uC2A4\uD0AC \uBC1C\uB3D9\",       \"IconName\": \"IconBluechipRange2\",      
+    \"Level_VelueList\": {         \"1\": [           20.0,           25.0,          
+    0.0,           1.0         ],         \"2\": [           20.0,           25.0,          
+    1.0,           2.0         ],         \"3\": [           20.0,           25.0,          
+    2.0,           3.0         ]       }     },     \"Hybrid1\": {       \"Name\":
+    \"\uC6A9\uAD00\uADDC\uCC9C\",       \"Desc\": \"\uADFC\uAC70\uB9AC \uBAA8\uB4DC\uB85C
+    \uC804\uD658\uD560 \uC2DC {0}\uD68C\uC758 \uADFC\uAC70\uB9AC \uD0C0\uACA9 \uD53C\uD574\uB7C9
+    {1}% \uC99D\uAC00, \uC6D0\uAC70\uB9AC \uBAA8\uB4DC\uB85C \uC804\uD658\uD560 \uC2DC
+    {2}\uD68C\uC758 \uC6D0\uAC70\uB9AC \uD0C0\uACA9 \uD53C\uD574\uB7C9 {3}% \uC99D\uAC00\",      
+    \"IconName\": \"IconBluechipHybrid1\",       \"Level_VelueList\": {         \"1\":
+    [           3.0,           40.0,           3.0,           40.0         ],        
+    \"2\": [           3.0,           60.0,           3.0,           60.0        
+    ],         \"3\": [           3.0,           80.0,           3.0,           80.0        
+    ],         \"4\": [           3.0,           110.0,           3.0,          
+    110.0         ],         \"5\": [           3.0,           150.0,           3.0,          
+    150.0         ]       }     },     \"Hybrid2\": {       \"Name\": \"\uC9C0\uB85D\uC704\uB9C8\",      
+    \"Desc\": \"\uACF5\uACA9 \uBAA8\uB4DC\uB97C \uC804\uD658\uD560 \uC218 \uC5C6\uC74C.
+    {0}\uCD08\uAC00 \uC9C0\uB0A0 \uB54C\uB9C8\uB2E4 \uC790\uB3D9\uC73C\uB85C \uBAA8\uB4DC
+    \uBCC0\uD658. \uB0B4\uAD6C\uB3C4\uB97C \uC18C\uBAA8\uD558\uC9C0 \uC54A\uC74C.
+    \uD0C4\uD658 \uC18C\uBAA8 \uC5C6\uC74C\",       \"IconName\": \"IconBluechipHybrid2\",      
+    \"Level_VelueList\": {         \"1\": [           5.0,           2.0        
+    ]       }     },     \"Generic1\": {       \"Name\": \"\uC804\uAD11\uC11D\uD654\",      
+    \"Desc\": \"\uB300\uC26C \uBC1C\uB3D9 \uC2DC \uACF5\uACA9\uD0C0\uC785\uC5D0 \uB530\uB77C
+    {2}\uCD08\uAC04 {0}\uCD08\uB2F9 {1}\uC758 \uC9C0\uC18D \uD53C\uD574\uB97C \uAC00\uD558\uB294
+    \uBD88\uAE38\uC744 \uC0DD\uC131\uD558\uAC70\uB098 {3}\uC758 \uD53C\uD574\uC758
+    \uD3ED\uBC1C\uC744 \uC0DD\uC131\",       \"IconName\": \"IconBluechipGeneral1\",      
+    \"Level_VelueList\": {         \"1\": [           1.0,           10.0,          
+    5.0,           25.0,           1.5         ],         \"2\": [           1.0,          
+    12.0,           5.0,           30.0,           1.5         ],         \"3\":
+    [           1.0,           14.0,           5.0,           35.0,           1.5        
+    ],         \"4\": [           1.0,           16.0,           5.0,           40.0,          
+    1.5         ],         \"5\": [           1.0,           20.0,           5.0,          
+    50.0,           1.5         ]       }     },     \"Generic2\": {       \"Name\":
+    \"\uACE0\uC721\uC9C0\uACC4\",       \"Desc\": \"\uC6D0\uAC70\uB9AC \uACF5\uACA9
+    \uC2DC \uD0C4\uD658\uC744 {0}\uB9CC\uD07C \uCD94\uAC00\uB85C \uC18C\uBAA8. \uC6D0\uAC70\uB9AC
+    \uD0C0\uACA9 \uD53C\uD574\uB7C9 {1}% \uC99D\uAC00. \uADFC\uAC70\uB9AC \uACF5\uACA9
+    \uC2DC \uADFC\uC811 \uAC8C\uC774\uC9C0\uB97C {2}\uB9CC\uD07C \uCD94\uAC00\uB85C
+    \uC18C\uBAA8. \uADFC\uAC70\uB9AC \uD0C0\uACA9 \uD53C\uD574\uB7C9 {3}% \uC99D\uAC00\",      
+    \"IconName\": \"IconBluechipGeneral2\",       \"Level_VelueList\": {        
+    \"1\": [           3.0,           80.0,           3.0,           80.0        
+    ],         \"2\": [           3.0,           100.0,           3.0,          
+    100.0         ],         \"3\": [           2.0,           120.0,           2.0,          
+    120.0         ],         \"4\": [           2.0,           140.0,           2.0,          
+    140.0         ],         \"5\": [           1.0,           150.0,           1.0,          
+    150.0         ]       }     },     \"Generic3\": {       \"Name\": \"\uC2B9\uC2B9\uC7A5\uAD6C\",      
+    \"Desc\": \"\uD604\uC7AC \uC2A4\uD0AC \uAC8C\uC774\uC9C0\uC5D0 \uBE44\uB840\uD558\uC5EC
+    \uACF5\uACA9 \uC18D\uB3C4\uAC00 \uCD5C\uB300 {3}% \uC99D\uAC00. {4}\uCD08\uAC04
+    \uACF5\uACA9\uC774 \uBA85\uC911\uD558\uC9C0 \uC54A\uC744 \uC2DC \uC2A4\uD0AC
+    \uAC8C\uC774\uC9C0 0\uC73C\uB85C \uCD08\uAE30\uD654.\",       \"IconName\": \"IconBluechipGeneral3\",      
+    \"Level_VelueList\": {         \"1\": [           3.0,           5.0,          
+    7.0,           10.0,           3.0         ],         \"2\": [           5.0,          
+    10.0,           15.0,           20.0,           3.0         ],         \"3\":
+    [           10.0,           15.0,           20.0,           30.0,           3.0        
+    ]       }     }   } }"
