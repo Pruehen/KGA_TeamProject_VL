@@ -1,9 +1,11 @@
 using Mirror;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using TMPro;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
+
 
 public class NetPlayer : NetworkBehaviour
 {
@@ -18,8 +20,6 @@ public class NetPlayer : NetworkBehaviour
     public Transform Mesh;
     public float _rotationSpeed = 100.0f;
 
-    [Header("Interaction")]
-    public KeyCode _atkKey = KeyCode.F;
 
     [SerializeField] Rigidbody RigidBody_Player;
     [SerializeField] Transform Transform_CameraParent;
@@ -34,12 +34,18 @@ public class NetPlayer : NetworkBehaviour
     [SerializeField] Transform Transform_SpawnObj;
     [SerializeField] LayerMask collisionLayers;
 
+    [Header("PlayerScript")]
+    [SerializeField] Behaviour[] PlayerScripts;
+    [SerializeField] GameObject[] PlayerGameObjects;
+
     private float _moveSpeed = 5.0f;
     private float _mouseSensitivity = 100.0f;
     private float _cameraRotationX = 0.0f;
     private Transform _chatRoot;
     public bool IsNearNPC = false;
     public NPCDialogue NpcDialogue;
+
+    public InputActionAsset InputAsset;
 
     public void SetNPC(NPCDialogue npcDialogue)
     {
@@ -50,19 +56,34 @@ public class NetPlayer : NetworkBehaviour
 
 
 
+    private MetaNetworkManager _chatManager;
+    [SerializeField] ChatUI _chatUI;
     private void Start()
     {
-        Transform_CameraParent.gameObject.SetActive(false);
+        //Transform_CameraParent.gameObject.SetActive(false);
 
         //Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;
-        var gObj = GameObject.Find("InputField_Chat");
-        Debug.Log($"InputField null: {gObj == null}");
-        if(gObj != null)
+
+        if(!isLocalPlayer)
         {
-            InputField_Chat = gObj.GetComponent<TMP_InputField>();
+            foreach (var localComponents in PlayerScripts)
+            {
+                localComponents.enabled = false;
+            }
+            foreach (var localGameObject in PlayerGameObjects)
+            {
+                localGameObject.SetActive(false);
+            }
         }
-        Debug.Log($"InputField: {InputField_Chat.name}");
+
+        InputAsset.Enable();
+        if(!isLocalPlayer)
+        {
+            return;
+        }
+        _chatManager = FindObjectOfType<MetaNetworkManager>();
+        _chatManager.ChatUi = _chatUI;
         StartCoroutine(CoDelayBindRpc());
     }
 
@@ -79,13 +100,11 @@ public class NetPlayer : NetworkBehaviour
                 MetaNetworkManager = metaManager;
                 if (this.isLocalPlayer)
                 {
-                    Transform_CameraParent.name = "LocalPlayerCamera";
                     MetaNetworkManager.BindLocalPlayerNetId(this.netId);
                     MetaNetworkManager.BindLocalPlayer(this);
-                    Transform_CameraParent.gameObject.SetActive(true);
                 }
                 
-                MetaNetworkManager.BindRpcAnimStateChangedCallback(OnRpcAnimStateChanged);
+                //MetaNetworkManager.BindRpcAnimStateChangedCallback(OnRpcAnimStateChanged);
                 MetaNetworkManager.BindRecvMsgCallback(OnRecvChatMsg);
             }
         }
@@ -137,28 +156,38 @@ public class NetPlayer : NetworkBehaviour
         {
             return;
         }
-        if(Input.GetKeyDown(KeyCode.Return))
+        if(isLocalPlayer == false)
         {
-            string curStateName = "Run";
-            if(IsAnimStateChanged(curStateName, false))
-            {
-                CheckAndCancelAnimState("Sit");
-                CheckAndCancelAnimState("InteractLoop");
-                MetaNetworkManager?.RequestChangeAnimState(curStateName, false);
-            }
+            return;
+        }
+        if(InputManager.Instance.IsEnterBtnClick)
+        {
             MetaNetworkManager.OnClick_ChatInputField();
         }
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if(InputManager.Instance.IsEscapeBtnClick)
         {
             GameManager.Instance.LoadMainScene();
         }
+        if(InputManager.Instance.IsInteractiveBtnClick_CoolTime)
+        {
+            if(IsNearNPC)
+            {
+                OnNpcInteract();
+            }
+            else
+            {
+                MetaNetworkManager.RequestSpawnFieldObject();
+            }
+        }
         if(InputField_Chat.isFocused)
         {
-            
-            return;
+            InputManager.Instance.IsTyping = true;
         }
-
-        MoveOnUpdate();
+        else
+        {
+            InputManager.Instance.IsTyping = false;
+        }
+        // MoveOnUpdate();
     }
 
     private bool CheckIsFocusedOnUpdate()
@@ -182,69 +211,145 @@ public class NetPlayer : NetworkBehaviour
 
     private void MoveOnUpdate()
     {
-        if (isLocalPlayer == false)
-            return;
 
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
-        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+        // if (isLocalPlayer == false)
+        //     return;
 
-        string curStateName = "Run";
-        bool isRunning = movement.magnitude > 0;
-        if(IsAnimStateChanged(curStateName, isRunning))
+        // float moveHorizontal = Input.GetAxis("Horizontal");
+        // float moveVertical = Input.GetAxis("Vertical");
+        // Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+
+        // string curStateName = "Run";
+        // bool isRunning = movement.magnitude > 0;
+        // if(IsAnimStateChanged(curStateName, isRunning))
+        // {
+        //     CheckAndCancelAnimState("Sit");
+        //     CheckAndCancelAnimState("InteractLoop");
+        //     MetaNetworkManager?.RequestChangeAnimState(curStateName, isRunning);
+        // }
+
+        // // Rotate Camera
+        // float mouseX = Input.GetAxis("Mouse X") * _mouseSensitivity * Time.deltaTime;
+        // float mouseY = Input.GetAxis("Mouse Y") * _mouseSensitivity * Time.deltaTime;
+
+        // _cameraRotationX -= mouseY;
+        // _cameraRotationX = Mathf.Clamp(_cameraRotationX, -15f, 60f);
+
+        //Transform_CameraParent.localRotation = Quaternion.Euler(_cameraRotationX, 0f, 0f);
+        // transform.Rotate(Vector3.up * mouseX);
+
+        // // Camera Collision
+        // if(Physics.Raycast(Transform_CameraParent.position, -Transform_CameraParent.forward, out RaycastHit hit, _cameraDistance, collisionLayers))
+        // {
+        //     Transform_Camera.position = Transform_CameraParent.position - (Transform_CameraParent.forward * (hit.distance - 0.1f));
+        // }
+        // else
+        // {
+        //     Transform_Camera.position = Transform_CameraParent.position - (Transform_CameraParent.forward * _cameraDistance);
+        // }
+
+        // Root Anim - false
+        // this.transform.Translate(Vector3.right * (moveHorizontal * _moveSpeed * Time.deltaTime));
+        // this.transform.Translate(Vector3.forward * (moveVertical * _moveSpeed * Time.deltaTime));
+
+        // // Rotate Player
+        // if(moveHorizontal != 0 || moveVertical != 0)
+        // {
+        //     Vector3 localMovement = Transform_CameraParent.transform.TransformDirection(movement);
+        //     localMovement.y = 0;
+        //     localMovement = localMovement.normalized;
+
+        //     Quaternion targetRotation = Quaternion.LookRotation(localMovement, Vector3.up);
+        //     Mesh.transform.rotation = Quaternion.Slerp(Mesh.transform.rotation, targetRotation, 1f - Mathf.Exp(-_rotationSpeed * Time.deltaTime));
+        // }
+
+        // // Interact
+        // if(Input.GetKeyDown(KeyCode.F))
+        // {
+        //     if(IsNearNPC)
+        //     {
+        //         NpcDialogue.StartDialogue();
+        //     }
+        //     else
+        //     {
+        //         MetaNetworkManager.RequestSpawnFieldObject();
+        //     }
+        // }
+    }
+
+
+
+    
+    public GameObject dialoguePanel;
+    public Text dialogueText;
+    public float delayBetweenDialogues = 1.5f; // 대화 사이의 지연 시간 (초)
+    private bool IsDisplayingDialogue = false;
+    private bool IsPrintingDialogue = false;
+
+    
+    private IEnumerator DisplayDialogueCoroutine()
+    {
+        IsPrintingDialogue = true;
+
+        if(NpcDialogue.TryGetCurrentLine(out string line))
         {
-            CheckAndCancelAnimState("Sit");
-            CheckAndCancelAnimState("InteractLoop");
-            MetaNetworkManager?.RequestChangeAnimState(curStateName, isRunning);
-        }
-
-        // Rotate Camera
-        float mouseX = Input.GetAxis("Mouse X") * _mouseSensitivity * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * _mouseSensitivity * Time.deltaTime;
-
-        _cameraRotationX -= mouseY;
-        _cameraRotationX = Mathf.Clamp(_cameraRotationX, -15f, 60f);
-
-        Transform_CameraParent.localRotation = Quaternion.Euler(_cameraRotationX, 0f, 0f);
-        transform.Rotate(Vector3.up * mouseX);
-
-        // Camera Collision
-        if(Physics.Raycast(Transform_CameraParent.position, -Transform_CameraParent.forward, out RaycastHit hit, _cameraDistance, collisionLayers))
-        {
-            Transform_Camera.position = Transform_CameraParent.position - (Transform_CameraParent.forward * (hit.distance - 0.1f));
+            StartCoroutine(PrintCharacterCoroutine(line));
+            yield return new WaitForSeconds(delayBetweenDialogues);
         }
         else
         {
-            Transform_Camera.position = Transform_CameraParent.position - (Transform_CameraParent.forward * _cameraDistance);
-        }
-
-        // Root Anim - false
-        this.transform.Translate(Vector3.right * (moveHorizontal * _moveSpeed * Time.deltaTime));
-        this.transform.Translate(Vector3.forward * (moveVertical * _moveSpeed * Time.deltaTime));
-
-        // Rotate Player
-        if(moveHorizontal != 0 || moveVertical != 0)
-        {
-            Vector3 localMovement = Transform_CameraParent.transform.TransformDirection(movement);
-            localMovement.y = 0;
-            localMovement = localMovement.normalized;
-
-            Quaternion targetRotation = Quaternion.LookRotation(localMovement, Vector3.up);
-            Mesh.transform.rotation = Quaternion.Slerp(Mesh.transform.rotation, targetRotation, 1f - Mathf.Exp(-_rotationSpeed * Time.deltaTime));
-        }
-
-        // Interact
-        if(Input.GetKeyDown(KeyCode.F))
-        {
-            if(IsNearNPC)
-            {
-                NpcDialogue.StartDialogue();
-            }
-            else
-            {
-                MetaNetworkManager.RequestSpawnFieldObject();
-            }
+            EndDialog();
         }
     }
 
+
+    private void OnNpcInteract()
+    {
+        if(IsPrintingDialogue)
+        {
+            return;
+        }
+        if(IsDisplayingDialogue)
+        {
+            OnNext();
+        }
+        else
+        {
+            dialoguePanel.SetActive(true);
+            NpcDialogue.StartDialogue();
+            IsDisplayingDialogue = true;
+            StartCoroutine(DisplayDialogueCoroutine());
+        }
+        
+        Debug.Log("NpcDialogue.StartDialogue()");
+    }
+    private void OnNext()
+    {
+        if(!IsPrintingDialogue)
+        {
+            StartCoroutine(DisplayDialogueCoroutine());
+        }
+    }
+    private IEnumerator PrintCharacterCoroutine(string text)
+    {
+        Debug.Log($"PrintCharacterCoroutine : {text}");
+        dialogueText.text = "";
+        foreach (char c in text)
+        {
+            dialogueText.text += c;
+            yield return new WaitForSeconds(0.05f);
+        }
+        IsPrintingDialogue = false;
+    }
+    public void EndDialog()
+    {
+        IsNearNPC = false;
+        dialoguePanel.SetActive(false);
+        IsDisplayingDialogue = false;
+    }
+
+    public void SendChatMessage(string msg)
+    {
+        _chatUI.OnClick_ChatInputField();
+    }
 }

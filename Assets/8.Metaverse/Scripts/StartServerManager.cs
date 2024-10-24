@@ -44,10 +44,10 @@ public class StartServerManager : MonoBehaviour
     {
         if (NetManager.GetNetworkClientConnected())
         {
-            if (Obj_LoadingPopup.activeSelf)
-            {
-                StartCoroutine(DelayedSetActive(Obj_LoadingPopup, false));
-            }
+            // if (Obj_LoadingPopup.activeSelf)
+            // {
+            //     StartCoroutine(DelayedSetActive(Obj_LoadingPopup, false));
+            // }
 
             return;
         }
@@ -63,7 +63,7 @@ public class StartServerManager : MonoBehaviour
 
     private void OnMetaStartClient()
     {
-        Obj_LoadingPopup.gameObject.SetActive(!NetManager.GetNetworkClientConnected());
+        //Obj_LoadingPopup.gameObject.SetActive(!NetManager.GetNetworkClientConnected());
     }
 
     private IEnumerator DelayedSetActive(GameObject obj, bool active)

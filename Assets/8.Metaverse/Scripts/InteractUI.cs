@@ -12,6 +12,11 @@ namespace Meta
 
         [SerializeField] private string Str_GameStartSceneName;
 
+        private void OnEnable()
+        {
+            MetaNetworkManager = FindObjectOfType<MetaNetworkManager>();
+        }
+
         public void OnClick_StartGame()
         {
             SceneManager.LoadScene(Str_GameStartSceneName);
@@ -24,7 +29,6 @@ namespace Meta
 
         public void OnClick_CreateInteractObj()
         {
-            MetaNetworkManager.RequestSpawnFieldObject();
         }
 
         public void OnClick_InteractMotion()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Microsoft.MixedReality.Toolkit.Experimental.UI;
 public class ChatUI : MonoBehaviour
 {
     [SerializeField] private MetaNetworkManager ChatManager;
@@ -14,10 +15,11 @@ public class ChatUI : MonoBehaviour
     [SerializeField] private TMP_InputField Input_ChatMsg;
     [SerializeField] private Text Text_ChatList;
     [SerializeField] private ScrollRect ScrollRect_ChatList;
-
+    [SerializeField] private NonNativeKeyboard VRKeyboard;
     private void OnEnable()
     {
         StartCoroutine(CoDelayRecvMsg());
+        ChatManager = FindObjectOfType<MetaNetworkManager>();
     }
 
     private IEnumerator CoDelayRecvMsg()
@@ -54,7 +56,12 @@ public class ChatUI : MonoBehaviour
         SendChatMsg();
         Input_ChatMsg.text = "";
         lastFocusedTime = Time.time;
-        Input_ChatMsg.DeactivateInputField();
+        Input_ChatMsg.DeactivateInputField();   
+        if(GameManager.Instance.IsXREnabled())
+        {
+            VRKeyboard.gameObject.SetActive(false);
+        }
+        Debug.Log($"Submit: {lastFocusedTime}");
     }
 
     public void OnClick_ExtendChatArea()
@@ -77,7 +84,12 @@ public class ChatUI : MonoBehaviour
         if(!Input_ChatMsg.isFocused && Time.time - lastFocusedTime > 0.1f)
         {
             Input_ChatMsg.ActivateInputField();
-            Debug.Log($"Submit: {lastFocusedTime}");
+            if(GameManager.Instance.IsXREnabled())
+            {
+                VRKeyboard.Clear();
+                VRKeyboard.gameObject.SetActive(true);
+            }
+            Debug.Log($"focus: {lastFocusedTime}");
         }
     }
 

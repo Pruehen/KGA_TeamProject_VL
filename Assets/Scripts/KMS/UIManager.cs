@@ -92,7 +92,7 @@ public class UIManager : SceneSingleton<UIManager>
         QuestReturn();
         AchievementReturn();
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (InputManager.Instance.IsEscapeBtnClick)
         {
             if (blueChipUI.activeSelf == true)
             {
@@ -107,7 +107,7 @@ public class UIManager : SceneSingleton<UIManager>
 
         }
 
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (InputManager.Instance.IsChipUiToggleBtnClick)
         {
             MainBlueChipList();
         }
@@ -179,13 +179,13 @@ public class UIManager : SceneSingleton<UIManager>
         }
     }
 
-    public void Interactable(bool chest)
+    public void Interactable(bool isInteractable)
     {
-        if (chest)
+        if (isInteractable)
         {
             interactive.gameObject.SetActive(true);
         }
-        else if (!chest)
+        else if (!isInteractable)
         {
             interactive.gameObject.SetActive(false);
         }

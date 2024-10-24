@@ -20,9 +20,9 @@ public class RayCameraCollision : MonoBehaviour
             _repositionCameraTarget.position =
              -_camera.forward * (hit.distance - _offsetFromWall) + _cameraParent.position;
             Debug.DrawRay(_repositionCameraTarget.position, Vector3.forward, Color.green);
-            Debug.Log($"Hit1 : {_camera.forward * (hit.distance - _offsetFromWall)}");
-            Debug.Log($"Hit2 : {_repositionCameraTarget.position}");
-            Debug.Log($"Hit3 : {_repositionCameraTarget.localPosition}");
+            // Debug.Log($"Hit1 : {_camera.forward * (hit.distance - _offsetFromWall)}");
+            // Debug.Log($"Hit2 : {_repositionCameraTarget.position}");
+            // Debug.Log($"Hit3 : {_repositionCameraTarget.localPosition}");
         } 
         else
         {

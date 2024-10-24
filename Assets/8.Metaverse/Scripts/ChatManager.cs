@@ -15,7 +15,7 @@ public class MetaNetworkManager : NetworkBehaviour
 
     [Header("InteractionFieldObject")]
     [SerializeField] GameObject Prefab_SpawnInteractFieldObj;
-    [SerializeField] ChatUI ChatUi;
+    [SerializeField] public ChatUI ChatUi;
 
     //임시
     private NetPlayer _localPlayer = null;
