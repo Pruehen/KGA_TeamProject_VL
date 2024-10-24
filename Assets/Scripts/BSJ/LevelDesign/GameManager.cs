@@ -82,7 +82,7 @@ public class GameManager : SceneSingleton<GameManager>
         _xR_Origin = FindObjectOfType<XROrigin>()?.gameObject;
         _xR_InteractionManager = FindObjectOfType<XRInteractionManager>()?.gameObject;
         _playerCamera = GameObject.FindGameObjectWithTag("PCPlayerCamera");
-        StartCoroutine(Coroutine_CheckXR());
+        //StartCoroutine(Coroutine_CheckXR());
     }
     private void Update()
     {
