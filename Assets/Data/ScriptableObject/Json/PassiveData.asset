@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ececdf24962462a45bcf665b39c0f21f, type: 3}
+  m_Name: PassiveData
+  m_EditorClassIdentifier: 
+  text: "{   \"dic\": {     \"Offensive1\": {       \"Name\": \"\uACF5\uACA91\",      
+    \"Desc\": \"\uD604\uC7AC \uCCB4\uB825\uC774 {0}% \uC774\uC0C1\uC77C \uB54C, \uC77C\uBC18&\uD2B9\uC218
+    \uACF5\uACA9\uB825\uC774 {1}% \uC99D\uAC00\",       \"IconPath\": \"Icon/passive/atk/IconPassiveAtk1\",      
+    \"IconPath_Dis\": \"Icon/passive/atk/IconPassiveAtkDis1\",       \"Cost\": 500,      
+    \"VelueList\": [         80.0,         15.0,         15.0       ]     },    
+    \"Offensive2\": {       \"Name\": \"\uACF5\uACA92\",       \"Desc\": \"{0}m\uBCF4\uB2E4
+    \uAC00\uAE4C\uC774 \uC788\uB294 \uC801\uC5D0\uAC8C \uAC00\uD558\uB294 \uB370\uBBF8\uC9C0\uAC00
+    {1}%\uB9CC\uD07C \uC99D\uAC00\",       \"IconPath\": \"Icon/passive/atk/IconPassiveAtk2\",      
+    \"IconPath_Dis\": \"Icon/passive/atk/IconPassiveAtkDis2\",       \"Cost\": 500,      
+    \"VelueList\": [         5.0,         20.0       ]     },     \"Offensive3\":
+    {       \"Name\": \"\uACF5\uACA93\",       \"Desc\": \"\uC77C\uBC18&\uD2B9\uC218
+    \uACF5\uACA9\uB825\uC774 {0, 1}% \uC99D\uAC00, \uB300\uC26C \uC2DC\uAC04 {2}%
+    \uAC10\uC18C \uBC0F \uC2A4\uD14C\uBBF8\uB098 \uC18C\uBAA8\uB7C9 {3}% \uC99D\uAC00\",      
+    \"IconPath\": \"Icon/passive/atk/IconPassiveAtk3\",       \"IconPath_Dis\": \"Icon/passive/atk/IconPassiveAtkDis3\",      
+    \"Cost\": 500,       \"VelueList\": [         30.0,         30.0,         50.0,        
+    50.0       ]     },     \"Offensive4\": {       \"Name\": \"\uACF5\uACA94\",      
+    \"Desc\": \"\uD2B9\uC218 \uACF5\uACA9\uB825 {0}% \uC99D\uAC00, \uC2A4\uD0AC\uC758
+    \uACF5\uACA9 \uBC94\uC704 {1}% \uC99D\uAC00, \uC2A4\uD0AC \uAC8C\uC774\uC9C0
+    \uD68D\uB4DD\uB7C9 {2}% \uAC10\uC18C\",       \"IconPath\": \"Icon/passive/atk/IconPassiveAtk4\",      
+    \"IconPath_Dis\": \"Icon/passive/atk/IconPassiveAtkDis4\",       \"Cost\": 500,      
+    \"VelueList\": [         40.0,         40.0,         50.0       ]     },    
+    \"Offensive5\": {       \"Name\": \"\uACF5\uACA95\",       \"Desc\": \"\uD2B9\uC218
+    \uACF5\uACA9\uB825\uC758 {0}%\uB9CC\uD07C\uC744 \uC77C\uBC18 \uACF5\uACA9\uB825\uC73C\uB85C
+    \uCE58\uD658\",       \"IconPath\": \"Icon/passive/atk/IconPassiveAtk5\",      
+    \"IconPath_Dis\": \"Icon/passive/atk/IconPassiveAtkDis5\",       \"Cost\": 500,      
+    \"VelueList\": [         50.0       ]     },     \"Defensive1\": {       \"Name\":
+    \"\uCCB4\uB8251\",       \"Desc\": \"\uCD5C\uB300 \uCCB4\uB825\uC774 {0}% \uC99D\uAC00\uD558\uB294
+    \uB300\uC2E0 \uC77C\uBC18&\uD2B9\uC218 \uACF5\uACA9\uB825 {1}% \uAC10\uC18C\",      
+    \"IconPath\": \"Icon/passive/growth/IconPassiveGrowth1\",       \"IconPath_Dis\":
+    \"Icon/passive/growth/IconPassiveGrowthDis1\",       \"Cost\": 500,       \"VelueList\":
+    [         50.0,         20.0,         20.0       ]     },     \"Defensive2\":
+    {       \"Name\": \"\uCCB4\uB8252\",       \"Desc\": \"\uC801\uC744 {0}\uB9C8\uB9AC
+    \uCC98\uCE58\uD560 \uB54C\uB9C8\uB2E4 \uD604\uC7AC \uCCB4\uB825\uC744 \uCD5C\uB300
+    \uCCB4\uB825\uC758 {1}%\uB9CC\uD07C \uD68C\uBCF5.\",       \"IconPath\": \"Icon/passive/growth/IconPassiveGrowth2\",      
+    \"IconPath_Dis\": \"Icon/passive/growth/IconPassiveGrowthDis2\",       \"Cost\":
+    500,       \"VelueList\": [         10.0,         20.0       ]     },     \"Defensive3\":
+    {       \"Name\": \"\uCCB4\uB8253\",       \"Desc\": \"\uCE58\uBA85\uC801 \uD53C\uD574\uB97C
+    \uC785\uC5C8\uC744 \uB54C {0}\uCD08\uB3D9\uC548 \uCCB4\uB825\uC774 {1}\uC774\uD558\uB85C
+    \uB5A8\uC5B4\uC9C0\uC9C0 \uC54A\uB294\uB2E4. (\uAC8C\uC784 \uB2F9 {2}\uD68C)\",      
+    \"IconPath\": \"Icon/passive/growth/IconPassiveGrowth3\",       \"IconPath_Dis\":
+    \"Icon/passive/growth/IconPassiveGrowthDis3\",       \"Cost\": 1000,       \"VelueList\":
+    [         3.0,         1.0,         1.0       ]     },     \"Defensive4\": {      
+    \"Name\": \"\uCCB4\uB8254\",       \"Desc\": \"\uC801\uC744 \uCC98\uCE58 \uD560
+    \uB54C\uB9C8\uB2E4 \uB2E4\uC74C \uACF5\uACA9\uC73C\uB85C \uC785\uB294 \uD53C\uD574\uAC00
+    {0}%\uC529 \uAC10\uC18C\uD55C\uB2E4 (\uCD5C\uB300 {1}%)\",       \"IconPath\":
+    \"Icon/passive/growth/IconPassiveGrowth4\",       \"IconPath_Dis\": \"Icon/passive/growth/IconPassiveGrowthDis4\",      
+    \"Cost\": 500,       \"VelueList\": [         1.0,         80.0       ]     },    
+    \"Defensive5\": {       \"Name\": \"\uCCB4\uB8255\",       \"Desc\": \"\uADFC\uAC70\uB9AC
+    \uBAA8\uB4DC\uC5D0\uC11C \uC6D0\uAC70\uB9AC \uBAA8\uB4DC\uAC00 \uB420 \uB54C\uB9C8\uB2E4
+    \uC2A4\uD0DC\uBBF8\uB098 {0}% \uD68C\uBCF5\",       \"IconPath\": \"Icon/passive/growth/IconPassiveGrowth5\",      
+    \"IconPath_Dis\": \"Icon/passive/growth/IconPassiveGrowthDis5\",       \"Cost\":
+    500,       \"VelueList\": [         50.0       ]     },     \"Utility1\": {      
+    \"Name\": \"\uC720\uD2F81\",       \"Desc\": \"\uBE14\uB8E8\uCE69 \uC120\uD0DD\uC9C0\uB97C
+    \uC0C8\uB85C\uACE0\uCE68 \uD560 \uC218 \uC788\uB2E4. (\uAC8C\uC784 \uB2F9 {0}\uD68C)\",      
+    \"IconPath\": \"Icon/passive/utility/IconPassiveUtility1\",       \"IconPath_Dis\":
+    \"Icon/passive/utility/IconPassiveUtilityDis1\",       \"Cost\": 1000,      
+    \"VelueList\": [         1.0       ]     },     \"Utility2\": {       \"Name\":
+    \"\uC720\uD2F82\",       \"Desc\": \"\uC7AC\uD654 \uD68D\uB4DD\uB7C9\uC774 {0}%
+    \uC99D\uAC00\",       \"IconPath\": \"Icon/passive/utility/IconPassiveUtility2\",      
+    \"IconPath_Dis\": \"Icon/passive/utility/IconPassiveUtilityDis2\",       \"Cost\":
+    500,       \"VelueList\": [         50.0       ]     },     \"Utility3\": {      
+    \"Name\": \"\uC720\uD2F83\",       \"Desc\": \"\uBE14\uB8E8\uCE69 \uC120\uD0DD\uC9C0\uAC00
+    {0}\uAC1C\uB85C \uAC10\uC18C\uD558\uC9C0\uB9CC {1} \uB354 \uB192\uC740 \uB808\uBCA8\uC758
+    \uBE14\uB8E8\uCE69\uC774 \uB4F1\uC7A5\uD55C\uB2E4.\",       \"IconPath\": \"Icon/passive/utility/IconPassiveUtility3\",      
+    \"IconPath_Dis\": \"Icon/passive/utility/IconPassiveUtilityDis3\",       \"Cost\":
+    500,       \"VelueList\": [         1.0,         1.0       ]     },     \"Utility4\":
+    {       \"Name\": \"\uC720\uD2F84\",       \"Desc\": \"\uAC8C\uC784\uC744 \uC2DC\uC791\uD558\uBA74
+    \uC8FC\uBCC0\uC5D0 \uBE14\uB8E8\uCE69 \uC0C1\uC790\uAC00 \uB098\uC628\uB2E4.\",      
+    \"IconPath\": \"Icon/passive/utility/IconPassiveUtility4\",       \"IconPath_Dis\":
+    \"Icon/passive/utility/IconPassiveUtilityDis4\",       \"Cost\": 500,       \"VelueList\":
+    []     },     \"Utility5\": {       \"Name\": \"\uC720\uD2F85\",       \"Desc\":
+    \"\uC6D0\uAC70\uB9AC \uCD5C\uB300 \uC790\uC6D0 \uBCF4\uC720\uB7C9\uC774 {0}\uB9CC\uD07C,
+    \uADFC\uAC70\uB9AC \uCD5C\uB300 \uC790\uC6D0 \uBCF4\uC720\uB7C9\uC774 {1}\uB9CC\uD07C
+    \uC99D\uAC00\",       \"IconPath\": \"Icon/passive/utility/IconPassiveUtility5\",      
+    \"IconPath_Dis\": \"Icon/passive/utility/IconPassiveUtilityDis5\",       \"Cost\":
+    500,       \"VelueList\": [         20.0,         10.0       ]     }   } }"

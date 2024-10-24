@@ -596,4 +596,27 @@ public class GameManager : SceneSingleton<GameManager>
         yield return new WaitForSeconds(.1f);
         DisableInput();
     }
+
+
+    public const string USER_DATA_FILE = "SaveFile.json";
+    public const string BLUECHIP_DATA_FILE = "BlueChipTable.json";
+    public const string PASSIVE_DATA_FILE = "PassiveTable.json";
+
+    [SerializeField] private TextData defaultStringData_UserData;
+    [SerializeField] private TextData defaultStringData_PassiveData;
+    [SerializeField] private TextData defaultStringData_BluechipData;
+
+    private UserData userData;
+
+    private void DataAwake()
+    {
+        SetupInitialUserData();
+    }
+
+    public void SetupInitialUserData()
+    {
+        JsonDataManager.SetupInitialData(USER_DATA_FILE, defaultStringData_UserData.text);
+        JsonDataManager.SetupInitialData(BLUECHIP_DATA_FILE, defaultStringData_BluechipData.text);
+        JsonDataManager.SetupInitialData(PASSIVE_DATA_FILE, defaultStringData_PassiveData.text);
+    }
 }

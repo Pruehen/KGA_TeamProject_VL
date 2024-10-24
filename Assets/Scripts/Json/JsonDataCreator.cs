@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
+using System.IO;
 public class BlueChip
 {
     [JsonProperty] public string Name { get; private set; }
@@ -60,7 +60,18 @@ public class BlueChipTable
     }
     public static string FilePath()
     {
-        return "/Data/Table/BlueChipTable.json";
+        string filePath = Path.Combine(Application.streamingAssetsPath, "Data/Table/BlueChipTable.json");
+
+        if (File.Exists(filePath))
+        {
+            string jsonContent = File.ReadAllText(filePath);
+            return jsonContent;
+        }
+        else
+        {
+            Debug.LogError("JSON file not found!");
+            return null;
+        }
     }
 }
 
@@ -121,7 +132,18 @@ public class PassiveTable
     }
     public static string FilePath()
     {
-        return "/Data/Table/PassiveTable.json";
+        string filePath = Path.Combine(Application.streamingAssetsPath, "Data/Table/PassiveTable.json");
+
+        if (File.Exists(filePath))
+        {
+            string jsonContent = File.ReadAllText(filePath);
+            return jsonContent;
+        }
+        else
+        {
+            Debug.LogError("JSON file not found!");
+            return null;
+        }
     }
 }
 
@@ -204,7 +226,7 @@ public class UserData
 
     public static void Save()
     {
-        JsonDataManager.DataSaveCommand(JsonDataManager.jsonCache.UserDataCache, UserDataList.FilePath());
+        JsonDataManager.DataSaveCommand(JsonDataManager.jsonCache.UserDataCache, GameManager.USER_DATA_FILE);
     }
 
     public void SavePlayData_OnSceneExit(PlayerInstanteState state, PlayerEquipBlueChip equipBlueChip)//씬 변환 시 호출
@@ -493,10 +515,6 @@ public class UserDataList
             dic.Add(index, new UserData(index));
             UserData.Save();
         }
-    }
-    public static string FilePath()
-    {
-        return $"/Data/UserData/SaveFile.json";
     }
 }
 
