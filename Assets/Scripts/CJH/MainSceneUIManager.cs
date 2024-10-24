@@ -55,11 +55,10 @@ public class MainSceneUIManager : SceneSingleton<MainSceneUIManager>
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (InputManager.Instance.IsEscapeBtnClick)
         {
             if (passiveUI.activeSelf == true)
             {
-                Debug.Log(123);
                 EnterMainScene_OnEscClick();
             }
         }

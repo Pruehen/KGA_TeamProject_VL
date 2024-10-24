@@ -14,6 +14,8 @@ public class InputManager : SceneSingleton<InputManager>
     bool _isRControlBtnClick;
     bool _isDashBtnClick;
     bool _isInteractiveBtnClick;
+    bool _isEnterBtnClick;
+    bool _isEscapeBtnClick;
 
     public Vector2 MoveVector2_Left_WASD
     {
@@ -105,6 +107,8 @@ public class InputManager : SceneSingleton<InputManager>
             }
         }
     }
+
+    float last_InteractiveBtnClickSetTime;
     public bool IsInteractiveBtnClick
     {
         get { return _isInteractiveBtnClick; }
@@ -118,6 +122,47 @@ public class InputManager : SceneSingleton<InputManager>
         }
     }
 
+    public bool IsInteractiveBtnClick_CoolTime
+    {
+        get { 
+            if(Time.time - last_InteractiveBtnClickSetTime > 0.5f && _isInteractiveBtnClick)
+            {
+                last_InteractiveBtnClickSetTime = Time.time;
+                return true;
+            }
+            return false;
+        }
+    }
+
+    public bool IsEnterBtnClick
+    {
+        get { return _isEnterBtnClick; }
+        set
+        {
+            if(_isEnterBtnClick != value)
+            {
+                _isEnterBtnClick = value;
+                OnPropertyChanged(nameof(IsEnterBtnClick));
+            }
+        }
+    }
+    public bool IsEscapeBtnClick
+    {
+        get { 
+            return _isEscapeBtnClick; }
+        set
+        {
+            if(_isEscapeBtnClick != value)
+            {
+                _isEscapeBtnClick = value;
+                OnPropertyChanged(nameof(IsEscapeBtnClick));
+            }
+        }
+    }    
+    
+    public bool IsTyping { get; set; }
+
+
     #region PropChanged
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -130,41 +175,81 @@ public class InputManager : SceneSingleton<InputManager>
 
     void OnMove(InputValue inputValue) // 이동(WASD)
     {        
+        if(IsTyping)
+        {
+            return;
+        }
         MoveVector2_Left_WASD = inputValue.Get<Vector2>();
     }
 
     void OnAtk(InputValue value) // 마우스 좌클릭
     {
+        if(IsTyping)
+        {
+            return;
+        }
         IsLMouseBtnClick = value.isPressed;
     }
 
     void OnSkill(InputValue value)//마우스 우클릭
     {
+        if(IsTyping)
+        {
+            return;
+        }
         IsRMouseBtnClick = value.isPressed;
     }
 
     void OnBacuum(InputValue value)//좌측 컨트롤 클릭
     {
+        if(IsTyping)
+        {
+            return;
+        }
         IsLControlBtnClick = value.isPressed;
     }
 
     void OnInventory(InputValue value)//Tab 버튼 클릭
     {
+        if(IsTyping)
+        {
+            return;
+        }
         IsChipUiToggleBtnClick = value.isPressed;
     }
     void OnInteractive(InputValue value)//F 버튼 클릭
     {
+        if(IsTyping)
+        {
+            return;
+        }
         IsInteractiveBtnClick = value.isPressed;
+    }
+    void OnEnter(InputValue value)//Enter 버튼 클릭
+    {
+        IsEnterBtnClick = value.isPressed;
     }
 
     void OnRotate(InputValue value)//마우스 좌표
     {
+        if(IsTyping)
+        {
+            return;
+        }
         RotateVector2_Rotate = value.Get<Vector2>();
     }
 
     void OnDash(InputValue value)//스페이스 버튼 클릭
     {
+        if(IsTyping)
+        {
+            return;
+        }
         IsDashBtnClick = value.isPressed;
+    }
+    void OnEscape(InputValue value)//Escape 버튼 클릭
+    {
+        IsEscapeBtnClick = value.isPressed;
     }
     void Update()
     {
