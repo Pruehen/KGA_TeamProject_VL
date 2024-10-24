@@ -45,10 +45,10 @@ Shader "Hovl/Particles/Add_Fresnel"
 				struct appdata_t 
 				{
 					float4 vertex : POSITION;
+					float3 ase_normal : NORMAL;
 					fixed4 color : COLOR;
 					float4 texcoord : TEXCOORD0;
 					UNITY_VERTEX_INPUT_INSTANCE_ID
-					float3 ase_normal : NORMAL;
 				};
 
 				struct v2f 
@@ -57,19 +57,19 @@ Shader "Hovl/Particles/Add_Fresnel"
 					fixed4 color : COLOR;
 					float4 texcoord : TEXCOORD0;
 					UNITY_FOG_COORDS(1)
+					float4 ase_texcoord3 : TEXCOORD3;
+					float4 ase_texcoord4 : TEXCOORD4;
 					#ifdef SOFTPARTICLES_ON
 					float4 projPos : TEXCOORD2;
 					#endif
 					UNITY_VERTEX_OUTPUT_STEREO
-					float4 ase_texcoord3 : TEXCOORD3;
-					float4 ase_texcoord4 : TEXCOORD4;
 					//float4 ase_texcoord5 : TEXCOORD5;
 				};
 				
 				uniform sampler2D _MainTex;
 				uniform fixed4 _TintColor;
 				uniform float4 _MainTex_ST;
-				uniform sampler2D_float _CameraDepthTexture;
+				UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 				uniform float _Useonlycolor;
 				uniform float4 _SpeedMainTexUVNoiseZW;
 				uniform sampler2D _Mask;
