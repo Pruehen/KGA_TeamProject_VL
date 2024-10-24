@@ -335,6 +335,10 @@ public class UIManager : SceneSingleton<UIManager>
 
     public void QuestReturn()
     {
+        if (questAni.gameObject.activeSelf == false)
+        {
+            return;
+        }
         AnimatorStateInfo currentState = questAni.GetCurrentAnimatorStateInfo(0);
 
         if (currentState.IsName("OutQuestPanel"))
@@ -372,6 +376,10 @@ public class UIManager : SceneSingleton<UIManager>
 
     public void AchievementReturn()
     {
+        if (achievementAni.gameObject.activeSelf == false)
+        {
+            return;
+        }
         AnimatorStateInfo currentState = achievementAni.GetCurrentAnimatorStateInfo(0);
 
         if (currentState.IsName("Achievement"))
