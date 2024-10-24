@@ -26,7 +26,7 @@ Shader "Hovl/Particles/Distortion"
 				#pragma fragmentoption ARB_precision_hint_fastest
 				#pragma multi_compile_particles
 				#include "UnityCG.cginc"
-				uniform sampler2D_float _CameraDepthTexture;
+				UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 				uniform float _InvFade;
 				uniform sampler2D _GrabTexture;
 				uniform sampler2D _NormalMap;

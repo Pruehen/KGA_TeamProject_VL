@@ -59,8 +59,7 @@ Shader "QFX/SFX/Particle/Particle HDR" {
 						UNITY_TRANSFER_FOG(o,o.vertex);
 						return o;
 					}
-
-					sampler2D_float _CameraDepthTexture;
+					UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 					float _InvFade;
 
 					float4 frag(v2f i) : SV_Target

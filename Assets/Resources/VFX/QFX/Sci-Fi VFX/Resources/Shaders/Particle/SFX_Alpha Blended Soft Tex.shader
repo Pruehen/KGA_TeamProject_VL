@@ -60,7 +60,7 @@ Shader "QFX/SFX/Particle/Alpha Blended Soft Tex"
 				uniform sampler2D _MainTex;
 				uniform fixed4 _TintColor;
 				uniform float4 _MainTex_ST;
-				uniform sampler2D_float _CameraDepthTexture;
+				UNITY_DECLARE_DEPTH_TEXTURE(_CameraDepthTexture);
 				uniform float _InvFade;
 				uniform half _TexSoftFactor;
 
