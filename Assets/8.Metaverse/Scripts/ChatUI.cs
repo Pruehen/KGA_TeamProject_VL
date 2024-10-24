@@ -56,12 +56,12 @@ public class ChatUI : MonoBehaviour
         SendChatMsg();
         Input_ChatMsg.text = "";
         lastFocusedTime = Time.time;
-        Input_ChatMsg.DeactivateInputField();   
-        if(GameManager.Instance.IsXREnabled())
-        {
-            VRKeyboard.gameObject.SetActive(false);
-        }
-        Debug.Log($"Submit: {lastFocusedTime}");
+        // Input_ChatMsg.DeactivateInputField();   
+        // if(GameManager.Instance.IsXREnabled())
+        // {
+        //     VRKeyboard.gameObject.SetActive(false);
+        // }
+        // Debug.Log($"Submit: {lastFocusedTime}");
     }
 
     public void OnClick_ExtendChatArea()
