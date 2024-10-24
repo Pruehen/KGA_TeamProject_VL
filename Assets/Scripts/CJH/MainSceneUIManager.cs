@@ -41,7 +41,6 @@ public class MainSceneUIManager : SceneSingleton<MainSceneUIManager>
     }
     private void Update()
     {   
-        Debug.Log(EventSystem.current.currentSelectedGameObject == null ? "null" : EventSystem.current.currentSelectedGameObject.name);
         if(EventSystem.current.currentSelectedGameObject == null || !EventSystem.current.currentSelectedGameObject.activeInHierarchy)
         {
             Button btn = FindObjectOfType<Button>();
