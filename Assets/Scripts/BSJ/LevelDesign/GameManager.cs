@@ -3,12 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
-using Zenject.SpaceFighter;
 using Unity.XR.CoreUtils;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Management;
+using UnityEngine.InputSystem;
 
 public enum RewardType
 {
@@ -80,6 +79,10 @@ public class GameManager : SceneSingleton<GameManager>
     private void Start()
     {
         OnSceneLoaded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
+        _xR_Origin = FindObjectOfType<XROrigin>()?.gameObject;
+        _xR_InteractionManager = FindObjectOfType<XRInteractionManager>()?.gameObject;
+        _playerCamera = GameObject.FindGameObjectWithTag("PCPlayerCamera");
+        StartCoroutine(Coroutine_CheckXR());
     }
     private void Update()
     {
@@ -322,11 +325,11 @@ public class GameManager : SceneSingleton<GameManager>
 
     public void LoadScene(string sceneName)
     {
-        if (_blockSceneChange)
+        if (BlockSceneChange)
         {
             return;
         }
-        _blockSceneChange = true;
+        BlockSceneChange = true;
         DelayLoadScene(sceneName, 0f);
     }
 
@@ -415,6 +418,9 @@ public class GameManager : SceneSingleton<GameManager>
         {
             IsLoading = false;
             BlockSceneChange = false;
+            _xR_Origin = FindObjectOfType<XROrigin>()?.gameObject;
+            _xR_InteractionManager = FindObjectOfType<XRInteractionManager>()?.gameObject;
+            _playerCamera = GameObject.FindGameObjectWithTag("PCPlayerCamera");
         };
     }
     private void ClearAndSave()
@@ -455,8 +461,8 @@ public class GameManager : SceneSingleton<GameManager>
         }
         IsLoading = true;
 
-        Destroy(GameObject.FindObjectOfType<XROrigin>().gameObject);
-        Destroy(GameObject.FindObjectOfType<XRInteractionManager>().gameObject);
+        Destroy(GameObject.FindObjectOfType<XROrigin>()?.gameObject);
+        Destroy(GameObject.FindObjectOfType<XRInteractionManager>()?.gameObject);
 
         AsyncOperation ao = SceneManager.LoadSceneAsync(sceneName, mode);
         if(onComplete != null)
@@ -515,4 +521,79 @@ public class GameManager : SceneSingleton<GameManager>
 
     public string MetaVersePlayerName {get; set;}
     public bool IsMetaVerseServer {get; set;} = true;
+    private GameObject _xR_Origin;
+    private GameObject _xR_InteractionManager;
+    private GameObject _playerCamera;
+
+    
+    public bool IsXREnabled()
+    {
+        var xrManagerSettings = XRGeneralSettings.Instance.Manager;
+        return xrManagerSettings != null && xrManagerSettings.activeLoader != null;
+    }
+    private IEnumerator Coroutine_CheckXR()
+    {
+        yield return new WaitForSeconds(1f);
+        Debug.Log($"IsXREnabled : {IsXREnabled()}");
+        if(!IsXREnabled())
+        {
+            _xR_Origin.SetActive(false);
+            _xR_InteractionManager.SetActive(false);
+
+            StartCoroutine(Coroutine_EnableInput());
+        }
+        else
+        {
+            _playerCamera.SetActive(true);
+            StartCoroutine(Coroutine_EnableInput());
+        }
+    }
+
+    [SerializeField]
+    [Tooltip("Input action assets to affect when inputs are enabled or disabled.")]
+    List<InputActionAsset> m_ActionAssets;
+    /// <summary>
+    /// Input action assets to affect when inputs are enabled or disabled.
+    /// </summary>
+    public List<InputActionAsset> actionAssets
+    {
+        get => m_ActionAssets;
+        set => m_ActionAssets = value ?? throw new ArgumentNullException(nameof(value));
+    }
+    public void EnableInput()
+    {
+        if (m_ActionAssets == null)
+            return;
+
+        foreach (var actionAsset in m_ActionAssets)
+        {
+            if (actionAsset != null)
+            {
+                actionAsset.Enable();
+            }
+        }
+    }
+    public void DisableInput()
+    {
+        if (m_ActionAssets == null)
+            return;
+
+        foreach (var actionAsset in m_ActionAssets)
+        {
+            if (actionAsset != null)
+            {
+                actionAsset.Disable();
+            }
+        }
+    }
+    private IEnumerator Coroutine_EnableInput()
+    {
+        yield return new WaitForSeconds(.1f);
+        EnableInput();
+    }
+    private IEnumerator Coroutine_DisableInput()
+    {
+        yield return new WaitForSeconds(.1f);
+        DisableInput();
+    }
 }
