@@ -2,6 +2,7 @@ using EnumTypes;
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit.Inputs.Simulation;
 
 
 public class Skill : MonoBehaviour
@@ -570,6 +571,14 @@ public class Skill : MonoBehaviour
     }
     public void Effect2(SO_SKillEvent skill)
     {
+        if(skill == null)
+        {
+            return;
+        }
+        if(skill.preFab == null)
+        {
+            return;
+        }
         GameObject VFX = ObjectPoolManager.Instance.DequeueObject(skill.preFab);
 
         Vector3 position = Vector3.zero;

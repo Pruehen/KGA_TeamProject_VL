@@ -1115,6 +1115,9 @@ MonoBehaviour:
     _chapterData: {fileID: 11400000, guid: c3e6ab949535945459d22aa36c3d847d, type: 2}
   _randomQuestsData: {fileID: 11400000, guid: eb37c6a02ede3bb44819358e48268e4f, type: 2}
   m_ActionAssets: []
+  defaultStringData_UserData: {fileID: 0}
+  defaultStringData_PassiveData: {fileID: 0}
+  defaultStringData_BluechipData: {fileID: 0}
 --- !u!1 &6975323383527796040
 GameObject:
   m_ObjectHideFlags: 3
@@ -3108,10 +3111,6 @@ PrefabInstance:
       value: -0.7098996
       objectReference: {fileID: 0}
     - target: {fileID: 516789563033613623, guid: bf65563d71b0c5e43bce5d8dad0aed86, type: 3}
-      propertyPath: _PlayerMesh
-      value: 
-      objectReference: {fileID: 2999014572823591202}
-    - target: {fileID: 516789563033613623, guid: bf65563d71b0c5e43bce5d8dad0aed86, type: 3}
       propertyPath: _ShieldMaterial
       value: 
       objectReference: {fileID: 2100000, guid: ea8d4581697e49bdbed09717eae38140, type: 2}
@@ -3953,7 +3952,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6603272864357064995, guid: bf65563d71b0c5e43bce5d8dad0aed86, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6608766055168018548, guid: bf65563d71b0c5e43bce5d8dad0aed86, type: 3}
       propertyPath: m_IsActive
@@ -4248,11 +4247,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fcab4553a9134449bc73c5806e5817e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!137 &2999014572823591202 stripped
-SkinnedMeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 5868761074969185386, guid: bf65563d71b0c5e43bce5d8dad0aed86, type: 3}
-  m_PrefabInstance: {fileID: 8713520557291943240}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4855074604796893004 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4290826977063166468, guid: bf65563d71b0c5e43bce5d8dad0aed86, type: 3}
