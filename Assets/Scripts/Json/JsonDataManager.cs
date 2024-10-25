@@ -45,23 +45,14 @@ public static class JsonDataManager
     }
     public static void DataSaveCommand<T>(T jsonCacheData, string saveDataFileName)
     {
-        Task task = DataSaveAsync(jsonCacheData, saveDataFileName);
-
-        task.ContinueWith(t =>
-        {
-            if (t.IsFaulted)
-            {
-                Debug.LogError($"<color=#FF0000>데이터 저장 중 오류 발생</color>: {t.Exception}");
-            }
-        });
+        DataSave(jsonCacheData, saveDataFileName);
     }
-    static async Task DataSaveAsync<T>(T jsonCacheData, string saveDataFileName)
+    static void DataSave<T>(T jsonCacheData, string saveDataFileName)
     {
-        string filePath = GetFilePath(saveDataFileName);
-
         string data = JsonConvert.SerializeObject(jsonCacheData, Formatting.Indented);
 
-        await File.WriteAllTextAsync(filePath, data);
+        PlayerPrefs.SetString(saveDataFileName, data);
+        PlayerPrefs.Save();
 
         Debug.Log($"<color=#FFFF00>데이터 저장 완료</color> : {typeof(T).Name}");
     }
@@ -96,59 +87,34 @@ public static class JsonDataManager
     }
     public static void SetupInitialData(string fileName, string defaultData)
     {
-        string filePath = GetFilePath(fileName);
-
         try
         {
-            File.WriteAllText(filePath, defaultData);
-            Debug.Log($"Data saved successfully to {filePath}");
+            PlayerPrefs.SetString(fileName, defaultData);
+            PlayerPrefs.Save();
+            Debug.Log($"Data saved successfully to {fileName}");
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"Failed to save data to {filePath}. Error: {e.Message}");
-        }
-    }
-
-    public static async Task SaveJsonAsync(string jsonData, string fileName)
-    {
-        string filePath = GetFilePath(fileName);
-
-        try
-        {
-            await File.WriteAllTextAsync(filePath, jsonData);
-            Debug.Log($"Data saved successfully to {filePath}");
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError($"Failed to save data to {filePath}. Error: {e.Message}");
+            Debug.LogError($"Failed to save data to {fileName}. Error: {e.Message}");
         }
     }
 
     public static T LoadJson<T>(string fileName) where T : new()
     {
-        string filePath = GetFilePath(fileName);
-
-        if (!File.Exists(filePath))
-        {
-            Debug.LogWarning($"File not found at {filePath}. Returning default value.");
-            return new T();
-        }
-
         try
         {
-            string json = File.ReadAllText(filePath);
-            Debug.Log($"File loaded successfully from {filePath}");
+            string json = PlayerPrefs.GetString(fileName);
             Debug.Log($"File data: {json}");
-            if(string.IsNullOrWhiteSpace(json))
+            if(!PlayerPrefs.HasKey(fileName) || string.IsNullOrWhiteSpace(json))
             {
-                Debug.LogWarning($"File is empty at {filePath}. Returning default value.");
+                Debug.LogWarning($"File is empty at {fileName}. Returning default value.");
                 GameManager.Instance.SetupInitialUserData();
                 return new T();
             }
             T data = JsonConvert.DeserializeObject<T>(json);
             if(data == null)
             {
-                Debug.LogWarning($"File is empty at {filePath}. Returning default value.");
+                Debug.LogWarning($"File is empty at {fileName}. Returning default value.");
                 GameManager.Instance.SetupInitialUserData();
                 return new T();
             }
@@ -156,31 +122,29 @@ public static class JsonDataManager
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"Failed to load data from {filePath}. Error: {e.Message}");
+            Debug.LogError($"Failed to load data from {fileName}. Error: {e.Message}");
             return new T();
         }
     }
 
     public static bool DeleteJson(string fileName)
     {
-        string filePath = GetFilePath(fileName);
-
-        if (File.Exists(filePath))
+        if (PlayerPrefs.HasKey(fileName))
         {
             try
             {
-                File.Delete(filePath);
-                Debug.Log($"File deleted successfully: {filePath}");
+                PlayerPrefs.DeleteKey(fileName);
+                Debug.Log($"File deleted successfully: {fileName}");
                 return true;
             }
             catch (System.Exception e)
             {
-                Debug.LogError($"Failed to delete file at {filePath}. Error: {e.Message}");
+                Debug.LogError($"Failed to delete file at {fileName}. Error: {e.Message}");
             }
         }
         else
         {
-            Debug.LogWarning($"File not found at {filePath}. Nothing to delete.");
+            Debug.LogWarning($"File not found at {fileName}. Nothing to delete.");
         }
 
         return false;
