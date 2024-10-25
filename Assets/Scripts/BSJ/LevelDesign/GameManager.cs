@@ -179,7 +179,7 @@ public class GameManager : SceneSingleton<GameManager>
     {
         SO_RandomQuestSetData randomQuestSet = _randomQuestsData;
         int count = 0;
-        unexpectedquests = new SO_Quest[_stageSystem.ChapterLength - 1];
+        unexpectedquests = new SO_Quest[_stageSystem.ChapterLength];
         for (int i = 0; i < unexpectedquests.Length; i++)
         {
             SO_Quest r = randomQuestSet.TryGetRandomQuest();
