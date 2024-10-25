@@ -1037,17 +1037,29 @@ public class PlayerInstanteState : MonoBehaviour
     public void ShieldMT()
     {
         //Debug.Log(Shield);
+        if(_PlayerMesh == null)
+        {
+            return;
+        }
 
         // 현재 materials 배열을 가져옵니다.
         Material[] materials = _PlayerMesh.materials;
 
         if (Shield > 0)
         {
+            if(_ShieldMaterial == null)
+            {
+                return;
+            }
             materials[1] = _ShieldMaterial;
             Debug.Log("실드있음");
         }
         else
         {
+            if(_ShieldMaterial == null)
+            {
+                return;
+            }
             materials[1] = null;  // 여기서는 재질을 null로 설정할 수 없으므로, 제거해야 합니다.
             Debug.Log("실드없음");
         }
