@@ -320,11 +320,11 @@ public class GameManager : SceneSingleton<GameManager>
 
     public void LoadScene(string sceneName)
     {
-        if (_blockSceneChange)
+        if (BlockSceneChange)
         {
             return;
         }
-        _blockSceneChange = true;
+        BlockSceneChange = true;
         DelayLoadScene(sceneName, 0f);
     }
 
