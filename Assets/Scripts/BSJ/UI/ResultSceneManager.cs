@@ -33,9 +33,10 @@ public class ResultSceneManager : MonoBehaviour
 
     public void ToStartScreen()
     {
-        if(isEnd)
+        if(GameManager.Instance.IsLoading)
             return;
-        isEnd = true;
+        if(GameManager.Instance.BlockSceneChange)
+            return;
         _scene = SceneManager.GetActiveScene();
         GameManager.Instance.LoadMainScene();
     }

@@ -365,6 +365,10 @@ public class EnemyBase : MonoBehaviour, ITargetable
     #region Nav
     public void Idle()
     {
+        if(!_navMeshAgent.isOnNavMesh)
+        {
+            return;
+        }
         _navMeshAgent.isStopped = true;
     }
 

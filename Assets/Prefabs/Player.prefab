@@ -134,6 +134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _absorbingStaminaConsumRate: 300
   _PlayerMesh: {fileID: 0}
+  _PlayerAnimator: {fileID: 0}
   _ShieldMaterial: {fileID: 0}
   _meleeToRangeRatio: 2
   MaxStamina: 800
@@ -1032,9 +1033,17 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8669256438428887208, guid: 5e6f511379ddc384cb88828d3cda0bac, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8669256438428887208, guid: 5e6f511379ddc384cb88828d3cda0bac, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 3071718739748270354, guid: 5e6f511379ddc384cb88828d3cda0bac, type: 3}
+      objectReference: {fileID: 2100000, guid: 5bb68a94905ffc0418608fc7e572ea42, type: 2}
+    - target: {fileID: 8669256438428887208, guid: 5e6f511379ddc384cb88828d3cda0bac, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5bb68a94905ffc0418608fc7e572ea42, type: 2}
     - target: {fileID: 8834413038077186634, guid: 5e6f511379ddc384cb88828d3cda0bac, type: 3}
       propertyPath: m_Layer
       value: 8
