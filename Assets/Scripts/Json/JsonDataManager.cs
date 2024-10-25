@@ -9,7 +9,12 @@ public static class JsonDataManager
     
     private static string GetFilePath(string fileName)
     {
-        return Path.Combine(Application.persistentDataPath, fileName);
+        string path = Application.dataPath;
+        #if UNITY_ANDROID && !UNITY_EDITOR
+            path = Path.Combine(path, "..", "files");
+        #endif
+        string filePath = Path.Combine(path, fileName);
+        return filePath;
     }
     
     public static JsonCache jsonCache = new JsonCache();
