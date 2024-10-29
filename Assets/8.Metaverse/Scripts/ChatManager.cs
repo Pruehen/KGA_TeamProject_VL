@@ -117,13 +117,12 @@ public class MetaNetworkManager : NetworkBehaviour
 
     public void SendMsg(string msg)
     {
-        SendMsgCommand(_localPlayerNetId, msg);
+        SendMsgCommand(_localPlayerNetId, GameManager.Instance.MetaVersePlayerName, msg);
     }
 
     [Command(requiresAuthority = false)]
-    public void SendMsgCommand(uint id, string msg)
+    public void SendMsgCommand(uint id, string playerName, string msg)
     {
-        string playerName = GameManager.Instance.MetaVersePlayerName;
         if(string.IsNullOrEmpty(playerName))
         {
             playerName = $"Unknown{id}";
