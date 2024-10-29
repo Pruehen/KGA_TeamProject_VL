@@ -2,7 +2,7 @@ using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System;
 public class StartServerManager : MonoBehaviour
 {
     [SerializeField] MetaNetManager NetManager;
@@ -58,7 +58,7 @@ public class StartServerManager : MonoBehaviour
         }
 
         NetManager.OnMetaStartClientCallback += OnMetaStartClient;
-        NetManager.StartClient();
+        NetManager.StartClient(new Uri("kcp://" + GameManager.Instance.MetaVerseServerAddress + ":7777"));
     }
 
     private void OnMetaStartClient()

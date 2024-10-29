@@ -148,6 +148,7 @@ public class MainSceneUIManager : SceneSingleton<MainSceneUIManager>
 
 
     [SerializeField] InputField Input_PlayerName;
+    [SerializeField] InputField Input_ServerAddress;
 
     public void OnClick_MetaVerseButton()
     {
@@ -163,7 +164,7 @@ public class MainSceneUIManager : SceneSingleton<MainSceneUIManager>
     {
         GameManager.Instance.IsMetaVerseServer = true;
         GameManager.Instance.MetaVersePlayerName = Input_PlayerName.text;
-
+        GameManager.Instance.MetaVerseServerAddress = Input_ServerAddress.text;
         GameManager.Instance.LoadScene("MetaScene");
     }
 
@@ -171,7 +172,7 @@ public class MainSceneUIManager : SceneSingleton<MainSceneUIManager>
     {
         GameManager.Instance.IsMetaVerseServer = false;
         GameManager.Instance.MetaVersePlayerName = Input_PlayerName.text;
-
+        GameManager.Instance.MetaVerseServerAddress = Input_ServerAddress.text;
         GameManager.Instance.LoadScene("MetaScene");
     }
 }

@@ -509,5 +509,6 @@ public class GameManager : SceneSingleton<GameManager>
 
 
     public string MetaVersePlayerName {get; set;}
+    public string MetaVerseServerAddress {get; set;} = "127.0.0.1";
     public bool IsMetaVerseServer {get; set;} = true;
 }
