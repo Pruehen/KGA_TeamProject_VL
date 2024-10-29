@@ -10,7 +10,7 @@ public class SO_Boss_Both_UltimateAttackModule : SO_AttackModule
     public float MaxArea = 50f;
     public float SpikeGap = 4f;
     public float SpikeRandomOffset = 2f;
-    public float Probability = .3f;
+    public float SpikeProbability = .3f;
 
     public override void StartAttack(EnemyBase owner, int type)
     {
@@ -18,59 +18,80 @@ public class SO_Boss_Both_UltimateAttackModule : SO_AttackModule
         switch (type)
         {
             case 0:
+                // Start VFXs
+                owner.StartVFX("Boss_Teleport_End1");
+                owner.StartVFX("Boss_Teleport_End2");
+
+                // Spawn Attack Area
                 Transform targetTrf = owner.transform;
                 Vector3 targetPos = targetTrf.position;
                 targetPos.y = 0f;
-                owner.StartVFX("Boss_Teleport_End1");
-                owner.StartVFX("Boss_Teleport_End2");
-                GameObject projectileObject = GameObject.Instantiate(Prefab_areaAttack,
+                GameObject attackArea_GO = GameObject.Instantiate(Prefab_areaAttack,
                     targetPos, Quaternion.identity);
-                BossDoubleAreaAttack areaAttack = projectileObject.GetComponent<BossDoubleAreaAttack>();
+                BossDoubleAreaAttack areaAttack = attackArea_GO.GetComponent<BossDoubleAreaAttack>();
                 areaAttack.Init(Damage, owner.Attack.RangeTypeThreshold, IsClose(owner));
                 owner.Attack.CurrentProjectile = areaAttack;
 
+                // Destroy Previous spikes
                 SpikeManager.Instance.DestroyAllSpike();
                 SpikeManager.Instance.DestroyAllTrash();
 
+                // Spawn New spikes
                 SpawnMultipleSpikeInAreaAndStore(owner, Prefab_Spike, MaxArea,
-                SpikeGap, Probability, SpikeRandomOffset,
+                SpikeGap, SpikeProbability, SpikeRandomOffset,
                 owner.Attack.CurrentSpikeSpawners);
 
                 break;
             case 1:
+                // Trigger Attack Area
                 owner.Attack.CurrentProjectile.Trigger();
+
+                // Trigger EnableSpikes
                 foreach (SpikeSpawner spike in owner.Attack.CurrentSpikeSpawners)
                 {
                     spike.Trigger();
                 }
                 owner.Attack.CurrentSpikeSpawners.Clear();
 
+                // Spawn New spikes
                 SpawnMultipleSpikeInAreaAndStore(owner, Prefab_Spike, MaxArea,
-                SpikeGap, Probability, SpikeRandomOffset,
+                SpikeGap, SpikeProbability, SpikeRandomOffset,
                 owner.Attack.CurrentSpikeSpawners);
                 break;
             case 2:
+                // Trigger Attack Area
                 owner.Attack.CurrentProjectile.Trigger();
+
+                // Trigger EnableSpikes
                 foreach (SpikeSpawner spike in owner.Attack.CurrentSpikeSpawners)
                 {
                     spike.Trigger();
                 }
+
+                // Clear SpikeSpawners
                 owner.Attack.CurrentProjectile = null;
                 owner.Attack.CurrentSpikeSpawners.Clear();
                 break;
         }
 
     }
+
     public override void StartAttackMove(EnemyBase owner, int type)
     {
+        // Start VFX
         owner.StartVFX("Boss_Teleport");
+
         switch (type)
         {
             case 0:
+                // Launch up
                 owner.Move.Launch(Vector3.up * 100);
                 break;
             case 1:
+                // Set Position To Center
                 owner.transform.position = owner.SpawnedPosition + Vector3.up * 15;
+
+                // Launch down
                 owner.Move.Launch(-Vector3.up * 100);
                 break;
         }
