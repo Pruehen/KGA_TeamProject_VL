@@ -18,11 +18,11 @@ public class SO_Boss_Both_UltimateAttackModule : SO_AttackModule
         switch (type)
         {
             case 0:
-                // Start VFXs
+                // 이펙트
                 owner.StartVFX("Boss_Teleport_End1");
                 owner.StartVFX("Boss_Teleport_End2");
 
-                // Spawn Attack Area
+                // 공격 영역 생성
                 Transform targetTrf = owner.transform;
                 Vector3 targetPos = targetTrf.position;
                 targetPos.y = 0f;
@@ -32,43 +32,43 @@ public class SO_Boss_Both_UltimateAttackModule : SO_AttackModule
                 areaAttack.Init(Damage, owner.Attack.RangeTypeThreshold, IsClose(owner));
                 owner.Attack.CurrentProjectile = areaAttack;
 
-                // Destroy Previous spikes
+                // 이전 스파이크 삭제
                 SpikeManager.Instance.DestroyAllSpike();
                 SpikeManager.Instance.DestroyAllTrash();
 
-                // Spawn New spikes
+                // 새로운 스파이크 생성
                 SpawnMultipleSpikeInAreaAndStore(owner, Prefab_Spike, MaxArea,
                 SpikeGap, SpikeProbability, SpikeRandomOffset,
                 owner.Attack.CurrentSpikeSpawners);
 
                 break;
             case 1:
-                // Trigger Attack Area
+                // 공격 영역 트리거
                 owner.Attack.CurrentProjectile.Trigger();
 
-                // Trigger EnableSpikes
+                // 스파이크 트리거
                 foreach (SpikeSpawner spike in owner.Attack.CurrentSpikeSpawners)
                 {
                     spike.Trigger();
                 }
                 owner.Attack.CurrentSpikeSpawners.Clear();
 
-                // Spawn New spikes
+                // 새로운 스파이크 생성
                 SpawnMultipleSpikeInAreaAndStore(owner, Prefab_Spike, MaxArea,
                 SpikeGap, SpikeProbability, SpikeRandomOffset,
                 owner.Attack.CurrentSpikeSpawners);
                 break;
             case 2:
-                // Trigger Attack Area
+                // 공격 영역 트리거
                 owner.Attack.CurrentProjectile.Trigger();
 
-                // Trigger EnableSpikes
+                // 스파이크 트리거
                 foreach (SpikeSpawner spike in owner.Attack.CurrentSpikeSpawners)
                 {
                     spike.Trigger();
                 }
 
-                // Clear SpikeSpawners
+                // 스파이크 초기화
                 owner.Attack.CurrentProjectile = null;
                 owner.Attack.CurrentSpikeSpawners.Clear();
                 break;
@@ -78,20 +78,20 @@ public class SO_Boss_Both_UltimateAttackModule : SO_AttackModule
 
     public override void StartAttackMove(EnemyBase owner, int type)
     {
-        // Start VFX
+        // 이펙트
         owner.StartVFX("Boss_Teleport");
 
         switch (type)
         {
             case 0:
-                // Launch up
+                // 위로 캐릭터 발사
                 owner.Move.Launch(Vector3.up * 100);
                 break;
             case 1:
-                // Set Position To Center
+                // 중앙으로 이동
                 owner.transform.position = owner.SpawnedPosition + Vector3.up * 15;
 
-                // Launch down
+                // 아래로 캐릭터 발사
                 owner.Move.Launch(-Vector3.up * 100);
                 break;
         }
@@ -100,6 +100,7 @@ public class SO_Boss_Both_UltimateAttackModule : SO_AttackModule
     private void SpawnMultipleSpikeInAreaAndStore(EnemyBase owner, GameObject spike, float areaRadius, float gap,
         float probability, float spikeRandomOffset, List<SpikeSpawner> spikeContainer)
     {
+        // 사각 순회하며 원 내부만 체크 후 스폰
         Vector3 centerOffset = new Vector3(areaRadius * .5f, 0f, areaRadius * .5f);
         for (int i = 0; i < areaRadius / gap; i++)
             for (int k = 0; k < areaRadius / gap; k++)
